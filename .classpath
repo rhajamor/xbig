@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src/java"/>
+	<classpathentry kind="src" path="tests/t1/build/java"/>
+	<classpathentry kind="lib" path="src/ant/jar/cpptasks-1.0.0.b4.jar"/>
+	<classpathentry kind="lib" path="src/ant/jar/junit-4.1.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="src/ant/jar/saxon-8.8.0.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

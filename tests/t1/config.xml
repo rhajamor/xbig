@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE DaemonConfig [
+  <!ENTITY cppFileHeader SYSTEM "etc/cpp_header.inc">
+  <!ENTITY javaClassContent SYSTEM "etc/java_class_content.inc">
+]>
+
+<config>
+
+	<meta>
+		<signatures>
+
+			<!-- mapping of basic types -->
+
+			<type meta="void" signature="v" />
+			<type meta="bool" signature="b" />
+
+			<type meta="char" signature="c" />
+			<type meta="signed char" signature="b" />
+			<type meta="unsigned char" signature="B" />
+
+			<type meta="short" signature="h" />
+			<type meta="signed short" signature="h" />
+			<type meta="unsigned short" signature="H" />
+
+			<type meta="int" signature="i" />
+			<type meta="signed int" signature="i" />
+			<type meta="unsigned int" signature="I" />
+
+			<type meta="long" signature="l" />
+			<type meta="signed long" signature="l" />
+			<type meta="unsigned long" signature="L" />
+
+			<type meta="double" signature="D" />
+			<type meta="float" signature="F" />
+
+			<type meta="std::string" signature="s" />
+
+			<!-- mapping of non-const passing methods for parameters -->
+
+			<pass meta="reference" signature="r" />
+			<pass meta="pointer" signature="p" />
+			<pass meta="value" signature="v" />
+			<pass meta="array" signature="a" />
+
+			<!-- mapping of constant passing methods for parameters -->
+
+			<const-pass meta="reference" signature="R" />
+			<const-pass meta="pointer" signature="P" />
+			<const-pass meta="value" signature="V" />
+			<const-pass meta="array" signature="A" />
+
+		</signatures>
+
+		<method>
+			<name>
+				<prefix>_</prefix>
+				<suffix></suffix>
+			</name>
+		</method>
+
+		<constructor>
+			<name>
+				<prefix>__create</prefix>
+				<suffix></suffix>
+			</name>
+		</constructor>
+
+		<destructor>
+			<name>__delete</name>
+		</destructor>
+
+	</meta>
+
+	<cpp>
+		<format>
+			<indent>&#10;&#32;&#32;</indent>
+		</format>
+		
+		<variables>
+			<jni>
+				<environment name="_jni_env_" />
+				<class name="_jni_class_" />
+				<object name="_jni_this_" />
+				<pointer name="_jni_pointer_" />
+			</jni>
+			<cpp>
+				<result name="_cpp_result" />
+				<object name="_cpp_this" />
+				<prefix name="_cpp_" />
+				<suffix name="" />
+			</cpp>
+		</variables>
+
+		<method>
+			<constructor>
+				#nl#// constructor of class #cpp_class#
+				#nl#
+				#nl#// parameter conversions
+				#cpp_conversions#
+				#nl#
+				#nl#// create new instance of class #cpp_class#
+				#nl##cpp_class#* #cpp_this# = new #cpp_class#(#cpp_params#);
+				#nl#
+				#nl#// return casted pointer
+				#nl#jlong #jni_pointer# =
+					reinterpret_cast&lt;jlong&gt;(#cpp_this#);
+				#nl#return #jni_pointer#;
+			</constructor>
+
+			<destructor>
+				#nl#// destructor of class #cpp_class#
+				#nl#// cast pointer to C++ object
+				#nl##cpp_class#* #cpp_this# =
+					reinterpret_cast&lt;#cpp_class#*&gt;(#jni_pointer#);
+				#nl#// delete object if it exists
+				#nl#if(#cpp_this# != NULL) delete #cpp_this#;
+			</destructor>
+
+			<static>
+				<void>
+					#nl#// static method of class #cpp_class# without return value
+				    #nl#// parameter conversions
+					#cpp_conversions#
+					#nl#
+					#nl#// call library method
+					#nl##cpp_class#::#cpp_method#(#cpp_params#);
+				</void>
+				<return>
+					#nl#// static method of class #cpp_class# with return value				
+				    #nl#// parameter conversions
+					#cpp_conversions#
+					#nl#
+					#nl#// call library method
+					#nl##cpp_return_type# #cpp_return_var# =
+					   #cpp_class#::#cpp_method#(#cpp_params#);
+					#nl#return #cpp_return#;
+				</return>
+			</static>
+
+			<normal>
+			    <void>
+			    	#nl#// parameter conversions
+					#cpp_conversions#
+					#nl#
+					#nl#// cast pointer to C++ object
+					#nl##cpp_class#* #cpp_this# =
+					reinterpret_cast&lt;#cpp_class#*&gt;(#jni_pointer#);
+					#nl#
+					#nl#// call library method
+					#nl##cpp_this#->#cpp_method#(#cpp_params#);
+				</void>
+			    <return>
+			    	#nl#// parameter conversions
+					#cpp_conversions#
+					#nl#
+					#nl#// cast pointer to C++ object
+					#nl##cpp_class#* #cpp_this# =
+					reinterpret_cast&lt;#cpp_class#*&gt;(#jni_pointer#);
+					#nl#
+					#nl#// call library method
+					#nl##cpp_return_type# #cpp_return_var# =
+					    #cpp_this#->#cpp_method#(#cpp_params#);
+					#nl#return #cpp_return#;
+				</return>				
+			</normal>
+
+		</method>
+
+		<jni>
+			<signatures>
+
+				<type meta="void" signature="V" />
+				<type meta="boolean" signature="Z" />
+
+				<type meta="char" signature="C" />
+				<type meta="signed char" signature="C" />
+				<type meta="unsigned char" signature="C" />
+
+				<type meta="short" signature="S" />
+				<type meta="signed short" signature="S" />
+				<type meta="unsigned short" signature="S" />
+
+				<type meta="int" signature="I" />
+				<type meta="signed int" signature="I" />
+				<type meta="unsigned int" signature="I" />
+
+				<type meta="long" signature="J" />
+				<type meta="signed long" signature="J" />
+				<type meta="unsigned long" signature="J" />
+
+				<type meta="double" signature="D" />
+				<type meta="float" signature="F" />
+
+				<type meta="object" signature="L" />
+				<type meta="std::string" signature="Ljava/lang/String;" />
+				<type meta="byte" signature="B" />
+				<type meta="array" signature="[" />
+			</signatures>
+
+			<types>
+				<type meta="void" jni="void" />
+				<type meta="bool" jni="jbool" />
+
+				<type meta="char" pass="pointer" const="true"				
+					jni="jstring" cpp="std::string" >
+					<jni2cpp>
+						org::xbig::jni::to_stdstring(#jni_env#, #jni_var#)
+					</jni2cpp>					
+					<cpp2jni>
+						org::xbig::jni::to_jstring(#jni_env#, #cpp_var#)
+					</cpp2jni>
+				</type>
+				
+				<type meta="char" jni="jchar" />
+				<type meta="signed char" jni="jbyte" />
+				<type meta="unsigned char" jni="jshort" />
+
+				<type meta="short" jni="jshort" />
+				<type meta="signed short" jni="jshort" />
+				<type meta="unsigned short" jni="jint" />
+
+				<type meta="int" jni="jint" />
+				<type meta="signed int" jni="jint" />
+				<type meta="unsigned int" jni="jlong" />
+
+				<type meta="long" jni="jlong" />
+				<type meta="signed long" jni="jlong" />
+				<type meta="unsigned long" jni="jlong" />
+
+				<type meta="double" jni="jdouble" />
+				<type meta="float" jni="jfloat" />
+
+				<type meta="std::string" jni="jstring">
+					<jni2cpp>
+						org::xbig::jni::to_stdstring(#jni_env#, #jni_var#)
+					</jni2cpp>
+					<cpp2jni>
+						org::xbig::jni::to_jstring(#jni_env#, #cpp_var#)
+					</cpp2jni>
+				</type>
+			</types>
+		</jni>
+
+		<format>
+			<file>
+				<header>
+					&cppFileHeader;
+				</header>
+			</file>
+		</format>
+	</cpp>
+
+	<java>
+		<types>
+
+			<type meta="void" java="void" />
+			<type meta="bool" java="bool" />
+
+			<type meta="char" java="char" />
+			<type meta="signed char" java="byte" />
+			<type meta="unsigned char" java="short" />
+
+			<type meta="short" java="short" />
+			<type meta="signed short" java="short" />
+			<type meta="unsigned short" java="int" />
+
+			<type meta="int" java="int" />
+			<type meta="signed int" java="int" />
+			<type meta="unsigned int" java="long" />
+
+			<type meta="long" java="long" />
+			<type meta="signed long" java="long" />
+			<type meta="unsigned long" java="long long" />
+
+			<type meta="double" java="double" />
+			<type meta="float" java="float" />
+
+			<type meta="std::string" java="String" />
+
+		</types>
+
+		<namespaces>
+			<namespace name="t1">org.xbig.t1</namespace>
+			<namespace name="t1::t11">org.xbig.t1.t11</namespace>
+		</namespaces>
+
+
+		<class>
+			<pointer>org.xbig.base.InstancePointer</pointer>
+			<inherits>org.xbig.base.NativeObject</inherits>
+			<content>
+				&javaClassContent;
+			</content>
+		</class>
+	</java>
+
+	<mapping>
+
+
+	</mapping>
+</config>
