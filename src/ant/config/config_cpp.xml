@@ -89,7 +89,7 @@
 			<equals arg1="${cpp.compiler}" arg2="xlC" />
 		</condition>
 
-		<condition property="is-win32">
+		<condition property="cpp.is-win32">
 			<or>
 				<equals arg1="${cpp.api}" arg2="win32" />
 				<and>
