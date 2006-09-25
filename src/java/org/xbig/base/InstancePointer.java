@@ -1,6 +1,6 @@
-/* This source file is part of ogre4j
- *     (The JNI bindings for OGRE)
- * For the latest info, see http://www.ogre4j.org/
+/* This source file is part of XBiG
+ *     (XSLT Bindings Generator)
+ * For the latest info, see http://sourceforge.net/projects/xbig/
  * 
  * Copyright (c) 2005 netAllied GmbH, Tettnang
  * Also see acknowledgements in Readme.html

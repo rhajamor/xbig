@@ -2,11 +2,11 @@
 <!DOCTYPE AntProject []>
 
 <!--
-	This source file is part of cpp2j
-	(The JNI bindings for C++)
-	For the latest info, see http://www.cpp2j.org/
+	This source file is part of XBiG
+		(XSLT Bindings Generator)
+	For the latest info, see http://sourceforge.net/projects/xbig
 	
-	Copyright (c) 2006 OneStepAhead AG, Stuttgart
+	Copyright (c) 2006 The XBiG Development Team
 	Also see acknowledgements in Readme.html
 	
 	This program is free software; you can redistribute it and/or modify it under
