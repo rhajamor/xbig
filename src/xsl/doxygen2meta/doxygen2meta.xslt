@@ -67,7 +67,10 @@
 		</xd:detail>
 	</xd:doc>
 	<xsl:template match="/">
-		<xsl:element name="meta">
+		<xsl:element name="meta" namespace="http://xbig.sourceforge.net/xmlns">
+			<xsl:attribute
+				name="schemaLocation"
+				namespace="http://www.w3.org/2001/XMLSchema-instance">http://xbig.sourceforge.net/xmlns http://xbig.sourceforge.net/xsd/meta.xsd</xsl:attribute>
 			<xsl:for-each
 				select="doxygen/compounddef[@kind='namespace']">
 				<xsl:call-template name="namespace" />
