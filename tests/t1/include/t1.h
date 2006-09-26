@@ -1,6 +1,13 @@
 
 #include <string>
 
+
+#ifdef WIN32
+	#define EXPORT __declspec(dllexport)
+#else
+	#define EXPORT
+#endif
+
 /** Test namespace t1.
  */
 
@@ -15,7 +22,7 @@ namespace t1
      /** Test class T1.
       * 
       */
-     class T1  {
+     class EXPORT T1  {
   
       public:
 
