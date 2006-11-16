@@ -2,7 +2,7 @@
 
 <!--	
 	This source file is part of XBiG
-		(XSLT Bindings Generator)
+	(XSLT Bindings Generator)
 	For the latest info, see http://sourceforge.net/projects/xbig
 	
 	Copyright (c) 2006 The XBiG Development Team
@@ -23,7 +23,7 @@
 	http://www.gnu.org/copyleft/lesser.txt.
 	
 	Author: Hubert Rung			<hubert.rung@netallied.de>
-			Christoph Nenning	<christoph.nenning@netallied.de>
+	Christoph Nenning	<christoph.nenning@netallied.de>
 -->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -67,10 +67,9 @@
 		</xd:detail>
 	</xd:doc>
 	<xsl:template match="/">
-		<xsl:element name="meta" namespace="http://xbig.sourceforge.net/XBiG">
-			<xsl:attribute
-				name="schemaLocation"
-				namespace="http://www.w3.org/2001/XMLSchema-instance">http://xbig.sourceforge.net/XBiG http://xbig.sourceforge.net/XMLSchema/xsd/meta.xsd</xsl:attribute>
+		<xsl:element name="meta"
+			namespace="http://xbig.sourceforge.net/XBiG">
+			<xsl:attribute name="schemaLocation">http://xbig.sourceforge.net/XMLSchema/xsd/meta.xsd</xsl:attribute>
 			<xsl:for-each
 				select="doxygen/compounddef[@kind='namespace']">
 				<xsl:call-template name="namespace" />
@@ -301,11 +300,11 @@
 						</xsl:if>
 					</xsl:if>
 				</xsl:if>
-				
+
 				<!-- copy all includes into meta output -->
 				<xsl:copy-of copy-namespaces="no" select="includes" />
-				
-				
+
+
 				<!-- cursor on doxygen/compounddef[@kind="class"] -->
 				<!-- derivation -->
 				<xsl:call-template name="derivation">
@@ -1258,11 +1257,11 @@
 				<!-- remove const prefix -->
 				<xsl:variable name="non_const_type"
 					select="replace($type, '[ \t]*^const[ \t]', '')" />
-					
+
 				<!-- remove parameter passing modifiers -->
 				<xsl:variable name="stripped_type"
 					select="replace($non_const_type, '[\*&amp;\[].*$', '')" />
-					
+
 				<xsl:value-of select="normalize-space($stripped_type)" />
 			</xsl:element>
 		</xsl:if>

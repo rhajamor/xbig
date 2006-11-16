@@ -313,7 +313,7 @@
 			<sources>
 				<src path="${dir.prj.src.java}" />
 				<src path="${dir.cur.build.java}" />
-				<src path="${dir.cur.src.java}" />
+				<!--  <src path="${dir.cur.src.java}" /> -->
 			</sources>
 		</javalib>
 	</target>
@@ -322,13 +322,14 @@
 	<!-- Test of generated Java code -->
 	<!-- ..................................................................... -->
 	
-	<target name="javalib-test" depends="meta2java, meta2cpp">
-		<!-- 
-		<junit fork="yes" haltonfailure="yes" >
-			<test name="AllTests" />
+	<target name="javalib-test" depends="javalib, jnilib">
+		<junit printsummary="yes" fork="yes" haltonfailure="yes" >
 			<formatter type="plain" usefile="false" />			
+			<test name="AllTests" />
+			<classpath>
+  				<fileset dir="${dir.cur.build.java.jar}" includes="${lib.xbig}.jar" />				
+			</classpath>
 		</junit>
-		-->
 	</target>
 
 </project>

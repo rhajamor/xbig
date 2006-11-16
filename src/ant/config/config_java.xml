@@ -66,17 +66,14 @@
 	<!-- ==================================================================== -->
 	<!-- Defines the JUnit task                                               -->
 	<!-- ==================================================================== -->
-	<!-- 
-	<echo message="${dir.prj.src.ant.jar}/junit-4.1.0.jar" />
 	<taskdef name="junit"
 		classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask">
 		<classpath>
 			<fileset dir="${dir.prj.src.ant.jar}" includes="junit-4.1.0.jar" />
+<!-- 			<fileset dir="${dir.prj.src.ant.jar}" includes="ant-junit.jar" /> -->
 		</classpath>
 	</taskdef>
-	-->
-
-
+     
 	<target name="java-pre-init">
 		<condition property="java.is-windows">
 			<os family="windows" />

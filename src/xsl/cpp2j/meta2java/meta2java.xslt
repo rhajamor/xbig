@@ -51,13 +51,13 @@
 	<xsl:param name="config" />
 	<xsl:param name="outdir" />
 
-	<xsl:template match="/">
+	<xsl:template match="/*[local-name() = 'meta']">
 
 		<xsl:result-document href="" format="textOutput">
 
 
 			<!-- iteration over all available namespaces -->
-			<xsl:for-each select="meta/namespace">
+			<xsl:for-each select="namespace">
 
 				<xsl:call-template name="javaNamespace">
 					<xsl:with-param name="meta_ns_name" select="@name" />

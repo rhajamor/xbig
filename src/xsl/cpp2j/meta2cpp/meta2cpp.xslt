@@ -3,7 +3,7 @@
 <!--
 	
 	This source file is part of XBiG
-		(XSLT Bindings Generator)
+	(XSLT Bindings Generator)
 	For the latest info, see http://sourceforge.net/projects/xbig
 	
 	Copyright (c) 2006 The XBiG Development Team
@@ -39,8 +39,8 @@
 		<xd:copyright>OneStepAhead AG</xd:copyright>
 		<xd:short>Transforms the meta layer to C++</xd:short>
 		<xd:detail>
-			This Stylesheet generates the JNI functions
-			to access the existing C++ library.
+			This Stylesheet generates the JNI functions to access the
+			existing C++ library.
 		</xd:detail>
 	</xd:doc>
 
@@ -56,22 +56,24 @@
 
 
 	<!-- main transformation process for generating C++ -->
-	<xsl:template match="/">
+	<xsl:template match="/*[local-name() = 'meta']">
 
 		<xsl:result-document href="" format="textOutput">
+
 			<!-- iteration over all available namespaces -->
-			<xsl:for-each select="meta/namespace">
+			<xsl:for-each select="namespace">
 
 				<xsl:call-template name="cppNamespace">
 					<xsl:with-param name="meta_ns_name" select="@name" />
-					<xsl:with-param name="include_dir" select="$include_dir" />
+					<xsl:with-param name="include_dir"
+						select="$include_dir" />
 					<xsl:with-param name="lib_dir" select="$lib_dir" />
 					<xsl:with-param name="config" select="$config" />
 				</xsl:call-template>
-				
+
 			</xsl:for-each>
-			
-	    <xsl:text>done</xsl:text>
+
+			<xsl:text>done</xsl:text>
 		</xsl:result-document>
 
 	</xsl:template>
