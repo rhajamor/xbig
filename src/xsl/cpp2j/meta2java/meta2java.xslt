@@ -33,6 +33,7 @@
 	version="2.0">
 
 	<xsl:import href="javaNamespace.xslt" />
+	<xsl:import href="javaGlobals.xslt" />
 
 	<xd:doc type="stylesheet">
 		<xd:author>Frank Bielig</xd:author>
@@ -66,6 +67,17 @@
 				</xsl:call-template>
 
 			</xsl:for-each>
+
+
+			<!-- global stuff -->
+			<xsl:for-each select="class">
+				<xsl:call-template name="javaGlobals">
+					<xsl:with-param name="meta_ns_name" select="'org.xbig'" />
+					<xsl:with-param name="outdir" select="$outdir" />
+					<xsl:with-param name="config" select="$config" />
+				</xsl:call-template>
+			</xsl:for-each>
+
 
 			<xsl:text>done</xsl:text>
 		</xsl:result-document>
