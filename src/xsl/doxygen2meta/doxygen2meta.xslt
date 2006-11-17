@@ -70,18 +70,92 @@
 		<xsl:element name="meta"
 			namespace="http://xbig.sourceforge.net/XBiG">
 			<xsl:attribute name="schemaLocation">http://xbig.sourceforge.net/XMLSchema/xsd/meta.xsd</xsl:attribute>
+
 			<xsl:for-each
 				select="doxygen/compounddef[@kind='namespace']">
-				<xsl:call-template name="namespace" />
+				<!-- because doxygen has a flat structure -->
+				<xsl:choose>
+					<xsl:when test="root()//compounddef[@kind='namespace']/innernamespace/@refid != @id">
+						<xsl:call-template name="namespace"/>
+					</xsl:when>
+					<xsl:when test="not(root()//compounddef[@kind='namespace']/innernamespace/@refid)">
+						<xsl:call-template name="namespace"/>
+					</xsl:when>
+				</xsl:choose>
 			</xsl:for-each>
+			
+			<!-- classes -->
+			<xsl:for-each select="doxygen/compounddef[@kind='class']">
+				<!-- because doxygen has a flat structure -->
+				<xsl:choose>
+					<xsl:when test="root()//compounddef[@kind='class']/innerclass/@refid != @id">
+						<xsl:call-template name="class">
+							<xsl:with-param name="refid" select="@id"/>
+						</xsl:call-template>
+					</xsl:when>
+					<xsl:when test="not(root()//compounddef[@kind='class']/innerclass/@refid) and
+									not(root()//compounddef[@kind='struct']/innerclass/@refid) and
+									not(root()//compounddef[@kind='namespace']/innerclass/@refid)">
+						<xsl:call-template name="class">
+							<xsl:with-param name="refid" select="@id"/>
+						</xsl:call-template>
+					</xsl:when>
+				</xsl:choose>
+			</xsl:for-each>
+			
+			<!-- structs -->
+			<xsl:for-each select="doxygen/compounddef[@kind='struct']">
+				<!-- because doxygen has a flat structure -->
+				<xsl:choose>
+					<xsl:when test="root()//compounddef[@kind='struct']/innerclass/@refid != @id">
+						<xsl:call-template name="struct"/>
+					</xsl:when>
+					<xsl:when test="not(root()//compounddef[@kind='class']/innerclass/@refid) and
+									not(root()//compounddef[@kind='struct']/innerclass/@refid) and
+									not(root()//compounddef[@kind='namespace']/innerclass/@refid)">
+						<xsl:call-template name="struct"/>
+					</xsl:when>
+				</xsl:choose>
+			</xsl:for-each>
+			
+			<!-- global variables -->
+			<xsl:for-each select="doxygen/compounddef[@kind='var']">
+				<xsl:call-template name="variable" />
+			</xsl:for-each>
+
+			<!-- global typedefs -->
+			<!-- <xsl:for-each select="doxygen/compounddef[@kind='typedef']"> -->
+			<xsl:for-each select="doxygen/compounddef[@kind='file']/sectiondef[@kind='typedef']">
+				<xsl:call-template name="typedef" />
+			</xsl:for-each>
+
+			<!-- global enums -->
+			<!-- <xsl:for-each select="doxygen/compounddef[@kind='enum']"> -->
+			<xsl:for-each select="doxygen/compounddef[@kind='file']/sectiondef[@kind='enum']">
+				<xsl:call-template name="enumeration" />
+			</xsl:for-each>
+
+			<!-- global functions -->
+			<!-- <xsl:for-each select="doxygen/compounddef[@kind='func']"> -->
+			<xsl:for-each select="doxygen/compounddef[@kind='file']/sectiondef[@kind='func']">
+				<xsl:if test="not(memberdef/templateparamlist)">
+					<xsl:call-template name="function" />
+				</xsl:if>
+			</xsl:for-each>
+
+			<!-- documentation -->
+			<xsl:call-template name="documentation" />
+			
 			<!-- header files of the source library -->
 			<xsl:for-each select="doxygen/compounddef[@kind='file']">
 				<xsl:element name="libraryfile">
 					<xsl:value-of select="compoundname" />
 				</xsl:element>
 			</xsl:for-each>
+
 		</xsl:element>
 	</xsl:template>
+
 	<!-- ############### NAMESPACE - calls class; globals - calls typedef, enum, function, variable ################# -->
 	<!-- cursor on doxygen/compounddef -->
 	<xd:doc>
@@ -132,11 +206,11 @@
 				<xsl:attribute name="second"
 					select="substring-after($name,'::')" />
 			</xsl:if>
-			<!-- inner namespace 
-				<xsl:variable name="innernamespaceRefID" select="innernamespace/@refid"/>
-				<xsl:for-each select="root()//compounddef[@id=$innernamespaceRefID]">
+			<!-- inner namespace -->
+			<xsl:variable name="innernamespaceRefID" select="innernamespace/@refid"/>
+			<xsl:for-each select="root()//compounddef[@id=$innernamespaceRefID]">
 				<xsl:call-template name="namespace"/>
-				</xsl:for-each> -->
+			</xsl:for-each>
 			<!-- classes -->
 			<xsl:for-each select="innerclass">
 				<xsl:call-template name="class">
@@ -245,15 +319,24 @@
 		<xsl:param name="refid" />
 		<!-- structs -->
 		<xsl:for-each
-			select="root()//compounddef[@id=$refid and @kind='struct' and @prot='public']/sectiondef[@kind='public-attrib']">
+			select="root()//compounddef[@id=$refid and @kind='struct' and @prot='public']">
+			<!-- select="root()//compounddef[@id=$refid and @kind='struct' and @prot='public']/sectiondef[@kind='public-attrib']"> -->
 			<xsl:call-template name="struct" />
 		</xsl:for-each>
 		<!-- classes -->
 		<xsl:for-each
 			select="root()//compounddef[@id=$refid and @kind='class' and @prot='public']">
 			<xsl:element name="class">
-				<xsl:attribute name="name"
-					select="substring-after(compoundname,'::')" />
+				<xsl:attribute name="name">
+					<xsl:choose>
+						<xsl:when test="contains(compoundname,'::')">
+							<xsl:value-of select="substring-after(compoundname,'::')"/>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:value-of select="compoundname"/>
+						</xsl:otherwise>
+					</xsl:choose>
+				</xsl:attribute>
 				<xsl:attribute name="fullName" select="compoundname" />
 
 				<!-- template attributes -->
@@ -411,8 +494,16 @@
 			<xsl:element name="derives">
 				<xsl:for-each select="derivedcompoundref">
 					<xsl:element name="subClass">
-						<xsl:value-of
-							select="substring-after(@refid,'_1_1')" />
+						<xsl:choose>
+							<!-- if there is no namespace -->
+							<xsl:when test="not(contains(@refid,'_1_1'))">
+								<xsl:value-of select="."/>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:value-of
+									select="substring-after(@refid,'_1_1')" />
+							</xsl:otherwise>
+						</xsl:choose>
 					</xsl:element>
 				</xsl:for-each>
 			</xsl:element>
@@ -430,6 +521,12 @@
 								<xsl:variable name="baseClass"
 									select="substring-after(../../node[@id=$childid]/label,'::')" />
 								<xsl:choose>
+									<!-- if there is no namespace -->
+									<xsl:when
+										test="substring-after(../../node[@id=$childid]/label,'::') = ''">
+										<xsl:value-of
+											select="../../node[@id=$childid]/label" />
+									</xsl:when>
 									<xsl:when
 										test="contains($baseClass,'::')">
 										<xsl:value-of
@@ -509,6 +606,9 @@
 					<xsl:for-each select="enumvalue">
 						<xsl:element name="enum">
 							<xsl:attribute name="name" select="name" />
+							<xsl:if test="initializer">
+								<xsl:attribute name="initializer" select="normalize-space(initializer)" />
+							</xsl:if>
 						</xsl:element>
 					</xsl:for-each>
 
@@ -825,6 +925,10 @@
 			for public functions of the struct.
 			<br />
 			Calls template
+			<b>structattributes</b>
+			for public attributes of the struct.
+			<br />
+			Calls template
 			<b>documentation</b>
 			for itself.
 			<br />
@@ -832,10 +936,26 @@
 	</xd:doc>
 	<xsl:template name="struct">
 		<xsl:element name="struct">
-			<xsl:attribute name="name"
-				select="substring-after(../compoundname,'::')" />
-			<xsl:variable name="name"
-				select="substring-after(../compoundname,'::')" />
+			<xsl:attribute name="name">
+				<xsl:choose>
+					<xsl:when test="contains(compoundname,'::')">
+						<xsl:value-of select="substring-after(compoundname,'::')"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="compoundname"/>
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:attribute>
+			<xsl:variable name="name">
+				<xsl:choose>
+					<xsl:when test="contains(compoundname,'::')">
+						<xsl:value-of select="substring-after(compoundname,'::')"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="compoundname"/>
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:variable>
 			<xsl:if test="contains($name,'::')">
 				<xsl:attribute name="name"
 					select="substring-after($name,'::')" />
@@ -861,27 +981,72 @@
 					</xsl:if>
 				</xsl:for-each>
 			</xsl:if>
-			<!-- struct attributes -->
-			<xsl:for-each select="memberdef[@kind='variable']">
-				<xsl:element name="param">
-					<xsl:element name="name">
-						<xsl:value-of select="name" />
-					</xsl:element>
-					<xsl:call-template name="typeMap">
-						<xsl:with-param name="type"
-							select="normalize-space(type)" />
-					</xsl:call-template>
-					<xsl:if test="argsstring!=''">
-						<xsl:element name="argsstring">
-							<xsl:value-of select="argsstring" />
-						</xsl:element>
+	 		<!-- If we have no namespace -->
+			<xsl:if test="templateparamlist">
+				<xsl:attribute name="template" select="'true'" />
+				<xsl:attribute name="templateType"
+					select="templateparamlist/param/type" />
+				<xsl:attribute name="templateDeclaration"
+					select="templateparamlist/param/declname" />
+				<xsl:for-each select="inheritancegraph/node">
+					<xsl:if test="link/@refid=@id">
+						<xsl:variable name="childnode"
+							select="childnode/@refid" />
+						<xsl:for-each select="../node">
+							<xsl:if test="@id=$childnode">
+								<xsl:attribute
+									name="templateName">
+									<xsl:variable name="string"
+										select="substring-before(label,' &gt;')" />
+									<xsl:value-of
+										select="substring-after($string,'&lt; ')" />
+								</xsl:attribute>
+							</xsl:if>
+						</xsl:for-each>
 					</xsl:if>
-				</xsl:element>
-			</xsl:for-each>
+				</xsl:for-each>
+			</xsl:if>
+
+			<!-- inner structs and classes -->
+			<xsl:if test="innerclass">
+				<xsl:variable name="idOfInnerClass" select="innerclass/@refid"/>
+				<xsl:for-each
+					select="root()//compounddef[@id=$idOfInnerClass and @kind='struct' and @prot='public']">
+					<xsl:call-template name="struct" />
+				</xsl:for-each>
+				<xsl:for-each
+					select="root()//compounddef[@id=$idOfInnerClass and @kind='class' and @prot='public']">
+					<xsl:call-template name="class">
+						<xsl:with-param name="refid" select="@id"/>
+					</xsl:call-template>
+				</xsl:for-each>
+			</xsl:if>
+
+			<!-- struct attributes -->
+			<xsl:choose>
+				<xsl:when test="name()='compounddef'">
+					<xsl:for-each select="sectiondef[@kind='public-attrib']">
+						<xsl:call-template name="structattributes" />
+					</xsl:for-each>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:call-template name="structattributes" />
+				</xsl:otherwise>
+			</xsl:choose>
+
 			<!-- struct functions -->
-			<xsl:for-each select="../sectiondef[@kind='public-func']">
-				<xsl:call-template name="function" />
-			</xsl:for-each>
+			<xsl:choose>
+				<xsl:when test="name()='compounddef'">
+					<xsl:for-each select="sectiondef[@kind='public-func']">
+						<xsl:call-template name="function" />
+					</xsl:for-each>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:for-each select="../sectiondef[@kind='public-func']">
+						<xsl:call-template name="function" />
+					</xsl:for-each>
+				</xsl:otherwise>
+			</xsl:choose>
 
 			<!-- documentation -->
 			<xsl:call-template name="documentation" />
@@ -1244,9 +1409,28 @@
 		<xsl:param name="passedBy" />
 		<xsl:if test="type!=''">
 			<xsl:element name="type">
-				<xsl:if test="contains(type,'const')">
-					<xsl:attribute name="const" select="'true'" />
-				</xsl:if>
+
+				<!-- check for const, take care of const pointer or const data
+					 (const int* vs int* const) -->
+				<xsl:choose>
+					<!-- <xsl:when test="$passedBy = 'pointer'"> -->
+					<xsl:when test="contains(type, '*')">
+						<!-- const data -->
+						<xsl:if test="contains(substring-before(type, '*'), 'const')">
+							<xsl:attribute name="const" select="'true'" />
+						</xsl:if>
+						<!-- const pointer -->
+						<xsl:if test="contains(substring-after(type, '*'), 'const')">
+							<xsl:attribute name="constPointer" select="'true'" />
+						</xsl:if>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:if test="contains(type,'const')">
+							<xsl:attribute name="const" select="'true'" />
+						</xsl:if>
+					</xsl:otherwise>
+				</xsl:choose>
+
 				<xsl:if test="array">
 					<xsl:attribute name="array" select="array" />
 				</xsl:if>
@@ -1254,9 +1438,20 @@
 					<xsl:attribute name="passedBy" select="$passedBy" />
 				</xsl:if>
 
-				<!-- remove const prefix -->
-				<xsl:variable name="non_const_type"
-					select="replace($type, '[ \t]*^const[ \t]', '')" />
+				<!-- remove const prefix or postfix -->
+				<xsl:variable name="non_const_type">
+					<xsl:choose>
+						<xsl:when test="starts-with($type, 'const')">
+							<xsl:value-of select="replace($type, '[ \t]*^const[ \t]', '')"/>
+						</xsl:when>
+						<xsl:when test="contains($type,'const')">
+							<xsl:value-of select="substring-before($type, 'const')"/>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:value-of select="$type"/>
+						</xsl:otherwise>
+					</xsl:choose>
+				</xsl:variable>
 
 				<!-- remove parameter passing modifiers -->
 				<xsl:variable name="stripped_type"
@@ -1357,6 +1552,42 @@
 		<xsl:if test="detaileddescription/*">
 			<xsl:copy-of select="detaileddescription" />
 		</xsl:if>
+	</xsl:template>
+
+	<!-- ############ STRUCT ATTRIBUTES ############ -->
+	<xd:doc>
+		<xd:short>
+			Generates elements for attributes of structs.
+		</xd:short>
+		<xd:detail>
+			It is needed for two cases in template struct
+		</xd:detail>
+	</xd:doc>
+	<xsl:template name="structattributes">
+		<xsl:for-each select="memberdef[@kind='variable']">
+			<xsl:element name="param">
+				<xsl:choose>
+					<xsl:when test="contains(type, '&amp;')">
+						<xsl:attribute name="passedBy">reference</xsl:attribute>
+					</xsl:when>
+					<xsl:when test="contains(type, '*')">
+						<xsl:attribute name="passedBy">pointer</xsl:attribute>
+					</xsl:when>
+				</xsl:choose>
+				<xsl:element name="name">
+					<xsl:value-of select="name" />
+				</xsl:element>
+				<xsl:call-template name="typeMap">
+					<xsl:with-param name="type"
+						select="normalize-space(type)" />
+				</xsl:call-template>
+				<xsl:if test="argsstring!=''">
+					<xsl:element name="argsstring">
+						<xsl:value-of select="argsstring" />
+					</xsl:element>
+				</xsl:if>
+			</xsl:element>
+		</xsl:for-each>
 	</xsl:template>
 
 </xsl:stylesheet>
