@@ -1022,6 +1022,26 @@
 				</xsl:for-each>
 			</xsl:if>
 
+			<!-- enumerations -->
+			<xsl:for-each
+				select="sectiondef[@kind='public-type']">
+				<!-- or @kind='protected-type'-->
+				<xsl:choose>
+					<xsl:when test="memberdef[@kind='enum']">
+						<xsl:call-template name="enumeration" />
+					</xsl:when>
+				</xsl:choose>
+			</xsl:for-each>
+			<!-- typedefs -->
+			<xsl:for-each
+				select="sectiondef[@kind='public-type']">
+				<xsl:choose>
+					<xsl:when test="memberdef[@kind='typedef']">
+						<xsl:call-template name="typedef" />
+					</xsl:when>
+				</xsl:choose>
+			</xsl:for-each>
+
 			<!-- struct attributes -->
 			<xsl:choose>
 				<xsl:when test="name()='compounddef'">
