@@ -66,6 +66,16 @@
 		</sequential>
 	</macrodef>
 
+	<target name="compile-junit" depends="javalib">
+		<javac 
+			srcdir="${dir.cur.src.java}" 
+			destdir="${dir.cur.build.java.class}" 
+			classpath="${dir.prj.src.ant.jar}/junit-4.1.0.jar">
+		</javac>
+		<jar destfile="${dir.cur.build.java.jar}/${lib.xbig}-test.jar"
+			basedir="${dir.cur.build.java.class}" includes="**/test/**/*.class" />
+	</target>
+	
 	<target name="java-clean" depends="init">
 		<delete dir="${dir.cur.build.java.class}" />
 		<delete dir="${dir.cur.build.java.jar}" />
