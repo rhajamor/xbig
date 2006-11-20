@@ -311,7 +311,8 @@
 	<target name="javalib" depends="meta2java">
 		<javalib name="${lib.xbig}">
 			<sources>
-				<src path="${dir.prj.src.java}" />
+				<src path="${dir.prj.src.java}">
+				</src>
 				<src path="${dir.cur.build.java}" />
 				<!--  <src path="${dir.cur.src.java}" /> -->
 			</sources>
@@ -322,12 +323,12 @@
 	<!-- Test of generated Java code -->
 	<!-- ..................................................................... -->
 	
-	<target name="javalib-test" depends="javalib, jnilib">
+	<target name="javalib-test" depends="javalib, jnilib, compile-junit">
 		<junit printsummary="yes" fork="yes" haltonfailure="yes" >
 			<formatter type="plain" usefile="false" />			
-			<test name="AllTests" />
+			<test name="org.xbig.test.${lib.name}.AllTests" />
 			<classpath>
-  				<fileset dir="${dir.cur.build.java.jar}" includes="${lib.xbig}.jar" />				
+  				<fileset dir="${dir.cur.build.java.jar}" includes="${lib.xbig}-test.jar" />				
 			</classpath>
 		</junit>
 	</target>
