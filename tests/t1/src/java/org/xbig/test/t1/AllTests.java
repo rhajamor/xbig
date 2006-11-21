@@ -17,14 +17,14 @@
  * http://www.gnu.org/copyleft/lesser.txt.
  */
 
-package org.xbig.test.t4_1;
+package org.xbig.test.t1;
 
 import junit.framework.JUnit4TestAdapter;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
-//@Suite.SuiteClasses()
+@Suite.SuiteClasses({BasicTests.class})
 
 
 public class AllTests {

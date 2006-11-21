@@ -1,9 +1,9 @@
 /**
  * 
  */
-package org.xbig.test.t4_1;
+package org.xbig.test.t1;
 
-import org.junit.*;
+import org.junit.Test;
 /**
  * @author bielig
  *
