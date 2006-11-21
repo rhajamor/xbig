@@ -328,8 +328,10 @@
 			<formatter type="plain" usefile="false" />			
 			<test name="org.xbig.test.${lib.name}.AllTests" />
 			<classpath>
-  				<fileset dir="${dir.cur.build.java.jar}" includes="${lib.xbig}-test.jar" />				
+				<fileset dir="${dir.cur.build.java.jar}" includes="${lib.xbig}*.jar" />
+				<fileset dir="${dir.prj.src.ant.jar}" includes="junit-4.1.0.jar"/>
 			</classpath>
+			<jvmarg value="-Djava.library.path=${dir.cpp.build.config}/shared"/>
 		</junit>
 	</target>
 
