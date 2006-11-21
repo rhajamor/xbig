@@ -49,30 +49,26 @@
 		<xsl:variable name="java_ns_dir"
 					  select="replace($meta_ns_name,'\.', '/')" />
 
-		<!-- iteration over all global classes -->
-<!-- 		<xsl:for-each select="class"> -->
+		<!-- compose filename of current class -->
+		<xsl:variable name="filename"
+			select="concat($outdir, '/', $java_ns_dir, '/',@name,'.java')" />
 
-			<!-- compose filename of current class -->
-			<xsl:variable name="filename"
-				select="concat($outdir, '/', $java_ns_dir, '/',@name,'.java')" />
+		<!-- open Java file -->
+		<xsl:result-document href="{$filename}"
+			format="textOutput">
 
-			<!-- open Java file -->
-			<xsl:result-document href="{$filename}"
-				format="textOutput">
+			<!-- write package -->
+			<xsl:text>package&#32;</xsl:text>
+			<xsl:value-of select="$meta_ns_name" />
+			<xsl:text>;&#10;&#10;</xsl:text>
 
-				<!-- write package -->
-				<xsl:text>package&#32;</xsl:text>
-				<xsl:value-of select="$meta_ns_name" />
-				<xsl:text>;&#10;&#10;</xsl:text>
+			<!-- write class implementation -->
+			<xsl:call-template name="javaClass">
+				<xsl:with-param name="config" select="$config" />
+				<xsl:with-param name="class" select="." />
+			</xsl:call-template>
 
-				<!-- write class implementation -->
-				<xsl:call-template name="javaClass">
-					<xsl:with-param name="config" select="$config" />
-					<xsl:with-param name="class" select="." />
-				</xsl:call-template>
-
-			</xsl:result-document>
-<!--		</xsl:for-each> -->
+		</xsl:result-document>
 
 	</xsl:template>
 </xsl:stylesheet>
