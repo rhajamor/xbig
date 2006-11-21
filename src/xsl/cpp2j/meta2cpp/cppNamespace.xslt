@@ -48,12 +48,24 @@
 		<xsl:param name="lib_dir" />
 		<xsl:param name="config" />
 
+		<!-- iterate over child namespaces -->
+		<xsl:for-each select="namespace">
+			<xsl:call-template name="cppNamespace">
+				<xsl:with-param name="meta_ns_name" select="@name" />
+				<xsl:with-param name="include_dir" select="$include_dir" />
+				<xsl:with-param name="lib_dir" select="$lib_dir" />
+				<xsl:with-param name="config" select="$config" />
+			</xsl:call-template>
+		</xsl:for-each>
+
 		<!-- shortcut for java configuration -->
 		<xsl:variable name="java_config" select="$config/config/java" />
 
 		<!-- extract Java namespace from configuration -->
+		<!-- <xsl:variable name="java_ns_name"
+			select="$java_config/namespaces/namespace[@name=$meta_ns_name]" /> -->
 		<xsl:variable name="java_ns_name"
-			select="$java_config/namespaces/namespace[@name=$meta_ns_name]" />
+			select="concat('org.xbig.', replace($meta_ns_name,'::', '.'))" />
 
 		<!-- if no mapping in Java configuration vailable -->
 		<xsl:if test="empty($java_ns_name)">
