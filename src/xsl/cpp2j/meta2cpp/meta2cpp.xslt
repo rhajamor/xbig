@@ -34,6 +34,7 @@
 
 	<xsl:import href="cppNamespace.xslt" />
 	<xsl:import href="cppGlobals.xslt" />
+	<xsl:import href="cppEnumFunctionVariableCreateFile.xslt" />
 
 	<xd:doc type="stylesheet">
 		<xd:author>Frank Bielig</xd:author>
@@ -75,7 +76,7 @@
 			</xsl:for-each>
 
 
-			<!-- global stuff -->
+			<!-- global classes and structs -->
 			<xsl:for-each select="class">
 				<xsl:call-template name="cppGlobals">
 					<xsl:with-param name="meta_ns_name" select="''" />
@@ -84,6 +85,23 @@
 					<xsl:with-param name="config" select="$config" />
 				</xsl:call-template>
 			</xsl:for-each>
+			<xsl:for-each select="struct">
+				<xsl:call-template name="cppGlobals">
+					<xsl:with-param name="meta_ns_name" select="''" />
+					<xsl:with-param name="include_dir" select="$include_dir" />
+					<xsl:with-param name="lib_dir" select="$lib_dir" />
+					<xsl:with-param name="config" select="$config" />
+				</xsl:call-template>
+			</xsl:for-each>
+
+
+			<!-- global enums, functions and variables -->
+			<!-- TODO: put org.xbig into config -->
+			<xsl:call-template name="cppEnumFunctionVariableCreateFile">
+				<xsl:with-param name="include_dir" select="$include_dir" />
+				<xsl:with-param name="lib_dir" select="$lib_dir" />
+				<xsl:with-param name="config" select="$config" />
+			</xsl:call-template>
 
 
 			<xsl:text>done</xsl:text>

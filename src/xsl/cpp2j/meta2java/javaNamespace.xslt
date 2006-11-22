@@ -57,6 +57,7 @@
 		<!-- extract Java namespace from configuration -->
 		<!-- <xsl:variable name="java_ns_name"
 			select="$config/config/java/namespaces/namespace[@name=$meta_ns_name]" /> -->
+		<!-- TODO: put org.xbig into config -->
 		<xsl:variable name="java_ns_name"
 			select="concat('org.xbig.', replace($meta_ns_name,'::', '.'))" />
 
@@ -97,8 +98,8 @@
 				</xsl:call-template>
 
 			</xsl:result-document>
-		</xsl:for-each>
 
+		</xsl:for-each>
 
 	</xsl:template>
 </xsl:stylesheet>

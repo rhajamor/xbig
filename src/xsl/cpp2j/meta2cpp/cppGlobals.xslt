@@ -36,7 +36,6 @@
 
 	<xsl:import href="cppClassFileHeader.xslt" />
 	<xsl:import href="cppClassFileImpl.xslt" />
-	<xsl:import href="../../util/utilXmlPrint.xslt" />
 
 	<xd:doc type="stylesheet">
 		<xd:short>Generation of types outside a namespace</xd:short>
@@ -49,6 +48,7 @@
 		<xsl:param name="config" />
 
 		<!-- compute java package name -->
+		<!-- TODO: put org_xbig into config -->
 		<xsl:variable name="java_ns_name" select="'org_xbig'" />
 
 		<!-- transform Java namespace to unique prefix -->
@@ -56,32 +56,32 @@
 			select="replace($java_ns_name,'\.', '_')" />
 
 		<!-- compose filename of current class without suffix -->
-			<xsl:variable name="class_prefix"
-				select="concat($ns_prefix, '_',@name)" />
+		<xsl:variable name="class_prefix"
+			select="concat($ns_prefix, '_',@name)" />
 
-			<!-- compose filename of current class without suffix -->
-			<xsl:variable name="main_filename"
-				select="concat('class_', $class_prefix)" />
+		<!-- compose filename of current class without suffix -->
+		<xsl:variable name="main_filename"
+			select="concat('class_', $class_prefix)" />
 
-			<!-- compose basic header filename of current class -->
-			<xsl:variable name="basic_header_filename"
-				select="concat($main_filename,'.h')" />
+		<!-- compose basic header filename of current class -->
+		<xsl:variable name="basic_header_filename"
+			select="concat($main_filename,'.h')" />
 
-			<!-- compose full header filename of current class -->
-			<xsl:variable name="header_filename"
-				select="concat($include_dir, '/', $basic_header_filename)" />
+		<!-- compose full header filename of current class -->
+		<xsl:variable name="header_filename"
+			select="concat($include_dir, '/', $basic_header_filename)" />
 
-			<!-- compose implementation filename of current class -->
-			<xsl:variable name="impl_filename"
-				select="concat($lib_dir, '/', $main_filename,'.cpp')" />
+		<!-- compose implementation filename of current class -->
+		<xsl:variable name="impl_filename"
+			select="concat($lib_dir, '/', $main_filename,'.cpp')" />
 
-			<!-- compose destructor name -->
-			<xsl:variable name="destructor_name"
-				select="$config/config/meta/destructor/name/text()" />
+		<!-- compose destructor name -->
+		<xsl:variable name="destructor_name"
+			select="$config/config/meta/destructor/name/text()" />
 
-			<!-- generate description for helper methods -->
-			<xsl:variable name="helper_methods">
-				<xsl:element name="function">
+		<!-- generate description for helper methods -->
+		<xsl:variable name="helper_methods">
+			<xsl:element name="function">
 				<xsl:attribute name="destructor">
 					<xsl:text>true</xsl:text>
 				</xsl:attribute>

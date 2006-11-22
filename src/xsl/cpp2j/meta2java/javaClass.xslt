@@ -38,13 +38,12 @@
 	<xsl:import href="javaAccessMethod.xslt" />
 
 	<xd:doc type="stylesheet">
-		<xd:short>Generate mapping of a single original class</xd:short>
+		<xd:short>Generate mapping of a single original class or struct</xd:short>
 	</xd:doc>
 
 	<xsl:template name="javaClass">
 		<xsl:param name="config" />
 		<xsl:param name="class" />
-
 
 		<!-- shortcut for class configuration -->
 		<xsl:variable name="class_config"

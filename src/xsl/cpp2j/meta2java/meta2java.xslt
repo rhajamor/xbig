@@ -34,6 +34,7 @@
 
 	<xsl:import href="javaNamespace.xslt" />
 	<xsl:import href="javaGlobals.xslt" />
+	<xsl:import href="javaEnumFunctionVariableCreateFile.xslt" />
 
 	<xd:doc type="stylesheet">
 		<xd:author>Frank Bielig</xd:author>
@@ -69,7 +70,8 @@
 			</xsl:for-each>
 
 
-			<!-- global stuff -->
+			<!-- global classes and structs -->
+			<!-- TODO: put org.xbig into config -->
 			<xsl:for-each select="class">
 				<xsl:call-template name="javaGlobals">
 					<xsl:with-param name="meta_ns_name" select="'org.xbig'" />
@@ -77,6 +79,22 @@
 					<xsl:with-param name="config" select="$config" />
 				</xsl:call-template>
 			</xsl:for-each>
+			<xsl:for-each select="struct">
+				<xsl:call-template name="javaGlobals">
+					<xsl:with-param name="meta_ns_name" select="'org.xbig'" />
+					<xsl:with-param name="outdir" select="$outdir" />
+					<xsl:with-param name="config" select="$config" />
+				</xsl:call-template>
+			</xsl:for-each>
+
+
+			<!-- global enums, functions and variables -->
+			<!-- TODO: put org.xbig into config -->
+			<xsl:call-template name="javaEnumFunctionVariableCreateFile">
+				<xsl:with-param name="meta_ns_name" select="'org.xbig'" />
+				<xsl:with-param name="outdir" select="$outdir" />
+				<xsl:with-param name="config" select="$config" />
+			</xsl:call-template>
 
 
 			<xsl:text>done</xsl:text>
