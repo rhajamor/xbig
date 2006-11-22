@@ -240,12 +240,18 @@
 				<arg value="+config=${path.config.project}" />
 			</params>
 		</saxon>
+		<!-- jalopy caused problems:
+				- crashed when more than one file gets formatted (eg t3_1)
+				- made enums uncompileable (eg t9_1)
+		-->
+		<!--
 		<jalopy fileformat="unix" convention="${path.config.jalopy}"
 			history="none" loglevel="warn" threads="5">
 			<fileset dir="${dir.cur.build.java}">
 				<include name="**/*.java" />
 			</fileset>
 		</jalopy>
+		-->
 	</target>
 
 	<target name="meta2java-clean">
