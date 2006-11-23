@@ -3,7 +3,9 @@
  */
 package org.xbig.test.t2_5;
 
+import org.junit.Assert;
 import org.junit.Test;
+import org.xbig.A;
 /**
  * @author bielig
  *
@@ -11,7 +13,14 @@ import org.junit.Test;
 public class BasicTests {
 	
 	@Test
-	public void print() {
-		System.out.println("BasicTests.print()");
+	public void callMethodsWithPointers() {
+		A a = new A();
+		int b = a.a((float)7.3);
+		Assert.assertEquals(7, b);
+		b = a.b((float)7.3);
+		Assert.assertEquals(7, b);
+		b = a.c((float)7.3);
+		Assert.assertEquals(7, b);
+		a.delete();
 	}
 }

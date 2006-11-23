@@ -4,6 +4,7 @@
 package org.xbig.test.t2_1;
 
 import org.junit.Test;
+import org.xbig.A;
 /**
  * @author bielig
  *
@@ -11,7 +12,8 @@ import org.junit.Test;
 public class BasicTests {
 	
 	@Test
-	public void print() {
-		System.out.println("BasicTests.print()");
+	public void createAndDeleteObject() {
+		A a = new A();
+		a.delete();
 	}
 }

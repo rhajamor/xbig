@@ -13,10 +13,10 @@ import org.xbig.n.A;
 public class BasicTests {
 	
 	@Test
-	public void print() {
+	public void createObjectFromInsideNamespace() {
 		A a = new A();
-	   int b = a.a((float)7.3);
-	   Assert.assertEquals(7, b);
-	   a.delete();
+		int b = a.a((float)7.3);
+		Assert.assertEquals(7, b);
+		a.delete();
 	}
 }
