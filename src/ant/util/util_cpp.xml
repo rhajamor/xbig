@@ -78,6 +78,7 @@
 		<attribute name="outdir" />
 		<attribute name="type" />
 		<element name="extraincludes" optional="true" />
+		<element name="extralibraries" optional="true" />
 		<sequential>
 			<echo
 				message="create @{type} library @{name} in @{outdir}/@{type} with sources in @{srcdir}" />
@@ -94,6 +95,9 @@
 				<moreincludes>
 					<extraincludes />
 				</moreincludes>
+				<morelibraries>
+					<extralibraries />
+				</morelibraries>
 			</cpp-compile>
 		</sequential>
 	</macrodef>

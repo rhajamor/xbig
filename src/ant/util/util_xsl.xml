@@ -45,7 +45,7 @@
 			<echo message="source: @{source}" />
 			<echo message="target: @{target}" />
 			<echo message="style:  @{style}" />
-			<java jar="${jar.xsl.saxon}" fork="true" failonerror="false"
+			<java jar="${jar.xsl.saxon}" fork="true" failonerror="true"
 				maxmemory="256m">
 				<args />
 				<arg value="-o" />

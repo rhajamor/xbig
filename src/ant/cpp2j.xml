@@ -238,6 +238,7 @@
 			<params>
 				<arg value="outdir=${dir.cur.build.java}" />
 				<arg value="+config=${path.config.project}" />
+				<arg value="+buildFile=${dir.cur}/build.xml" />
 			</params>
 		</saxon>
 		<!-- jalopy caused problems:
@@ -301,12 +302,16 @@
 	<target name="jnilib" depends="meta2cpp">
 		<cpp-lib-compile name="${lib.xbig}" outdir="${dir.cpp.build.config}"
 			srcdir="${dir.cur.build.cpp.src.lib}" type="shared">
+			<!-- TODO: put all "shared" in a property -->
 			<extraincludes>
 				<includepath path="${dir.prj.src.c}/include" />
 				<includepath path="${dir.cur.build.cpp.include}" />
 				<includepath path="${dir.java.include}" />
 				<includepath path="${dir.java.include.os}" />
 			</extraincludes>
+			<extralibraries>
+				<libset libs="${lib.name}" dir="${dir.cpp.build.config}/shared"/>
+			</extralibraries>
 		</cpp-lib-compile>
 	</target>
 
@@ -330,6 +335,15 @@
 	<!-- ..................................................................... -->
 	
 	<target name="javalib-test" depends="javalib, jnilib, compile-junit">
+		<!-- put native lib in a dir where it can be found -->
+		<copy todir="${dir.cur}">
+			<fileset dir="${dir.cpp.build.config}/shared" includes="*${lib.name}.*" />
+		</copy>
+		<!-- this has been put into run.sh -->
+		<!--<exec executable="export" os="linux">
+			<arg value="LD_LIBRARY_PATH=./"/>
+		</exec>-->
+
 		<junit printsummary="yes" fork="yes" haltonfailure="yes" >
 			<formatter type="plain" usefile="false" />			
 			<test name="org.xbig.test.${lib.name}.AllTests" />
@@ -339,6 +353,11 @@
 			</classpath>
 			<jvmarg value="-Djava.library.path=${dir.cpp.build.config}/shared"/>
 		</junit>
+	
+		<!-- delete the previous copied files -->
+		<delete quiet="true" failonerror="false">
+			<fileset dir="." includes="*${lib.name}.*"/>
+		</delete>
 	</target>
 
 </project>
