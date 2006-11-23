@@ -42,8 +42,8 @@
 
 	<!-- Compilation of test library -->
 	<target name="compile-lib-base" depends="init">
-		<cpp-shared-lib name="t01" />
-		<cpp-shared-test name="simple" libs="t01" />
+		<cpp-shared-lib name="${lib.name}" />
+		<cpp-shared-test name="simple" libs="${lib.name}" />
 	</target>
 
 	<target name="all" depends="compile-lib-base, javalib-test"></target>

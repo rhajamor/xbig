@@ -306,14 +306,14 @@
 		</types>
 
 		<namespaces>
-			<namespace name="t1">org.xbig.t1</namespace>
-			<namespace name="t1::t11">org.xbig.t1.t11</namespace>
+			<packageprefix>org.xbig</packageprefix>
 		</namespaces>
 
 
 		<class>
 			<pointer>org.xbig.base.InstancePointer</pointer>
 			<inherits>org.xbig.base.NativeObject</inherits>
+			<enumwrapper>_Constants</enumwrapper>
 			<content>
 				&javaClassContent;
 			</content>
