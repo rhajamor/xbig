@@ -44,6 +44,7 @@
 	<xsl:template name="javaClass">
 		<xsl:param name="config" />
 		<xsl:param name="class" />
+		<xsl:param name="buildFile" />
 
 		<!-- shortcut for class configuration -->
 		<xsl:variable name="class_config"
@@ -64,6 +65,11 @@
 
 		<!-- start class content -->
 		<xsl:text>&#32;{&#10;</xsl:text>
+
+		<!-- creating static initializer -->
+		<xsl:text>static { System.loadLibrary("</xsl:text>
+		<xsl:value-of select="$buildFile/project/property[@name='lib.name']/@value"/>
+		<xsl:text>-xbig");}&#10;</xsl:text>
 
 		<!-- if additional class content defined in configuration -->
 		<xsl:if test="$class_config/content">

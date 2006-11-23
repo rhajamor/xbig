@@ -44,6 +44,7 @@
 		<xsl:param name="meta_ns_name" />
 		<xsl:param name="outdir" />
 		<xsl:param name="config" />
+		<xsl:param name="buildFile" />
 
 		<!-- transform Java namespace to directory name -->
 		<xsl:variable name="java_ns_dir"
@@ -66,6 +67,7 @@
 			<xsl:call-template name="javaClass">
 				<xsl:with-param name="config" select="$config" />
 				<xsl:with-param name="class" select="." />
+				<xsl:with-param name="buildFile" select="$buildFile" />
 			</xsl:call-template>
 
 		</xsl:result-document>

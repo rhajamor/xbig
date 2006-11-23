@@ -48,8 +48,8 @@
 		<xsl:param name="config" />
 
 		<!-- compute java package name -->
-		<!-- TODO: put org_xbig into config -->
-		<xsl:variable name="java_ns_name" select="'org_xbig'" />
+		<xsl:variable name="java_ns_name"
+				select="replace($config/config/java/namespaces/packageprefix/text(), '\.', '_')" />
 
 		<!-- transform Java namespace to unique prefix -->
 		<xsl:variable name="ns_prefix"

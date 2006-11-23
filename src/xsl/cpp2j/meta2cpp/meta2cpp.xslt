@@ -96,7 +96,6 @@
 
 
 			<!-- global enums, functions and variables -->
-			<!-- TODO: put org.xbig into config -->
 			<xsl:call-template name="cppEnumFunctionVariableCreateFile">
 				<xsl:with-param name="include_dir" select="$include_dir" />
 				<xsl:with-param name="lib_dir" select="$lib_dir" />

@@ -44,6 +44,7 @@
 		<xsl:param name="meta_ns_name" />
 		<xsl:param name="outdir" />
 		<xsl:param name="config" />
+		<xsl:param name="buildFile" />
 
 		<!-- iterate over child namespaces -->
 		<xsl:for-each select="namespace">
@@ -51,15 +52,16 @@
 				<xsl:with-param name="meta_ns_name" select="@name" />
 				<xsl:with-param name="outdir" select="$outdir" />
 				<xsl:with-param name="config" select="$config" />
+				<xsl:with-param name="buildFile" select="$buildFile" />
 			</xsl:call-template>
 		</xsl:for-each>
 
 		<!-- extract Java namespace from configuration -->
 		<!-- <xsl:variable name="java_ns_name"
 			select="$config/config/java/namespaces/namespace[@name=$meta_ns_name]" /> -->
-		<!-- TODO: put org.xbig into config -->
 		<xsl:variable name="java_ns_name"
-			select="concat('org.xbig.', replace($meta_ns_name,'::', '.'))" />
+			select="concat($config/config/java/namespaces/packageprefix/text(),
+						   '.', replace($meta_ns_name,'::', '.'))" />
 
 		<!-- if no mapping in Java configuration vailable -->
 		<xsl:if test="empty($java_ns_name)">
@@ -95,6 +97,7 @@
 				<xsl:call-template name="javaClass">
 					<xsl:with-param name="config" select="$config" />
 					<xsl:with-param name="class" select="." />
+					<xsl:with-param name="buildFile" select="$buildFile" />
 				</xsl:call-template>
 
 			</xsl:result-document>

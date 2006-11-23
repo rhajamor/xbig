@@ -52,6 +52,7 @@
 
 	<xsl:param name="config" />
 	<xsl:param name="outdir" />
+	<xsl:param name="buildFile" />
 
 	<xsl:template match="/*[local-name() = 'meta']">
 
@@ -65,35 +66,40 @@
 					<xsl:with-param name="meta_ns_name" select="@name" />
 					<xsl:with-param name="outdir" select="$outdir" />
 					<xsl:with-param name="config" select="$config" />
+					<xsl:with-param name="buildFile" select="$buildFile" />
 				</xsl:call-template>
 
 			</xsl:for-each>
 
 
 			<!-- global classes and structs -->
-			<!-- TODO: put org.xbig into config -->
 			<xsl:for-each select="class">
 				<xsl:call-template name="javaGlobals">
-					<xsl:with-param name="meta_ns_name" select="'org.xbig'" />
+					<xsl:with-param name="meta_ns_name" 
+									select="$config/config/java/namespaces/packageprefix/text()" />
 					<xsl:with-param name="outdir" select="$outdir" />
 					<xsl:with-param name="config" select="$config" />
+					<xsl:with-param name="buildFile" select="$buildFile" />
 				</xsl:call-template>
 			</xsl:for-each>
 			<xsl:for-each select="struct">
 				<xsl:call-template name="javaGlobals">
-					<xsl:with-param name="meta_ns_name" select="'org.xbig'" />
+					<xsl:with-param name="meta_ns_name" 
+									select="$config/config/java/namespaces/packageprefix/text()" />
 					<xsl:with-param name="outdir" select="$outdir" />
 					<xsl:with-param name="config" select="$config" />
+					<xsl:with-param name="buildFile" select="$buildFile" />
 				</xsl:call-template>
 			</xsl:for-each>
 
 
 			<!-- global enums, functions and variables -->
-			<!-- TODO: put org.xbig into config -->
 			<xsl:call-template name="javaEnumFunctionVariableCreateFile">
-				<xsl:with-param name="meta_ns_name" select="'org.xbig'" />
+				<xsl:with-param name="meta_ns_name" 
+								select="$config/config/java/namespaces/packageprefix/text()" />
 				<xsl:with-param name="outdir" select="$outdir" />
 				<xsl:with-param name="config" select="$config" />
+				<xsl:with-param name="buildFile" select="$buildFile" />
 			</xsl:call-template>
 
 

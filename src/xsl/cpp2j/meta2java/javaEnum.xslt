@@ -67,10 +67,9 @@
 				<xsl:variable name="name" select="@name"/>
 				<xsl:text> (</xsl:text>
 
-				<!-- TODO: get '_Constants' from config 
-					 (see javaEnumFunctionVariableCreateFile $filenameStub) -->
 				<xsl:if test="../name() != 'meta'">
-					<xsl:text>_Constants.</xsl:text>
+					<xsl:value-of select="$config/config/java/class/enumwrapper" />
+					<xsl:text>.</xsl:text>
 				</xsl:if>
 
 				<xsl:text>ENUM_VALUES[</xsl:text>

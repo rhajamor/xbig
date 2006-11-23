@@ -64,9 +64,9 @@
 		<!-- extract Java namespace from configuration -->
 		<!-- <xsl:variable name="java_ns_name"
 			select="$java_config/namespaces/namespace[@name=$meta_ns_name]" /> -->
-		<!-- TODO: put org.xbig into config -->
 		<xsl:variable name="java_ns_name"
-			select="concat('org.xbig.', replace($meta_ns_name,'::', '.'))" />
+			select="concat($config/config/java/namespaces/packageprefix/text(),
+						   '.', replace($meta_ns_name,'::', '.'))" />
 
 		<!-- if no mapping in Java configuration vailable -->
 		<xsl:if test="empty($java_ns_name)">

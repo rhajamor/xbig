@@ -44,6 +44,7 @@
 		<xsl:param name="meta_ns_name" />
 		<xsl:param name="outdir" />
 		<xsl:param name="config" />
+		<xsl:param name="buildFile" />
 
 		<!-- check if this is necessary -->
 		<xsl:if test="enumeration or function or variable or
@@ -55,8 +56,8 @@
 			<xsl:variable name="java_ns_dir"
 						  select="replace($meta_ns_name,'\.', '/')" />
 	
-			<!-- TODO: put this into config -->
-			<xsl:variable name="filenameStub" select="'_Constants'"/>
+			<!-- get class name from config -->
+			<xsl:variable name="filenameStub" select="$config/config/java/class/enumwrapper"/>
 	
 			<!-- compose filename -->
 			<xsl:variable name="filename"
@@ -75,6 +76,11 @@
 				<xsl:text>public class </xsl:text>
 				<xsl:value-of select="$filenameStub"/>
 				<xsl:text>{&#10;</xsl:text>
+
+				<!-- creating static initializer -->
+				<xsl:text>static { System.loadLibrary("</xsl:text>
+				<xsl:value-of select="$buildFile/project/property[@name='lib.name']/@value"/>
+				<xsl:text>-xbig");}&#10;</xsl:text>
 
 				<xsl:if test="enumeration or root()//namespace/enumeration">
 					<xsl:text>public static final int[] ENUM_VALUES = _getEnumValues();&#10;</xsl:text>
