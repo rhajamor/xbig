@@ -16,6 +16,7 @@ namespace n {
 	class EXPORT A {
 	public:
 		A();
+		~A();
 		int a(float b);
 	};
 };

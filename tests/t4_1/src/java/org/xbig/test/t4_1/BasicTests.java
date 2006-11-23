@@ -17,5 +17,6 @@ public class BasicTests {
 		A a = new A();
 	   int b = a.a((float)7.3);
 	   Assert.assertEquals(7, b);
+	   a.delete();
 	}
 }

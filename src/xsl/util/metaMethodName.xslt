@@ -52,8 +52,22 @@
 
 		<!-- shortcut to method name configuration depending on constructor 
 			or normal method -->
-		<xsl:variable name="mcfg"
-			select="if($method/type) then $meta_config/method/name else $meta_config/constructor/name" />
+		<!-- <xsl:variable name="mcfg"
+			select="if($method/type) then $meta_config/method/name else $meta_config/constructor/name" /> -->
+		<xsl:variable name="mcfg">
+			<xsl:choose>
+				<xsl:when test="not($method/type)">
+					<xsl:value-of select="$meta_config/constructor/name" />
+				</xsl:when>
+				<!-- destructor -->
+				<xsl:when test="$method/name() = $meta_config/destructor/name">
+					<xsl:value-of select="''" />
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="$meta_config/method/name"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
 
 		<!-- shortcut of given function name -->
 		<xsl:variable name="org_method_name" select="$method/name" />
