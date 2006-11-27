@@ -95,6 +95,11 @@
 			<name>__delete</name>
 		</destructor>
 
+		<publicattribute>
+			<get>get</get>
+			<set>set</set>
+		</publicattribute>
+
 	</meta>
 
 	<cpp>
@@ -108,6 +113,7 @@
 				<class name="_jni_class_" />
 				<object name="_jni_this_" />
 				<pointer name="_jni_pointer_" />
+				<attributevalue name="_jni_value_" />
 			</jni>
 			<cpp>
 				<result name="_cpp_result" />
@@ -189,6 +195,79 @@
 					#nl#return #cpp_return#;
 				</return>				
 			</normal>
+
+			<publicattribute>
+				<get>
+					<value>
+						<static>
+							// FIXME: no template for this case
+						</static>
+						<nonstatic>
+							#nl#// parameter conversions
+							#cpp_conversions#
+							#nl#
+							#nl#// cast pointer to C++ object
+							#nl##cpp_class#* #cpp_this# =
+							reinterpret_cast&lt;#cpp_class#*&gt;(#jni_pointer#);
+							#nl#
+							#nl#// call library method
+							#nl##cpp_return_type# #cpp_return_var# =
+							    #cpp_this#->#cpp_attribute#;
+							#nl#return #cpp_return#;
+						</nonstatic>
+					</value>
+					<pointer>
+						<static>
+							// FIXME: no template for this case
+						</static>
+						<nonstatic>
+							// FIXME: no template for this case
+						</nonstatic>
+					</pointer>
+					<reference>
+						<static>
+							// FIXME: no template for this case
+						</static>
+						<nonstatic>
+							// FIXME: no template for this case
+						</nonstatic>
+					</reference>
+				</get>
+				<set>
+					<value>
+						<static>
+							// FIXME: no template for this case
+						</static>
+						<nonstatic>
+							#nl#// parameter conversions
+							#cpp_conversions#
+							#nl#
+							#nl#// cast pointer to C++ object
+							#nl##cpp_class#* #cpp_this# =
+							reinterpret_cast&lt;#cpp_class#*&gt;(#jni_pointer#);
+							#nl#
+							#nl#// call library method
+							#nl##cpp_this#->#cpp_attribute# = #cpp_params#;
+						</nonstatic>
+					</value>
+					<pointer>
+						<static>
+							// FIXME: no template for this case
+						</static>
+						<nonstatic>
+							// FIXME: no template for this case
+						</nonstatic>
+					</pointer>
+					<reference>
+						<static>
+							// FIXME: no template for this case
+						</static>
+						<nonstatic>
+							// FIXME: no template for this case
+						</nonstatic>
+					</reference>
+				</set>
+			</publicattribute>
 
 		</method>
 
