@@ -113,6 +113,12 @@
 			<xsl:when test="$method/@destructor eq 'true'">
 				<xsl:text>destructor</xsl:text>
 			</xsl:when>
+			<xsl:when test="$method/@public_attribute_getter eq 'true'">
+				<xsl:text>getter for public attribute</xsl:text>
+			</xsl:when>
+			<xsl:when test="$method/@public_attribute_setter eq 'true'">
+				<xsl:text>setter for public attribute</xsl:text>
+			</xsl:when>
 			<xsl:when test="$method/@static eq 'true'">
 				<xsl:text>static method</xsl:text>
 			</xsl:when>
@@ -131,7 +137,9 @@
 		<xsl:text>&#10;&#32;*&#32;Definition:</xsl:text>
 		<xsl:text>&#32;</xsl:text>
 		<xsl:value-of select="$method_def" />
-		<xsl:text>()</xsl:text>
+		<xsl:if test="$method/@public_attribute_getter ne 'true' or $method/@public_attribute_setter ne 'true'">
+			<xsl:text>()</xsl:text>
+		</xsl:if>
 
 		<!-- write signature of this method -->
 		<xsl:text>&#10;&#32;*&#32;Signature:</xsl:text>
@@ -149,7 +157,7 @@
 
 	<xd:doc type="stylesheet">
 		<xd:short>
-			Generate method comments prior method declarations
+			Generate method declarations
 		</xd:short>
 	</xd:doc>
 	<xsl:template name="cppRealMethodDeclaration">

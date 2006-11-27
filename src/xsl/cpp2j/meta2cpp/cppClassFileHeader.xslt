@@ -88,7 +88,7 @@
 			<xsl:text>;</xsl:text>
 		</xsl:for-each>
 
-		<!-- iterate through all member functions -->
+		<!-- iterate through all helper functions -->
 		<xsl:for-each select="$helper_methods/function">
 
 			<xsl:call-template name="cppMethodDeclaration">

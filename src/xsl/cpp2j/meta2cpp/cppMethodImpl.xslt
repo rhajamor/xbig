@@ -76,6 +76,54 @@
 						select="$config/config/cpp/method/destructor" />
 				</xsl:when>
 
+				<!-- handle public attribute getter -->
+				<xsl:when test="$method/@public_attribute_getter eq 'true'">
+					<xsl:choose>
+						<xsl:when test="@passedBy='value' and @static!='true'">
+							<xsl:copy-of select="$config/config/cpp/method/publicattribute/get/value/nonstatic" />
+						</xsl:when>
+						<xsl:when test="@passedBy='pointer' and @static!='true'">
+							<xsl:copy-of select="$config/config/cpp/method/publicattribute/get/pointer/nonstatic" />
+						</xsl:when>
+						<xsl:when test="@passedBy='reference' and @static!='true'">
+							<xsl:copy-of select="$config/config/cpp/method/publicattribute/get/reference/nonstatic" />
+						</xsl:when>
+						<xsl:when test="@passedBy='value' and @static='true'">
+							<xsl:copy-of select="$config/config/cpp/method/publicattribute/get/value/static" />
+						</xsl:when>
+						<xsl:when test="@passedBy='pointer' and @static='true'">
+							<xsl:copy-of select="$config/config/cpp/method/publicattribute/get/pointer/static" />
+						</xsl:when>
+						<xsl:when test="@passedBy='reference' and @static='true'">
+							<xsl:copy-of select="$config/config/cpp/method/publicattribute/get/reference/static" />
+						</xsl:when>
+					</xsl:choose>
+				</xsl:when>
+
+				<!-- handle public attribute setter -->
+				<xsl:when test="$method/@public_attribute_setter eq 'true'">
+					<xsl:choose>
+						<xsl:when test="@passedBy='value' and @static!='true'">
+							<xsl:copy-of select="$config/config/cpp/method/publicattribute/set/value/nonstatic" />
+						</xsl:when>
+						<xsl:when test="@passedBy='pointer' and @static!='true'">
+							<xsl:copy-of select="$config/config/cpp/method/publicattribute/set/pointer/nonstatic" />
+						</xsl:when>
+						<xsl:when test="@passedBy='reference' and @static!='true'">
+							<xsl:copy-of select="$config/config/cpp/method/publicattribute/set/reference/nonstatic" />
+						</xsl:when>
+						<xsl:when test="@passedBy='value' and @static='true'">
+							<xsl:copy-of select="$config/config/cpp/method/publicattribute/set/value/static" />
+						</xsl:when>
+						<xsl:when test="@passedBy='pointer' and @static='true'">
+							<xsl:copy-of select="$config/config/cpp/method/publicattribute/set/pointer/static" />
+						</xsl:when>
+						<xsl:when test="@passedBy='reference' and @static='true'">
+							<xsl:copy-of select="$config/config/cpp/method/publicattribute/set/reference/static" />
+						</xsl:when>
+					</xsl:choose>
+				</xsl:when>
+
 				<!-- handle static method without return parameter -->
 				<xsl:when
 					test="($method/type eq 'void') and ($static eq 'true') ">

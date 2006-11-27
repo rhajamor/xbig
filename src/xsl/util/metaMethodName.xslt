@@ -78,7 +78,8 @@
 
 		<!-- write meta signature if parameters available -->
 		<xsl:variable name="method_params">
-			<xsl:if test="count(parameters/parameter) > 0">
+			<xsl:if test="count(parameters/parameter) > 0 and
+						  $method/@public_attribute_setter ne 'true'">
 
 				<!-- write parameter seperation -->
 				<xsl:text>__</xsl:text>

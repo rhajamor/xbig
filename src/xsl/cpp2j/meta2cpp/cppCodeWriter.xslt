@@ -339,8 +339,15 @@
 		<xsl:variable name="line11"
 			select="xbig:cpp-replace($line10, '#cpp_return_var#', $var_config/cpp/result/@name)" />
 
+		<!-- replace public attribute -->
+		<!-- ARGH: WTF is this not working ????? -->
+		<!-- <xsl:variable name="line12"
+			select="xbig:cpp-replace($line11, '#cpp_attribute#', $method/attribute_name)" /> -->
+		<xsl:variable name="line12"
+			select="xbig:cpp-replace($line11, '#cpp_attribute#', substring($method/name, string-length($config/config/meta/publicattribute/get)+3))" />
+
 		<xsl:variable name="result"
-			select="xbig:cpp-replace(normalize-space($line11),'#nl#', $config/config/cpp/format/indent)" />
+			select="xbig:cpp-replace(normalize-space($line12),'#nl#', $config/config/cpp/format/indent)" />
 
 		<!-- real writing of code line -->
 		<xsl:value-of select="$result" />

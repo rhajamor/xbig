@@ -36,6 +36,7 @@
 
 	<xsl:import href="javaNativeMethod.xslt" />
 	<xsl:import href="javaAccessMethod.xslt" />
+	<xsl:import href="javaPublicAttribute.xslt" />
 
 	<xd:doc type="stylesheet">
 		<xd:short>Generate mapping of a single original class or struct</xd:short>
@@ -93,6 +94,13 @@
 				<xsl:with-param name="method" select="." />
 			</xsl:call-template>
 
+		</xsl:for-each>
+
+		<!-- handling of public attributes -->
+		<xsl:for-each select="variable">
+			<xsl:call-template name="javaPublicAttribute">
+				<xsl:with-param name="config" select="$config" />
+			</xsl:call-template>
 		</xsl:for-each>
 
 		<!-- close class declaration  -->

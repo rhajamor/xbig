@@ -36,6 +36,7 @@
 
 	<xsl:import href="cppClassFileHeader.xslt" />
 	<xsl:import href="cppClassFileImpl.xslt" />
+	<xsl:import href="cppCreateHelperMethods.xslt" />
 
 	<xd:doc type="stylesheet">
 		<xd:short>Generation of types outside a namespace</xd:short>
@@ -75,42 +76,11 @@
 		<xsl:variable name="impl_filename"
 			select="concat($lib_dir, '/', $main_filename,'.cpp')" />
 
-		<!-- compose destructor name -->
-		<xsl:variable name="destructor_name"
-			select="$config/config/meta/destructor/name/text()" />
-
 		<!-- generate description for helper methods -->
 		<xsl:variable name="helper_methods">
-			<xsl:element name="function">
-				<xsl:attribute name="destructor">
-					<xsl:text>true</xsl:text>
-				</xsl:attribute>
-				<xsl:attribute name="virt">
-					<xsl:text>virtual</xsl:text>
-				</xsl:attribute>
-				<xsl:attribute name="visibility">
-					<xsl:text>public</xsl:text>
-				</xsl:attribute>
-				<xsl:attribute name="static">
-					<xsl:text>false</xsl:text>
-				</xsl:attribute>
-				<xsl:attribute name="const">
-					<xsl:text>false</xsl:text>
-				</xsl:attribute>
-				<xsl:attribute name="passedBy">
-					<xsl:text>value</xsl:text>
-				</xsl:attribute>
-				<xsl:element name="type">
-					<xsl:text>void</xsl:text>
-				</xsl:element>
-				<xsl:element name="name">
-					<xsl:value-of select="$destructor_name" />
-				</xsl:element>
-				<xsl:element name="definition">
-					<xsl:value-of
-						select="concat(@fullName, '::', $destructor_name)" />
-				</xsl:element>
-			</xsl:element>
+			<xsl:call-template name="cppCreateHelperMethods">
+				<xsl:with-param name="config" select="$config" />
+			</xsl:call-template>
 		</xsl:variable>
 
 		<!-- open header file -->
