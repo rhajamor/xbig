@@ -1,3 +1,3 @@
 #!/bin/sh
 export LD_LIBRARY_PATH=$(dirname $0)
-ant
+ant -lib ../../src/ant/jar
