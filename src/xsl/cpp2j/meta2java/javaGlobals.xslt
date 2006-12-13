@@ -32,9 +32,11 @@
 	xmlns:xs="http://www.w3.org/2001/XMLSchema"
 	xmlns:fn="http://www.w3.org/2005/xpath-functions"
 	xmlns:xdt="http://www.w3.org/2005/xpath-datatypes"
-	xmlns:xd="http://www.pnp-software.com/XSLTdoc">
+	xmlns:xd="http://www.pnp-software.com/XSLTdoc"
+	xmlns:xbig="http://xbig.sourceforge.net/XBiG">
 
 	<xsl:import href="javaClass.xslt" />
+	<xsl:import href="../../util/path.xslt" />
 
 	<xd:doc type="stylesheet">
 		<xd:short>Generation of types outside a namespace</xd:short>
@@ -48,14 +50,14 @@
 
 		<!-- transform Java namespace to directory name -->
 		<xsl:variable name="java_ns_dir"
-					  select="replace($meta_ns_name,'\.', '/')" />
+			select="replace($meta_ns_name,'\.', '/')" />
 
 		<!-- compose filename of current class -->
 		<xsl:variable name="filename"
-			select="concat($outdir, '/', $java_ns_dir, '/',@name,'.java')" />
+			select="concat($outdir, '/', $java_ns_dir, '/',@name,'.java')" />							
 
 		<!-- open Java file -->
-		<xsl:result-document href="{$filename}"
+		<xsl:result-document href="{xbig:toFileURL($filename)}"
 			format="textOutput">
 
 			<!-- write package -->

@@ -33,7 +33,7 @@
 	xmlns:fn="http://www.w3.org/2005/xpath-methods"
 	xmlns:xdt="http://www.w3.org/2005/xpath-datatypes"
 	xmlns:xd="http://www.pnp-software.com/XSLTdoc"
-	xmlns:xbig="http://www.xbig.org/cpp2j">
+	xmlns:xbig="http://xbig.sourceforge.net/XBiG">
 
 	<xsl:import href="cppMethodDeclaration.xslt" />
 

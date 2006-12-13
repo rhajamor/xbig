@@ -1,6 +1,16 @@
 TO DO!  
-  
 
+1.Windows
+---------
+To install/use XBIG in combination of Eclipse and the MS compiler
+follow this instructions.
+
+1.1 Configuration
+-----------------
+* Set the compiler and platform.
+  /src/ant/config/config_cpp.xml
+* Set the path to your doxygen installation.
+  /src/ant/config/config_doxygen.xml
 -----
 
 Copyright (c) 2006 The XBiG Development Team

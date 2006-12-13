@@ -32,12 +32,14 @@
 	xmlns:xs="http://www.w3.org/2001/XMLSchema"
 	xmlns:fn="http://www.w3.org/2005/xpath-functions"
 	xmlns:xdt="http://www.w3.org/2005/xpath-datatypes"
-	xmlns:xd="http://www.pnp-software.com/XSLTdoc">
+	xmlns:xd="http://www.pnp-software.com/XSLTdoc"
+	xmlns:xbig="http://xbig.sourceforge.net/XBiG">
 
 	<xsl:import href="cppClassFileHeader.xslt" />
 	<xsl:import href="cppClassFileImpl.xslt" />
 	<xsl:import href="cppCreateHelperMethods.xslt" />
 	<xsl:import href="../../util/utilXmlPrint.xslt" />
+	<xsl:import href="../../util/path.xslt" />
 
 	<xd:doc type="stylesheet">
 		<xd:short>Generation of types inside a namespace</xd:short>
@@ -110,9 +112,9 @@
 					<xsl:with-param name="config" select="$config" />
 				</xsl:call-template>
 			</xsl:variable>
-
+			
 			<!-- open header file -->
-			<xsl:result-document href="{$header_filename}"
+			<xsl:result-document href="{xbig:toFileURL($header_filename)}"
 				format="textOutput">
 
 				<!-- write header file -->
@@ -127,10 +129,8 @@
 
 			</xsl:result-document>
 
-
-
 			<!-- open implementation file -->
-			<xsl:result-document href="{$impl_filename}"
+			<xsl:result-document href="{xbig:toFileURL($impl_filename)}"
 				format="textOutput">
 
 				<!-- write file header with copyright information -->
