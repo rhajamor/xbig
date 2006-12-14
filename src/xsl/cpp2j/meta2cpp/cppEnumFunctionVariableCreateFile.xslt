@@ -32,7 +32,10 @@
 	xmlns:xs="http://www.w3.org/2001/XMLSchema"
 	xmlns:fn="http://www.w3.org/2005/xpath-functions"
 	xmlns:xdt="http://www.w3.org/2005/xpath-datatypes"
-	xmlns:xd="http://www.pnp-software.com/XSLTdoc">
+	xmlns:xd="http://www.pnp-software.com/XSLTdoc"
+	xmlns:xbig="http://xbig.sourceforge.net/XBiG">
+	
+	<xsl:import href="../../util/path.xslt"/>
 
 	<xd:doc type="stylesheet">
 		<xd:short>Generation of files for global or in-namespace enums, functions and variables</xd:short>
@@ -80,7 +83,7 @@
 	
 	
 			<!-- open header file -->
-			<xsl:result-document href="{$header_filename}"
+			<xsl:result-document href="{xbig:toFileURL($header_filename)}"
 				format="textOutput">
 	
 				<!-- write file header with copyright information -->
@@ -138,7 +141,7 @@
 	
 	
 			<!-- open implementation file -->
-			<xsl:result-document href="{$impl_filename}"
+			<xsl:result-document href="{xbig:toFileURL($impl_filename)}"
 				format="textOutput">
 	
 				<!-- include all JNI utility functions -->

@@ -32,9 +32,11 @@
 	xmlns:xs="http://www.w3.org/2001/XMLSchema"
 	xmlns:fn="http://www.w3.org/2005/xpath-functions"
 	xmlns:xdt="http://www.w3.org/2005/xpath-datatypes"
-	xmlns:xd="http://www.pnp-software.com/XSLTdoc">
+	xmlns:xd="http://www.pnp-software.com/XSLTdoc"
+	xmlns:xbig="http://xbig.sourceforge.net/XBiG">
 
 	<xsl:import href="javaEnum.xslt" />
+	<xsl:import href="../../util/path.xslt"/>
 
 	<xd:doc type="stylesheet">
 		<xd:short>Generation of a file for global or in-namespace enums, functions and variables</xd:short>
@@ -64,7 +66,7 @@
 				select="concat($outdir, '/', $java_ns_dir, '/', $filenameStub, '.java')" />
 	
 			<!-- open Java file -->
-			<xsl:result-document href="{$filename}"
+			<xsl:result-document href="{xbig:toFileURL($filename)}"
 				format="textOutput">
 	
 				<!-- write package -->

@@ -304,6 +304,15 @@
 
 			<types>
 				<type meta="void" jni="void" />
+				
+				<type meta="bool" pass="pointer" jni="jlong" cpp="bool*">
+					<jni2cpp>
+						reinterpret_cast&lt;bool*&gt;(#jni_var#)
+					</jni2cpp>					
+					<cpp2jni>
+						reinterpret_cast&lt;jlong&gt;(#cpp_var#)
+					</cpp2jni>
+				</type>
 				<type meta="bool" jni="jbool" />
 
 				<type meta="char" pass="pointer" const="true"				
@@ -314,26 +323,120 @@
 					<cpp2jni>
 						org::xbig::jni::to_jstring(#jni_env#, #cpp_var#)
 					</cpp2jni>
-				</type>
-				
-				<type meta="char" jni="jchar" />
+				</type>				
+				<type meta="char" jni="jchar" />				
 				<type meta="signed char" jni="jbyte" />
 				<type meta="unsigned char" jni="jshort" />
 
+				<type meta="short" pass="pointer" jni="jlong" cpp="short*">
+					<jni2cpp>
+						reinterpret_cast&lt;short*&gt;(#jni_var#)
+					</jni2cpp>					
+					<cpp2jni>
+						reinterpret_cast&lt;jlong&gt;(#cpp_var#)
+					</cpp2jni>
+				</type>
 				<type meta="short" jni="jshort" />
+				
+				<type meta="signed short" pass="pointer" jni="jlong" cpp="signed short*">
+					<jni2cpp>
+						reinterpret_cast&lt;signed short*&gt;(#jni_var#)
+					</jni2cpp>					
+					<cpp2jni>
+						reinterpret_cast&lt;jlong&gt;(#cpp_var#)
+					</cpp2jni>
+				</type>
 				<type meta="signed short" jni="jshort" />
+				
+				<type meta="unsigned short" pass="pointer" jni="jlong" cpp="unsigned short*">
+					<jni2cpp>
+						reinterpret_cast&lt;unsigned short*&gt;(#jni_var#)
+					</jni2cpp>					
+					<cpp2jni>
+						reinterpret_cast&lt;jlong&gt;(#cpp_var#)
+					</cpp2jni>
+				</type>			
 				<type meta="unsigned short" jni="jint" />
 
+				<type meta="int" pass="pointer" jni="jlong" cpp="int*">
+					<jni2cpp>
+						reinterpret_cast&lt;int*&gt;(#jni_var#)
+					</jni2cpp>					
+					<cpp2jni>
+						reinterpret_cast&lt;jlong&gt;(#cpp_var#)
+					</cpp2jni>
+				</type>	
 				<type meta="int" jni="jint" />
+				
+				<type meta="signed int" pass="pointer" jni="jlong" cpp="signed int*">
+					<jni2cpp>
+						reinterpret_cast&lt;signed int*&gt;(#jni_var#)
+					</jni2cpp>					
+					<cpp2jni>
+						reinterpret_cast&lt;jlong&gt;(#cpp_var#)
+					</cpp2jni>
+				</type>	
 				<type meta="signed int" jni="jint" />
+				
+				<type meta="unsigned int" pass="pointer" jni="jlong" cpp="unsigned int*">
+					<jni2cpp>
+						reinterpret_cast&lt;unsigned int*&gt;(#jni_var#)
+					</jni2cpp>					
+					<cpp2jni>
+						reinterpret_cast&lt;jlong&gt;(#cpp_var#)
+					</cpp2jni>
+				</type>	
 				<type meta="unsigned int" jni="jlong" />
-
+				
+				<type meta="long" pass="pointer" jni="jlong" cpp="long*">
+					<jni2cpp>
+						reinterpret_cast&lt;long*&gt;(#jni_var#)
+					</jni2cpp>					
+					<cpp2jni>
+						reinterpret_cast&lt;jlong&gt;(#cpp_var#)
+					</cpp2jni>
+				</type>	
 				<type meta="long" jni="jlong" />
+				
+				<type meta="signed long" pass="pointer" jni="jlong" cpp="signed long*">
+					<jni2cpp>
+						reinterpret_cast&lt;signed long*&gt;(#jni_var#)
+					</jni2cpp>					
+					<cpp2jni>
+						reinterpret_cast&lt;jlong&gt;(#cpp_var#)
+					</cpp2jni>
+				</type>
 				<type meta="signed long" jni="jlong" />
+				
+				<type meta="unsigned long" pass="pointer" jni="jlong" cpp="unsgined long*">
+					<jni2cpp>
+						reinterpret_cast&lt;unsigned long*&gt;(#jni_var#)
+					</jni2cpp>					
+					<cpp2jni>
+						reinterpret_cast&lt;jlong&gt;(#cpp_var#)
+					</cpp2jni>
+				</type>
 				<type meta="unsigned long" jni="jlong" />
-
+				
+				<type meta="double" pass="pointer" jni="jdouble" cpp="double*">
+					<jni2cpp>
+						reinterpret_cast&lt;double*&gt;(#jni_var#)
+					</jni2cpp>					
+					<cpp2jni>
+						reinterpret_cast&lt;jlong&gt;(#cpp_var#)
+					</cpp2jni>
+				</type>				
 				<type meta="double" jni="jdouble" />
-				<type meta="float" jni="jfloat" />
+				
+				<type meta="float" pass="pointer" jni="jlong" cpp="float*">
+					<jni2cpp>
+						reinterpret_cast&lt;float*&gt;(#jni_var#)
+					</jni2cpp>					
+					<cpp2jni>
+						reinterpret_cast&lt;jlong&gt;(#cpp_var#)
+					</cpp2jni>
+				</type>				
+				<type meta="float" jni="jfloat" />				
 
 				<type meta="std::string" jni="jstring">
 					<jni2cpp>
