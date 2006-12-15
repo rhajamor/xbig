@@ -54,34 +54,16 @@
 
 		<!-- extract jni type depending on meta type, const/non-const, pass type -->
 
+
 		<!-- iterator through all entries for given type -->
-		<xsl:for-each select="$root/type[@meta=$meta_type]">
+		<xsl:for-each select="$root/type">
 
-			<!-- check passing type -->
-			<xsl:choose>
-
-				<!-- exact match of pass type and const type -->
-				<xsl:when
-					test="@passedBy and @const and ($pass_type eq @passedBy) and ($const_type eq @const)">
-					<xsl:copy-of select="." />
-				</xsl:when>
-
-				<!-- exact match of pass type -->
-				<xsl:when
-					test="@passedBy and ($pass_type eq @passedBy)">
-					<xsl:copy-of select="." />
-				</xsl:when>
-
-				<!-- exact match const type -->
-				<xsl:when test="@const and ($const_type eq @const)">
-					<xsl:copy-of select="." />
-				</xsl:when>
-
-				<!-- only type matching -->
-				<xsl:otherwise>
-					<xsl:copy-of select="." />
-				</xsl:otherwise>
-			</xsl:choose>
+			<!-- build a element which contains all types from config as children -->
+			<xsl:if test="@meta eq $meta_type">
+				<xsl:element name="types">
+					<xsl:copy-of select="."/>
+				</xsl:element>
+			</xsl:if>
 
 		</xsl:for-each>
 
@@ -110,7 +92,46 @@
 		</xsl:if>
 
 		<!-- take first type info-->
-		<xsl:copy-of select="$type_infos/type[1]" />
+		<xsl:copy-of select="$type_infos/types/type[1]" />
+
+	</xsl:template>
+
+	<xsl:template name="metaExactTypeInfo">
+		<xsl:param name="root" />
+		<xsl:param name="param" />
+
+		<!-- calculate all suitable type informations -->
+		<xsl:variable name="type_infos">
+			<xsl:call-template name="metaTypeInfo">
+				<xsl:with-param name="root" select="$root" />
+				<xsl:with-param name="param" select="$param" />
+			</xsl:call-template>
+		</xsl:variable>
+
+		<!-- ensure valid signature -->
+		<xsl:if test="count($type_infos) = 0">
+			<xsl:message terminate="yes">
+				ERROR: no type info for meta type '
+				<xsl:value-of select="$param/type" />
+				' found.
+			</xsl:message>
+		</xsl:if>
+ 
+		<!-- find exact type info-->
+		<xsl:for-each select="$type_infos/types/type">
+			<xsl:choose>
+
+				<!-- when passed by value, the pass attribute is missing in config.xml -->
+				<xsl:when test="not(@pass) and ($param/@passedBy eq 'value')">
+					<xsl:copy-of select="."/>
+				</xsl:when>
+
+				<xsl:when test="@pass eq $param/@passedBy">
+					<xsl:copy-of select="."/>
+				</xsl:when>
+
+			</xsl:choose>
+		</xsl:for-each>
 
 	</xsl:template>
 

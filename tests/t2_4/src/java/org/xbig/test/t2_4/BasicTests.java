@@ -6,6 +6,8 @@ package org.xbig.test.t2_4;
 import org.junit.Assert;
 import org.junit.Test;
 import org.xbig.A;
+import org.xbig.base.*;
+
 /**
  * @author bielig
  *
@@ -15,12 +17,18 @@ public class BasicTests {
 	@Test
 	public void callMethodsWithReferences() {
 		A a = new A();
-		int b = a.a((float)7.3);
-		Assert.assertEquals(7, b);
-		b = a.b((float)7.3);
-		Assert.assertEquals(7, b);
-		b = a.c((float)7.3);
-		Assert.assertEquals(7, b);
+		IntegerPointer iPtr;
+		FloatPointer fPtr = new FloatPointer(7.3f);
+
+		int b = a.a(fPtr);
+		Assert.assertEquals(fPtr.intValue(), b);
+
+		iPtr = a.b(fPtr.floatValue());
+		Assert.assertEquals(fPtr.intValue(), iPtr.intValue());
+
+		iPtr = a.c(fPtr);
+		Assert.assertEquals(fPtr.intValue(), iPtr.intValue());
+
 		a.delete();
 	}
 }

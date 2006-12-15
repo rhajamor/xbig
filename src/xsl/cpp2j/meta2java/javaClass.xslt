@@ -54,6 +54,12 @@
 		<!-- shortcut for class name -->
 		<xsl:variable name="class_name" select="$class/@name" />
 
+		<!-- write import -->
+		<xsl:text>&#32;</xsl:text>
+		<xsl:text>import org.xbig.base.*;&#32;</xsl:text>
+		<xsl:text>import std.*;&#32;</xsl:text>
+		<xsl:text>&#32;</xsl:text>
+
 		<!-- write class declaration -->
 		<xsl:text>public class&#32;</xsl:text>
 		<xsl:value-of select="$class_name" />

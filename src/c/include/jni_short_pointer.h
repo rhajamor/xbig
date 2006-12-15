@@ -35,12 +35,21 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+/*
+ * Class:     base_ShortPointer
+ * Method:    _create
+ * Signature: ()J
+ */
+JNIEXPORT jlong JNICALL Java_org_xbig_base_ShortPointer__1create
+  (JNIEnv *env, jclass that, jshort value);
+
 /*
  * Class:     base_ShortPointer
  * Method:    _dispose
  * Signature: (J)V
  */
-JNIEXPORT void JNICALL Java_base_ShortPointer__1dispose
+JNIEXPORT void JNICALL Java_org_xbig_base_ShortPointer__1dispose
   (JNIEnv *, jobject, jlong);
 
 /*
@@ -48,7 +57,7 @@ JNIEXPORT void JNICALL Java_base_ShortPointer__1dispose
  * Method:    _get
  * Signature: (J)S
  */
-JNIEXPORT jshort JNICALL Java_base_ShortPointer__1get
+JNIEXPORT jshort JNICALL Java_org_xbig_base_ShortPointer__1get
   (JNIEnv *, jobject, jlong);
 
 /*
@@ -56,7 +65,7 @@ JNIEXPORT jshort JNICALL Java_base_ShortPointer__1get
  * Method:    _next
  * Signature: (J)J
  */
-JNIEXPORT jlong JNICALL Java_base_ShortPointer__1next
+JNIEXPORT jlong JNICALL Java_org_xbig_base_ShortPointer__1next
   (JNIEnv *, jobject, jlong);
 
 /*
@@ -64,7 +73,7 @@ JNIEXPORT jlong JNICALL Java_base_ShortPointer__1next
  * Method:    _set
  * Signature: (JS)V
  */
-JNIEXPORT void JNICALL Java_base_ShortPointer__1set
+JNIEXPORT void JNICALL Java_org_xbig_base_ShortPointer__1set
   (JNIEnv *, jobject, jlong, jshort);
 
 #ifdef __cplusplus

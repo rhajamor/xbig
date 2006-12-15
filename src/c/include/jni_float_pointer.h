@@ -35,12 +35,21 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+/*
+ * Class:     alwaysthere_FloatPointer
+ * Method:    _create
+ * Signature: ()J
+ */
+JNIEXPORT jlong JNICALL Java_org_xbig_base_FloatPointer__1create
+  (JNIEnv *env, jclass that, jfloat value);
+
 /*
  * Class:     alwaysthere_FloatPointer
  * Method:    _dispose
  * Signature: (J)V
  */
-JNIEXPORT void JNICALL Java_base_FloatPointer__1dispose
+JNIEXPORT void JNICALL Java_org_xbig_base_FloatPointer__1dispose
   (JNIEnv *, jobject, jlong);
 
 /*
@@ -48,7 +57,7 @@ JNIEXPORT void JNICALL Java_base_FloatPointer__1dispose
  * Method:    _get
  * Signature: (J)F
  */
-JNIEXPORT jfloat JNICALL Java_base_FloatPointer__1get
+JNIEXPORT jfloat JNICALL Java_org_xbig_base_FloatPointer__1get
   (JNIEnv *, jobject, jlong);
 
 /*
@@ -56,7 +65,7 @@ JNIEXPORT jfloat JNICALL Java_base_FloatPointer__1get
  * Method:    _set
  * Signature: (JF)V
  */
-JNIEXPORT void JNICALL Java_base_FloatPointer__1set
+JNIEXPORT void JNICALL Java_org_xbig_base_FloatPointer__1set
   (JNIEnv *, jobject, jlong, jfloat);
 
 /*
@@ -64,7 +73,7 @@ JNIEXPORT void JNICALL Java_base_FloatPointer__1set
  * Method:    _next
  * Signature: (J)J
  */
-JNIEXPORT jlong JNICALL Java_base_FloatPointer__1next
+JNIEXPORT jlong JNICALL Java_org_xbig_base_FloatPointer__1next
   (JNIEnv *, jobject, jlong);
 
 #ifdef __cplusplus

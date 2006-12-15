@@ -35,12 +35,21 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+/*
+ * Class:     base_IntegerPointer
+ * Method:    _create
+ * Signature: ()J
+ */
+JNIEXPORT jlong JNICALL Java_org_xbig_base_IntegerPointer__1create
+  (JNIEnv *env, jclass that, jint value);
+
 /*
  * Class:     base_IntegerPointer
  * Method:    _dispose
  * Signature: (J)V
  */
-JNIEXPORT void JNICALL Java_base_IntegerPointer__1dispose
+JNIEXPORT void JNICALL Java_org_xbig_base_IntegerPointer__1dispose
   (JNIEnv *, jobject, jlong);
 
 /*
@@ -48,7 +57,7 @@ JNIEXPORT void JNICALL Java_base_IntegerPointer__1dispose
  * Method:    _get
  * Signature: (J)I
  */
-JNIEXPORT jint JNICALL Java_base_IntegerPointer__1get
+JNIEXPORT jint JNICALL Java_org_xbig_base_IntegerPointer__1get
   (JNIEnv *, jobject, jlong);
 
 /*
@@ -56,7 +65,7 @@ JNIEXPORT jint JNICALL Java_base_IntegerPointer__1get
  * Method:    _next
  * Signature: (J)J
  */
-JNIEXPORT jlong JNICALL Java_base_IntegerPointer__1next
+JNIEXPORT jlong JNICALL Java_org_xbig_base_IntegerPointer__1next
   (JNIEnv *, jobject, jlong);
 
 /*
@@ -64,7 +73,7 @@ JNIEXPORT jlong JNICALL Java_base_IntegerPointer__1next
  * Method:    _set
  * Signature: (JI)V
  */
-JNIEXPORT void JNICALL Java_base_IntegerPointer__1set
+JNIEXPORT void JNICALL Java_org_xbig_base_IntegerPointer__1set
   (JNIEnv *, jobject, jlong, jint);
 
 #ifdef __cplusplus

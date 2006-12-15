@@ -45,6 +45,8 @@
 		<xsl:param name="class" />
 		<xsl:param name="method" />
 		<xsl:param name="with_types" />
+		<xsl:param name="writingNativeMethod" />
+		<xsl:param name="callingNativeMethod" />
 
 		<!-- iterator through all parameters -->
 		<xsl:for-each select="$method/parameters/parameter">
@@ -53,10 +55,20 @@
 			<xsl:if test="$with_types eq 'true'">
 
 				<!-- write parameter type -->
-				<xsl:call-template name="javaType">
-					<xsl:with-param name="config" select="$config" />
-					<xsl:with-param name="param" select="." />
-				</xsl:call-template>
+				<xsl:choose>
+					<xsl:when test="($writingNativeMethod eq 'true') and
+						 ((./@passedBy eq 'pointer') or (./@passedBy eq 'reference'))">
+						<xsl:value-of select="'long'" />
+					</xsl:when>
+					
+					<xsl:otherwise>
+						<xsl:call-template name="javaType">
+							<xsl:with-param name="config" select="$config" />
+							<xsl:with-param name="param" select="." />
+							<xsl:with-param name="writingNativeMethod" select="$writingNativeMethod" />
+						</xsl:call-template>
+					</xsl:otherwise>
+				</xsl:choose>
 
 			</xsl:if>
 
@@ -65,6 +77,12 @@
 
 			<!-- write parameter name -->
 			<xsl:value-of select="name" />
+
+			<!-- if we call a native method and have to pass an InstancePointer -->
+			<xsl:if test="($callingNativeMethod eq 'true') and
+				 ((./@passedBy eq 'pointer') or (./@passedBy eq 'reference'))">
+				<xsl:value-of select="'.object.pointer'" />
+			</xsl:if>
 
 			<!-- if another parameter follows, write seperator -->
 			<xsl:if test="position()!=last()">

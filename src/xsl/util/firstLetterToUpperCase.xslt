@@ -23,7 +23,7 @@
 	Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 	http://www.gnu.org/copyleft/lesser.txt.
 	
-	Author: Frank Bielig
+	Author: Kai Klesatschke <kai.klesatschke@netallied.de>
 	
 -->
 
@@ -32,29 +32,30 @@
 	xmlns:xs="http://www.w3.org/2001/XMLSchema"
 	xmlns:fn="http://www.w3.org/2005/xpath-functions"
 	xmlns:xdt="http://www.w3.org/2005/xpath-datatypes"
-	xmlns:xd="http://www.pnp-software.com/XSLTdoc">
-
-	<xsl:import href="../../util/metaTypeInfo.xslt" />
+	xmlns:xd="http://www.pnp-software.com/XSLTdoc"
+	xmlns:xbig="http://xbig.sourceforge.net/XBiG">
 
 	<xd:doc type="stylesheet">
-		<xd:short>Generate mapping of a single type</xd:short>
+		<xd:short>Collection of helper templates/functions to handle paths.</xd:short>
 	</xd:doc>
+	
 
-	<xsl:template name="jniType">
-		<xsl:param name="config" />
-		<xsl:param name="param" />
+	<xsl:template name="firstLetterToUpperCase">
+		<xsl:param name="name"/>
 
-		<xsl:variable name="type_info">
-			<xsl:call-template name="metaExactTypeInfo">
-				<xsl:with-param name="root"
-					select="$config/config/cpp/jni/types" />
-				<xsl:with-param name="param" select="$param" />
-			</xsl:call-template>
+		<xsl:variable name="firstLetter">
+			<xsl:value-of select="substring($name,1,1)"/>
 		</xsl:variable>
 
-		<!-- print first type found in result list -->
-		<xsl:value-of select="$type_info/type/@jni" />
+		<xsl:variable name="rest">
+			<xsl:value-of select="substring($name,2)"/>
+		</xsl:variable>
+
+		<xsl:variable name="upperFirstLetter">
+			<xsl:value-of select="translate($firstLetter,'abcdefghijklmnopqrstuvwxyz', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ')"/>
+		</xsl:variable>
+
+		<xsl:value-of select="concat($upperFirstLetter,$rest)"/>
 
 	</xsl:template>
-
 </xsl:stylesheet>

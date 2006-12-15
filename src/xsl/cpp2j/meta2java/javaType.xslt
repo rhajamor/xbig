@@ -35,6 +35,7 @@
 	xmlns:xd="http://www.pnp-software.com/XSLTdoc">
 
 	<xsl:import href="../../util/metaTypeInfo.xslt" />
+	<xsl:import href="../../util/firstLetterToUpperCase.xslt" />
 
 	<xd:doc type="stylesheet">
 		<xd:short>Generate mapping of a single type</xd:short>
@@ -43,18 +44,74 @@
 	<xsl:template name="javaType">
 		<xsl:param name="config" />
 		<xsl:param name="param" />
+		<xsl:param name="writingNativeMethod" />
 
 		<!-- extract jni type depending on meta type, const/non-const, pass type -->
 		<xsl:variable name="type_info">
 			<xsl:call-template name="metaFirstTypeInfo">
-				<xsl:with-param name="root"
+				<xsl:with-param name="root" 
 					select="$config/config/java/types" />
 				<xsl:with-param name="param" select="$param" />
 			</xsl:call-template>
 		</xsl:variable>
 
 		<!-- print first type found in result list -->
-		<xsl:value-of select="$type_info/type/@java" />
+		<xsl:choose>
+
+			<!-- write pointer class -->
+			<xsl:when test="($param/@passedBy='pointer' or $param/@passedBy='reference')
+						 and ($writingNativeMethod ne 'true')">
+				<xsl:call-template name="javaPointerClass">
+					<xsl:with-param name="config" select="$config" />
+					<xsl:with-param name="param" select="$param" />
+				</xsl:call-template>
+			</xsl:when>
+
+			<xsl:otherwise>
+				<xsl:value-of select="$type_info/type/@java" />
+			</xsl:otherwise>
+		</xsl:choose>
+
+	</xsl:template>
+
+
+	<xsl:template name="javaPointerClass">
+		<xsl:param name="config" />
+		<xsl:param name="param" />
+
+		<!-- extract jni type depending on meta type, const/non-const, pass type -->
+		<xsl:variable name="type_info">
+			<xsl:call-template name="metaFirstTypeInfo">
+				<xsl:with-param name="root" 
+					select="$config/config/java/types" />
+				<xsl:with-param name="param" select="$param" />
+			</xsl:call-template>
+		</xsl:variable>
+
+		<xsl:choose>
+			<xsl:when test="$param/type ne 'int'">
+				<xsl:value-of>
+					<xsl:call-template name="firstLetterToUpperCase">
+						<xsl:with-param name="name">
+							<xsl:choose>
+								<xsl:when test="contains($type_info/type/@java, ' ')">
+									<xsl:value-of select="substring-after($type_info/type/@java, ' ')" />
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:value-of select="$type_info/type/@java" />
+								</xsl:otherwise>
+							</xsl:choose>
+						</xsl:with-param>
+					</xsl:call-template>
+					<xsl:value-of select="'Pointer'" />
+				</xsl:value-of>
+			</xsl:when>
+
+			<!-- IntegerPointer is a special name -->
+			<xsl:when test="$param/type eq 'int'">
+				<xsl:value-of select="'IntegerPointer'" />
+			</xsl:when>
+		</xsl:choose>
 
 	</xsl:template>
 

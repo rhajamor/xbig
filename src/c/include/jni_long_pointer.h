@@ -35,12 +35,21 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+/*
+ * Class:     base_LongPointer
+ * Method:    _create
+ * Signature: ()J
+ */
+JNIEXPORT jlong JNICALL Java_org_xbig_base_LongPointer__1create
+  (JNIEnv *env, jclass that, jlong value);
+
 /*
  * Class:     base_LongPointer
  * Method:    _dispose
  * Signature: (J)V
  */
-JNIEXPORT void JNICALL Java_base_LongPointer__1dispose
+JNIEXPORT void JNICALL Java_org_xbig_base_LongPointer__1dispose
   (JNIEnv *, jobject, jlong);
 
 /*
@@ -48,7 +57,7 @@ JNIEXPORT void JNICALL Java_base_LongPointer__1dispose
  * Method:    _get
  * Signature: (J)J
  */
-JNIEXPORT jlong JNICALL Java_base_LongPointer__1get
+JNIEXPORT jlong JNICALL Java_org_xbig_base_LongPointer__1get
   (JNIEnv *, jobject, jlong);
 
 /*
@@ -56,7 +65,7 @@ JNIEXPORT jlong JNICALL Java_base_LongPointer__1get
  * Method:    _next
  * Signature: (J)J
  */
-JNIEXPORT jlong JNICALL Java_base_LongPointer__1next
+JNIEXPORT jlong JNICALL Java_org_xbig_base_LongPointer__1next
   (JNIEnv *, jobject, jlong);
 
 /*
@@ -64,7 +73,7 @@ JNIEXPORT jlong JNICALL Java_base_LongPointer__1next
  * Method:    _set
  * Signature: (JJ)V
  */
-JNIEXPORT void JNICALL Java_base_LongPointer__1set
+JNIEXPORT void JNICALL Java_org_xbig_base_LongPointer__1set
   (JNIEnv *, jobject, jlong, jlong);
 
 #ifdef __cplusplus

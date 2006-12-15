@@ -35,12 +35,21 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+/*
+ * Class:     base_DoublePointer
+ * Method:    _create
+ * Signature: ()J
+ */
+JNIEXPORT jlong JNICALL Java_org_xbig_base_DoublePointer__1create
+  (JNIEnv *env, jclass that, jdouble value);
+
 /*
  * Class:     base_DoublePointer
  * Method:    _dispose
  * Signature: (J)V
  */
-JNIEXPORT void JNICALL Java_base_DoublePointer__1dispose
+JNIEXPORT void JNICALL Java_org_xbig_base_DoublePointer__1dispose
   (JNIEnv *, jobject, jlong);
 
 /*
@@ -48,7 +57,7 @@ JNIEXPORT void JNICALL Java_base_DoublePointer__1dispose
  * Method:    _get
  * Signature: (J)D
  */
-JNIEXPORT jdouble JNICALL Java_base_DoublePointer__1get
+JNIEXPORT jdouble JNICALL Java_org_xbig_base_DoublePointer__1get
   (JNIEnv *, jobject, jlong);
 
 /*
@@ -56,7 +65,7 @@ JNIEXPORT jdouble JNICALL Java_base_DoublePointer__1get
  * Method:    _next
  * Signature: (J)J
  */
-JNIEXPORT jlong JNICALL Java_base_DoublePointer__1next
+JNIEXPORT jlong JNICALL Java_org_xbig_base_DoublePointer__1next
   (JNIEnv *, jobject, jlong);
 
 /*
@@ -64,7 +73,7 @@ JNIEXPORT jlong JNICALL Java_base_DoublePointer__1next
  * Method:    _set
  * Signature: (JD)V
  */
-JNIEXPORT void JNICALL Java_base_DoublePointer__1set
+JNIEXPORT void JNICALL Java_org_xbig_base_DoublePointer__1set
   (JNIEnv *, jobject, jlong, jdouble);
 
 #ifdef __cplusplus

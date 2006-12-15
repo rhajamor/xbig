@@ -20,5 +20,5 @@ public:
 	int* c(float* d);
 
 private:
-	float d;
+	int e;
 };

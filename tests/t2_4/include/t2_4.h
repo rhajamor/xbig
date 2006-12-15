@@ -20,5 +20,5 @@ public:
 	int& c(float& d);
 
 private:
-	int d;
+	int e;
 };

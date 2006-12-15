@@ -106,7 +106,7 @@
 
 	</target>
 
-	<target name="cpp-debug-init" depends="cpp-pre-init" if="cpp.is-debug">
+	<target name="cpp-debug-init" depends="cpp-pre-init, cpp-release-init" if="cpp.is-debug">
 		<property name="cpp.compiler.config" value="debug" />
 	</target>
 

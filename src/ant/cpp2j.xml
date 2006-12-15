@@ -351,7 +351,8 @@
 				<fileset dir="${dir.cur.build.java.jar}" includes="${lib.xbig}*.jar" />
 				<fileset dir="${dir.prj.src.ant.jar}" includes="junit-4.1.0.jar"/>
 			</classpath>
-			<jvmarg value="-Djava.library.path=${dir.cpp.build.config}/shared"/>
+			<jvmarg value="-Djava.library.path=${dir.cpp.build.config}/shared:${dir.prj.base}/bin/c/${cpp.platform}/${cpp.compiler}/${cpp.compiler.config}/shared"/>
+			<!--<jvmarg os="windows" value="-Djava.library.path=${dir.cpp.build.config}/shared;${dir.prj.base}/bin/c/${cpp.platform}/${cpp.compiler}/${cpp.compiler.config}/shared"/>-->
 		</junit>
 	
 		<!-- delete the previous copied files -->

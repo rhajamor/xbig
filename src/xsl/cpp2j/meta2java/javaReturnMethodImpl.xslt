@@ -49,6 +49,16 @@
 		<!-- write return statement -->
 		<xsl:text>&#32;return&#32;</xsl:text>
 
+		<!-- create Pointer object when necessary -->
+		<xsl:if test="$method/@passedBy='pointer' or $method/@passedBy='reference'">
+			<xsl:text>new&#32;</xsl:text>
+			<xsl:call-template name="javaPointerClass">
+				<xsl:with-param name="config" select="$config" />
+				<xsl:with-param name="param" select="$method" />
+			</xsl:call-template>
+			<xsl:text>(new&#32;InstancePointer(</xsl:text>
+		</xsl:if>
+
 		<!-- write native method name -->
 		<xsl:call-template name="metaMethodName">
 			<xsl:with-param name="config" select="$config" />
@@ -76,7 +86,13 @@
 			<xsl:with-param name="config" select="$config" />
 			<xsl:with-param name="class" select="$class" />
 			<xsl:with-param name="method" select="$method" />
+			<xsl:with-param name="callingNativeMethod" select="'true'" />
 		</xsl:call-template>
+
+		<!-- close Pointer and InstancePointer c-tor calls -->
+		<xsl:if test="$method/@passedBy='pointer' or $method/@passedBy='reference'">
+			<xsl:text>))</xsl:text>
+		</xsl:if>
 
 		<!-- close parameter list -->
 		<xsl:text>);</xsl:text>

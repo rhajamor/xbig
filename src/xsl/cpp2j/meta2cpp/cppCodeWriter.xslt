@@ -68,16 +68,33 @@
 
 		<!-- shortcut to type conversion configurations -->
 		<xsl:variable name="type_info">
-			<xsl:call-template name="metaFirstTypeInfo">
+			<xsl:call-template name="metaExactTypeInfo">
 				<xsl:with-param name="root"
 					select="$config/config/cpp/jni/types" />
 				<xsl:with-param name="param" select="$param" />
 			</xsl:call-template>
 		</xsl:variable>
 
+		<!-- ensure valid signature -->
+		<xsl:if test="count($type_info) != 1">
+			<xsl:message terminate="yes">
+				ERROR: no exact type info for meta type '
+				<xsl:value-of select="$param/type" />
+				' found.
+			</xsl:message>
+		</xsl:if>
+
 		<!-- if explicit conversion given -->
 		<xsl:if test="$type_info/type/@cpp">
-			<xsl:value-of select="$type_info/type/@cpp" />
+			<xsl:choose>
+				<!-- references need different conversion and return types -->
+				<xsl:when test="$type_info/type/@pass='reference' and $param/definition">
+					<xsl:value-of select="$type_info/type/@returntype" />
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="$type_info/type/@cpp" />
+				</xsl:otherwise>
+			</xsl:choose>
 		</xsl:if>
 
 		<!-- no explicit conversion given, compose from parameter information -->
@@ -120,7 +137,7 @@
 
 		<!-- shortcut to type conversion configurations -->
 		<xsl:variable name="type_info">
-			<xsl:call-template name="metaFirstTypeInfo">
+			<xsl:call-template name="metaExactTypeInfo">
 				<xsl:with-param name="root"
 					select="$config/config/cpp/jni/types" />
 				<xsl:with-param name="param" select="$param" />
@@ -164,7 +181,7 @@
 
 		<!-- shortcut to type conversion configurations -->
 		<xsl:variable name="type_info">
-			<xsl:call-template name="metaFirstTypeInfo">
+			<xsl:call-template name="metaExactTypeInfo">
 				<xsl:with-param name="root"
 					select="$config/config/cpp/jni/types" />
 				<xsl:with-param name="param" select="$param" />
@@ -307,6 +324,9 @@
 							select="$method/parameters/parameter">
 
 							<!-- write parameter name -->
+							<xsl:if test="@passedBy='reference'">
+							<xsl:value-of select="'*'" />
+							</xsl:if>
 							<xsl:value-of
 								select="xbig:cpp-param($config, name)" />
 

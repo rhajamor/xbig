@@ -37,6 +37,7 @@
 
 	<target name="init" depends="config.java.init"></target>
 
+	<!-- <target name="javalib" depends="init"> -->
 	<macrodef name="javalib">
 		<attribute name="name" />
 		<element name="sources" />
@@ -64,6 +65,7 @@
 				basedir="${dir.cur.build.java.class}" includes="**/*.class" />
 
 		</sequential>
+	<!-- </target> -->
 	</macrodef>
 
 	<target name="compile-junit" depends="javalib">

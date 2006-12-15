@@ -50,9 +50,17 @@
 		<!-- shortcut of function name -->
 		<xsl:variable name="method_name" select="$method/name" />
 
-		<!-- shortcut for return type, take long for constructors -->
-		<xsl:variable name="return_type"
-			select="if($method/type) then $method/type else 'long'" />
+		<!-- shortcut for return type, take long for constructors, pointers and references -->
+		<xsl:variable name="return_type">
+			<xsl:choose>
+				<xsl:when test="$method/@passedBy='pointer' or $method/@passedBy='reference'">
+					<value-of select="'long'" />
+				</xsl:when>
+				<xsl:otherwise>
+					<value-of select="if($method/type) then $method/type else 'long'" />
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
 
 		<!-- shortcut for static property -->
 		<xsl:variable name="static" select="$method/@static" />
@@ -93,10 +101,17 @@
 		<xsl:text>&#32;</xsl:text>
 
 		<!-- write return type -->
-		<xsl:call-template name="javaType">
-			<xsl:with-param name="config" select="$config" />
-			<xsl:with-param name="param" select="$method" />
-		</xsl:call-template>
+		<xsl:choose>
+			<xsl:when test="($method/@passedBy eq 'pointer') or ($method/@passedBy eq 'reference')">
+				<xsl:value-of select="'long'" />
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:call-template name="javaType">
+					<xsl:with-param name="config" select="$config" />
+					<xsl:with-param name="param" select="$method" />
+				</xsl:call-template>
+			</xsl:otherwise>
+		</xsl:choose>
 
 		<!-- write method name -->
 		<xsl:text>&#32;</xsl:text>
@@ -126,6 +141,7 @@
 			<xsl:with-param name="class" select="$class" />
 			<xsl:with-param name="method" select="$method" />
 			<xsl:with-param name="with_types" select="'true'" />
+			<xsl:with-param name="writingNativeMethod" select="'true'" />
 		</xsl:call-template>
 
 		<!-- end parameter declaration -->
