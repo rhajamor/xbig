@@ -27,6 +27,12 @@ public class ShortPointer extends NumberPointer<Short> {
 		super(pInstance);
 	}
 
+	public ShortPointer(short value) {
+		super(new InstancePointer(_create(value)));
+	}
+
+	private static native long _create(short value);
+
 	private native void _dispose(long pInstance);
 
 	private native short _get(long pInstance);

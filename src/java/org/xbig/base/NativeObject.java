@@ -31,6 +31,14 @@
 package org.xbig.base;
 
 public abstract class NativeObject {
+
+	/**
+	 * Load native library
+	 */
+	static {
+		System.loadLibrary("cpp2j-base");
+	}
+
 	/**
 	 * Indicates if the native instance is created by the underlying library.
 	 */

@@ -31,6 +31,12 @@ public class CharPointer extends NumberPointer<Character> {
 		super(pointer,b);
 	}
 
+	public CharPointer(char value) {
+		super(new InstancePointer(_create(value)));
+	}
+
+	private static native long _create(char value);
+
 	private native void _dispose(long pInstance);
 
 	private native char _get(long pInstance);

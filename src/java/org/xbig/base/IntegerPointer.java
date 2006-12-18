@@ -27,6 +27,12 @@ public class IntegerPointer extends NumberPointer<Integer> {
 		super(pInstance);
 	}
 
+	public IntegerPointer(int value) {
+		super(new InstancePointer(_create(value)));
+	}
+
+	private static native long _create(int value);
+
 	private native void _dispose(long pInstance);
 
 	private native int _get(long pInstance);	

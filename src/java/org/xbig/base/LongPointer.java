@@ -27,6 +27,12 @@ public class LongPointer extends NumberPointer<Long> {
 		super(pInstance);
 	}
 
+	public LongPointer(long value) {
+		super(new InstancePointer(_create(value)));
+	}
+
+	private static native long _create(long value);
+
 	private native void _dispose(long pInstance);
 
 	private native long _get(long pInstance);

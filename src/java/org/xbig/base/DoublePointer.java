@@ -27,6 +27,12 @@ public class DoublePointer extends NumberPointer<Double> {
 		super(pInstance);
 	}
 
+	public DoublePointer(double value) {
+		super(new InstancePointer(_create(value)));
+	}
+
+	private static native long _create(double value);
+
 	private native void _dispose(long pInstance);
 
 	private native double _get(long pInstance);
