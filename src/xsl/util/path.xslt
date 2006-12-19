@@ -46,6 +46,6 @@
 			select="replace($path,'\\', '/')" />
 
 		<xsl:value-of
-			select="concat('file://', $uri)" />
+			select="concat('file:///', $uri)" />
 	</xsl:function>
 </xsl:stylesheet>
