@@ -9,6 +9,6 @@ do
 	echo >> build.log
 	echo ----- $i ----- >> build.log
 	cd $i
-	ant -lib ../../src/ant/jar >> ../build.log 2>&1
+	./run.sh >> ../build.log 2>&1
 	cd  ..
 done

@@ -335,15 +335,22 @@
 	<!-- ..................................................................... -->
 	
 	<target name="javalib-test" depends="javalib, jnilib, compile-junit">
-		<!-- put native lib in a dir where it can be found -->
+		<!-- put native libs in a dir where it can be found -->
 		<copy todir="${dir.cur}">
-			<fileset dir="${dir.cpp.build.config}/shared" includes="*${lib.name}.*" />
+			<fileset dir="${dir.cpp.build.config}/shared" includes="*${lib.name}*.*" />
+			<fileset dir="${dir.prj.base}/bin/c/${cpp.platform}/${cpp.compiler}/${cpp.compiler.config}/shared" includes="*cpp2j-base.*" />
 		</copy>
 		<!-- this has been put into run.sh -->
 		<!--<exec executable="export" os="linux">
 			<arg value="LD_LIBRARY_PATH=./"/>
 		</exec>-->
-
+<!--
+		<condition property="runningOnWin">
+			<os family="windows"/>
+		</condition>
+		<property name="path.delimiter" value=";" if="runningOnWin" />
+		<property name="path.delimiter" value=":" unless="runningOnWin" />
+-->
 		<junit printsummary="yes" fork="yes" haltonfailure="yes" >
 			<formatter type="plain" usefile="false" />			
 			<test name="org.xbig.test.${lib.name}.AllTests" />
@@ -351,13 +358,23 @@
 				<fileset dir="${dir.cur.build.java.jar}" includes="${lib.xbig}*.jar" />
 				<fileset dir="${dir.prj.src.ant.jar}" includes="junit-4.1.0.jar"/>
 			</classpath>
+
+			<!--
+			<jvmarg unless="runningOnWin" value="-Djava.library.path=${dir.cpp.build.config}/shared:${dir.prj.base}/bin/c/${cpp.platform}/${cpp.compiler}/${cpp.compiler.config}/shared"/>
+			<jvmarg if="runningOnWin" value="-Djava.library.path=${dir.cpp.build.config}/shared;${dir.prj.base}/bin/c/${cpp.platform}/${cpp.compiler}/${cpp.compiler.config}/shared"/>
+			<jvmarg value="-Djava.library.path=${dir.cpp.build.config}/shared${path.delimiter}${dir.prj.base}/bin/c/${cpp.platform}/${cpp.compiler}/${cpp.compiler.config}/shared"/>
+			<jvmarg value="-Djava.library.path=${dir.cpp.build.config}/shared" />
+			<jvmarg value="-Djava.library.path=${dir.cpp.build.config}/shared"/>
+			<jvmarg value="-Djava.library.path=${dir.prj.base}/bin/c/${cpp.platform}/${cpp.compiler}/${cpp.compiler.config}/shared"/>
 			<jvmarg value="-Djava.library.path=${dir.cpp.build.config}/shared:${dir.prj.base}/bin/c/${cpp.platform}/${cpp.compiler}/${cpp.compiler.config}/shared"/>
-			<!--<jvmarg os="windows" value="-Djava.library.path=${dir.cpp.build.config}/shared;${dir.prj.base}/bin/c/${cpp.platform}/${cpp.compiler}/${cpp.compiler.config}/shared"/>-->
+			-->
+			<jvmarg value="-Djava.library.path=."/>
 		</junit>
 	
 		<!-- delete the previous copied files -->
 		<delete quiet="true" failonerror="false">
-			<fileset dir="." includes="*${lib.name}.*"/>
+			<fileset dir="." includes="*${lib.name}*.*"/>
+			<fileset dir="." includes="*cpp2j-base.*"/>
 		</delete>
 	</target>
 
