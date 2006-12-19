@@ -327,7 +327,7 @@
 		<xsl:for-each
 			select="root()//compounddef[@id=$refid and @kind='class' and @prot='public']">
 			<xsl:element name="class">
-				<xsl:attribute name="name">
+				<xsl:variable name="className">
 					<xsl:choose>
 						<xsl:when test="contains(compoundname,'::')">
 							<xsl:value-of select="substring-after(compoundname,'::')"/>
@@ -336,7 +336,8 @@
 							<xsl:value-of select="compoundname"/>
 						</xsl:otherwise>
 					</xsl:choose>
-				</xsl:attribute>
+				</xsl:variable>
+				<xsl:attribute name="name" select="$className"/>
 				<xsl:attribute name="fullName" select="compoundname" />
 
 				<!-- template attributes -->
@@ -435,6 +436,13 @@
 						</xsl:when>
 					</xsl:choose>
 				</xsl:for-each>
+				
+				<xsl:call-template name="createDefaultConstructor">
+					<xsl:with-param name="className">
+						<xsl:value-of select="$className"/>
+					</xsl:with-param>
+				</xsl:call-template>
+				
 				<!-- recursion for inner classes -->
 				<xsl:for-each select="innerclass">
 					<xsl:call-template name="class">
@@ -946,6 +954,7 @@
 					</xsl:otherwise>
 				</xsl:choose>
 			</xsl:attribute>
+			<xsl:attribute name="fullName" select="compoundname" />
 			<xsl:variable name="name">
 				<xsl:choose>
 					<xsl:when test="contains(compoundname,'::')">
@@ -1022,6 +1031,9 @@
 				</xsl:for-each>
 			</xsl:if>
 
+			<!-- copy all includes into meta output -->
+			<xsl:copy-of copy-namespaces="no" select="includes" />
+
 			<!-- enumerations -->
 			<xsl:for-each
 				select="sectiondef[@kind='public-type']">
@@ -1043,6 +1055,7 @@
 			</xsl:for-each>
 
 			<!-- struct attributes -->
+			<!--
 			<xsl:choose>
 				<xsl:when test="name()='compounddef'">
 					<xsl:for-each select="sectiondef[@kind='public-attrib']">
@@ -1053,6 +1066,11 @@
 					<xsl:call-template name="structattributes" />
 				</xsl:otherwise>
 			</xsl:choose>
+			-->
+			<xsl:for-each
+				select="sectiondef[@kind='public-attrib' or @kind='public-static-attrib']">
+				<xsl:call-template name="variable" />
+			</xsl:for-each>
 
 			<!-- struct functions -->
 			<xsl:choose>
@@ -1067,6 +1085,10 @@
 					</xsl:for-each>
 				</xsl:otherwise>
 			</xsl:choose>
+
+			<xsl:call-template name="createDefaultConstructor">
+				<xsl:with-param name="className" select="$name" />
+			</xsl:call-template>
 
 			<!-- documentation -->
 			<xsl:call-template name="documentation" />
@@ -1608,6 +1630,43 @@
 				</xsl:if>
 			</xsl:element>
 		</xsl:for-each>
+	</xsl:template>
+
+
+
+	<xsl:template name="createDefaultConstructor">
+		<xsl:param name="className"/>
+	
+		<!-- generate default c-tor if necessary -->
+		<xsl:if test="not(sectiondef[@kind='public-func']/memberdef/name=$className) and
+					  not(sectiondef[@kind='private-func']/memberdef/name=$className) and
+					  not(sectiondef[@kind='protected-func']/memberdef/name=$className)">
+			<xsl:element name="function">
+				<xsl:attribute name="virt">
+					<xsl:text>non-virtual</xsl:text>
+				</xsl:attribute>
+				<xsl:attribute name="visibility">
+					<xsl:text>public</xsl:text>
+				</xsl:attribute>
+				<xsl:attribute name="static">
+					<xsl:text>false</xsl:text>
+				</xsl:attribute>
+				<xsl:attribute name="const">
+					<xsl:text>false</xsl:text>
+				</xsl:attribute>
+				<xsl:attribute name="passedBy">
+					<xsl:text>value</xsl:text>
+				</xsl:attribute>
+				<xsl:element name="name">
+					<xsl:value-of select="$className" />
+				</xsl:element>
+				<xsl:element name="definition">
+					<xsl:value-of
+						select="concat(compoundname, '::', $className)" />
+				</xsl:element>
+	
+			</xsl:element>
+		</xsl:if>
 	</xsl:template>
 
 </xsl:stylesheet>

@@ -16,3 +16,18 @@ class EXPORT A {
 public:
 	A();
 };
+
+class EXPORT B {
+public:
+	
+};
+
+class EXPORT C {
+private:
+	C();
+};
+
+class EXPORT D {
+protected:
+	D();
+};

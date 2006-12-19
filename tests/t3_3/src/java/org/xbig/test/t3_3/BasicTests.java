@@ -15,8 +15,8 @@ public class BasicTests {
 	@Test
 	public void callStructMethod() {
 		B a = new B();
-		float b = a.y(7);
-		Assert.assertEquals(7, b);
+		float b = a.x(7);
+		Assert.assertEquals(7.0f, b);
 		a.delete();
 	}
 }

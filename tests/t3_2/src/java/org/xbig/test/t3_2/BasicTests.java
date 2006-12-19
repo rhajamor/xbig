@@ -16,7 +16,7 @@ public class BasicTests {
 	public void accessPublicStructAttribute() {
 		B a = new B();
 		a.setz(7.3);
-		int b = a.getz();
+		double b = a.getz();
 		Assert.assertEquals(7.3, b);
 		a.delete();
 	}

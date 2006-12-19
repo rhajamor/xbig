@@ -74,6 +74,7 @@
  			<pathelement location="${dir.prj.src.ant.jar}/ant-junit.jar" />
 		</classpath>
 	</taskdef>
+	
 	<target name="java-pre-init">
 		<condition property="java.is-windows">
 			<os family="windows" />

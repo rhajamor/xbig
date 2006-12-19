@@ -24,6 +24,7 @@
 	http://www.gnu.org/copyleft/lesser.txt.
 	
 	Author: Frank Bielig
+			Kai Klesatschke <kai.klesatschke@netallied.de>
 -->
 
 <project name="cpp2j" default="echo-props" basedir="../..">
@@ -331,6 +332,20 @@
 	</target>
 
 	<!-- ..................................................................... -->
+	<!-- Compile Junit tests for generated Java code -->
+	<!-- ..................................................................... -->
+
+	<target name="compile-junit" depends="javalib">
+		<javac 
+			srcdir="${dir.cur.src.java}" 
+			destdir="${dir.cur.build.java.class}" 
+			classpath="${dir.prj.src.ant.jar}/junit-4.1.0.jar">
+		</javac>
+		<jar destfile="${dir.cur.build.java.jar}/${lib.xbig}-test.jar"
+			basedir="${dir.cur.build.java.class}" includes="**/test/**/*.class" />
+	</target>
+
+	<!-- ..................................................................... -->
 	<!-- Test of generated Java code -->
 	<!-- ..................................................................... -->
 	
@@ -338,7 +353,7 @@
 		<!-- put native libs in a dir where it can be found -->
 		<copy todir="${dir.cur}">
 			<fileset dir="${dir.cpp.build.config}/shared" includes="*${lib.name}*.*" />
-			<fileset dir="${dir.prj.base}/bin/c/${cpp.platform}/${cpp.compiler}/${cpp.compiler.config}/shared" includes="*cpp2j-base.*" />
+			<fileset dir="${dir.prj.base}/src/c/build/${cpp.platform}/${cpp.compiler}/${cpp.compiler.config}/shared" includes="*cpp2j-base.*" />
 		</copy>
 		<!-- this has been put into run.sh -->
 		<!--<exec executable="export" os="linux">
