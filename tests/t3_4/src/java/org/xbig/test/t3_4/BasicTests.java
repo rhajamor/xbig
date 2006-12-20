@@ -4,8 +4,11 @@
 package org.xbig.test.t3_4;
 
 import org.junit.Assert;
+import org.junit.Before;
+import org.junit.After;
 import org.junit.Test;
 import org.xbig.B;
+import org.xbig.base.*;
 /**
  * @author bielig
  *
@@ -26,18 +29,26 @@ public class BasicTests {
 
 	@Test
 	public void callStructMethodsWithReferences() {
-		int b = a.a((float)7.3);
-		Assert.assertEquals(7, b);
-		b = a.b((float)7.3);
-		Assert.assertEquals(7, b);
-		b = a.c((float)7.3);
-		Assert.assertEquals(7, b);
+		IntegerPointer iPtr;
+		FloatPointer fPtr = new FloatPointer(7.3f);
+
+		int b = a.a(fPtr);
+		Assert.assertEquals(fPtr.intValue(), b);
+
+		iPtr = a.b(fPtr.floatValue());
+		Assert.assertEquals(fPtr.intValue(), iPtr.intValue());
+
+		iPtr = a.c(fPtr);
+		Assert.assertEquals(fPtr.intValue(), iPtr.intValue());
 	}
 
 	@Test
 	public void accessStructReferenceAttribute() {
-		a.setz(7.3);
-		int b = a.getz();
-		Assert.assertEquals(7, b);
+		DoublePointer gPtr;
+		DoublePointer sPtr = new DoublePointer(7.3);
+
+		a.setz(sPtr);
+		gPtr = a.getz();
+		Assert.assertEquals(sPtr.doubleValue(), gPtr.doubleValue());
 	}
 }

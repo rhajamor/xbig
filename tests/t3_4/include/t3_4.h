@@ -21,5 +21,5 @@ struct EXPORT B {
 	double& z;
 
 private:
-	int d;
+	int e;
 };

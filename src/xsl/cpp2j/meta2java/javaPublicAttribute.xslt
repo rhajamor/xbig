@@ -59,15 +59,48 @@
 		<xsl:if test="@static">
 			<xsl:text>static </xsl:text>
 		</xsl:if>
-		<xsl:value-of select="type"/>
+
+		<!-- return type -->
+		<xsl:choose>
+
+			<!-- write pointer class -->
+			<xsl:when test="(./@passedBy='pointer' or ./@passedBy='reference')">
+				<xsl:call-template name="javaPointerClass">
+					<xsl:with-param name="config" select="$config" />
+					<xsl:with-param name="param" select="." />
+				</xsl:call-template>
+			</xsl:when>
+
+			<xsl:otherwise>
+				<xsl:value-of select="type" />
+			</xsl:otherwise>
+		</xsl:choose>
+
 		<xsl:text> </xsl:text>
 		<xsl:value-of select="$getterName" />
 		<xsl:text>() { return </xsl:text>
+
+		<!-- create Pointer object when necessary -->
+		<xsl:if test="./@passedBy='pointer' or ./@passedBy='reference'">
+			<xsl:text>new&#32;</xsl:text>
+			<xsl:call-template name="javaPointerClass">
+				<xsl:with-param name="config" select="$config" />
+				<xsl:with-param name="param" select="." />
+			</xsl:call-template>
+			<xsl:text>(new&#32;InstancePointer(</xsl:text>
+		</xsl:if>
+
 		<xsl:value-of select="$nativeGetterName" />
 		<xsl:text>(</xsl:text>
 		<xsl:if test="not(@static)">
 			<xsl:text>object.pointer</xsl:text>
 		</xsl:if>
+
+		<!-- close Pointer and InstancePointer c-tor calls -->
+		<xsl:if test="./@passedBy='pointer' or ./@passedBy='reference'">
+			<xsl:text>))</xsl:text>
+		</xsl:if>
+
 		<xsl:text>);</xsl:text>
 		<xsl:text>}&#10;</xsl:text>
 
@@ -76,7 +109,17 @@
 			<xsl:text>static </xsl:text>
 		</xsl:if>
 		<xsl:text>private final native </xsl:text>
-		<xsl:value-of select="type"/>
+
+		<!-- return type -->
+		<xsl:choose>
+			<xsl:when test="./@passedBy='pointer' or ./@passedBy='reference'">
+				<xsl:text>long</xsl:text>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="type"/>
+			</xsl:otherwise>
+		</xsl:choose>
+
 		<xsl:text> </xsl:text>
 		<xsl:value-of select="$nativeGetterName" />
 		<xsl:text>(</xsl:text>
@@ -107,14 +150,34 @@
 			<xsl:text>public void </xsl:text>
 			<xsl:value-of select="$setterName" />
 			<xsl:text>(</xsl:text>
-			<xsl:value-of select="type"/>
+
+			<!-- param type -->
+			<xsl:choose>
+				<xsl:when test="(./@passedBy='pointer' or ./@passedBy='reference')">
+					<xsl:call-template name="javaPointerClass">
+						<xsl:with-param name="config" select="$config" />
+						<xsl:with-param name="param" select="." />
+					</xsl:call-template>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="type" />
+				</xsl:otherwise>
+			</xsl:choose>
+
 			<xsl:text> value) { </xsl:text>
 			<xsl:value-of select="$nativeSetterName" />
 			<xsl:text>(</xsl:text>
 			<xsl:if test="not(@static)">
 				<xsl:text>object.pointer, </xsl:text>
 			</xsl:if>
-			<xsl:text>value);</xsl:text>
+			<xsl:text>value</xsl:text>
+
+			<!-- pass instance pointer if necessary -->
+			<xsl:if test="./@passedBy='pointer' or ./@passedBy='reference'">
+				<xsl:text>.object.pointer</xsl:text>
+			</xsl:if>
+
+			<xsl:text>);</xsl:text>
 			<xsl:text>}&#10;</xsl:text>
 	
 			<!-- native -->
@@ -127,7 +190,17 @@
 			<xsl:if test="not(@static)">
 				<xsl:text>long _pointer_, </xsl:text>
 			</xsl:if>
-			<xsl:value-of select="type"/>
+
+			<!-- para type -->
+			<xsl:choose>
+				<xsl:when test="./@passedBy='pointer' or ./@passedBy='reference'">
+					<xsl:text>long</xsl:text>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="type"/>
+				</xsl:otherwise>
+			</xsl:choose>
+
 			<xsl:text> value);&#10;&#10;</xsl:text>
 		</xsl:if>
 

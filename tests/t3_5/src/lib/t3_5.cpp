@@ -12,12 +12,13 @@ int B::a(float* b) {
 int* B::b(float c) {
 	std::cout << "t3_5: B::b(float c)" << std::endl;
 	std::cout << "c: " << c << std::endl;
-	d = c;
-	return (int*) &d;
+	e = (int) c;
+	return &e;
 }
 
 int* B::c(float* d) {
 	std::cout << "t3_5: B::c(float* d)" << std::endl;
 	std::cout << "d: " << *d << std::endl;
-	return (int*)d;
+	e = (int) *d;
+	return &e;
 }

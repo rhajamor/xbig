@@ -19,6 +19,6 @@ struct EXPORT B {
 
 	double* z;
 
-public:
-	float d;
+private:
+	int e;
 };

@@ -23,6 +23,7 @@
 	http://www.gnu.org/copyleft/lesser.txt.
 	
 	Author: Frank Bielig
+			Christoph Nenning
 	
 -->
 <!DOCTYPE DaemonConfig [
@@ -198,74 +199,56 @@
 
 			<publicattribute>
 				<get>
-					<value>
-						<static>
-							// FIXME: no template for this case
-						</static>
-						<nonstatic>
-							#nl#// parameter conversions
-							#cpp_conversions#
-							#nl#
-							#nl#// cast pointer to C++ object
-							#nl##cpp_class#* #cpp_this# =
-							reinterpret_cast&lt;#cpp_class#*&gt;(#jni_pointer#);
-							#nl#
-							#nl#// call library method
-							#nl##cpp_return_type# #cpp_return_var# =
-							    #cpp_this#->#cpp_attribute#;
-							#nl#return #cpp_return#;
-						</nonstatic>
-					</value>
-					<pointer>
-						<static>
-							// FIXME: no template for this case
-						</static>
-						<nonstatic>
-							// FIXME: no template for this case
-						</nonstatic>
-					</pointer>
-					<reference>
-						<static>
-							// FIXME: no template for this case
-						</static>
-						<nonstatic>
-							// FIXME: no template for this case
-						</nonstatic>
-					</reference>
+					<static>
+						#nl#// parameter conversions
+						#cpp_conversions#
+						#nl#
+						#nl#// cast pointer to C++ object
+						#nl##cpp_class#* #cpp_this# =
+						reinterpret_cast&lt;#cpp_class#*&gt;(#jni_pointer#);
+						#nl#
+						#nl#// call library method
+						#nl##cpp_return_type# #cpp_return_var# =
+						    #cpp_class#::#cpp_attribute#;
+						#nl#return #cpp_return#;
+					</static>
+					<nonstatic>
+						#nl#// parameter conversions
+						#cpp_conversions#
+						#nl#
+						#nl#// cast pointer to C++ object
+						#nl##cpp_class#* #cpp_this# =
+						reinterpret_cast&lt;#cpp_class#*&gt;(#jni_pointer#);
+						#nl#
+						#nl#// call library method
+						#nl##cpp_return_type# #cpp_return_var# =
+						    #cpp_this#->#cpp_attribute#;
+						#nl#return #cpp_return#;
+					</nonstatic>
 				</get>
 				<set>
-					<value>
-						<static>
-							// FIXME: no template for this case
-						</static>
-						<nonstatic>
-							#nl#// parameter conversions
-							#cpp_conversions#
-							#nl#
-							#nl#// cast pointer to C++ object
-							#nl##cpp_class#* #cpp_this# =
-							reinterpret_cast&lt;#cpp_class#*&gt;(#jni_pointer#);
-							#nl#
-							#nl#// call library method
-							#nl##cpp_this#->#cpp_attribute# = #cpp_params#;
-						</nonstatic>
-					</value>
-					<pointer>
-						<static>
-							// FIXME: no template for this case
-						</static>
-						<nonstatic>
-							// FIXME: no template for this case
-						</nonstatic>
-					</pointer>
-					<reference>
-						<static>
-							// FIXME: no template for this case
-						</static>
-						<nonstatic>
-							// FIXME: no template for this case
-						</nonstatic>
-					</reference>
+					<static>
+						#nl#// parameter conversions
+						#cpp_conversions#
+						#nl#
+						#nl#// cast pointer to C++ object
+						#nl##cpp_class#* #cpp_this# =
+						reinterpret_cast&lt;#cpp_class#*&gt;(#jni_pointer#);
+						#nl#
+						#nl#// call library method
+						#nl##cpp_class#::#cpp_attribute# = #cpp_params#;
+					</static>
+					<nonstatic>
+						#nl#// parameter conversions
+						#cpp_conversions#
+						#nl#
+						#nl#// cast pointer to C++ object
+						#nl##cpp_class#* #cpp_this# =
+						reinterpret_cast&lt;#cpp_class#*&gt;(#jni_pointer#);
+						#nl#
+						#nl#// call library method
+						#nl##cpp_this#->#cpp_attribute# = #cpp_params#;
+					</nonstatic>
 				</set>
 			</publicattribute>
 
@@ -304,6 +287,8 @@
 
 			<types>
 				<type meta="void" jni="void" />
+				<type meta="void" pass="pointer" jni="void" />
+				<type meta="void" pass="reference" jni="void" />
 				
 				<type meta="bool" pass="pointer" jni="jlong" cpp="bool*">
 					<jni2cpp>
@@ -525,7 +510,7 @@
 				</type>
 				<type meta="unsigned long" jni="jlong" />
 				
-				<type meta="double" pass="pointer" jni="jdouble" cpp="double*">
+				<type meta="double" pass="pointer" jni="jlong" cpp="double*">
 					<jni2cpp>
 						reinterpret_cast&lt;double*&gt;(#jni_var#)
 					</jni2cpp>					

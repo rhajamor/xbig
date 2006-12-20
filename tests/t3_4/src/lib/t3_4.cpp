@@ -12,15 +12,15 @@ int B::a(float& b) {
 int& B::b(float c) {
 	std::cout << "t3_4: B::b(float c)" << std::endl;
 	std::cout << "c: " << c << std::endl;
-	d = (int)c;
-	return d;
+	e = (int)c;
+	return e;
 }
 
 int& B::c(float& d) {
 	std::cout << "t3_4: B::c(float& d)" << std::endl;
 	std::cout << "d: " << d << std::endl;
-	this->d = int(d);
-	return this->d;
+	e = int(d);
+	return e;
 }
 
 double t3_4_hlp = 100000.8;
