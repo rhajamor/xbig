@@ -22,12 +22,12 @@ public class BasicTests {
 
 	@Test
 	public void useInnerStruct() {
-		B a = new B();
+		A.B a = new A.B();
 		a.setz(7.3);
-		int b = a.getz();
-		Assert.assertEquals(7, b);
+		double b = a.getz();
+		Assert.assertEquals(7.3, b);
 		float c = a.x(7);
-		Assert.assertEquals(7, c);
+		Assert.assertEquals(7.0f, c);
 		a.delete();
 	}
 }

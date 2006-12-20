@@ -35,10 +35,7 @@
 	xmlns:xd="http://www.pnp-software.com/XSLTdoc"
 	xmlns:xbig="http://xbig.sourceforge.net/XBiG">
 
-	<xsl:import href="cppClassFileHeader.xslt" />
-	<xsl:import href="cppClassFileImpl.xslt" />
-	<xsl:import href="cppCreateHelperMethods.xslt" />
-	<xsl:import href="../../util/path.xslt" />
+	<xsl:import href="cppClass.xslt" />
 
 	<xd:doc type="stylesheet">
 		<xd:short>Generation of types outside a namespace</xd:short>
@@ -58,66 +55,13 @@
 		<xsl:variable name="ns_prefix"
 			select="replace($java_ns_name,'\.', '_')" />
 
-		<!-- compose filename of current class without suffix -->
-		<xsl:variable name="class_prefix"
-			select="concat($ns_prefix, '_',@name)" />
-
-		<!-- compose filename of current class without suffix -->
-		<xsl:variable name="main_filename"
-			select="concat('class_', $class_prefix)" />
-
-		<!-- compose basic header filename of current class -->
-		<xsl:variable name="basic_header_filename"
-			select="concat($main_filename,'.h')" />
-
-		<!-- compose full header filename of current class -->
-		<xsl:variable name="header_filename"
-			select="concat($include_dir, '/', $basic_header_filename)" />
-
-		<!-- compose implementation filename of current class -->
-		<xsl:variable name="impl_filename"
-			select="concat($lib_dir, '/', $main_filename,'.cpp')" />
-
-		<!-- generate description for helper methods -->
-		<xsl:variable name="helper_methods">
-			<xsl:call-template name="cppCreateHelperMethods">
-				<xsl:with-param name="config" select="$config" />
-			</xsl:call-template>
-		</xsl:variable>
-	
-		<!-- open header file -->
-		<xsl:result-document href="{xbig:toFileURL($header_filename)}"
-			format="textOutput">
-
-			<!-- write header file -->
-			<xsl:call-template name="cppClassFileHeader">
-				<xsl:with-param name="config" select="$config" />
-				<xsl:with-param name="class" select="." />
-				<xsl:with-param name="class_prefix"
-					select="$class_prefix" />
-				<xsl:with-param name="helper_methods"
-					select="$helper_methods" />
-			</xsl:call-template>
-
-		</xsl:result-document>
-
-		<!-- open implementation file -->
-		<xsl:result-document href="{xbig:toFileURL($impl_filename)}"
-			format="textOutput">
-
-			<!-- write file header with copyright information -->
-			<xsl:call-template name="cppClassFileImpl">
-				<xsl:with-param name="config" select="$config" />
-				<xsl:with-param name="class" select="." />
-				<xsl:with-param name="class_prefix"
-					select="$class_prefix" />
-				<xsl:with-param name="header_filename"
-					select="$basic_header_filename" />
-				<xsl:with-param name="helper_methods"
-					select="$helper_methods" />
-			</xsl:call-template>
-
-		</xsl:result-document>
+		<!-- generate files -->
+		<xsl:call-template name="cppClass">
+			<xsl:with-param name="ns_prefix" select="$ns_prefix" />
+			<xsl:with-param name="include_dir" select="$include_dir" />
+			<xsl:with-param name="lib_dir" select="$lib_dir" />
+			<xsl:with-param name="config" select="$config" />
+		</xsl:call-template>
 
 	</xsl:template>
 </xsl:stylesheet>

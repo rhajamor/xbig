@@ -24,6 +24,7 @@
 	http://www.gnu.org/copyleft/lesser.txt.
 	
 	Author: Frank Bielig
+			Christoph Nenning
 	
 -->
 
@@ -54,14 +55,15 @@
 		<!-- shortcut for class name -->
 		<xsl:variable name="class_name" select="$class/@name" />
 
-		<!-- write import -->
-		<xsl:text>&#32;</xsl:text>
-		<xsl:text>import org.xbig.base.*;&#32;</xsl:text>
-		<xsl:text>import std.*;&#32;</xsl:text>
-		<xsl:text>&#32;</xsl:text>
+		<!-- find out if we create an inner class -->
+		<xsl:variable name="isInnerClass" select="../name() eq 'class' or ../name() eq 'struct'"/>
 
 		<!-- write class declaration -->
-		<xsl:text>public class&#32;</xsl:text>
+		<xsl:text>public </xsl:text>
+		<xsl:if test="$isInnerClass">
+			<xsl:text>static </xsl:text>
+		</xsl:if>
+		<xsl:text>class&#32;</xsl:text>
 		<xsl:value-of select="$class_name" />
 
 		<!-- if base class configured -->
@@ -73,10 +75,28 @@
 		<!-- start class content -->
 		<xsl:text>&#32;{&#10;</xsl:text>
 
-		<!-- creating static initializer -->
-		<xsl:text>static { System.loadLibrary("</xsl:text>
-		<xsl:value-of select="$buildFile/project/property[@name='lib.name']/@value"/>
-		<xsl:text>-xbig");}&#10;</xsl:text>
+		<!-- create static initializer -->
+		<xsl:if test="not($isInnerClass)">
+			<xsl:text>static { System.loadLibrary("</xsl:text>
+			<xsl:value-of select="$buildFile/project/property[@name='lib.name']/@value"/>
+			<xsl:text>-xbig");}&#10;</xsl:text>
+		</xsl:if>
+
+		<!-- handle inner classes & structs -->
+		<xsl:for-each select="class">
+			<xsl:call-template name="javaClass">
+				<xsl:with-param name="config" select="$config" />
+				<xsl:with-param name="class" select="." />
+				<xsl:with-param name="buildFile" select="$buildFile" />
+			</xsl:call-template>
+		</xsl:for-each>
+		<xsl:for-each select="struct">
+			<xsl:call-template name="javaClass">
+				<xsl:with-param name="config" select="$config" />
+				<xsl:with-param name="class" select="." />
+				<xsl:with-param name="buildFile" select="$buildFile" />
+			</xsl:call-template>
+		</xsl:for-each>
 
 		<!-- if additional class content defined in configuration -->
 		<xsl:if test="$class_config/content">

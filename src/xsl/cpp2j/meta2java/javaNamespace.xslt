@@ -24,6 +24,7 @@
 	http://www.gnu.org/copyleft/lesser.txt.
 	
 	Author: Frank Bielig
+			Christoph Nenning
 	
 -->
 
@@ -35,8 +36,7 @@
 	xmlns:xd="http://www.pnp-software.com/XSLTdoc"
 	xmlns:xbig="http://xbig.sourceforge.net/XBiG">
 
-	<xsl:import href="javaClass.xslt" />
-	<xsl:import href="../../util/path.xslt"/>
+	<xsl:import href="javaClassFileStub.xslt" />
 
 	<xd:doc type="stylesheet">
 		<xd:short>Generation of types inside a namespace</xd:short>
@@ -80,30 +80,22 @@
 
 		<!-- iteration over all classes inside current namespace -->
 		<xsl:for-each select="class">
-
-			<!-- compose filename of current class -->
-			<xsl:variable name="filename"
-				select="concat($outdir, '/', $java_ns_dir, '/',@name,'.java')" />
-
-			<!-- open Java file -->
-			<xsl:result-document href="{xbig:toFileURL($filename)}"
-				format="textOutput">
-
-				<!-- write package -->
-				<xsl:text>package&#32;</xsl:text>
-				<xsl:value-of select="$java_ns_name" />
-				<xsl:text>;&#10;&#10;</xsl:text>
-
-
-				<!-- write class implementation -->
-				<xsl:call-template name="javaClass">
-					<xsl:with-param name="config" select="$config" />
-					<xsl:with-param name="class" select="." />
-					<xsl:with-param name="buildFile" select="$buildFile" />
-				</xsl:call-template>
-
-			</xsl:result-document>
-
+			<xsl:call-template name="javaClassFileStub">
+				<xsl:with-param name="java_ns_dir" select="$java_ns_dir" />
+				<xsl:with-param name="java_ns_name" select="$java_ns_name" />
+				<xsl:with-param name="outdir" select="$outdir" />
+				<xsl:with-param name="config" select="$config" />
+				<xsl:with-param name="buildFile" select="$buildFile" />
+			</xsl:call-template>
+		</xsl:for-each>
+		<xsl:for-each select="struct">
+			<xsl:call-template name="javaClassFileStub">
+				<xsl:with-param name="java_ns_dir" select="$java_ns_dir" />
+				<xsl:with-param name="java_ns_name" select="$java_ns_name" />
+				<xsl:with-param name="outdir" select="$outdir" />
+				<xsl:with-param name="config" select="$config" />
+				<xsl:with-param name="buildFile" select="$buildFile" />
+			</xsl:call-template>
 		</xsl:for-each>
 
 	</xsl:template>

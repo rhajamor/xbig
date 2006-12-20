@@ -22,9 +22,9 @@ public class BasicTests {
 
 	@Test
 	public void useInnerClass() {
-		B a = new B();
+		A.B a = new A.B();
 		float b = a.x(7);
-		Assert.assertEquals(7, b);
+		Assert.assertEquals(7.0f, b);
 		a.delete();
 	}
 }

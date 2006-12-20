@@ -23,7 +23,8 @@
 	Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 	http://www.gnu.org/copyleft/lesser.txt.
 	
-	Author: Christoph Nenning
+	Author: Frank Bielig
+			Christoph Nenning
 	
 -->
 
@@ -36,29 +37,46 @@
 	xmlns:xbig="http://xbig.sourceforge.net/XBiG">
 
 	<xsl:import href="javaClass.xslt" />
-	<xsl:import href="../../util/path.xslt" />
+	<xsl:import href="../../util/path.xslt"/>
 
 	<xd:doc type="stylesheet">
-		<xd:short>Generation of types outside a namespace</xd:short>
+		<xd:short>Generation of the first few lines of a .java file</xd:short>
 	</xd:doc>
 
-	<xsl:template name="javaGlobals">
-		<xsl:param name="meta_ns_name" />
+	<xsl:template name="javaClassFileStub">
+		<xsl:param name="java_ns_dir" />
+		<xsl:param name="java_ns_name" />
 		<xsl:param name="outdir" />
 		<xsl:param name="config" />
 		<xsl:param name="buildFile" />
 
-		<!-- transform Java namespace to directory name -->
-		<xsl:variable name="java_ns_dir"
-			select="replace($meta_ns_name,'\.', '/')" />
+		<!-- compose filename of current class -->
+		<xsl:variable name="filename"
+			select="concat($outdir, '/', $java_ns_dir, '/',@name,'.java')" />
 
-		<xsl:call-template name="javaClassFileStub">
-			<xsl:with-param name="java_ns_dir" select="$java_ns_dir" />
-			<xsl:with-param name="java_ns_name" select="$meta_ns_name" />
-			<xsl:with-param name="outdir" select="$outdir" />
-			<xsl:with-param name="config" select="$config" />
-			<xsl:with-param name="buildFile" select="$buildFile" />
-		</xsl:call-template>
+		<!-- open Java file -->
+		<xsl:result-document href="{xbig:toFileURL($filename)}"
+			format="textOutput">
 
+			<!-- write package -->
+			<xsl:text>package&#32;</xsl:text>
+			<xsl:value-of select="$java_ns_name" />
+			<xsl:text>;&#10;&#10;</xsl:text>
+
+			<!-- write import -->
+			<xsl:text>&#32;</xsl:text>
+			<xsl:text>import org.xbig.base.*;&#32;</xsl:text>
+			<xsl:text>import std.*;&#32;</xsl:text>
+			<xsl:text>&#32;</xsl:text>
+
+
+			<!-- write class implementation -->
+			<xsl:call-template name="javaClass">
+				<xsl:with-param name="config" select="$config" />
+				<xsl:with-param name="class" select="." />
+				<xsl:with-param name="buildFile" select="$buildFile" />
+			</xsl:call-template>
+
+		</xsl:result-document>
 	</xsl:template>
 </xsl:stylesheet>
