@@ -1,16 +1,65 @@
-TO DO!  
+1 Dependencies
+----------------
 
-1.Windows
+1.1 Java
+----------
+XBiG makes use of the new features like generics introduced with JavaVM
+1.5. Therefor you will need JRE5 or higher. Get the latest version from
+http://java.sun.com/javase/downloads/ and follow the installation
+instruction for your platform.
+
+1.2 ANT
 ---------
-To install/use XBIG in combination of Eclipse and the MS compiler
-follow this instructions.
+XBiG uses ANT to build itself and to generate the bindings. Get the
+latest ANT version from http://ant.apache.org/ and follow the
+installation instructions for your platform.
 
-1.1 Configuration
+1.3 Doxygen
+-----------
+XBiG uses the source code documentation tool Doxygen to analyse the 
+source library. Doxygen has already support for several languages and
+creates an XML notation of the library interfaces. Get the latest
+version from http://www.stack.nl/~dimitri/doxygen/ and follow the
+installation instructions for your platform.
+
+2 Configuration
 -----------------
-* Set the compiler and platform.
-  /src/ant/config/config_cpp.xml
-* Set the path to your doxygen installation.
-  /src/ant/config/config_doxygen.xml
+
+2.1 CPP Compiler
+----------------
+Open the file /src/ant/config/config_cpp.xml and set the following
+properties to match your platform:
+    cpp.compiler = msvc|g++
+    cpp.platform = win32|linux
+
+2.2 Doxygen
+-----------
+Open the file /src/ant/config/config_doxygen.xml and set the property
+path.doxygen.bin to "installdir/doxygen/bin/doxygen.exe"
+	
+3 Run a test
+------------
+If you have installed all necessary dependencies and configured XBiG
+then your are ready to run one or all of the tests in the test suite.
+Change into the directory /test/t2_1 and run ant with the the parameter
+"-lib ../../src/ant/jar/" to point to the libraries needed.
+
+The build of a test includes the following steps:
+1. Build of the source library (C++)
+2. Generation of the meta layer with doxygen and XSLT
+3. Generation of the Java and C++ code for the JNI bindings
+4. Build of the JNI bindings.
+5. Run of a JUnit test for the generated bindings.
+
+At least you should see the message "BUILD SUCCESSFUL". If the
+build was successful you are ready to create a project for the
+library you want to generate bindings. Ohterwise something went
+wrong and you have to check your environment and configuration.
+
+4 Setup a own project
+---------------------
+more to come...
+
 -----
 
 Copyright (c) 2006 The XBiG Development Team
