@@ -43,6 +43,11 @@ public abstract class NativeObject {
 	 * Indicates if the native instance is created by the underlying library.
 	 */
 	protected boolean remote;
+	
+	/**
+	 * Indicates if the native instance is deleted.
+	 */
+	protected boolean deleted;
 
 	/**
 	 * The pointer to the native instance. Stores the native reference.

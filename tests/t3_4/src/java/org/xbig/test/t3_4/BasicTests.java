@@ -40,15 +40,18 @@ public class BasicTests {
 
 		iPtr = a.c(fPtr);
 		Assert.assertEquals(fPtr.intValue(), iPtr.intValue());
+		
+		fPtr.delete();
 	}
 
 	@Test
 	public void accessStructReferenceAttribute() {
-		DoublePointer gPtr;
 		DoublePointer sPtr = new DoublePointer(7.3);
 
 		a.setz(sPtr);
-		gPtr = a.getz();
+		DoublePointer gPtr = a.getz();
 		Assert.assertEquals(sPtr.doubleValue(), gPtr.doubleValue());
+		
+		sPtr.delete();
 	}
 }

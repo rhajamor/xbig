@@ -28,7 +28,7 @@ public class FloatPointer extends NumberPointer<Float> {
 	}
 
 	public FloatPointer(float value) {
-		super(new InstancePointer(_create(value)));
+		super(new InstancePointer(_create(value)),false);
 	}
 
 	private static native long _create(float value);

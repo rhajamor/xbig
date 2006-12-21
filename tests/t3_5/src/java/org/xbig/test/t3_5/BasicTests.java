@@ -40,6 +40,8 @@ public class BasicTests {
 
 		iPtr = a.c(fPtr);
 		Assert.assertEquals(fPtr.intValue(), iPtr.intValue());
+		
+		fPtr.delete();
 	}
 
 	@Test
@@ -50,5 +52,7 @@ public class BasicTests {
 		a.setz(sPtr);
 		gPtr = a.getz();
 		Assert.assertEquals(sPtr.doubleValue(), gPtr.doubleValue());
+		
+		sPtr.delete();
 	}
 }

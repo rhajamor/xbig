@@ -8,14 +8,15 @@ protected #classname#(org.xbig.base.InstancePointer p, boolean remote) {
 }
 
 public void delete() {
-	if (!this.remote) 
+	if (this.remote)
        throw new RuntimeException("can't dispose object not created by native library");
 
     __delete(object.pointer);
+    this.deleted = true;
 }
 	
 public void finalize() {
-	if(this.remote)
+	if(!this.remote && !this.deleted)
 		delete();
 }
 	

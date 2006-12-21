@@ -29,6 +29,7 @@ public class BasicTests {
 		iPtr = a.c(fPtr);
 		Assert.assertEquals(fPtr.intValue(), iPtr.intValue());
 
+		fPtr.delete();
 		a.delete();
 	}
 }

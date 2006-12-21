@@ -28,7 +28,7 @@ public class DoublePointer extends NumberPointer<Double> {
 	}
 
 	public DoublePointer(double value) {
-		super(new InstancePointer(_create(value)));
+		super(new InstancePointer(_create(value)),false);
 	}
 
 	private static native long _create(double value);
