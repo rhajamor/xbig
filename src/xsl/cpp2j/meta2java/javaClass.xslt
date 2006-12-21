@@ -66,11 +66,23 @@
 		<xsl:text>class&#32;</xsl:text>
 		<xsl:value-of select="$class_name" />
 
-		<!-- if base class configured -->
-		<xsl:if test="$class_config/inherits">
-			<xsl:text>&#32;extends&#32;</xsl:text>
-			<xsl:value-of select="$class_config/inherits" />
-		</xsl:if>
+		<!-- base class -->
+		<xsl:choose>
+			<!-- native inheritance -->
+			<xsl:when test="$class/inherits">
+				<xsl:text>&#32;extends &#32;</xsl:text>
+				<xsl:value-of select="$class/inherits/baseClass" />
+			</xsl:when>
+
+			<!-- configured inheritance -->
+			<xsl:when test="$class_config/inherits">
+				<xsl:text>&#32;extends&#32;</xsl:text>
+				<xsl:value-of select="$class_config/inherits" />
+			</xsl:when>
+
+			<xsl:otherwise>
+			</xsl:otherwise>
+		</xsl:choose>
 
 		<!-- start class content -->
 		<xsl:text>&#32;{&#10;</xsl:text>

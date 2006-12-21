@@ -13,6 +13,11 @@ int A::a(float b) {
 	return (int)b;
 }
 
+int A::get() {
+	std::cout << "t5_1: A::get()" << std::endl;
+	return val;
+}
+
 B::B() {
 	std::cout << "t5_1: B::B()" << std::endl;
 }
@@ -21,4 +26,10 @@ float B::c(int d) {
 	std::cout << "t5_1: B::c(float d)" << std::endl;
 	std::cout << "d: " << d << std::endl;
 	return (float)d;
+}
+
+void B::set(int val) {
+	std::cout << "t5_1: A::set(int val)" << std::endl;
+	std::cout << "val: " << val << std::endl;
+	this->val = val;
 }

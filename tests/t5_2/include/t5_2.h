@@ -2,7 +2,7 @@
  *
  * Test file for the XSLT Bindings Generator (XBiG)
  *
- * It handles a multiple inheritance
+ * It handles multiple inheritance
  *
  ******************************************************************/
 
