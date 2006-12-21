@@ -23,11 +23,15 @@
 	http://www.gnu.org/copyleft/lesser.txt.
 	
 	Author: Hubert Rung			<hubert.rung@netallied.de>
-	Christoph Nenning	<christoph.nenning@netallied.de>
+			Christoph Nenning
 -->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-	xmlns:xd="http://www.pnp-software.com/XSLTdoc" version="2.0">
+	xmlns:xd="http://www.pnp-software.com/XSLTdoc" version="2.0"
+	xmlns:str="http://exslt.org/strings">
+
+	<xsl:import href="../exslt/str.split.template.xsl" />
+
 	<xd:doc type="stylesheet">
 		<xd:author>Hubert Rung</xd:author>
 		<xd:copyright>netAllied GmbH</xd:copyright>
@@ -329,12 +333,22 @@
 			<xsl:element name="class">
 				<xsl:variable name="className">
 					<xsl:choose>
+
+						<!-- if this class is inside a namespace -->
 						<xsl:when test="contains(compoundname,'::')">
-							<xsl:value-of select="substring-after(compoundname,'::')"/>
+							<xsl:variable name="compoundNameTokens">
+								<xsl:call-template name="str:split">
+									<xsl:with-param name="string" select="compoundname" />
+									<xsl:with-param name="pattern" select="'::'" />
+								</xsl:call-template>
+							</xsl:variable>
+							<xsl:value-of select="$compoundNameTokens/token[last()]"></xsl:value-of>
 						</xsl:when>
+
 						<xsl:otherwise>
 							<xsl:value-of select="compoundname"/>
 						</xsl:otherwise>
+
 					</xsl:choose>
 				</xsl:variable>
 				<xsl:attribute name="name" select="$className"/>
@@ -944,31 +958,31 @@
 	</xd:doc>
 	<xsl:template name="struct">
 		<xsl:element name="struct">
-			<xsl:attribute name="name">
+
+			<xsl:variable name="className">
 				<xsl:choose>
+	
+					<!-- if this class is inside a namespace -->
 					<xsl:when test="contains(compoundname,'::')">
-						<xsl:value-of select="substring-after(compoundname,'::')"/>
+						<xsl:variable name="compoundNameTokens">
+							<xsl:call-template name="str:split">
+								<xsl:with-param name="string" select="compoundname" />
+								<xsl:with-param name="pattern" select="'::'" />
+							</xsl:call-template>
+						</xsl:variable>
+						<xsl:value-of select="$compoundNameTokens/token[last()]"></xsl:value-of>
 					</xsl:when>
+	
 					<xsl:otherwise>
 						<xsl:value-of select="compoundname"/>
 					</xsl:otherwise>
-				</xsl:choose>
-			</xsl:attribute>
-			<xsl:attribute name="fullName" select="compoundname" />
-			<xsl:variable name="name">
-				<xsl:choose>
-					<xsl:when test="contains(compoundname,'::')">
-						<xsl:value-of select="substring-after(compoundname,'::')"/>
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:value-of select="compoundname"/>
-					</xsl:otherwise>
+	
 				</xsl:choose>
 			</xsl:variable>
-			<xsl:if test="contains($name,'::')">
-				<xsl:attribute name="name"
-					select="substring-after($name,'::')" />
-			</xsl:if>
+
+			<xsl:attribute name="name" select="$className"/>
+			<xsl:attribute name="fullName" select="compoundname" />
+
 			<!-- template attributes -->
 			<xsl:if test="../templateparamlist">
 				<xsl:variable name="refid" select="../@id" />
@@ -1087,7 +1101,7 @@
 			</xsl:choose>
 
 			<xsl:call-template name="createDefaultConstructor">
-				<xsl:with-param name="className" select="$name" />
+				<xsl:with-param name="className" select="$className" />
 			</xsl:call-template>
 
 			<!-- documentation -->
