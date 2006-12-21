@@ -16,7 +16,7 @@ public void delete() {
 }
 	
 public void finalize() {
-	if(!this.remote && !this.deleted)
+	if(!this.remote &amp;&amp; !this.deleted)
 		delete();
 }
 	
