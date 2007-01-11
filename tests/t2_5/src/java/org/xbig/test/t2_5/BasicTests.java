@@ -9,7 +9,7 @@ import org.xbig.A;
 import org.xbig.base.*;
 
 /**
- * @author bielig
+ * @author nenning
  *
  */
 public class BasicTests {

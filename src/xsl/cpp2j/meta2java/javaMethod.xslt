@@ -24,6 +24,7 @@
 	http://www.gnu.org/copyleft/lesser.txt.
 	
 	Author: Frank Bielig
+			Christoph Nenning
 	
 -->
 
@@ -72,9 +73,13 @@
 			<xsl:when test="$virtuality = 'non-virtual'">
 				<xsl:text>&#32;final</xsl:text>
 			</xsl:when>
+
+			<!-- this is not necessary because of the interfaces that are generated for multiple inheritance -->
 			<xsl:when test="$virtuality = 'pure-virtual'">
-				<xsl:text>&#32;abstract</xsl:text>
+				<!-- <xsl:text>&#32;abstract</xsl:text> -->
+				<xsl:text>&#32;final</xsl:text>
 			</xsl:when>
+
 			<xsl:when test="$virtuality = 'virtual'" />
 			<xsl:otherwise>
 				<xsl:message terminate="no">

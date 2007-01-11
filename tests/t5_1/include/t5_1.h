@@ -2,7 +2,7 @@
  *
  * Test file for the XSLT Bindings Generator (XBiG)
  *
- * It handles a single inheritance
+ * It handles single inheritance
  *
  ******************************************************************/
 
@@ -11,6 +11,8 @@
 #else
 	#define EXPORT
 #endif
+
+namespace n {
 
 class EXPORT A {
 public:
@@ -23,7 +25,9 @@ protected:
 	int val;
 };
 
-class EXPORT B : public A {
+}
+
+class EXPORT B : public n::A {
 public:
 	B();
 	float c(int d);

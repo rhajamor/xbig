@@ -7,7 +7,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.xbig.B;
 /**
- * @author bielig
+ * @author nenning
  *
  */
 public class BasicTests {

@@ -24,6 +24,7 @@
 	http://www.gnu.org/copyleft/lesser.txt.
 	
 	Author: Frank Bielig
+			Christoph Nenning
 	
 -->
 
@@ -33,9 +34,11 @@
 	xmlns:fn="http://www.w3.org/2005/xpath-methods"
 	xmlns:xdt="http://www.w3.org/2005/xpath-datatypes"
 	xmlns:xd="http://www.pnp-software.com/XSLTdoc"
-	xmlns:xbig="http://xbig.sourceforge.net/XBiG">
+	xmlns:xbig="http://xbig.sourceforge.net/XBiG"
+	xmlns:str="http://exslt.org/strings">
 
 	<xsl:import href="cppMethodDeclaration.xslt" />
+	<xsl:import href="../../exslt/str.split.template.xsl" />
 
 	<xd:doc type="stylesheet">
 		<xd:short></xd:short>
@@ -361,13 +364,40 @@
 
 		<!-- replace public attribute -->
 		<!-- ARGH: WTF is this not working ????? -->
+		<!-- TODO make this generic -->
 		<!-- <xsl:variable name="line12"
 			select="xbig:cpp-replace($line11, '#cpp_attribute#', $method/attribute_name)" /> -->
 		<xsl:variable name="line12"
 			select="xbig:cpp-replace($line11, '#cpp_attribute#', substring($method/name, string-length($config/config/meta/publicattribute/get)+3))" />
 
+		<!-- replace name of class the method was inherited from -->
+		<xsl:variable name="methodClassWithPreStuffTokens">
+			<xsl:call-template name="str:split">
+				<xsl:with-param name="string" select="$method/definition" />
+				<xsl:with-param name="pattern" select="' '" />
+			</xsl:call-template>
+		</xsl:variable>
+		<xsl:variable name="methodClassTokens">
+			<xsl:call-template name="str:split">
+				<xsl:with-param name="string" select="$methodClassWithPreStuffTokens/*[last()]" />
+				<xsl:with-param name="pattern" select="'::'" />
+			</xsl:call-template>
+		</xsl:variable>
+		<xsl:variable name="methodClassFullName">
+			<xsl:for-each select="$methodClassTokens/*">
+				<xsl:if test="position() != last()">
+					<xsl:value-of select="." />
+				</xsl:if>
+				<xsl:if test="(position() != last()) and (position() != last()-1)">
+					<xsl:value-of select="'::'" />
+				</xsl:if>
+			</xsl:for-each>
+		</xsl:variable>
+		<xsl:variable name="line13"
+			select="xbig:cpp-replace($line12, '#cpp_inherited_method_class#', $methodClassFullName)" />
+
 		<xsl:variable name="result"
-			select="xbig:cpp-replace(normalize-space($line12),'#nl#', $config/config/cpp/format/indent)" />
+			select="xbig:cpp-replace(normalize-space($line13),'#nl#', $config/config/cpp/format/indent)" />
 
 		<!-- real writing of code line -->
 		<xsl:value-of select="$result" />

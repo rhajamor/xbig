@@ -24,6 +24,7 @@
 	http://www.gnu.org/copyleft/lesser.txt.
 	
 	Author: Frank Bielig
+			Christoph Nenning
 	
 -->
 
@@ -89,13 +90,16 @@
 			<!-- no virtual function -->
 			<xsl:when test="$virtuality eq 'non-virtual'">
 				<xsl:if test="not(empty($return_type))">
+					<!-- generate no final because of interfaces
 					<xsl:text>&#32;final</xsl:text>
+					 -->
 				</xsl:if>
 			</xsl:when>
 
 			<!-- abstract function -->
+			<!-- this is not necessary because of the interfaces that are generated for multiple inheritance -->
 			<xsl:when test="$virtuality = 'pure-virtual'">
-				<xsl:text>&#32;abstract</xsl:text>
+				<!-- <xsl:text>&#32;abstract</xsl:text> -->
 			</xsl:when>
 
 			<!-- virtual function -->

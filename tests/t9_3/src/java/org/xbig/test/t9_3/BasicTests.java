@@ -5,7 +5,7 @@ package org.xbig.test.t9_3;
 
 import org.junit.Test;
 /**
- * @author bielig
+ * @author nenning
  *
  */
 public class BasicTests {

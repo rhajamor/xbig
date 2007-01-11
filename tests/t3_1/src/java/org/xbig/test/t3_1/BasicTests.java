@@ -8,7 +8,7 @@ import org.junit.Test;
 import org.xbig.B;
 import org.xbig.C;
 /**
- * @author bielig
+ * @author nenning
  *
  */
 public class BasicTests {

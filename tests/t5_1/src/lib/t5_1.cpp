@@ -3,18 +3,18 @@
 #include "t5_1.h"
 #include <iostream>
 
-A::A() {
-	std::cout << "t5_1: A::A()" << std::endl;
+n::A::A() {
+	std::cout << "t5_1: n::A::A()" << std::endl;
 }
 
-int A::a(float b) {
-	std::cout << "t5_1: A::a(float b)" << std::endl;
+int n::A::a(float b) {
+	std::cout << "t5_1: n::A::a(float b)" << std::endl;
 	std::cout << "b: " << b << std::endl;
 	return (int)b;
 }
 
-int A::get() {
-	std::cout << "t5_1: A::get()" << std::endl;
+int n::A::get() {
+	std::cout << "t5_1: n::A::get()" << std::endl;
 	return val;
 }
 

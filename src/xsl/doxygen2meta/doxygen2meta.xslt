@@ -97,9 +97,9 @@
 							<xsl:with-param name="refid" select="@id"/>
 						</xsl:call-template>
 					</xsl:when>
-					<xsl:when test="not(root()//compounddef[@kind='class']/innerclass/@refid) and
-									not(root()//compounddef[@kind='struct']/innerclass/@refid) and
-									not(root()//compounddef[@kind='namespace']/innerclass/@refid)">
+					<xsl:when test="not(root()//compounddef[@kind='class']/innerclass/@refid = @id) and
+									not(root()//compounddef[@kind='struct']/innerclass/@refid = @id) and
+									not(root()//compounddef[@kind='namespace']/innerclass/@refid = @id)">
 						<xsl:call-template name="class">
 							<xsl:with-param name="refid" select="@id"/>
 						</xsl:call-template>
@@ -539,7 +539,12 @@
 						<!-- non templates first -->
 						<xsl:if
 							test="not(contains(substring-after(../../node[@id=$childid]/label,'::'),'&lt;'))">
+
 							<xsl:element name="baseClass">
+
+								<!-- remember the full name of base classes -->
+								<xsl:attribute name="fullBaseClassName" select="../../node[@id=$childid]/label"/>
+
 								<xsl:variable name="baseClass"
 									select="substring-after(../../node[@id=$childid]/label,'::')" />
 								<xsl:choose>

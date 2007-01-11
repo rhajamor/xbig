@@ -4,7 +4,7 @@
 
 int main(int argc, char* argv[]) 
 {
-   A a;
+   n::A a;
    B b;
 
    int c = a.a(7.3);

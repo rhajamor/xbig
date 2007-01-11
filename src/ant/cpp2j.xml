@@ -317,6 +317,26 @@
 	</target>
 
 	<!-- ..................................................................... -->
+	<!-- Create shared library of generated C++ code, to test manual changes -->
+	<!-- ..................................................................... -->
+
+	<target name="testcompilejni" depends="java-include-init, init">
+		<cpp-lib-compile name="${lib.xbig}" outdir="${dir.cpp.build.config}"
+			srcdir="${dir.cur.build.cpp.src.lib}" type="shared">
+			<!-- TODO: put all "shared" in a property -->
+			<extraincludes>
+				<includepath path="${dir.prj.src.c}/include" />
+				<includepath path="${dir.cur.build.cpp.include}" />
+				<includepath path="${dir.java.include}" />
+				<includepath path="${dir.java.include.os}" />
+			</extraincludes>
+			<extralibraries>
+				<libset libs="${lib.name}" dir="${dir.cpp.build.config}/shared"/>
+			</extralibraries>
+		</cpp-lib-compile>
+	</target>
+
+	<!-- ..................................................................... -->
 	<!-- Create archive of generated Java code -->
 	<!-- ..................................................................... -->
 	

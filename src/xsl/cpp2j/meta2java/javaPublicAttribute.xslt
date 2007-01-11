@@ -43,7 +43,6 @@
 
 
 		<!-- getter -->
-		<!-- method name -->
 		<xsl:variable name="getterName">
 			<xsl:value-of select="$config/config/meta/publicattribute/get/text()"/>
 			<xsl:value-of select="name"/>
@@ -52,33 +51,11 @@
 		<!-- native method name -->
 		<xsl:variable name="nativeGetterName" select="concat('__', $getterName)" />
 
-		<!-- impl -->
-		<xsl:text>&#10;&#10;</xsl:text>
-		<xsl:text>// getter for public attribute </xsl:text><xsl:value-of select="name"/>
-		<xsl:text>&#10;public </xsl:text>
-		<xsl:if test="@static">
-			<xsl:text>static </xsl:text>
-		</xsl:if>
+		<xsl:call-template name="javaPublicAttributeGetterDeclaration">
+			<xsl:with-param name="config" select="$config" />
+		</xsl:call-template>
 
-		<!-- return type -->
-		<xsl:choose>
-
-			<!-- write pointer class -->
-			<xsl:when test="(./@passedBy='pointer' or ./@passedBy='reference')">
-				<xsl:call-template name="javaPointerClass">
-					<xsl:with-param name="config" select="$config" />
-					<xsl:with-param name="param" select="." />
-				</xsl:call-template>
-			</xsl:when>
-
-			<xsl:otherwise>
-				<xsl:value-of select="type" />
-			</xsl:otherwise>
-		</xsl:choose>
-
-		<xsl:text> </xsl:text>
-		<xsl:value-of select="$getterName" />
-		<xsl:text>() { return </xsl:text>
+		<xsl:text> { return </xsl:text>
 
 		<!-- create Pointer object when necessary -->
 		<xsl:if test="./@passedBy='pointer' or ./@passedBy='reference'">
@@ -131,40 +108,19 @@
 
 		<!-- setter -->
 		<xsl:if test="not(@const)">
-			<!-- method name -->
 			<xsl:variable name="setterName">
 				<xsl:value-of select="$config/config/meta/publicattribute/set/text()"/>
 				<xsl:value-of select="name"/>
 			</xsl:variable>
-	
+
 			<!-- native method name -->
 			<xsl:variable name="nativeSetterName" select="concat('__', $setterName)" />
 	
-			<!-- impl -->
-			<xsl:text>&#10;&#10;</xsl:text>
-			<xsl:text>// setter for public attribute </xsl:text><xsl:value-of select="name"/>
-			<xsl:text>&#10;</xsl:text>
-			<xsl:if test="@static">
-				<xsl:text>static </xsl:text>
-			</xsl:if>
-			<xsl:text>public void </xsl:text>
-			<xsl:value-of select="$setterName" />
-			<xsl:text>(</xsl:text>
+			<xsl:call-template name="javaPublicAttributeSetterDeclaration">
+				<xsl:with-param name="config" select="$config" />
+			</xsl:call-template>
 
-			<!-- param type -->
-			<xsl:choose>
-				<xsl:when test="(./@passedBy='pointer' or ./@passedBy='reference')">
-					<xsl:call-template name="javaPointerClass">
-						<xsl:with-param name="config" select="$config" />
-						<xsl:with-param name="param" select="." />
-					</xsl:call-template>
-				</xsl:when>
-				<xsl:otherwise>
-					<xsl:value-of select="type" />
-				</xsl:otherwise>
-			</xsl:choose>
-
-			<xsl:text> value) { </xsl:text>
+			<xsl:text> { </xsl:text>
 			<xsl:value-of select="$nativeSetterName" />
 			<xsl:text>(</xsl:text>
 			<xsl:if test="not(@static)">
@@ -204,6 +160,81 @@
 			<xsl:text> value);&#10;&#10;</xsl:text>
 		</xsl:if>
 
-
 	</xsl:template>
+
+
+<xsl:template name="javaPublicAttributeGetterDeclaration">
+		<xsl:param name="config" />
+
+		<xsl:variable name="getterName">
+			<xsl:value-of select="$config/config/meta/publicattribute/get/text()"/>
+			<xsl:value-of select="name"/>
+		</xsl:variable>
+
+		<!-- impl -->
+		<xsl:text>&#10;&#10;</xsl:text>
+		<xsl:text>// getter for public attribute </xsl:text><xsl:value-of select="name"/>
+		<xsl:text>&#10;public </xsl:text>
+		<xsl:if test="@static">
+			<xsl:text>static </xsl:text>
+		</xsl:if>
+
+		<!-- return type -->
+		<xsl:choose>
+
+			<!-- write pointer class -->
+			<xsl:when test="(./@passedBy='pointer' or ./@passedBy='reference')">
+				<xsl:call-template name="javaPointerClass">
+					<xsl:with-param name="config" select="$config" />
+					<xsl:with-param name="param" select="." />
+				</xsl:call-template>
+			</xsl:when>
+
+			<xsl:otherwise>
+				<xsl:value-of select="type" />
+			</xsl:otherwise>
+		</xsl:choose>
+
+		<xsl:text> </xsl:text>
+		<xsl:value-of select="$getterName" />
+		<xsl:text>()</xsl:text>
+	</xsl:template>
+
+	<xsl:template name="javaPublicAttributeSetterDeclaration">
+		<xsl:param name="config" />
+
+		<!-- method name -->
+		<xsl:variable name="setterName">
+			<xsl:value-of select="$config/config/meta/publicattribute/set/text()"/>
+			<xsl:value-of select="name"/>
+		</xsl:variable>
+
+		<!-- impl -->
+		<xsl:text>&#10;&#10;</xsl:text>
+		<xsl:text>// setter for public attribute </xsl:text><xsl:value-of select="name"/>
+		<xsl:text>&#10;</xsl:text>
+		<xsl:if test="@static">
+			<xsl:text>static </xsl:text>
+		</xsl:if>
+		<xsl:text>public void </xsl:text>
+		<xsl:value-of select="$setterName" />
+		<xsl:text>(</xsl:text>
+
+		<!-- param type -->
+		<xsl:choose>
+			<xsl:when test="(./@passedBy='pointer' or ./@passedBy='reference')">
+				<xsl:call-template name="javaPointerClass">
+					<xsl:with-param name="config" select="$config" />
+					<xsl:with-param name="param" select="." />
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="type" />
+			</xsl:otherwise>
+		</xsl:choose>
+
+		<xsl:text> value)</xsl:text>
+	</xsl:template>
+
+
 </xsl:stylesheet>

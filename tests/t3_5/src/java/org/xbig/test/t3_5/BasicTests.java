@@ -10,7 +10,7 @@ import org.junit.Test;
 import org.xbig.B;
 import org.xbig.base.*;
 /**
- * @author bielig
+ * @author nenning
  *
  */
 public class BasicTests {

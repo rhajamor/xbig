@@ -6,7 +6,7 @@ package org.xbig.test.t2_1;
 import org.junit.Test;
 import org.xbig.A;
 /**
- * @author bielig
+ * @author nenning
  *
  */
 public class BasicTests {

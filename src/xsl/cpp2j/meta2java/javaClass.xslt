@@ -33,11 +33,13 @@
 	xmlns:xs="http://www.w3.org/2001/XMLSchema"
 	xmlns:fn="http://www.w3.org/2005/xpath-functions"
 	xmlns:xdt="http://www.w3.org/2005/xpath-datatypes"
-	xmlns:xd="http://www.pnp-software.com/XSLTdoc">
+	xmlns:xd="http://www.pnp-software.com/XSLTdoc"
+	xmlns:xbig="http://xbig.sourceforge.net/XBiG">
 
 	<xsl:import href="javaNativeMethod.xslt" />
 	<xsl:import href="javaAccessMethod.xslt" />
 	<xsl:import href="javaPublicAttribute.xslt" />
+	<xsl:import href="../../util/metaInheritedMethods.xslt" />
 
 	<xd:doc type="stylesheet">
 		<xd:short>Generate mapping of a single original class or struct</xd:short>
@@ -66,23 +68,17 @@
 		<xsl:text>class&#32;</xsl:text>
 		<xsl:value-of select="$class_name" />
 
-		<!-- base class -->
-		<xsl:choose>
-			<!-- native inheritance -->
-			<xsl:when test="$class/inherits">
-				<xsl:text>&#32;extends &#32;</xsl:text>
-				<xsl:value-of select="$class/inherits/baseClass" />
-			</xsl:when>
+		<!-- configured inheritance -->
+		<xsl:if test="$class_config/inherits">
+			<xsl:text>&#32;extends&#32;</xsl:text>
+			<xsl:value-of select="$class_config/inherits" />
+		</xsl:if>
 
-			<!-- configured inheritance -->
-			<xsl:when test="$class_config/inherits">
-				<xsl:text>&#32;extends&#32;</xsl:text>
-				<xsl:value-of select="$class_config/inherits" />
-			</xsl:when>
-
-			<xsl:otherwise>
-			</xsl:otherwise>
-		</xsl:choose>
+		<!-- implement interface -->
+		<xsl:text>&#32;implements&#32;</xsl:text>
+		<xsl:value-of select="$config/config/java/interface/prefix" />
+		<xsl:value-of select="$class_name" />
+		<xsl:value-of select="$config/config/java/interface/suffix" />
 
 		<!-- start class content -->
 		<xsl:text>&#32;{&#10;</xsl:text>
@@ -117,9 +113,17 @@
 				select="replace($class_config/content,'#classname#', $class_name)" />
 		</xsl:if>
 
-		<!-- handling of member functions -->
-		<xsl:for-each select="function">
 
+		<!-- get methods, with inherited -->
+		<xsl:variable name="inheritedMethods">
+			<xsl:call-template name="findRelevantInheritedMethods">
+				<xsl:with-param name="config" select="$config" />
+				<xsl:with-param name="class" select="$class" />
+			</xsl:call-template>
+		</xsl:variable>
+
+		<!-- generate method impl -->
+ 		<xsl:for-each select="$inheritedMethods/function">
 			<xsl:call-template name="javaAccessMethod">
 				<xsl:with-param name="config" select="$config" />
 				<xsl:with-param name="class" select="$class" />
@@ -131,19 +135,20 @@
 				<xsl:with-param name="class" select="$class" />
 				<xsl:with-param name="method" select="." />
 			</xsl:call-template>
-
 		</xsl:for-each>
-
-		<!-- handling of public attributes -->
-		<xsl:for-each select="variable">
-			<xsl:call-template name="javaPublicAttribute">
+ 
+ 		<!-- generate public attributes getters and setters -->
+ 		<xsl:for-each select="$inheritedMethods/attribute/variable">
+ 			<xsl:call-template name="javaPublicAttribute">
 				<xsl:with-param name="config" select="$config" />
 			</xsl:call-template>
-		</xsl:for-each>
+ 		</xsl:for-each>
+
 
 		<!-- close class declaration  -->
 		<xsl:text>};&#10;&#10;</xsl:text>
 
 	</xsl:template>
+
 
 </xsl:stylesheet>

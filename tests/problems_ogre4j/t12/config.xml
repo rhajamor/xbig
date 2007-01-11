@@ -180,7 +180,7 @@
 					reinterpret_cast&lt;#cpp_class#*&gt;(#jni_pointer#);
 					#nl#
 					#nl#// call library method
-					#nl##cpp_this#->#cpp_method#(#cpp_params#);
+					#nl##cpp_this#->#cpp_inherited_method_class#::#cpp_method#(#cpp_params#);
 				</void>
 			    <return>
 			    	#nl#// parameter conversions
@@ -192,7 +192,7 @@
 					#nl#
 					#nl#// call library method
 					#nl##cpp_return_type# #cpp_return_var# =
-					    #cpp_this#->#cpp_method#(#cpp_params#);
+					    #cpp_this#->#cpp_inherited_method_class#::#cpp_method#(#cpp_params#);
 					#nl#return #cpp_return#;
 				</return>				
 			</normal>
@@ -609,6 +609,12 @@
 				&javaClassContent;
 			</content>
 		</class>
+
+		<interface>
+			<prefix>I</prefix>
+			<suffix></suffix>
+		</interface>
+
 	</java>
 
 	<mapping>

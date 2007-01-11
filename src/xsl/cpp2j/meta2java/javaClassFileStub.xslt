@@ -37,6 +37,7 @@
 	xmlns:xbig="http://xbig.sourceforge.net/XBiG">
 
 	<xsl:import href="javaClass.xslt" />
+	<xsl:import href="javaInterface.xslt" />
 	<xsl:import href="../../util/path.xslt"/>
 
 	<xd:doc type="stylesheet">
@@ -50,33 +51,80 @@
 		<xsl:param name="config" />
 		<xsl:param name="buildFile" />
 
+		<!-- generate Interface -->
 		<!-- compose filename of current class -->
-		<xsl:variable name="filename"
-			select="concat($outdir, '/', $java_ns_dir, '/',@name,'.java')" />
+		<xsl:variable name="ifFilename"
+			select="concat($outdir, '/',
+					$java_ns_dir, '/',
+					$config/config/java/interface/prefix,
+					@name,
+					$config/config/java/interface/suffix,
+					'.java')" />
 
 		<!-- open Java file -->
-		<xsl:result-document href="{xbig:toFileURL($filename)}"
+		<xsl:result-document href="{xbig:toFileURL($ifFilename)}"
 			format="textOutput">
 
-			<!-- write package -->
-			<xsl:text>package&#32;</xsl:text>
-			<xsl:value-of select="$java_ns_name" />
-			<xsl:text>;&#10;&#10;</xsl:text>
+			<xsl:call-template name="javaFileFirstContent">
+				<xsl:with-param name="java_ns_name" select="$java_ns_name" />
+				<xsl:with-param name="config" select="$config" />
+			</xsl:call-template>
 
-			<!-- write import -->
-			<xsl:text>&#32;</xsl:text>
-			<xsl:text>import org.xbig.base.*;&#32;</xsl:text>
-			<xsl:text>import std.*;&#32;</xsl:text>
-			<xsl:text>&#32;</xsl:text>
-
-
-			<!-- write class implementation -->
-			<xsl:call-template name="javaClass">
+			<!-- write interface implementation -->
+			<xsl:call-template name="javaInterface">
 				<xsl:with-param name="config" select="$config" />
 				<xsl:with-param name="class" select="." />
 				<xsl:with-param name="buildFile" select="$buildFile" />
 			</xsl:call-template>
 
 		</xsl:result-document>
+
+
+		<!-- generate Class if necessary -->
+		<xsl:if test="not(xbig:areThereUnimplementedAbstractMethods(.))">
+
+			<!-- compose filename of current class -->
+			<xsl:variable name="filename"
+				select="concat($outdir, '/', $java_ns_dir, '/',@name,'.java')" />
+	
+			<!-- open Java file -->
+			<xsl:result-document href="{xbig:toFileURL($filename)}"
+				format="textOutput">
+
+				<xsl:call-template name="javaFileFirstContent">
+					<xsl:with-param name="java_ns_name" select="$java_ns_name" />
+					<xsl:with-param name="config" select="$config" />
+				</xsl:call-template>
+	
+				<!-- write class implementation -->
+				<xsl:call-template name="javaClass">
+					<xsl:with-param name="config" select="$config" />
+					<xsl:with-param name="class" select="." />
+					<xsl:with-param name="buildFile" select="$buildFile" />
+				</xsl:call-template>
+	
+			</xsl:result-document>
+		</xsl:if>
 	</xsl:template>
+
+
+	<xsl:template name="javaFileFirstContent">
+		<xsl:param name="java_ns_name" />
+		<xsl:param name="config" />
+
+		<!-- write package -->
+		<xsl:text>package&#32;</xsl:text>
+		<xsl:value-of select="$java_ns_name" />
+		<xsl:text>;&#10;&#10;</xsl:text>
+
+		<!-- write import -->
+		<xsl:text>&#10;</xsl:text>
+		<xsl:text>import org.xbig.base.*;&#10;</xsl:text>
+		<xsl:text>import std.*;&#10;</xsl:text>
+		<xsl:text>import </xsl:text>
+		<xsl:value-of select="$config/config/java/namespaces/packageprefix"/>
+		<xsl:text>.*;&#10;</xsl:text>
+		<xsl:text>&#10;</xsl:text>
+	</xsl:template>
+
 </xsl:stylesheet>

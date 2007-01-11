@@ -5,23 +5,24 @@ package org.xbig.test.t5_1;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.xbig.A;
+import org.xbig.n.A;
+import org.xbig.n.IA;
 import org.xbig.B;
 /**
- * @author bielig
+ * @author nenning
  *
  */
 public class BasicTests {
 	
 	@Test
-	public void print() {
+	public void useSubClass() {
 		int i;
 		float f = 4.8f;
 
-		A a = new A();
+		IA a = new A();
 		i = a.a(f);
 		Assert.assertEquals((int)f, i);
-		a.delete();
+		((A)a).delete();
 		
 		B b = new B();
 		i = 2;

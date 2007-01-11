@@ -75,8 +75,17 @@
 		<xsl:text>&#10;#endif /* __cplusplus */</xsl:text>
 
 		<!-- iterate through all member functions -->
-		<xsl:for-each select="$class/function">
+		<!-- <xsl:for-each select="$class/function"> -->
+		<!-- get methods, with inherited -->
+		<xsl:variable name="inheritedMethods">
+			<xsl:call-template name="findRelevantInheritedMethods">
+				<xsl:with-param name="config" select="$config" />
+				<xsl:with-param name="class" select="$class" />
+			</xsl:call-template>
+		</xsl:variable>
 
+		<!-- generate method impl -->
+ 		<xsl:for-each select="$inheritedMethods/function">
 			<xsl:call-template name="cppMethodDeclaration">
 				<xsl:with-param name="config" select="$config" />
 				<xsl:with-param name="class_prefix"
