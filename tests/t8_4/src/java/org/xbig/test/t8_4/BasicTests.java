@@ -3,7 +3,10 @@
  */
 package org.xbig.test.t8_4;
 
+import org.junit.Assert;
 import org.junit.Test;
+import org.xbig.A;
+import org.xbig.base.*;
 /**
  * @author nenning
  *
@@ -11,7 +14,31 @@ import org.junit.Test;
 public class BasicTests {
 	
 	@Test
-	public void print() {
-		System.out.println("BasicTests.print()");
+	public void useMethodsWithManyConst() {
+		IntegerPointer iPtr;
+		FloatPointer fPtr = new FloatPointer(7.3f);
+		int i;
+		float f = fPtr.floatValue();
+
+		A a = new A();
+
+		i = a.a(fPtr);
+		Assert.assertEquals(fPtr.intValue(), i);
+		i = a.b(fPtr);
+		Assert.assertEquals(fPtr.intValue(), i);
+		i = a.c(fPtr);
+		Assert.assertEquals(fPtr.intValue(), i);
+		/*iPtr = a.d(fPtr.floatValue());
+		Assert.assertEquals(fPtr.intValue(), iPtr.intValue());*/
+		iPtr = a.e(fPtr);
+		Assert.assertEquals(fPtr.intValue(), iPtr.intValue());
+		iPtr = a.g(fPtr);
+		Assert.assertEquals(fPtr.intValue(), iPtr.intValue());
+		iPtr = a.h(fPtr);
+		Assert.assertEquals(fPtr.intValue(), iPtr.intValue());
+		iPtr = a.i(fPtr);
+		Assert.assertEquals(fPtr.intValue(), iPtr.intValue());
+
+		a.delete();
 	}
 }

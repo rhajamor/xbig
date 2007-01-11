@@ -92,10 +92,27 @@
 			<xsl:choose>
 				<!-- references need different conversion and return types -->
 				<xsl:when test="$type_info/type/@pass='reference' and $param/definition">
-					<xsl:value-of select="$type_info/type/@returntype" />
+					<!-- if const -->
+					<xsl:choose>
+					<xsl:when test="$param/type/@const eq 'true'">
+						<xsl:value-of select="concat('const ', $type_info/type/@returntype)" />
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="$type_info/type/@returntype" />
+					</xsl:otherwise>
+					</xsl:choose>
 				</xsl:when>
 				<xsl:otherwise>
-					<xsl:value-of select="$type_info/type/@cpp" />
+					<!-- if const -->
+					<!-- TODO check for const pointers (int* const) -->
+					<xsl:choose>
+					<xsl:when test="$param/type/@const eq 'true'">
+						<xsl:value-of select="concat('const ', $type_info/type/@cpp)" />
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="$type_info/type/@cpp" />
+					</xsl:otherwise>
+					</xsl:choose>
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:if>

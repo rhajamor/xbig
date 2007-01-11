@@ -3,7 +3,9 @@
  */
 package org.xbig.test.t8_2;
 
+import org.junit.Assert;
 import org.junit.Test;
+import org.xbig.A;
 /**
  * @author nenning
  *
@@ -11,7 +13,31 @@ import org.junit.Test;
 public class BasicTests {
 	
 	@Test
-	public void print() {
-		System.out.println("BasicTests.print()");
+	public void useMethodsWithManyConst() {
+		A a = new A();
+
+		int i = 5;
+		float f = 3.4f;
+
+		i = a.a(f);
+		Assert.assertEquals((int)f, i);
+		i = a.b(f);
+		Assert.assertEquals((int)f, i);
+		i = a.c(f);
+		Assert.assertEquals((int)f, i);
+		i = a.d(f);
+		Assert.assertEquals((int)f, i);
+		i = a.e(f);
+		Assert.assertEquals((int)f, i);
+		i = a.f(f);
+		Assert.assertEquals((int)f, i);
+		i = a.g(f);
+		Assert.assertEquals((int)f, i);
+		i = a.h(f);
+		Assert.assertEquals((int)f, i);
+		i = a.i(f);
+		Assert.assertEquals((int)f, i);
+
+		a.delete();
 	}
 }
