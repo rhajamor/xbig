@@ -29,13 +29,36 @@ public class BasicTests {
 		Assert.assertEquals(fPtr.intValue(), i);
 		i = a.c(fPtr);
 		Assert.assertEquals(fPtr.intValue(), i);
+		i = a.a_const(fPtr);
+		Assert.assertEquals(fPtr.intValue(), i);
 		iPtr = a.d(fPtr.floatValue());
 		Assert.assertEquals(fPtr.intValue(), iPtr.intValue());
 		iPtr = a.e(fPtr);
 		Assert.assertEquals(fPtr.intValue(), iPtr.intValue());
 		iPtr = a.g(fPtr);
 		Assert.assertEquals(fPtr.intValue(), iPtr.intValue());
+		iPtr = a.e_const(fPtr);
+		Assert.assertEquals(fPtr.intValue(), iPtr.intValue());
+
+		// these overloaded methods are not generated
+		i = a.a(final fPtr);
+		Assert.assertEquals(fPtr.intValue(), i);
+		i = a.b(final fPtr);
+		Assert.assertEquals(fPtr.intValue(), i);
+		i = a.c(final fPtr);
+		Assert.assertEquals(fPtr.intValue(), i);
+		i = a.a_const(final fPtr);
+		Assert.assertEquals(fPtr.intValue(), i);
+		iPtr = a.e(final fPtr);
+		Assert.assertEquals(fPtr.intValue(), iPtr.intValue());
+		iPtr = a.g(final fPtr);
+		Assert.assertEquals(fPtr.intValue(), iPtr.intValue());
+		iPtr = a.e_const(final fPtr);
+		Assert.assertEquals(fPtr.intValue(), iPtr.intValue());
+
 		iPtr = a.h(fPtr);
+		Assert.assertEquals(fPtr.intValue(), iPtr.intValue());
+		iPtr = a.g_const(fPtr);
 		Assert.assertEquals(fPtr.intValue(), iPtr.intValue());
 		iPtr = a.i(fPtr);
 		Assert.assertEquals(fPtr.intValue(), iPtr.intValue());
@@ -48,6 +71,8 @@ public class BasicTests {
 		iPtr = b.a(f);
 		Assert.assertEquals((int)f, iPtr.intValue());
 		iPtr = b.c(f);
+		Assert.assertEquals((int)f, iPtr.intValue());
+		iPtr = b.a_const(f);
 		Assert.assertEquals((int)f, iPtr.intValue());
 
 		b.delete();

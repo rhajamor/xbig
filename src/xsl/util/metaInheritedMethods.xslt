@@ -36,6 +36,7 @@
 	xmlns:xbig="http://xbig.sourceforge.net/XBiG">
 
 	<xsl:import href="metaMethodsEqual.xslt" />
+	<xsl:import href="metaMethodName.xslt" />
 
 	<xd:doc type="stylesheet">
 		<xd:short>this file contains some helper templates and functions to deal with inheritance</xd:short>
@@ -44,7 +45,59 @@
 	<xd:doc type="template">
 		<xd:short>find the inherited methods that must be implemented by java classes</xd:short>
 	</xd:doc>
+	<!-- this template hadles const overloading -->
 	<xsl:template name="findRelevantInheritedMethods">
+		<xsl:param name="config" />
+		<xsl:param name="class" />
+
+		<!-- get the method list -->
+		<xsl:variable name="methodList">
+			<xsl:call-template name="findRelevantInheritedMethodsWithoutTakingCareAboutConstOverloading">
+				<xsl:with-param name="config" select="$config" />
+				<xsl:with-param name="class" select="$class" />
+			</xsl:call-template>
+		</xsl:variable>
+
+		<xsl:for-each select="$methodList/function">
+			<xsl:choose>
+
+				<!-- if the name is not unique now, const overloading is used -->
+				<xsl:when test="count(../function[name = current()/name]) > 1">
+					<xsl:choose>
+						<!-- change the name of the const version -->
+						<xsl:when test="./@const = 'true'">
+							<xsl:call-template name="createElementForConstOverloadedMethod">
+								<xsl:with-param name="config" select="$config" />
+								<xsl:with-param name="method" select="." />
+							</xsl:call-template>
+						</xsl:when>
+
+						<!-- copy the not const version -->
+						<xsl:otherwise>
+							<xsl:copy-of select="." />
+						</xsl:otherwise>
+					</xsl:choose>
+				</xsl:when>
+
+				<!-- no const overloading for this method -->
+				<xsl:otherwise>
+					<xsl:copy-of select="." />
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:for-each>
+
+		<!-- just copy public attributes -->
+		<xsl:for-each select="$methodList/attribute">
+			<xsl:copy-of select="." />
+		</xsl:for-each>
+
+	</xsl:template>
+
+
+	<xd:doc type="template">
+		<xd:short>find the inherited methods and filter c-tors and overloaded methods</xd:short>
+	</xd:doc>
+	<xsl:template name="findRelevantInheritedMethodsWithoutTakingCareAboutConstOverloading">
 		<xsl:param name="config" />
 		<xsl:param name="class" />
 

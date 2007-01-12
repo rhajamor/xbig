@@ -21,4 +21,5 @@ public:
 	int c(const float b);
 	int d(float const b);
 	int a(float b) const;
+	void e() const;
 };

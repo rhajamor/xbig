@@ -27,6 +27,9 @@ public class BasicTests {
 		Assert.assertEquals((int)f, i);
 		i = a.d(f);
 		Assert.assertEquals((int)f, i);
+		i = a.a_const(f);
+		Assert.assertEquals(((int)f)*2, i);
+		a.e();
 
 		a.delete();
 	}

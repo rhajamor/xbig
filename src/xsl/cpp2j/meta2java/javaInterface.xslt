@@ -38,6 +38,7 @@
 	<xsl:import href="javaAccessMethodDeclaration.xslt" />
 	<xsl:import href="javaPublicAttribute.xslt" />
 	<xsl:import href="../../exslt/str.split.template.xsl" />
+	<xsl:import href="../../util/metaMethodName.xslt" />
 
 	<xd:doc type="stylesheet">
 		<xd:short>
@@ -125,12 +126,27 @@
 		<!-- handling of member functions -->
 		<xsl:for-each select="function">
 
+			<!-- change method name if const overloading is used -->
+			<xsl:variable name="methodContainer">
+				<xsl:choose>
+					<xsl:when test="(count(../function[name = current()/name]) > 1) and @const='true'">
+						<xsl:call-template name="createElementForConstOverloadedMethod">
+							<xsl:with-param name="config" select="$config" />
+							<xsl:with-param name="method" select="." />
+						</xsl:call-template>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:copy-of select="." />
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:variable>
+
 			<!-- interfaces cannot have consructors -->
 			<xsl:if test="name!=../@name">
 				<xsl:call-template name="javaAccessMethodDeclaration">
 					<xsl:with-param name="config" select="$config" />
 					<xsl:with-param name="class" select="$class" />
-					<xsl:with-param name="method" select="." />
+					<xsl:with-param name="method" select="$methodContainer/function" />
 				</xsl:call-template>
 
 				<!-- finish declaration -->

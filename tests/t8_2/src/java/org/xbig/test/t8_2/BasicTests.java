@@ -27,6 +27,14 @@ public class BasicTests {
 		Assert.assertEquals((int)f, i);
 		i = a.d(f);
 		Assert.assertEquals((int)f, i);
+		i = a.a_const(f);
+		Assert.assertEquals((int)f, i);
+		i = a.b_const(f);
+		Assert.assertEquals((int)f, i);
+		i = a.c_const(f);
+		Assert.assertEquals((int)f, i);
+		i = a.d_const(f);
+		Assert.assertEquals((int)f, i);
 		i = a.e(f);
 		Assert.assertEquals((int)f, i);
 		i = a.f(f);

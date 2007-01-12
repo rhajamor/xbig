@@ -24,6 +24,7 @@
 	http://www.gnu.org/copyleft/lesser.txt.
 	
 	Author: Frank Bielig
+			Christoph Nenning
 	
 -->
 
@@ -70,7 +71,9 @@
 		</xsl:variable>
 
 		<!-- shortcut of given function name -->
-		<xsl:variable name="org_method_name" select="$method/name" />
+		<xsl:variable name="org_method_name">
+				<xsl:value-of select="$method/name"/>
+		</xsl:variable>
 
 		<!-- expand to fuel method name -->
 		<xsl:variable name="method_name"
@@ -112,6 +115,49 @@
 				<xsl:value-of select="$full_method_name" />
 			</xsl:otherwise>
 		</xsl:choose>
+
+	</xsl:template>
+
+
+
+	<xsl:template name="createElementForConstOverloadedMethod">
+		<xsl:param name="config" />
+		<xsl:param name="method" />
+
+		<xsl:element name="function">
+			<xsl:attribute name="virt">
+				<xsl:value-of select="$method/@virt" />
+			</xsl:attribute>
+			<xsl:attribute name="visibility">
+				<xsl:value-of select="$method/@visibility" />
+			</xsl:attribute>
+			<xsl:attribute name="static">
+				<xsl:value-of select="$method/@static" />
+			</xsl:attribute>
+			<xsl:attribute name="const">
+				<xsl:value-of select="$method/@const" />
+			</xsl:attribute>
+			<xsl:attribute name="passedBy">
+				<xsl:value-of select="$method/@passedBy" />
+			</xsl:attribute>
+
+			<xsl:element name="type">
+				<xsl:value-of select="$method/type" />
+			</xsl:element>
+			<xsl:element name="definition">
+				<xsl:value-of select="$method/definition" />
+			</xsl:element>
+			<xsl:element name="name">
+				<xsl:value-of select="$config/config/java/constoverloading/prefix" />
+				<xsl:value-of select="$method/name" />
+				<xsl:value-of select="$config/config/java/constoverloading/suffix" />
+			</xsl:element>
+
+			<xsl:element name="parameters">
+				<xsl:copy-of select="$method/parameters/*" />
+			</xsl:element>
+
+		</xsl:element>
 
 	</xsl:template>
 

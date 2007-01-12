@@ -278,12 +278,32 @@
 		<xsl:variable name="org_line" select="normalize-space($line)" />
 
 		<!-- replace method name -->
-		<xsl:variable name="line0"
-			select="xbig:cpp-replace($org_line, '#cpp_method#', $method/name)" />
+		<xsl:variable name="line0">
+			<!-- if const overloading is used, we have to find out the original name -->
+			<xsl:choose>
+				<xsl:when test="$method/@const = 'true' and not($class/function[name = $method/name][@const = 'true'])">
+					<xsl:variable name="methodNameWithoutPrefix" select="substring-after($method/name, $config/config/java/constoverloading/prefix)"/>
+					<xsl:variable name="methodName" select="substring-before($methodNameWithoutPrefix, $config/config/java/constoverloading/suffix)"/>
+					<xsl:value-of select="xbig:cpp-replace($org_line, '#cpp_method#', $methodName)" />
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="xbig:cpp-replace($org_line, '#cpp_method#', $method/name)" />
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
 
 		<!-- replace class name -->
-		<xsl:variable name="line1"
-			select="xbig:cpp-replace($line0, '#cpp_class#', $class/@fullName)" />
+		<xsl:variable name="line1">
+			<xsl:choose>
+				<!-- if we call a const method -->
+				<xsl:when test="$method/@const = 'true'">
+					<xsl:value-of  select="xbig:cpp-replace($line0, '#cpp_class#', concat('const ', $class/@fullName))"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of  select="xbig:cpp-replace($line0, '#cpp_class#', $class/@fullName)"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
 
 		<!-- replace JNI environment variable -->
 		<xsl:variable name="line2"

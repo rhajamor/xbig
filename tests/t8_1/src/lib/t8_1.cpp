@@ -34,5 +34,9 @@ int A::d(float const b) {
 int A::a(float b) const {
 	std::cout << "t8_1: A::a(float b) const" << std::endl;
 	std::cout << "b: " << b << std::endl;
-	return (int)b;
+	return ((int)b) * 2;
+}
+
+void A::e() const {
+	std::cout << "t8_1: A::e() const" << std::endl;
 }

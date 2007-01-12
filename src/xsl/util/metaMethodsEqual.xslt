@@ -36,10 +36,13 @@
 	xmlns:xbig="http://xbig.sourceforge.net/XBiG">
 
 	<xd:doc type="stylesheet">
-		<xd:short>check if two methods have the same name and parameter types</xd:short>
+		<xd:short>helper functions to check if methods are overloaded</xd:short>
 	</xd:doc>
 
-	<xsl:function name="xbig:areTheseMethodsEqual" as="xs:boolean">
+	<xd:doc type="function">
+		<xd:short>check if two methods have the same name and parameter types</xd:short>
+	</xd:doc>
+	<xsl:function name="xbig:areTheseMethodsEqualExceptConst" as="xs:boolean">
 		<xsl:param name="meth1"/>
 		<xsl:param name="meth2"/>
 
@@ -82,7 +85,6 @@
 								<xsl:value-of select="true()"/>
 							</xsl:otherwise>
 						</xsl:choose>
-
 					</xsl:when>
 
 					<!-- if the number of parameters is different -->
@@ -98,6 +100,36 @@
 			</xsl:otherwise>
 		</xsl:choose>
 
+	</xsl:function>
+
+	<xd:doc type="function">
+		<xd:short>check if two methods have the same constness, same name and parameter types</xd:short>
+	</xd:doc>
+	<xsl:function name="xbig:areTheseMethodsEqual" as="xs:boolean">
+		<xsl:param name="meth1"/>
+		<xsl:param name="meth2"/>
+
+		<xsl:variable name="equalWithoutConst" select="xbig:areTheseMethodsEqualExceptConst($meth1, $meth2)"/>
+
+		<!-- test if both methods have the same constness -->
+		<xsl:choose>
+			<xsl:when test="$equalWithoutConst">
+				<xsl:choose>
+					<xsl:when test="$meth1/@const = $meth2/@const">
+						<xsl:value-of select="true()"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="false()"/>
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:when>
+
+			<!-- if the constness is different -->
+			<xsl:otherwise>
+				<xsl:value-of select="false()"/>
+			</xsl:otherwise>
+
+		</xsl:choose>
 	</xsl:function>
 
 </xsl:stylesheet>

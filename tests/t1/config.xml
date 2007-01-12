@@ -615,6 +615,12 @@
 			<suffix></suffix>
 		</interface>
 
+		<constoverloading>
+			<prefix></prefix>
+			<suffix>_const</suffix>
+		</constoverloading>
+		
+
 	</java>
 
 	<mapping>
