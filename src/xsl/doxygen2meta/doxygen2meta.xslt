@@ -135,8 +135,18 @@
 
 			<!-- global enums -->
 			<!-- <xsl:for-each select="doxygen/compounddef[@kind='enum']"> -->
-			<xsl:for-each select="doxygen/compounddef[@kind='file']/sectiondef[@kind='enum']">
-				<xsl:call-template name="enumeration" />
+			<xsl:for-each select="doxygen/compounddef[@kind='file']/sectiondef[@kind='']/memberdef[@kind='enum']">
+				<xsl:choose>
+					<!-- if there are more than one entries in all.xml -->
+					<xsl:when test="last() > 1">
+						<xsl:if test="position() = 1">
+							<xsl:call-template name="enumeration" />
+						</xsl:if>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:call-template name="enumeration" />
+					</xsl:otherwise>
+				</xsl:choose>
 			</xsl:for-each>
 
 			<!-- global functions -->
@@ -625,9 +635,12 @@
 		</xd:detail>
 	</xd:doc>
 	<xsl:template name="enumeration">
-		<xsl:for-each select="memberdef[@kind='enum']">
-			<!-- test if enum belongs to actual class -->
-			<xsl:if test="starts-with(@id,../../@id)">
+	
+		<!-- check if we are inside a class -->
+		<xsl:choose>
+
+			<!-- global -->
+			<xsl:when test="@kind='enum'">
 				<xsl:element name="enumeration">
 					<xsl:attribute name="name" select="name" />
 					<xsl:for-each select="enumvalue">
@@ -638,13 +651,35 @@
 							</xsl:if>
 						</xsl:element>
 					</xsl:for-each>
-
 					<!-- documentation -->
 					<xsl:call-template name="documentation" />
-
 				</xsl:element>
-			</xsl:if>
-		</xsl:for-each>
+			</xsl:when>
+
+			<!-- inside class -->
+			<xsl:otherwise>
+				<xsl:for-each select="memberdef[@kind='enum']">
+					<!-- test if enum belongs to actual class -->
+					<xsl:if test="starts-with(@id,../../@id)">
+						<xsl:element name="enumeration">
+							<xsl:attribute name="name" select="name" />
+							<xsl:for-each select="enumvalue">
+								<xsl:element name="enum">
+									<xsl:attribute name="name" select="name" />
+									<xsl:if test="initializer">
+										<xsl:attribute name="initializer" select="normalize-space(initializer)" />
+									</xsl:if>
+								</xsl:element>
+							</xsl:for-each>
+
+							<!-- documentation -->
+							<xsl:call-template name="documentation" />
+
+						</xsl:element>
+					</xsl:if>
+				</xsl:for-each>
+			</xsl:otherwise>
+		</xsl:choose>
 	</xsl:template>
 	<!-- ##################### TYPEDEF - calls typeMap ######################### -->
 	<!-- cursor on doxygen/compounddef/sectiondef -->

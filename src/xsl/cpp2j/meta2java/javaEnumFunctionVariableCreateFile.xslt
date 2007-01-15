@@ -90,8 +90,15 @@
 					<xsl:text>&#10;</xsl:text>
 	
 					<!-- create enums -->
-					<xsl:for-each select="enumeration and root()//namespace/enumeration">
-						<xsl:call-template name="javaEnum"/>
+					<xsl:for-each select="enumeration">
+						<xsl:call-template name="javaEnum">
+							<xsl:with-param name="enum" select="." />
+						</xsl:call-template>
+					</xsl:for-each>
+					<xsl:for-each select="root()//namespace/enumeration">
+						<xsl:call-template name="javaEnum">
+							<xsl:with-param name="enum" select="." />
+						</xsl:call-template>
 					</xsl:for-each>
 				</xsl:if>
 

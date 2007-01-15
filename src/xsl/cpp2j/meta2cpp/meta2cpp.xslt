@@ -24,6 +24,7 @@
 	http://www.gnu.org/copyleft/lesser.txt.
 	
 	Author: Frank Bielig
+			Christoph Nenning
 	
 -->
 
@@ -56,6 +57,10 @@
 
 	<!-- local variables -->
 
+
+	<!-- global variables -->
+	<!-- it seems there is a bug in saxon when trying to select root in javaType.xslt or in some callers -->
+	<xsl:variable name="root" select="/" />
 
 	<!-- main transformation process for generating C++ -->
 	<xsl:template match="/*[local-name() = 'meta']">

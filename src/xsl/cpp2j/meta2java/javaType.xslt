@@ -33,10 +33,13 @@
 	xmlns:xs="http://www.w3.org/2001/XMLSchema"
 	xmlns:fn="http://www.w3.org/2005/xpath-functions"
 	xmlns:xdt="http://www.w3.org/2005/xpath-datatypes"
-	xmlns:xd="http://www.pnp-software.com/XSLTdoc">
+	xmlns:xd="http://www.pnp-software.com/XSLTdoc"
+	xmlns:xbig="http://xbig.sourceforge.net/XBiG"
+	xmlns:str="http://exslt.org/strings">
 
 	<xsl:import href="../../util/metaTypeInfo.xslt" />
 	<xsl:import href="../../util/firstLetterToUpperCase.xslt" />
+	<xsl:import href="../../exslt/str.split.template.xsl" />
 
 	<xd:doc type="stylesheet">
 		<xd:short>Generate mapping of a single type</xd:short>
@@ -68,6 +71,39 @@
 				</xsl:call-template>
 			</xsl:when>
 
+			<!-- if no type info is found -> we are dealing with a class / enum / ... -->
+			<xsl:when test="not($type_info/type/@java)">
+				<xsl:variable name="paraFullNameTokens">
+					<xsl:call-template name="str:split">
+						<xsl:with-param name="string" select="$param/type" />
+						<xsl:with-param name="pattern" select="'::'" />
+					</xsl:call-template>
+				</xsl:variable>
+				<xsl:variable name="paraType" select="$paraFullNameTokens/token[last()]"/>
+
+				<xsl:choose>
+
+					<!-- if this type is an enum -->
+					<xsl:when test="xbig:isEnum($paraType, $root)">
+						<xsl:choose>
+							<xsl:when test="$writingNativeMethod = 'true'">
+								<xsl:value-of select="'int'"/>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:value-of select="$config/config/java/class/enumwrapper"/>
+								<xsl:value-of select="'.'"/>
+								<xsl:value-of select="$paraType"/>
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:when>
+
+					<xsl:otherwise>
+						<xsl:value-of select="$param/type"/>
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:when>
+
+			<!-- types in config (usually primitive types) -->
 			<xsl:otherwise>
 				<xsl:value-of select="$type_info/type/@java" />
 			</xsl:otherwise>

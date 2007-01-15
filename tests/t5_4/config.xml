@@ -259,6 +259,7 @@
 
 				<type meta="void" signature="V" />
 				<type meta="boolean" signature="Z" />
+				<type meta="bool" signature="Z" />
 
 				<type meta="char" signature="C" />
 				<type meta="signed char" signature="C" />
@@ -306,7 +307,7 @@
 						reinterpret_cast&lt;jlong&gt;(&amp;#cpp_var#)
 					</cpp2jni>
 				</type>
-				<type meta="bool" jni="jbool" />
+				<type meta="bool" jni="jboolean" />
 
 				<type meta="char" pass="pointer" const="true"				
 					jni="jstring" cpp="std::string" >
@@ -571,7 +572,7 @@
 		<types>
 
 			<type meta="void" java="void" />
-			<type meta="bool" java="bool" />
+			<type meta="bool" java="boolean" />
 
 			<type meta="char" java="char" />
 			<type meta="signed char" java="byte" />

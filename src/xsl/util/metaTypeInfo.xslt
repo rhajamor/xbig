@@ -33,7 +33,8 @@
 	xmlns:xs="http://www.w3.org/2001/XMLSchema"
 	xmlns:fn="http://www.w3.org/2005/xpath-functions"
 	xmlns:xdt="http://www.w3.org/2005/xpath-datatypes"
-	xmlns:xd="http://www.pnp-software.com/XSLTdoc">
+	xmlns:xd="http://www.pnp-software.com/XSLTdoc"
+	xmlns:xbig="http://xbig.sourceforge.net/XBiG">
 
 	<xd:doc type="stylesheet">
 		<xd:short>Generate mapping of a single type</xd:short>
@@ -135,5 +136,33 @@
 		</xsl:for-each>
 
 	</xsl:template>
+
+
+
+	<xd:doc type="function">
+		<xd:short>check if a type is an enum</xd:short>
+	</xd:doc>
+	<xsl:function name="xbig:isEnum" as="xs:boolean">
+		<xsl:param name="type"/>
+		<xsl:param name="inputTreeRoot"/>
+
+		<!-- list of enums -->
+		<xsl:variable name="enums">
+			<xsl:for-each select="$inputTreeRoot//enumeration">
+				<xsl:copy-of select="."/>
+			</xsl:for-each>
+		</xsl:variable>
+
+		<xsl:choose>
+			<xsl:when test="boolean($enums/*[@name = $type])">
+				<xsl:value-of select="true()" />
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="false()" />
+			</xsl:otherwise>
+		</xsl:choose>
+
+	</xsl:function>
+
 
 </xsl:stylesheet>

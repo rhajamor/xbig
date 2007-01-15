@@ -169,7 +169,17 @@
 
 		<!-- no conversion function available -->
 		<xsl:if test="not($type_info/type/jni2cpp)">
-			<xsl:value-of select="$param_name" />
+
+			<!-- test for enums -->
+			<xsl:choose>
+				<xsl:when test="xbig:isEnum($param/type, $root)">
+					<xsl:value-of select="concat('(', $param/type, ')', $param_name)" />
+				</xsl:when>
+
+				<xsl:otherwise>
+					<xsl:value-of select="$param_name" />
+				</xsl:otherwise>
+			</xsl:choose>
 		</xsl:if>
 
 		<!-- if conversion function available -->

@@ -24,6 +24,7 @@
 	http://www.gnu.org/copyleft/lesser.txt.
 	
 	Author: Frank Bielig
+			Christoph Nenning
 	
 -->
 
@@ -53,6 +54,10 @@
 	<xsl:param name="config" />
 	<xsl:param name="outdir" />
 	<xsl:param name="buildFile" />
+
+	<!-- global variables -->
+	<!-- it seems there is a bug in saxon when trying to select root in javaType.xslt or in some callers -->
+	<xsl:variable name="root" select="/" />
 
 	<xsl:template match="/*[local-name() = 'meta']">
 

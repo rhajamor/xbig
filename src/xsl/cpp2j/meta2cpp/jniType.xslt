@@ -24,6 +24,7 @@
 	http://www.gnu.org/copyleft/lesser.txt.
 	
 	Author: Frank Bielig
+			Christoph Nenning
 	
 -->
 
@@ -32,7 +33,8 @@
 	xmlns:xs="http://www.w3.org/2001/XMLSchema"
 	xmlns:fn="http://www.w3.org/2005/xpath-functions"
 	xmlns:xdt="http://www.w3.org/2005/xpath-datatypes"
-	xmlns:xd="http://www.pnp-software.com/XSLTdoc">
+	xmlns:xd="http://www.pnp-software.com/XSLTdoc"
+	xmlns:xbig="http://xbig.sourceforge.net/XBiG">
 
 	<xsl:import href="../../util/metaTypeInfo.xslt" />
 
@@ -52,8 +54,29 @@
 			</xsl:call-template>
 		</xsl:variable>
 
-		<!-- print first type found in result list -->
-		<xsl:value-of select="$type_info/type/@jni" />
+		<!-- check if there is a type in config -->
+		<xsl:choose>
+
+			<!-- if no type info is found -> we are dealing with a class / enum / ... -->
+			<xsl:when test="not($type_info/type/@jni)">
+				<xsl:choose>
+
+					<!-- if this type is an enum -->
+					<xsl:when test="xbig:isEnum($param/type, $root)">
+						<xsl:value-of select="'jint'"/>
+					</xsl:when>
+
+					<xsl:otherwise>
+						<xsl:value-of select="$param/type"/>
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:when>
+
+			<!-- print first type found in result list -->
+			<xsl:otherwise>
+				<xsl:value-of select="$type_info/type/@jni" />
+			</xsl:otherwise>
+		</xsl:choose>
 
 	</xsl:template>
 

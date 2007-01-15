@@ -14,33 +14,40 @@
 
 namespace n {
 	enum EXPORT Vocals {
-		a,
-		e,
-		i,
-		o,
-		u
+		a = 101,
+		e = 102,
+		i = 103,
+		o = 104,
+		u = 105
 	};
 }
 
-class A {
+class EXPORT A {
 public:
-	A();
 	enum EXPORT Vocals {
-		a,
-		e,
-		i,
-		o,
-		u
+		a = 201,
+		e = 202,
+		i = 203,
+		o = 204,
+		u = 205
 	};
 };
 
-struct B {
-	B();
+struct EXPORT B {
 	enum EXPORT Vocals {
-		a,
-		e,
-		i,
-		o,
-		u
+		a = 301,
+		e = 302,
+		i = 303,
+		o = 304,
+		u = 305
 	};
+};
+
+class EXPORT Vocals {};
+
+class EXPORT Tester {
+public:
+	bool isN(n::Vocals a);
+	bool isA(A::Vocals a);
+	bool isB(B::Vocals a);
 };

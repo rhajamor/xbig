@@ -19,3 +19,12 @@ enum EXPORT Vocals {
 	o,
 	u
 };
+
+class EXPORT A {
+public:
+	bool isA(Vocals b);
+	bool isE(Vocals a);
+	bool isI(Vocals a);
+	bool isO(Vocals a);
+	bool isU(Vocals a);
+};

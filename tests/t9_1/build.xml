@@ -48,6 +48,8 @@
 
 	<target name="all" depends="compile-lib-base, javalib-test"></target>
 
+	<target name="testjni" depends="testcompilejni"></target>
+
 	<target name="clean" depends="cpp-clean">
 		<delete dir="${dir.cpp.build}" />
 	</target>

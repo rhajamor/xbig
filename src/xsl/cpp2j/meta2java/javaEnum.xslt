@@ -39,13 +39,12 @@
 	</xd:doc>
 
 	<xsl:template name="javaEnum">
-<!-- 		<xsl:param name="isGlobal"/> -->
-<!-- 		<xsl:param name="enumList"/> -->
+		<xsl:param name="enum"/>
 
-		<!-- This variable is not global, to avoid an additional parameter -->
+		<!-- build a list of all enums, to know the index in the array -->
 		<xsl:variable name="enumList">
 			<!-- <xsl:for-each select="root()//enumeration[not(starts-with(@name,'@'))]/enum"> -->
-			<xsl:for-each select="root()//enumeration/enum">
+			<xsl:for-each select="//enumeration/enum">
 				<xsl:element name="enum">
 					<xsl:attribute name="position"><xsl:number level="any" format="1"/></xsl:attribute>
 					<xsl:value-of select="@name"/>
@@ -59,10 +58,10 @@
 			<xsl:text>&#10;//J-&#10;</xsl:text>
 
 			<xsl:text>public enum </xsl:text>
-			<xsl:value-of select="@name"/>
+			<xsl:value-of select="$enum/@name"/>
 			<xsl:text> {&#10;</xsl:text>
 
-			<xsl:for-each select="enum">
+			<xsl:for-each select="$enum/enum">
 				<xsl:value-of select="@name"/>
 				<xsl:variable name="name" select="@name"/>
 				<xsl:text> (</xsl:text>
@@ -82,25 +81,25 @@
 
 			<xsl:text>;&#10;&#10;</xsl:text>
 			<xsl:text>public int value;&#10;</xsl:text>
-			<xsl:value-of select="@name"/>
+			<xsl:value-of select="$enum/@name"/>
 			<xsl:text>(int i) {&#10;</xsl:text>
 			<xsl:text>this.value = i;&#10;</xsl:text>
 			<xsl:text>}&#10;</xsl:text>
 
 			<!-- enum mapping, switch case -->
 			<xsl:text>public static final </xsl:text>
-			<xsl:value-of select="@name"/>
+			<xsl:value-of select="$enum/@name"/>
 			<xsl:text> toEnum(int retval) {&#10;</xsl:text>
 			<xsl:text>if (retval == </xsl:text>
-			<xsl:value-of select="enum[position()=1]/@name"/>
+			<xsl:value-of select="$enum/enum[position()=1]/@name"/>
 			<xsl:text>.value)&#10;</xsl:text>
 			<xsl:text>return </xsl:text>
-			<xsl:value-of select="@name"/>
+			<xsl:value-of select="$enum/@name"/>
 			<xsl:text>.</xsl:text>
-			<xsl:value-of select="enum[position()=1]/@name"/>
+			<xsl:value-of select="$enum/enum[position()=1]/@name"/>
 			<xsl:text>;&#10;</xsl:text>
 
-			<xsl:for-each select="enum">
+			<xsl:for-each select="$enum/enum">
 				<xsl:if test="position()!=1">
 					<xsl:text>else if (retval == </xsl:text>
 					<xsl:value-of select="@name"/>

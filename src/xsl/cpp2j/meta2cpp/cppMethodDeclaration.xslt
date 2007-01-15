@@ -24,6 +24,7 @@
 	http://www.gnu.org/copyleft/lesser.txt.
 	
 	Author: Frank Bielig
+			Christoph Nenning
 	
 -->
 
@@ -39,7 +40,7 @@
 	<xsl:import href="jniType.xslt" />
 
 	<xd:doc type="stylesheet">
-		<xd:short>Generation of types inside a namespace</xd:short>
+		<xd:short>Generation of JNI function headers, with javah like comment</xd:short>
 	</xd:doc>
 
 	<xsl:template name="cppMethodDeclaration">

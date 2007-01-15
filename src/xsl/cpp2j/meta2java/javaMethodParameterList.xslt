@@ -32,9 +32,11 @@
 	xmlns:xs="http://www.w3.org/2001/XMLSchema"
 	xmlns:fn="http://www.w3.org/2005/xpath-functions"
 	xmlns:xdt="http://www.w3.org/2005/xpath-datatypes"
-	xmlns:xd="http://www.pnp-software.com/XSLTdoc">
+	xmlns:xd="http://www.pnp-software.com/XSLTdoc"
+	xmlns:xbig="http://xbig.sourceforge.net/XBiG">
 
 	<xsl:import href="../../util/metaMethodName.xslt" />
+	<xsl:import href="../../util/metaTypeInfo.xslt" />
 
 	<xd:doc type="stylesheet">
 		<xd:short>Generate mapping of a single original class</xd:short>
@@ -80,8 +82,14 @@
 
 			<!-- if we call a native method and have to pass an InstancePointer -->
 			<xsl:if test="($callingNativeMethod eq 'true') and
-				 ((./@passedBy eq 'pointer') or (./@passedBy eq 'reference'))">
+				 		  ((./@passedBy eq 'pointer') or (./@passedBy eq 'reference'))">
 				<xsl:value-of select="'.object.pointer'" />
+			</xsl:if>
+
+			<!-- if this parameter is a enum -->
+			<xsl:if test="($callingNativeMethod eq 'true') and
+				 		  (xbig:isEnum(./type, $root))">
+				<xsl:value-of select="'.value'" />
 			</xsl:if>
 
 			<!-- if another parameter follows, write seperator -->
