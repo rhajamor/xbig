@@ -62,6 +62,9 @@
 	<property name="dir.prj.src.ant.jalopy"
 		value="${dir.prj.src.ant}/jalopy" />
 
+	<property name="dir.cpp2j.config"
+		value="${dir.prj.src.xsl}/cpp2j" />
+		
 	<property name="dir.cur.build.java" value="${dir.cur.build}/java" />
 	<property name="dir.cur.build.cpp" value="${dir.cur.build}/cpp" />
 	<property name="dir.cur.build.cpp.include"
@@ -114,7 +117,7 @@
 		value="${dir.cur.build.cpp}/meta2cpp.log" />
 
 	<property name="path.config.project"
-		value="${dir.cur}/${file.config.project}" />
+		value="${dir.cpp2j.config}/${file.config.project}" />
 
 	<property name="path.config.jalopy"
 		value="${dir.prj.src.ant.jalopy}/${file.config.jalopy}" />
