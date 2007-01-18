@@ -68,6 +68,7 @@
 	<xsl:function name="xbig:cpp-type" as="xs:string">
 		<xsl:param name="config" />
 		<xsl:param name="param" />
+		<xsl:param name="class" />
 
 		<!-- shortcut to type conversion configurations -->
 		<xsl:variable name="type_info">
@@ -120,8 +121,19 @@
 		<!-- no explicit conversion given, compose from parameter information -->
 		<xsl:if test="not($type_info/type/@cpp)">
 
-			<xsl:variable name="type"
-				select="if($param/type) then $param/type else 'void'" />
+			<xsl:variable name="type">
+				<xsl:choose>
+					<xsl:when test="not($param/type)">
+						<xsl:value-of select="'void'"/>
+					</xsl:when>
+					<xsl:when test="xbig:isClassOrStruct($param/type, $class, $root)">
+						<xsl:value-of select="xbig:getFullTypeName($param/type, $class, $root)"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="$param/type"/>
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:variable>
 
 			<xsl:variable name="const"
 				select="if($param/type/@const eq 'true') then 'const ' else ''" />
@@ -172,8 +184,18 @@
 
 			<!-- test for enums -->
 			<xsl:choose>
-				<xsl:when test="xbig:isEnum($param/type, $root)">
+				<xsl:when test="xbig:isEnum($param/type, $class, $root)">
 					<xsl:value-of select="concat('(', $param/type, ')', $param_name)" />
+				</xsl:when>
+
+				<!-- if this type is a class or struct -->
+				<xsl:when test="xbig:isClassOrStruct($param/type, $class, $root)">
+					<xsl:variable name="part1" select="'*reinterpret_cast&lt; '"/>
+					<xsl:variable name="part2" select="xbig:getFullTypeName($param/type, $class, $root)" />
+					<xsl:variable name="part3" select="'* &gt;('"/>
+					<xsl:variable name="part4" select="$param_name" />
+					<xsl:variable name="part5" select="')'"/>
+					<xsl:value-of select="concat($part1, $part2, $part3, $part4, $part5)" />
 				</xsl:when>
 
 				<xsl:otherwise>
@@ -224,7 +246,22 @@
 
 		<!-- no conversion function available -->
 		<xsl:if test="not($type_info/type/cpp2jni)">
-			<xsl:value-of select="$param_name" />
+			<xsl:choose>
+				<!-- if this method returns an object -->
+				<xsl:when test="xbig:isClassOrStruct($method/type, $class, $root)">
+					<xsl:variable name="returnCast">
+						<!-- produces warning: address of local variable ‘_cpp_result’ returned -->
+						<xsl:value-of select="'reinterpret_cast&lt;jlong&gt;(&amp;'"/>
+						<xsl:value-of select="$param_name"/>
+						<xsl:value-of select="')'"/>
+					</xsl:variable>
+					<xsl:value-of select="$returnCast"/>
+				</xsl:when>
+
+				<xsl:otherwise>
+					<xsl:value-of select="$param_name" />
+				</xsl:otherwise>
+			</xsl:choose>
 		</xsl:if>
 
 		<!-- if conversion function available -->
@@ -329,7 +366,7 @@
 
 		<!-- replace JNI pointer variable -->
 		<xsl:variable name="line5"
-			select="xbig:cpp-replace($line4, '#jni_pointer#', $var_config/jni/pointer/@name)" />
+					  select="xbig:cpp-replace($line4, '#jni_pointer#', $var_config/jni/pointer/@name)"/>
 
 		<!-- replace library pointer variable -->
 		<xsl:variable name="line6"
@@ -402,8 +439,24 @@
 			select="if(matches($line8, '#cpp_return#')) then xbig:cpp-replace($line8, '#cpp_return#', xbig:cpp-to-jni($config, $class, $method, $method, '#cpp_return_var#')) else $line8" />
 
 		<!-- replace return type -->
-		<xsl:variable name="line10"
-			select="xbig:cpp-replace($line9, '#cpp_return_type#', xbig:cpp-type($config, $method))" />
+		<xsl:variable name="line10">
+			<xsl:choose>
+				<!-- saxon needs this in case of a constructor -->
+				<xsl:when test="not($method/type)">
+					<xsl:value-of select="xbig:cpp-replace($line9, '#cpp_return_type#', xbig:cpp-type($config, $method, $class))"/>
+				</xsl:when>
+				<!-- if we return an object, we have to store it's address -->
+				<!-- Produces warning: taking address of temporary
+				<xsl:when test="xbig:isClassOrStruct($method/type, $class, $root)">
+					<xsl:variable name="returnType" select="concat(xbig:cpp-type($config, $method, $class), '*')"/>
+					<xsl:value-of select="xbig:cpp-replace($line9, '#cpp_return_type#', $returnType)"/>
+				</xsl:when>
+				 -->
+				<xsl:otherwise>
+					<xsl:value-of select="xbig:cpp-replace($line9, '#cpp_return_type#', xbig:cpp-type($config, $method, $class))"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
 
 		<!-- replace class name -->
 		<xsl:variable name="line11"
@@ -443,8 +496,34 @@
 		<xsl:variable name="line13"
 			select="xbig:cpp-replace($line12, '#cpp_inherited_method_class#', $methodClassFullName)" />
 
+		<!-- if an object is returned, we need it's address -->
+		<xsl:variable name="line14">
+			<xsl:choose>
+				<xsl:when test="not($method/type)">
+					<xsl:value-of select="$line13" />
+				</xsl:when>
+				<!-- Produces warning: taking address of temporary
+				<xsl:when test="xbig:isClassOrStruct($method/type, $class, $root)">
+					<xsl:variable name="cppThis" select="$var_config/cpp/object/@name"/>
+					<xsl:variable name="searchFor">
+						<xsl:value-of select="'= '"/>
+						<xsl:value-of select="$cppThis"/>
+					</xsl:variable>
+					<xsl:variable name="replaceWith">
+						<xsl:value-of select="'= &amp; '"/>
+						<xsl:value-of select="$cppThis"/>
+					</xsl:variable>
+					<xsl:value-of select="replace($line13, $searchFor, $replaceWith)" />
+				</xsl:when>
+				 -->
+				<xsl:otherwise>
+					<xsl:value-of select="$line13" />
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+
 		<xsl:variable name="result"
-			select="xbig:cpp-replace(normalize-space($line13),'#nl#', $config/config/cpp/format/indent)" />
+			select="xbig:cpp-replace(normalize-space($line14),'#nl#', $config/config/cpp/format/indent)" />
 
 		<!-- real writing of code line -->
 		<xsl:value-of select="$result" />

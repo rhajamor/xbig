@@ -121,6 +121,7 @@
 			<xsl:call-template name="javaType">
 				<xsl:with-param name="config" select="$config" />
 				<xsl:with-param name="param" select="$method" />
+				<xsl:with-param name="class" select="$class" />
 			</xsl:call-template>
 		</xsl:if>
 
@@ -138,6 +139,7 @@
 			<xsl:call-template name="javaType">
 				<xsl:with-param name="config" select="$config" />
 				<xsl:with-param name="param" select="." />
+				<xsl:with-param name="class" select="$class" />
 			</xsl:call-template>
 
 			<!-- seperator type and name -->

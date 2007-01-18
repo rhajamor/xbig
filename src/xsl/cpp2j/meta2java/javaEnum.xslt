@@ -47,6 +47,7 @@
 			<xsl:for-each select="//enumeration/enum">
 				<xsl:element name="enum">
 					<xsl:attribute name="position"><xsl:number level="any" format="1"/></xsl:attribute>
+					<xsl:attribute name="typeName"><xsl:value-of select="../@name"/></xsl:attribute>
 					<xsl:value-of select="@name"/>
 				</xsl:element>
 			</xsl:for-each>
@@ -72,7 +73,9 @@
 				</xsl:if>
 
 				<xsl:text>ENUM_VALUES[</xsl:text>
-				<xsl:value-of select="$enumList/enum[$name=.]/@position -1"/>
+				<xsl:value-of select="$enumList/enum[. = current()/@name]
+													[@typeName = current()/../@name]
+													/@position -1"/>
 				<xsl:text>])</xsl:text>
 				<xsl:if test="position()!=last()">
 					<xsl:text>,&#10;</xsl:text>

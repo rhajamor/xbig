@@ -49,8 +49,7 @@
 		<xsl:param name="buildFile" />
 
 		<!-- check if this is necessary -->
-		<xsl:if test="enumeration or function or variable or
-					  root()//namespace/enumeration or
+		<xsl:if test="//enumeration or function or variable or
 					  root()//namespace/function or
 					  root()//namespace/variable ">
 
@@ -84,18 +83,13 @@
 				<xsl:value-of select="$buildFile/project/property[@name='lib.name']/@value"/>
 				<xsl:text>-xbig");}&#10;</xsl:text>
 
-				<xsl:if test="enumeration or root()//namespace/enumeration">
+				<xsl:if test="//enumeration">
 					<xsl:text>public static final int[] ENUM_VALUES = _getEnumValues();&#10;</xsl:text>
 					<xsl:text>private static native int[] _getEnumValues();&#10;</xsl:text>
 					<xsl:text>&#10;</xsl:text>
 	
 					<!-- create enums -->
-					<xsl:for-each select="enumeration">
-						<xsl:call-template name="javaEnum">
-							<xsl:with-param name="enum" select="." />
-						</xsl:call-template>
-					</xsl:for-each>
-					<xsl:for-each select="root()//namespace/enumeration">
+					<xsl:for-each select="//enumeration">
 						<xsl:call-template name="javaEnum">
 							<xsl:with-param name="enum" select="." />
 						</xsl:call-template>

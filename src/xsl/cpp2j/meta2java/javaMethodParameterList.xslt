@@ -24,6 +24,7 @@
 	http://www.gnu.org/copyleft/lesser.txt.
 	
 	Author: Frank Bielig
+			Christoph Nenning
 	
 -->
 
@@ -67,6 +68,7 @@
 						<xsl:call-template name="javaType">
 							<xsl:with-param name="config" select="$config" />
 							<xsl:with-param name="param" select="." />
+							<xsl:with-param name="class" select="$class" />
 							<xsl:with-param name="writingNativeMethod" select="$writingNativeMethod" />
 						</xsl:call-template>
 					</xsl:otherwise>
@@ -88,8 +90,14 @@
 
 			<!-- if this parameter is a enum -->
 			<xsl:if test="($callingNativeMethod eq 'true') and
-				 		  (xbig:isEnum(./type, $root))">
+				 		  (xbig:isEnum(./type, $class, $root))">
 				<xsl:value-of select="'.value'" />
+			</xsl:if>
+
+			<!-- if this parameter is a class or struct -->
+			<xsl:if test="($callingNativeMethod eq 'true') and
+				 		  (xbig:isClassOrStruct(./type, $class, $root))">
+				<xsl:value-of select="'.getInstancePointer().pointer'" />
 			</xsl:if>
 
 			<!-- if another parameter follows, write seperator -->

@@ -24,6 +24,7 @@
 	http://www.gnu.org/copyleft/lesser.txt.
 	
 	Author: Frank Bielig
+			Christoph Nenning
 	
 -->
 
@@ -32,7 +33,8 @@
 	xmlns:xs="http://www.w3.org/2001/XMLSchema"
 	xmlns:fn="http://www.w3.org/2005/xpath-functions"
 	xmlns:xdt="http://www.w3.org/2005/xpath-datatypes"
-	xmlns:xd="http://www.pnp-software.com/XSLTdoc">
+	xmlns:xd="http://www.pnp-software.com/XSLTdoc"
+	xmlns:xbig="http://xbig.sourceforge.net/XBiG">
 
 	<xd:doc type="stylesheet">
 		<xd:short>Generate mapping of a single original class</xd:short>
@@ -56,6 +58,13 @@
 				<xsl:with-param name="config" select="$config" />
 				<xsl:with-param name="param" select="$method" />
 			</xsl:call-template>
+			<xsl:text>(new&#32;InstancePointer(</xsl:text>
+		</xsl:if>
+
+		<!-- create native object when necessary -->
+		<xsl:if test="xbig:isClassOrStruct($method/type, $class, $root)">
+			<xsl:text>new&#32;</xsl:text>
+			<xsl:value-of select="xbig:getFullJavaClassAndNotInterfaceName($method/type, $class, $root, $config)"/>
 			<xsl:text>(new&#32;InstancePointer(</xsl:text>
 		</xsl:if>
 
@@ -92,6 +101,9 @@
 		<!-- close Pointer and InstancePointer c-tor calls -->
 		<xsl:if test="$method/@passedBy='pointer' or $method/@passedBy='reference'">
 			<xsl:text>))</xsl:text>
+		</xsl:if>
+		<xsl:if test="xbig:isClassOrStruct($method/type, $class, $root)">
+			<xsl:text>)), true</xsl:text>
 		</xsl:if>
 
 		<!-- close parameter list -->

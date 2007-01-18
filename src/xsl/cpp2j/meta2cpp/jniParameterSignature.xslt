@@ -24,6 +24,7 @@
 	http://www.gnu.org/copyleft/lesser.txt.
 	
 	Author: Frank Bielig
+			Christoph Nenning
 	
 -->
 
@@ -32,7 +33,8 @@
 	xmlns:xs="http://www.w3.org/2001/XMLSchema"
 	xmlns:fn="http://www.w3.org/2005/xpath-functions"
 	xmlns:xdt="http://www.w3.org/2005/xpath-datatypes"
-	xmlns:xd="http://www.pnp-software.com/XSLTdoc">
+	xmlns:xd="http://www.pnp-software.com/XSLTdoc"
+	xmlns:xbig="http://xbig.sourceforge.net/XBiG">
 
 
 	<xd:doc type="stylesheet">
@@ -43,10 +45,24 @@
 		<xsl:param name="config" />
 		<xsl:param name="meta_type" />
 		<xsl:param name="escape" />
+		<xsl:param name="class" />
 
 		<!-- map type to signature with mapping table from configuration -->
-		<xsl:variable name="signature"
-			select="$config/config/cpp/jni/signatures/type[@meta=$meta_type]/@signature" />
+		<xsl:variable name="signature">
+			<xsl:choose>
+				<xsl:when test="$config/config/cpp/jni/signatures/type[@meta=$meta_type]/@signature">
+					<xsl:value-of select="$config/config/cpp/jni/signatures/type[@meta=$meta_type]/@signature" />
+				</xsl:when>
+				<xsl:when test="xbig:isClassOrStruct($meta_type, $class, $root)">
+					<xsl:value-of select="$config/config/cpp/jni/signatures/type[@meta='long']/@signature" />
+				</xsl:when>
+				<xsl:when test="xbig:isEnum($meta_type, $class, $root)">
+					<xsl:value-of select="$config/config/cpp/jni/signatures/type[@meta='int']/@signature" />
+				</xsl:when>
+				<xsl:otherwise>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
 
 		<!-- ensure valid signature -->
 		<xsl:if test="empty($signature)">

@@ -95,6 +95,7 @@
 		<xsl:call-template name="javaType">
 			<xsl:with-param name="meta_type" select="$return_type" />
 			<xsl:with-param name="config" select="$config" />
+			<xsl:with-param name="class" select="$class" />
 		</xsl:call-template>
 
 		<!-- write parameter meta signature -->
@@ -115,6 +116,7 @@
 			<xsl:call-template name="javaType">
 				<xsl:with-param name="meta_type" select="type" />
 				<xsl:with-param name="config" select="$config" />
+				<xsl:with-param name="class" select="$class" />
 			</xsl:call-template>
 
 			<!-- seperator type and name -->

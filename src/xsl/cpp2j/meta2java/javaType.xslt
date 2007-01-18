@@ -48,6 +48,7 @@
 	<xsl:template name="javaType">
 		<xsl:param name="config" />
 		<xsl:param name="param" />
+		<xsl:param name="class" />
 		<xsl:param name="writingNativeMethod" />
 
 		<!-- extract jni type depending on meta type, const/non-const, pass type -->
@@ -64,7 +65,8 @@
 
 			<!-- write pointer class -->
 			<xsl:when test="($param/@passedBy='pointer' or $param/@passedBy='reference')
-						 and ($writingNativeMethod ne 'true')">
+							and ($writingNativeMethod ne 'true')
+							and $type_info/type/@java">
 				<xsl:call-template name="javaPointerClass">
 					<xsl:with-param name="config" select="$config" />
 					<xsl:with-param name="param" select="$param" />
@@ -73,32 +75,36 @@
 
 			<!-- if no type info is found -> we are dealing with a class / enum / ... -->
 			<xsl:when test="not($type_info/type/@java)">
-				<xsl:variable name="paraFullNameTokens">
-					<xsl:call-template name="str:split">
-						<xsl:with-param name="string" select="$param/type" />
-						<xsl:with-param name="pattern" select="'::'" />
-					</xsl:call-template>
-				</xsl:variable>
-				<xsl:variable name="paraType" select="$paraFullNameTokens/token[last()]"/>
-
 				<xsl:choose>
 
 					<!-- if this type is an enum -->
-					<xsl:when test="xbig:isEnum($paraType, $root)">
+					<xsl:when test="xbig:isEnum($param/type, $class, $root)">
 						<xsl:choose>
-							<xsl:when test="$writingNativeMethod = 'true'">
+							<xsl:when test="$writingNativeMethod eq 'true'">
 								<xsl:value-of select="'int'"/>
 							</xsl:when>
 							<xsl:otherwise>
 								<xsl:value-of select="$config/config/java/class/enumwrapper"/>
 								<xsl:value-of select="'.'"/>
-								<xsl:value-of select="$paraType"/>
+								<xsl:value-of select="$param/type"/>
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:when>
+
+					<!-- if this type is a class or struct -->
+					<xsl:when test="xbig:isClassOrStruct($param/type, $class, $root)">
+						<xsl:choose>
+							<xsl:when test="$writingNativeMethod eq 'true'">
+								<xsl:value-of select="'long'"/>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:value-of select="xbig:getFullJavaName($param/type, $class, $root, $config)"/>
 							</xsl:otherwise>
 						</xsl:choose>
 					</xsl:when>
 
 					<xsl:otherwise>
-						<xsl:value-of select="$param/type"/>
+						<xsl:value-of select="xbig:getFullJavaName($param/type, $class, $root, $config)"/>
 					</xsl:otherwise>
 				</xsl:choose>
 			</xsl:when>
@@ -151,5 +157,80 @@
 		</xsl:choose>
 
 	</xsl:template>
+
+
+
+	<xd:doc type="function">
+		<xd:short>resolve the full java name of a type, including the package</xd:short>
+	</xd:doc>
+	<xsl:function name="xbig:getFullJavaName" as="xs:string">
+		<xsl:param name="type" as="xs:string"/>
+		<xsl:param name="currentNode"/> <!-- must be a class, struct or namespace element -->
+		<xsl:param name="inputTreeRoot"/>
+		<xsl:param name="config"/>
+
+		<!-- get full meta / c++ name -->
+		<xsl:variable name="fullNameAsReturned" select="xbig:getFullTypeName($type, $currentNode, $inputTreeRoot)"/>
+
+		<!-- add java specific stuff to class name -->
+		<xsl:variable name="fullName">
+			<xsl:variable name="fullNameTokens">
+				<xsl:call-template name="str:split">
+					<xsl:with-param name="string" select="$fullNameAsReturned" />
+					<xsl:with-param name="pattern" select="'::'" />
+				</xsl:call-template>
+			</xsl:variable>
+
+			<xsl:choose>
+				<!-- Use generated Interface for classes and structs -->
+				<xsl:when test="xbig:isClassOrStruct($fullNameAsReturned, $currentNode, $inputTreeRoot)">
+					<xsl:for-each select="$fullNameTokens/token">
+						<xsl:if test="position() = last()">
+							<xsl:value-of select="$config/config/java/interface/prefix" />
+						</xsl:if>
+						<xsl:value-of select="." />
+						<xsl:choose>
+							<xsl:when test="position() = last()">
+								<xsl:value-of select="$config/config/java/interface/suffix" />
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:value-of select="'::'" />
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:for-each>
+				</xsl:when>
+
+				<xsl:otherwise>
+					<xsl:value-of select="$fullNameAsReturned"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+
+		<xsl:variable name="nsPrefix" select="$config/config/java/namespaces/packageprefix"/>
+		<xsl:variable name="fullNameWithDots" select="replace($fullName, '::', '.')"/>
+		<xsl:value-of select="concat($nsPrefix, '.', $fullNameWithDots)"/>
+
+	</xsl:function>
+
+
+	<xd:doc type="function">
+		<xd:short>resolve the full java name of a type, including the package but not of it's interface</xd:short>
+	</xd:doc>
+	<xsl:function name="xbig:getFullJavaClassAndNotInterfaceName" as="xs:string">
+		<xsl:param name="type" as="xs:string"/>
+		<xsl:param name="currentNode"/> <!-- must be a class, struct or namespace element -->
+		<xsl:param name="inputTreeRoot"/>
+		<xsl:param name="config"/>
+
+		<!-- get full meta / c++ name -->
+		<xsl:variable name="fullName" select="xbig:getFullTypeName($type, $currentNode, $inputTreeRoot)"/>
+
+		<xsl:variable name="nsPrefix" select="$config/config/java/namespaces/packageprefix"/>
+		<xsl:variable name="fullNameWithDots" select="replace($fullName, '::', '.')"/>
+		<xsl:value-of select="concat($nsPrefix, '.', $fullNameWithDots)"/>
+
+	</xsl:function>
+
+
 
 </xsl:stylesheet>

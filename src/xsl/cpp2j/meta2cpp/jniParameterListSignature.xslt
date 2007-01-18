@@ -24,6 +24,7 @@
 	http://www.gnu.org/copyleft/lesser.txt.
 	
 	Author: Frank Bielig
+			Christoph Nenning
 	
 -->
 
@@ -44,6 +45,7 @@
 		<xsl:param name="config" />
 		<xsl:param name="method" />
 		<xsl:param name="escape" />
+		<xsl:param name="class" />
 
 		<!-- iterate throw all parameters -->
 		<xsl:for-each select="parameters/parameter">
@@ -59,6 +61,7 @@
 				<xsl:with-param name="config" select="$config" />
 				<xsl:with-param name="meta_type" select="$param_type" />
 				<xsl:with-param name="escape" select="$escape" />
+				<xsl:with-param name="class" select="$class" />
 			</xsl:call-template>
 
 		</xsl:for-each>

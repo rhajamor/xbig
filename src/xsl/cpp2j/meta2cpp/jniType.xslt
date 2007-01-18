@@ -45,6 +45,7 @@
 	<xsl:template name="jniType">
 		<xsl:param name="config" />
 		<xsl:param name="param" />
+		<xsl:param name="class" />
 
 		<xsl:variable name="type_info">
 			<xsl:call-template name="metaExactTypeInfo">
@@ -62,8 +63,13 @@
 				<xsl:choose>
 
 					<!-- if this type is an enum -->
-					<xsl:when test="xbig:isEnum($param/type, $root)">
+					<xsl:when test="xbig:isEnum($param/type, $class, $root)">
 						<xsl:value-of select="'jint'"/>
+					</xsl:when>
+
+					<!-- if this type is a class or struct -->
+					<xsl:when test="xbig:isClassOrStruct($param/type, $class, $root)">
+						<xsl:value-of select="'jlong'"/>
 					</xsl:when>
 
 					<xsl:otherwise>

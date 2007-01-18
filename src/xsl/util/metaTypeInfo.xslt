@@ -34,7 +34,10 @@
 	xmlns:fn="http://www.w3.org/2005/xpath-functions"
 	xmlns:xdt="http://www.w3.org/2005/xpath-datatypes"
 	xmlns:xd="http://www.pnp-software.com/XSLTdoc"
-	xmlns:xbig="http://xbig.sourceforge.net/XBiG">
+	xmlns:xbig="http://xbig.sourceforge.net/XBiG"
+	xmlns:str="http://exslt.org/strings">
+
+	<xsl:import href="../exslt/str.split.template.xsl" />
 
 	<xd:doc type="stylesheet">
 		<xd:short>Generate mapping of a single type</xd:short>
@@ -144,21 +147,199 @@
 	</xd:doc>
 	<xsl:function name="xbig:isEnum" as="xs:boolean">
 		<xsl:param name="type"/>
+		<xsl:param name="currentNode"/> <!-- must be a class, struct or namespace element -->
 		<xsl:param name="inputTreeRoot"/>
 
-		<!-- list of enums -->
-		<xsl:variable name="enums">
-			<xsl:for-each select="$inputTreeRoot//enumeration">
-				<xsl:copy-of select="."/>
-			</xsl:for-each>
-		</xsl:variable>
+		<xsl:variable name="fullName" select="xbig:getFullTypeName($type, $currentNode, $inputTreeRoot)"/>
 
 		<xsl:choose>
-			<xsl:when test="boolean($enums/*[@name = $type])">
+			<xsl:when test="boolean($inputTreeRoot//enumeration[@fullName = $fullName])">
 				<xsl:value-of select="true()" />
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:value-of select="false()" />
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:function>
+
+
+	<xd:doc type="function">
+		<xd:short>check if a type is a typedef</xd:short>
+	</xd:doc>
+	<xsl:function name="xbig:isTypedef" as="xs:boolean">
+		<xsl:param name="type"/>
+		<xsl:param name="currentNode"/> <!-- must be a class, struct or namespace element -->
+		<xsl:param name="inputTreeRoot"/>
+
+		<xsl:variable name="fullName" select="xbig:getFullTypeName($type, $currentNode, $inputTreeRoot)"/>
+
+		<xsl:choose>
+			<xsl:when test="boolean($inputTreeRoot//typedef[@fullName = $fullName])">
+				<xsl:value-of select="true()" />
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="false()" />
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:function>
+
+
+	<xd:doc type="function">
+		<xd:short>check if a type is a class</xd:short>
+	</xd:doc>
+	<xsl:function name="xbig:isClass" as="xs:boolean">
+		<xsl:param name="type"/>
+		<xsl:param name="currentNode"/> <!-- must be a class, struct or namespace element -->
+		<xsl:param name="inputTreeRoot"/>
+
+		<xsl:variable name="fullName" select="xbig:getFullTypeName($type, $currentNode, $inputTreeRoot)"/>
+
+		<xsl:choose>
+			<xsl:when test="boolean($inputTreeRoot//class[@fullName = $fullName])">
+				<xsl:value-of select="true()" />
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="false()" />
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:function>
+
+
+	<xd:doc type="function">
+		<xd:short>check if a type is a struct</xd:short>
+	</xd:doc>
+	<xsl:function name="xbig:isStruct" as="xs:boolean">
+		<xsl:param name="type"/>
+		<xsl:param name="currentNode"/> <!-- must be a class, struct or namespace element -->
+		<xsl:param name="inputTreeRoot"/>
+
+		<xsl:variable name="fullName" select="xbig:getFullTypeName($type, $currentNode, $inputTreeRoot)"/>
+
+		<xsl:choose>
+			<xsl:when test="boolean($inputTreeRoot//struct[@fullName = $fullName])">
+				<xsl:value-of select="true()" />
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="false()" />
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:function>
+
+
+	<xd:doc type="function">
+		<xd:short>check if a type is a class or a struct</xd:short>
+	</xd:doc>
+	<xsl:function name="xbig:isClassOrStruct" as="xs:boolean">
+		<xsl:param name="type"/>
+		<xsl:param name="currentNode"/> <!-- must be a class, struct or namespace element -->
+		<xsl:param name="inputTreeRoot"/>
+
+		<xsl:variable name="fullName" select="xbig:getFullTypeName($type, $currentNode, $inputTreeRoot)"/>
+
+		<xsl:choose>
+			<xsl:when test="boolean($inputTreeRoot//class[@fullName = $fullName])">
+				<xsl:value-of select="true()" />
+			</xsl:when>
+			<xsl:when test="boolean($inputTreeRoot//struct[@fullName = $fullName])">
+				<xsl:value-of select="true()" />
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="false()" />
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:function>
+
+
+	<xd:doc type="function">
+		<xd:short>resolve the full c++ name of a type, including the namespace</xd:short>
+	</xd:doc>
+	<xsl:function name="xbig:getFullTypeName" as="xs:string">
+		<xsl:param name="type" as="xs:string"/>
+		<xsl:param name="currentNode"/> <!-- must be a class, struct or namespace element -->
+		<xsl:param name="inputTreeRoot"/>
+
+		<xsl:choose>
+			<!-- check parameters -->
+			<!-- <xsl:when test="not($currentNode/name() = 'class' or $currentNode/name() = 'struct' or 
+								$currentNode/name() = 'namespace')">
+				<xsl:message>ERROR: invalid current node: <xsl:value-of select="$currentNode/name()"/></xsl:message>
+				<xsl:value-of select="$type"/>
+			</xsl:when> -->
+
+			<!-- parameters ok, main function body -->
+
+			<!-- if the type contains a namespace -->
+			<xsl:when test="contains($type, '::')">
+				<xsl:choose>
+
+					<!-- if we have an absolute namespace path -->
+					<xsl:when test="starts-with($type, '::')">
+						<xsl:value-of select="substring-after($type, '::')"/>
+					</xsl:when>
+
+					<!-- namespace path could be absolute or relative -->
+					<xsl:otherwise>
+						<xsl:variable name="relPathFirstPart" select="substring-before($type, '::')"/>
+						<xsl:variable name="typeContainingNodeName" 
+									  select="xbig:getNodeNameWhichContainsType
+									  ($relPathFirstPart, $currentNode, $inputTreeRoot)"/>
+						<xsl:variable name="typeContainingNodeDots">
+							<xsl:if test="$typeContainingNodeName != ''">
+								<xsl:value-of select="concat($typeContainingNodeName, '::')"/>
+							</xsl:if>
+						</xsl:variable>
+						<xsl:value-of select="concat($typeContainingNodeDots, $type)"/>
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:when>
+
+			<!-- type does not contain a namespace -->
+			<xsl:otherwise>
+				<xsl:variable name="typeContainingNodeName" 
+							  select="xbig:getNodeNameWhichContainsType
+							  ($type, $currentNode, $inputTreeRoot)" />
+				<xsl:choose>
+					<xsl:when test="$typeContainingNodeName = ''">
+						<xsl:value-of select="$type"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="concat($typeContainingNodeName, '::', $type)"/>
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:function>
+
+
+	<xd:doc type="function">
+		<xd:short>find the namespace / class / struct in which a type is declared</xd:short>
+	</xd:doc>
+	<xsl:function name="xbig:getNodeNameWhichContainsType">
+		<xsl:param name="type" as="xs:string"/>
+		<xsl:param name="currentNode"/> <!-- must be a class, struct or namespace element -->
+		<xsl:param name="inputTreeRoot"/>
+
+		<xsl:choose>
+
+			<!-- to avoid a live lock -->
+			<xsl:when test="not($currentNode/..)">
+				<xsl:value-of select="''" />
+			</xsl:when>
+
+			<!-- if found, return node -->
+			<xsl:when test="$currentNode/*[@name = $type]">
+				<xsl:value-of select="$currentNode/@fullName" />
+			</xsl:when>
+
+			<!-- else if the current node is the root return an empty string -->
+			<xsl:when test="$inputTreeRoot = $currentNode">
+				<xsl:value-of select="''" />
+			</xsl:when>
+
+			<!-- else check the parent node -->
+			<xsl:otherwise>
+				<xsl:value-of select="xbig:getNodeNameWhichContainsType
+									  ($type, $currentNode/.., $inputTreeRoot)" />
 			</xsl:otherwise>
 		</xsl:choose>
 

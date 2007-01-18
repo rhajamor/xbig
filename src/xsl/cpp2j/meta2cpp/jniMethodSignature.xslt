@@ -24,6 +24,7 @@
 	http://www.gnu.org/copyleft/lesser.txt.
 	
 	Author: Frank Bielig
+			Christoph Nenning
 	
 -->
 
@@ -43,6 +44,7 @@
 	<xsl:template name="jniMethodSignature">
 		<xsl:param name="config" />
 		<xsl:param name="method" />
+		<xsl:param name="class" />
 
 		<!-- write begin of parameter list -->
 		<xsl:text>(</xsl:text>
@@ -50,6 +52,7 @@
 		<xsl:call-template name="jniParameterListSignature">
 			<xsl:with-param name="config" select="$config" />
 			<xsl:with-param name="method" select="$method" />
+			<xsl:with-param name="class" select="$class" />
 		</xsl:call-template>
 
 		<!-- write end of parameter list -->
@@ -63,6 +66,7 @@
 		<xsl:call-template name="jniParameterSignature">
 			<xsl:with-param name="config" select="$config" />
 			<xsl:with-param name="meta_type" select="$return_type" />
+			<xsl:with-param name="class" select="$class" />
 		</xsl:call-template>
 
 	</xsl:template>

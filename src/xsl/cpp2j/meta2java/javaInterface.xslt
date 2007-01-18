@@ -68,9 +68,12 @@
 		<xsl:value-of select="$class/@name" />
 		<xsl:value-of select="$config/config/java/interface/suffix" />
 
+		<xsl:text>&#32;extends&#32;</xsl:text>
+		<xsl:text>INativeObject&#32;</xsl:text>
+
 		<!-- extended interfaces -->
 		<xsl:if test="inherits">
-			<xsl:text>&#32;extends&#32;</xsl:text>
+			<xsl:text>,&#32;</xsl:text>
 			<xsl:for-each select="inherits/baseClass">
 
 				<!-- configured package -->

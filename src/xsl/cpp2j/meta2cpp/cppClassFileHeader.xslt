@@ -24,6 +24,7 @@
 	http://www.gnu.org/copyleft/lesser.txt.
 	
 	Author: Frank Bielig
+			Christoph Nenning
 	
 -->
 
@@ -91,6 +92,7 @@
 				<xsl:with-param name="class_prefix"
 					select="$class_prefix" />
 				<xsl:with-param name="method" select="." />
+				<xsl:with-param name="class" select="$class" />
 			</xsl:call-template>
 
 			<!-- end of method declaration -->
@@ -105,6 +107,7 @@
 				<xsl:with-param name="class_prefix"
 					select="$class_prefix" />
 				<xsl:with-param name="method" select="." />
+				<xsl:with-param name="class" select="$class" />
 			</xsl:call-template>
 
 			<!-- end of method declaration -->

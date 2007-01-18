@@ -24,6 +24,7 @@
 	http://www.gnu.org/copyleft/lesser.txt.
 	
 	Author: Frank Bielig
+			Christoph Nenning
 	
 -->
 
@@ -60,7 +61,7 @@
 
 			<!-- write type for transformation -->
 			<!-- take cpp attribute if available, otherwise write meta -->
-			<xsl:value-of select="xbig:cpp-type($config, .)" />
+			<xsl:value-of select="xbig:cpp-type($config, ., $class)" />
 
 			<!-- write seperator for variable -->
 			<xsl:text>&#32;</xsl:text>

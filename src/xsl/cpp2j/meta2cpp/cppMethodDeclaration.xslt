@@ -47,12 +47,14 @@
 		<xsl:param name="config" />
 		<xsl:param name="class_prefix" />
 		<xsl:param name="method" />
+		<xsl:param name="class" />
 
 		<!-- write method comment -->
 		<xsl:call-template name="cppMethodDeclarationComment">
 			<xsl:with-param name="config" select="$config" />
 			<xsl:with-param name="class_prefix" select="$class_prefix" />
 			<xsl:with-param name="method" select="$method" />
+			<xsl:with-param name="class" select="$class" />
 		</xsl:call-template>
 
 		<!-- write real method real declaration -->
@@ -60,6 +62,7 @@
 			<xsl:with-param name="config" select="$config" />
 			<xsl:with-param name="class_prefix" select="$class_prefix" />
 			<xsl:with-param name="method" select="$method" />
+			<xsl:with-param name="class" select="$class" />
 		</xsl:call-template>
 
 
@@ -77,6 +80,7 @@
 		<xsl:param name="config" />
 		<xsl:param name="class_prefix" />
 		<xsl:param name="method" />
+		<xsl:param name="class" />
 
 		<!-- shortcut for method name -->
 		<xsl:variable name="method_name"
@@ -148,6 +152,7 @@
 		<xsl:call-template name="jniMethodSignature">
 			<xsl:with-param name="config" select="$config" />
 			<xsl:with-param name="method" select="$method" />
+			<xsl:with-param name="class" select="$class" />
 		</xsl:call-template>
 
 		<!-- finish comment in a single line -->
@@ -165,6 +170,7 @@
 		<xsl:param name="config" />
 		<xsl:param name="class_prefix" />
 		<xsl:param name="method" />
+		<xsl:param name="class" />
 
 		<!-- shortcut for method name -->
 		<xsl:variable name="method_name"
@@ -186,6 +192,7 @@
 		<xsl:call-template name="jniType">
 			<xsl:with-param name="config" select="$config" />
 			<xsl:with-param name="param" select="$method" />
+			<xsl:with-param name="class" select="$class" />
 		</xsl:call-template>
 
 		<!-- write call method keyword -->
@@ -259,6 +266,7 @@
 			<xsl:call-template name="jniType">
 				<xsl:with-param name="config" select="$config" />
 				<xsl:with-param name="param" select="." />
+				<xsl:with-param name="class" select="$class" />
 			</xsl:call-template>
 
 			<!-- seperator type and name -->

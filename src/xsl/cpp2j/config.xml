@@ -156,7 +156,7 @@
 					#cpp_conversions#
 					#nl#
 					#nl#// call library method
-					#nl##cpp_class#::#cpp_method#(#cpp_params#);
+					#nl##cpp_inherited_method_class#::#cpp_method#(#cpp_params#);
 				</void>
 				<return>
 					#nl#// static method of class #cpp_class# with return value				
@@ -165,7 +165,7 @@
 					#nl#
 					#nl#// call library method
 					#nl##cpp_return_type# #cpp_return_var# =
-					   #cpp_class#::#cpp_method#(#cpp_params#);
+					   #cpp_inherited_method_class#::#cpp_method#(#cpp_params#);
 					#nl#return #cpp_return#;
 				</return>
 			</static>

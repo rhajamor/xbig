@@ -30,7 +30,7 @@
  */
 package org.xbig.base;
 
-public abstract class NativeObject {
+public abstract class NativeObject implements INativeObject {
 
 	/**
 	 * Load native library
@@ -53,6 +53,15 @@ public abstract class NativeObject {
 	 * The pointer to the native instance. Stores the native reference.
 	 */
 	public InstancePointer object;
+
+	/**
+	 * Needed for Interfaces which are needed for multiple inheritance
+	 * 
+	 * @return the object
+	 */
+	public InstancePointer getInstancePointer() {
+		return object;
+	}
 
 	/**
 	 * Internal default constructor.
@@ -86,12 +95,8 @@ public abstract class NativeObject {
 		setInstancePointer(pInstance, remote);
 	}
 
-	/**
-	 * Subclasses must implement this but if the native instance was created by
-	 * the underlying library the native call to dispose must <b>not</b>
-	 * happen!
-	 * 
-	 * @see #remote
+	/* (non-Javadoc)
+	 * @see INativeObject#delete()
 	 */
 	public abstract void delete();
 
@@ -138,29 +143,15 @@ public abstract class NativeObject {
 		this.remote = argRemote;
 	}
 
-	/**
-	 * Convenience method to set the instance pointer. Sets the createdByLibrary
-	 * flag to true.
-	 * <p>
-	 * <b>Note:</b> This is an internal method. Do not use it to change the
-	 * instance pointer!
-	 * </p>
-	 * 
-	 * @see #setInstancePointer(long, boolean)
+	/* (non-Javadoc)
+	 * @see INativeObject#setInstancePointer(long)
 	 */
 	public void setInstancePointer(long pInstance) {
 		setInstancePointer(pInstance, true);
 	}
 
-	/**
-	 * Convenience method to set the instance pointer. Creates the
-	 * InstancePointer object.
-	 * <p>
-	 * <b>Note:</b> This is an internal method. Do not use it to change the
-	 * instance pointer!
-	 * </p>
-	 * 
-	 * @see #setInstancePointer(InstancePointer, boolean)
+	/* (non-Javadoc)
+	 * @see INativeObject#setInstancePointer(long, boolean)
 	 */
 	public void setInstancePointer(long pInstance, boolean createdByLibray) {
 		setInstancePointer(new InstancePointer(pInstance), createdByLibray);

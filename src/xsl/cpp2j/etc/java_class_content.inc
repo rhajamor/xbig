@@ -3,7 +3,11 @@ protected #classname#(org.xbig.base.InstancePointer p) {
 	super(p);
 }
 
-protected #classname#(org.xbig.base.InstancePointer p, boolean remote) {
+/**
+ * Never call this constructor !
+ * It is public but not published !
+ */
+public #classname#(org.xbig.base.InstancePointer p, boolean remote) {
 	super(p, remote);
 }
 

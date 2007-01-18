@@ -33,7 +33,8 @@
 	xmlns:xs="http://www.w3.org/2001/XMLSchema"
 	xmlns:fn="http://www.w3.org/2005/xpath-functions"
 	xmlns:xdt="http://www.w3.org/2005/xpath-datatypes"
-	xmlns:xd="http://www.pnp-software.com/XSLTdoc">
+	xmlns:xd="http://www.pnp-software.com/XSLTdoc"
+	xmlns:xbig="http://xbig.sourceforge.net/XBiG">
 
 	<xsl:import href="javaType.xslt" />
 	<xsl:import href="javaMethodParameterList.xslt" />
@@ -109,10 +110,20 @@
 			<xsl:when test="($method/@passedBy eq 'pointer') or ($method/@passedBy eq 'reference')">
 				<xsl:value-of select="'long'" />
 			</xsl:when>
+			<xsl:when test="not($method/type)"> <!-- c-tor -->
+				<xsl:value-of select="'long'" />
+			</xsl:when>
+			<xsl:when test="xbig:isClassOrStruct($method/type, $class, $root)">
+				<xsl:value-of select="'long'" />
+			</xsl:when>
+			<xsl:when test="xbig:isEnum($method/type, $class, $root)">
+				<xsl:value-of select="'int'" />
+			</xsl:when>
 			<xsl:otherwise>
 				<xsl:call-template name="javaType">
 					<xsl:with-param name="config" select="$config" />
 					<xsl:with-param name="param" select="$method" />
+					<xsl:with-param name="class" select="$class" />
 				</xsl:call-template>
 			</xsl:otherwise>
 		</xsl:choose>

@@ -57,6 +57,7 @@
 			<xsl:with-param name="config" select="$config" />
 			<xsl:with-param name="class_prefix" select="$class_prefix" />
 			<xsl:with-param name="method" select="." />
+			<xsl:with-param name="class" select="$class" />
 		</xsl:call-template>
 
 		<!-- start implementation -->
