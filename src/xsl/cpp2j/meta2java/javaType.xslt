@@ -84,9 +84,7 @@
 								<xsl:value-of select="'int'"/>
 							</xsl:when>
 							<xsl:otherwise>
-								<xsl:value-of select="$config/config/java/class/enumwrapper"/>
-								<xsl:value-of select="'.'"/>
-								<xsl:value-of select="$param/type"/>
+								<xsl:value-of select="xbig:getFullJavaName($param/type, $class, $root, $config)"/>
 							</xsl:otherwise>
 						</xsl:choose>
 					</xsl:when>

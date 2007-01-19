@@ -97,6 +97,15 @@
 				<xsl:with-param name="buildFile" select="$buildFile" />
 			</xsl:call-template>
 		</xsl:for-each>
+		<xsl:for-each select="enumeration">
+			<xsl:call-template name="javaClassFileStub">
+				<xsl:with-param name="java_ns_dir" select="$java_ns_dir" />
+				<xsl:with-param name="java_ns_name" select="$java_ns_name" />
+				<xsl:with-param name="outdir" select="$outdir" />
+				<xsl:with-param name="config" select="$config" />
+				<xsl:with-param name="buildFile" select="$buildFile" />
+			</xsl:call-template>
+		</xsl:for-each>
 
 	</xsl:template>
 </xsl:stylesheet>

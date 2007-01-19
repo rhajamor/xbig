@@ -68,6 +68,12 @@
 			<xsl:text>(new&#32;InstancePointer(</xsl:text>
 		</xsl:if>
 
+		<!-- get enum when necessary -->
+		<xsl:if test="xbig:isEnum($method/type, $class, $root)">
+			<xsl:value-of select="xbig:getFullJavaName($method/type, $class, $root, $config)"/>
+			<xsl:text>.toEnum(</xsl:text>
+		</xsl:if>
+
 		<!-- write native method name -->
 		<xsl:call-template name="metaMethodName">
 			<xsl:with-param name="config" select="$config" />
@@ -104,6 +110,9 @@
 		</xsl:if>
 		<xsl:if test="xbig:isClassOrStruct($method/type, $class, $root)">
 			<xsl:text>)), true</xsl:text>
+		</xsl:if>
+		<xsl:if test="xbig:isEnum($method/type, $class, $root)">
+			<xsl:text>)</xsl:text>
 		</xsl:if>
 
 		<!-- close parameter list -->

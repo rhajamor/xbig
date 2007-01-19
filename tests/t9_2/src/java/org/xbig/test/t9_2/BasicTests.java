@@ -6,7 +6,7 @@ package org.xbig.test.t9_2;
 import org.junit.Assert;
 import org.junit.Test;
 import org.xbig.A;
-import org.xbig._Constants;
+import org.xbig.Vocals;
 /**
  * @author nenning
  *
@@ -17,13 +17,13 @@ public class BasicTests {
 	public void useEnumWithDefaultValues() {
 		A a = new A();
 
-		Assert.assertTrue(a.isA(_Constants.Vocals.a));
-		Assert.assertTrue(a.isE(_Constants.Vocals.e));
-		Assert.assertTrue(a.isI(_Constants.Vocals.i));
-		Assert.assertTrue(a.isO(_Constants.Vocals.o));
-		Assert.assertTrue(a.isU(_Constants.Vocals.u));
+		Assert.assertTrue(a.isA(Vocals.a));
+		Assert.assertTrue(a.isE(Vocals.e));
+		Assert.assertTrue(a.isI(Vocals.i));
+		Assert.assertTrue(a.isO(Vocals.o));
+		Assert.assertTrue(a.isU(Vocals.u));
 
-		Assert.assertFalse(a.isU(_Constants.Vocals.a));
+		Assert.assertFalse(a.isU(Vocals.a));
 
 		a.delete();
 	}

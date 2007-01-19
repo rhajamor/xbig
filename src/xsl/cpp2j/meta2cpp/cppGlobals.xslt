@@ -36,6 +36,7 @@
 	xmlns:xbig="http://xbig.sourceforge.net/XBiG">
 
 	<xsl:import href="cppClass.xslt" />
+	<xsl:import href="cppEnum.xslt" />
 
 	<xd:doc type="stylesheet">
 		<xd:short>Generation of types outside a namespace</xd:short>
@@ -56,12 +57,25 @@
 			select="replace($java_ns_name,'\.', '_')" />
 
 		<!-- generate files -->
-		<xsl:call-template name="cppClass">
-			<xsl:with-param name="ns_prefix" select="$ns_prefix" />
-			<xsl:with-param name="include_dir" select="$include_dir" />
-			<xsl:with-param name="lib_dir" select="$lib_dir" />
-			<xsl:with-param name="config" select="$config" />
-		</xsl:call-template>
+		<xsl:choose>
+			<xsl:when test="./name() = 'enumeration'">
+				<xsl:call-template name="cppEnum">
+					<xsl:with-param name="enum" select="." />
+					<xsl:with-param name="ns_prefix" select="$ns_prefix" />
+					<xsl:with-param name="include_dir" select="$include_dir" />
+					<xsl:with-param name="lib_dir" select="$lib_dir" />
+					<xsl:with-param name="config" select="$config" />
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:call-template name="cppClass">
+					<xsl:with-param name="ns_prefix" select="$ns_prefix" />
+					<xsl:with-param name="include_dir" select="$include_dir" />
+					<xsl:with-param name="lib_dir" select="$lib_dir" />
+					<xsl:with-param name="config" select="$config" />
+				</xsl:call-template>
+			</xsl:otherwise>
+		</xsl:choose>
 
 	</xsl:template>
 </xsl:stylesheet>

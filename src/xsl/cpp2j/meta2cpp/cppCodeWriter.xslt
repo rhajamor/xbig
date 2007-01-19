@@ -129,6 +129,9 @@
 					<xsl:when test="xbig:isClassOrStruct($param/type, $class, $root)">
 						<xsl:value-of select="xbig:getFullTypeName($param/type, $class, $root)"/>
 					</xsl:when>
+					<xsl:when test="xbig:isEnum($param/type, $class, $root)">
+						<xsl:value-of select="xbig:getFullTypeName($param/type, $class, $root)"/>
+					</xsl:when>
 					<xsl:otherwise>
 						<xsl:value-of select="$param/type"/>
 					</xsl:otherwise>
@@ -185,7 +188,8 @@
 			<!-- test for enums -->
 			<xsl:choose>
 				<xsl:when test="xbig:isEnum($param/type, $class, $root)">
-					<xsl:value-of select="concat('(', $param/type, ')', $param_name)" />
+					<xsl:value-of select="
+						concat('(', xbig:getFullTypeName($param/type, $class, $root), ')', $param_name)" />
 				</xsl:when>
 
 				<!-- if this type is a class or struct -->

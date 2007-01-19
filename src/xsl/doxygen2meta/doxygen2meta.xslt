@@ -540,11 +540,21 @@
 		<!-- check if we are inside a class -->
 		<xsl:choose>
 
-			<!-- global -->
+			<!-- global or inside namespace -->
 			<xsl:when test="@kind='enum'">
 				<xsl:element name="enumeration">
 					<xsl:attribute name="name" select="name" />
-					<xsl:attribute name="fullName" select="name" />
+					<xsl:attribute name="fullName">
+						<xsl:choose>
+							<xsl:when test="../../@kind = 'namespace'">
+								<xsl:value-of select="concat(../../compoundname, '::', name)"/>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:value-of select="name"/>
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:attribute>
+
 					<xsl:for-each select="enumvalue">
 						<xsl:element name="enum">
 							<xsl:attribute name="name" select="name" />

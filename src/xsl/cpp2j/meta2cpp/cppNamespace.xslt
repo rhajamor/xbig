@@ -37,6 +37,7 @@
 	xmlns:xbig="http://xbig.sourceforge.net/XBiG">
 
 	<xsl:import href="cppClass.xslt" />
+	<xsl:import href="cppEnum.xslt" />
 
 	<xd:doc type="stylesheet">
 		<xd:short>Generation of types inside a namespace</xd:short>
@@ -91,6 +92,17 @@
 		</xsl:for-each>
 		<xsl:for-each select="struct">
 			<xsl:call-template name="cppClass">
+				<xsl:with-param name="ns_prefix" select="$ns_prefix" />
+				<xsl:with-param name="include_dir" select="$include_dir" />
+				<xsl:with-param name="lib_dir" select="$lib_dir" />
+				<xsl:with-param name="config" select="$config" />
+			</xsl:call-template>
+		</xsl:for-each>
+
+		<!-- enums -->
+		<xsl:for-each select="enumeration">
+			<xsl:call-template name="cppEnum">
+				<xsl:with-param name="enum" select="." />
 				<xsl:with-param name="ns_prefix" select="$ns_prefix" />
 				<xsl:with-param name="include_dir" select="$include_dir" />
 				<xsl:with-param name="lib_dir" select="$lib_dir" />

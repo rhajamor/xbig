@@ -38,6 +38,7 @@
 	<xsl:import href="cppClassFileHeader.xslt" />
 	<xsl:import href="cppClassFileImpl.xslt" />
 	<xsl:import href="cppCreateHelperMethods.xslt" />
+	<xsl:import href="cppEnum.xslt" />
 	<xsl:import href="../../util/path.xslt" />
 	<xsl:import href="../../util/metaInheritedMethods.xslt" />
 
@@ -51,41 +52,41 @@
 		<xsl:param name="lib_dir" />
 		<xsl:param name="config" />
 
+		<!-- find out if we create an inner class -->
+		<xsl:variable name="isInnerClass" select="../name() eq 'class' or ../name() eq 'struct'"/>
+
+		<!-- compose filename of current class without suffix -->
+		<!-- the 00024 is for the $ of inner classes -->
+		<xsl:variable name="class_prefix">
+			<xsl:choose>
+				<xsl:when test="$isInnerClass">
+					<xsl:value-of select="concat($ns_prefix, '_', '00024', @name)"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="concat($ns_prefix, '_', @name)"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+
+		<!-- compose filename of current class without suffix -->
+		<xsl:variable name="main_filename"
+			select="concat('class_', $class_prefix)" />
+
+		<!-- compose basic header filename of current class -->
+		<xsl:variable name="basic_header_filename"
+			select="concat($main_filename,'.h')" />
+
+		<!-- compose full header filename of current class -->
+		<xsl:variable name="header_filename"
+			select="concat($include_dir, '/', $basic_header_filename)" />
+
+		<!-- compose implementation filename of current class -->
+		<xsl:variable name="impl_filename"
+			select="concat($lib_dir, '/', $main_filename,'.cpp')" />
+
 		<!-- check if this class is abstract -->
 		<xsl:if test="not(xbig:areThereUnimplementedAbstractMethods(.))">
 
-			<!-- find out if we create an inner class -->
-			<xsl:variable name="isInnerClass" select="../name() eq 'class' or ../name() eq 'struct'"/>
-	
-			<!-- compose filename of current class without suffix -->
-			<!-- the 00024 is for the $ of inner classes -->
-			<xsl:variable name="class_prefix">
-				<xsl:choose>
-					<xsl:when test="$isInnerClass">
-						<xsl:value-of select="concat($ns_prefix, '_', '00024', @name)"/>
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:value-of select="concat($ns_prefix, '_', @name)"/>
-					</xsl:otherwise>
-				</xsl:choose>
-			</xsl:variable>
-	
-			<!-- compose filename of current class without suffix -->
-			<xsl:variable name="main_filename"
-				select="concat('class_', $class_prefix)" />
-	
-			<!-- compose basic header filename of current class -->
-			<xsl:variable name="basic_header_filename"
-				select="concat($main_filename,'.h')" />
-	
-			<!-- compose full header filename of current class -->
-			<xsl:variable name="header_filename"
-				select="concat($include_dir, '/', $basic_header_filename)" />
-	
-			<!-- compose implementation filename of current class -->
-			<xsl:variable name="impl_filename"
-				select="concat($lib_dir, '/', $main_filename,'.cpp')" />
-	
 			<!-- generate description for helper methods -->
 			<xsl:variable name="helper_methods">
 				<xsl:for-each select=".">
@@ -149,6 +150,17 @@
 
 		<!-- end of abstract class check -->
 		</xsl:if>
+
+		<!-- inner enums -->
+		<xsl:for-each select="enumeration">
+			<xsl:call-template name="cppEnum">
+				<xsl:with-param name="enum" select="." />
+				<xsl:with-param name="ns_prefix" select="$class_prefix" />
+				<xsl:with-param name="include_dir" select="$include_dir" />
+				<xsl:with-param name="lib_dir" select="$lib_dir" />
+				<xsl:with-param name="config" select="$config" />
+			</xsl:call-template>
+		</xsl:for-each>
 
 	</xsl:template>
 </xsl:stylesheet>

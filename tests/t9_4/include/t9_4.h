@@ -3,6 +3,7 @@
  * Test file for the XSLT Bindings Generator (XBiG)
  *
  * It handles enums with different names in different namespaces
+ * and enums as return values
  *
  ******************************************************************/
 
@@ -28,16 +29,6 @@ public:
 	};
 };
 
-struct EXPORT B {
-	enum EXPORT Vocals3 {
-		a = 301,
-		e = 302,
-		i = 303,
-		o = 304,
-		u = 305
-	};
-};
-
 namespace n {
 	enum EXPORT Vocals1 {
 		a = 101,
@@ -46,13 +37,43 @@ namespace n {
 		o = 104,
 		u = 105
 	};
+}
 
+struct EXPORT B {
+	enum EXPORT Vocals3 {
+		a = 301,
+		e = 302,
+		i = 303,
+		o = 304,
+		u = 305
+	};
+
+	class EXPORT Returner {
+	public:
+		n::Vocals1 getN() {return n::a;}
+		A::Vocals2 getA() {return A::a;}
+		Vocals3 getB() {return a;}
+		::Vocals1 getObject();
+		virtual ~Returner();
+	};
+};
+
+namespace n {
 	class EXPORT Tester {
 	public:
 		bool isN(Vocals1 a);
 		bool isA(A::Vocals2 a);
 		bool isB(B::Vocals3 a);
 		bool isObject(::Vocals1 a);
+	};
+
+	class EXPORT Returner {
+	public:
+		Vocals1 getN() {return a;}
+		A::Vocals2 getA() {return A::a;}
+		B::Vocals3 getB() {return B::a;}
+		::Vocals1 getObject();
+		virtual ~Returner();
 	};
 }
 
@@ -62,4 +83,13 @@ public:
 	bool isA(A::Vocals2 a);
 	bool isB(B::Vocals3 a);
 	bool isObject(Vocals1 a);
+};
+
+class EXPORT Returner {
+public:
+	n::Vocals1 getN() {return n::a;}
+	A::Vocals2 getA() {return A::a;}
+	B::Vocals3 getB() {return B::a;}
+	Vocals1 getObject();
+	virtual ~Returner();
 };

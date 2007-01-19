@@ -51,60 +51,88 @@
 		<xsl:param name="config" />
 		<xsl:param name="buildFile" />
 
-		<!-- generate Interface -->
-		<!-- compose filename of current class -->
-		<xsl:variable name="ifFilename"
-			select="concat($outdir, '/',
-					$java_ns_dir, '/',
-					$config/config/java/interface/prefix,
-					@name,
-					$config/config/java/interface/suffix,
-					'.java')" />
+		<!-- test if we handle a class or an enum -->
+		<xsl:choose>
+			<xsl:when test="./name() = 'enumeration'">
+				<!-- compose filename of current class -->
+				<xsl:variable name="filename"
+					select="concat($outdir, '/', $java_ns_dir, '/', @name, '.java')" />
 
-		<!-- open Java file -->
-		<xsl:result-document href="{xbig:toFileURL($ifFilename)}"
-			format="textOutput">
+				<!-- open Java file -->
+				<xsl:result-document href="{xbig:toFileURL($filename)}"
+					format="textOutput">
 
-			<xsl:call-template name="javaFileFirstContent">
-				<xsl:with-param name="java_ns_name" select="$java_ns_name" />
-				<xsl:with-param name="config" select="$config" />
-			</xsl:call-template>
+					<xsl:call-template name="javaFileFirstContent">
+						<xsl:with-param name="java_ns_name" select="$java_ns_name" />
+						<xsl:with-param name="config" select="$config" />
+					</xsl:call-template>
 
-			<!-- write interface implementation -->
-			<xsl:call-template name="javaInterface">
-				<xsl:with-param name="config" select="$config" />
-				<xsl:with-param name="class" select="." />
-				<xsl:with-param name="buildFile" select="$buildFile" />
-			</xsl:call-template>
+					<!-- write class implementation -->
+					<xsl:call-template name="javaEnum">
+						<xsl:with-param name="enum" select="." />
+						<xsl:with-param name="buildFile" select="$buildFile" />
+					</xsl:call-template>
 
-		</xsl:result-document>
+				</xsl:result-document>
+			</xsl:when>
 
+			<!-- classes -->
+			<xsl:otherwise>
+				<!-- generate Interface -->
+				<!-- compose filename of current class -->
+				<xsl:variable name="ifFilename"
+					select="concat($outdir, '/',
+							$java_ns_dir, '/',
+							$config/config/java/interface/prefix,
+							@name,
+							$config/config/java/interface/suffix,
+							'.java')" />
 
-		<!-- generate Class if necessary -->
-		<xsl:if test="not(xbig:areThereUnimplementedAbstractMethods(.))">
+				<!-- open Java file -->
+				<xsl:result-document href="{xbig:toFileURL($ifFilename)}"
+					format="textOutput">
 
-			<!-- compose filename of current class -->
-			<xsl:variable name="filename"
-				select="concat($outdir, '/', $java_ns_dir, '/',@name,'.java')" />
-	
-			<!-- open Java file -->
-			<xsl:result-document href="{xbig:toFileURL($filename)}"
-				format="textOutput">
+					<xsl:call-template name="javaFileFirstContent">
+						<xsl:with-param name="java_ns_name" select="$java_ns_name" />
+						<xsl:with-param name="config" select="$config" />
+					</xsl:call-template>
 
-				<xsl:call-template name="javaFileFirstContent">
-					<xsl:with-param name="java_ns_name" select="$java_ns_name" />
-					<xsl:with-param name="config" select="$config" />
-				</xsl:call-template>
-	
-				<!-- write class implementation -->
-				<xsl:call-template name="javaClass">
-					<xsl:with-param name="config" select="$config" />
-					<xsl:with-param name="class" select="." />
-					<xsl:with-param name="buildFile" select="$buildFile" />
-				</xsl:call-template>
-	
-			</xsl:result-document>
-		</xsl:if>
+					<!-- write interface implementation -->
+					<xsl:call-template name="javaInterface">
+						<xsl:with-param name="config" select="$config" />
+						<xsl:with-param name="class" select="." />
+						<xsl:with-param name="buildFile" select="$buildFile" />
+					</xsl:call-template>
+
+				</xsl:result-document>
+
+				<!-- generate Class if necessary -->
+				<xsl:if test="not(xbig:areThereUnimplementedAbstractMethods(.))">
+
+					<!-- compose filename of current class -->
+					<xsl:variable name="filename"
+						select="concat($outdir, '/', $java_ns_dir, '/', @name, '.java')" />
+
+					<!-- open Java file -->
+					<xsl:result-document href="{xbig:toFileURL($filename)}"
+						format="textOutput">
+
+						<xsl:call-template name="javaFileFirstContent">
+							<xsl:with-param name="java_ns_name" select="$java_ns_name" />
+							<xsl:with-param name="config" select="$config" />
+						</xsl:call-template>
+
+						<!-- write class implementation -->
+						<xsl:call-template name="javaClass">
+							<xsl:with-param name="config" select="$config" />
+							<xsl:with-param name="class" select="." />
+							<xsl:with-param name="buildFile" select="$buildFile" />
+						</xsl:call-template>
+
+					</xsl:result-document>
+				</xsl:if>
+			</xsl:otherwise>
+		</xsl:choose>
 	</xsl:template>
 
 

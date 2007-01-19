@@ -43,3 +43,45 @@ bool Tester::isObject(Vocals1 a) {
 	cout << "t9_3 Tester::isObject(Vocals1)\n";
 	return a.get5() == 5;
 }
+
+
+Vocals1* v_ptr = 0;
+
+Vocals1 Returner::getObject() {
+	if (v_ptr == 0)
+		v_ptr = new ::Vocals1;
+	return *v_ptr;
+}
+
+Returner::~Returner() {
+	if (v_ptr != 0) {
+		delete v_ptr;
+		v_ptr = 0;
+	}
+}
+
+Vocals1 n::Returner::getObject() {
+	if (v_ptr == 0)
+		v_ptr = new ::Vocals1;
+	return *v_ptr;
+}
+
+n::Returner::~Returner() {
+	if (v_ptr != 0) {
+		delete v_ptr;
+		v_ptr = 0;
+	}
+}
+
+Vocals1 B::Returner::getObject() {
+	if (v_ptr == 0)
+		v_ptr = new ::Vocals1;
+	return *v_ptr;
+}
+
+B::Returner::~Returner() {
+	if (v_ptr != 0) {
+		delete v_ptr;
+		v_ptr = 0;
+	}
+}

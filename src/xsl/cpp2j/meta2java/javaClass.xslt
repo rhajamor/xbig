@@ -39,6 +39,7 @@
 	<xsl:import href="javaNativeMethod.xslt" />
 	<xsl:import href="javaAccessMethod.xslt" />
 	<xsl:import href="javaPublicAttribute.xslt" />
+	<xsl:import href="javaEnum.xslt" />
 	<xsl:import href="../../util/metaInheritedMethods.xslt" />
 
 	<xd:doc type="stylesheet">
@@ -102,6 +103,14 @@
 			<xsl:call-template name="javaClass">
 				<xsl:with-param name="config" select="$config" />
 				<xsl:with-param name="class" select="." />
+				<xsl:with-param name="buildFile" select="$buildFile" />
+			</xsl:call-template>
+		</xsl:for-each>
+
+		<!-- create enums -->
+		<xsl:for-each select="enumeration">
+			<xsl:call-template name="javaEnum">
+				<xsl:with-param name="enum" select="." />
 				<xsl:with-param name="buildFile" select="$buildFile" />
 			</xsl:call-template>
 		</xsl:for-each>
