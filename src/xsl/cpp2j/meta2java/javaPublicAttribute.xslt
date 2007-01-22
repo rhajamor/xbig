@@ -32,7 +32,8 @@
 	xmlns:xs="http://www.w3.org/2001/XMLSchema"
 	xmlns:fn="http://www.w3.org/2005/xpath-functions"
 	xmlns:xdt="http://www.w3.org/2005/xpath-datatypes"
-	xmlns:xd="http://www.pnp-software.com/XSLTdoc">
+	xmlns:xd="http://www.pnp-software.com/XSLTdoc"
+	xmlns:xbig="http://xbig.sourceforge.net/XBiG">
 
 	<xd:doc type="stylesheet">
 		<xd:short>Generate mapping of a single original class or struct</xd:short>
@@ -41,6 +42,8 @@
 	<xsl:template name="javaPublicAttribute">
 		<xsl:param name="config" />
 
+		<!-- resolve typedefs -->
+		<xsl:variable name="resolvedType" select="xbig:resolveTypedef(./type, .., $root)"/>
 
 		<!-- getter -->
 		<xsl:variable name="getterName">
@@ -53,6 +56,7 @@
 
 		<xsl:call-template name="javaPublicAttributeGetterDeclaration">
 			<xsl:with-param name="config" select="$config" />
+			<xsl:with-param name="typeName" select="$resolvedType" />
 		</xsl:call-template>
 
 		<xsl:text> { return </xsl:text>
@@ -63,6 +67,7 @@
 			<xsl:call-template name="javaPointerClass">
 				<xsl:with-param name="config" select="$config" />
 				<xsl:with-param name="param" select="." />
+				<xsl:with-param name="typeName" select="$resolvedType" />
 			</xsl:call-template>
 			<xsl:text>(new&#32;InstancePointer(</xsl:text>
 		</xsl:if>
@@ -118,6 +123,7 @@
 	
 			<xsl:call-template name="javaPublicAttributeSetterDeclaration">
 				<xsl:with-param name="config" select="$config" />
+				<xsl:with-param name="typeName" select="$resolvedType" />
 			</xsl:call-template>
 
 			<xsl:text> { </xsl:text>
@@ -153,7 +159,7 @@
 					<xsl:text>long</xsl:text>
 				</xsl:when>
 				<xsl:otherwise>
-					<xsl:value-of select="type"/>
+					<xsl:value-of select="$resolvedType"/>
 				</xsl:otherwise>
 			</xsl:choose>
 
@@ -165,6 +171,7 @@
 
 <xsl:template name="javaPublicAttributeGetterDeclaration">
 		<xsl:param name="config" />
+		<xsl:param name="typeName" />
 
 		<xsl:variable name="getterName">
 			<xsl:value-of select="$config/config/meta/publicattribute/get/text()"/>
@@ -187,11 +194,12 @@
 				<xsl:call-template name="javaPointerClass">
 					<xsl:with-param name="config" select="$config" />
 					<xsl:with-param name="param" select="." />
+					<xsl:with-param name="typeName" select="$typeName" />
 				</xsl:call-template>
 			</xsl:when>
 
 			<xsl:otherwise>
-				<xsl:value-of select="type" />
+				<xsl:value-of select="$typeName" />
 			</xsl:otherwise>
 		</xsl:choose>
 
@@ -202,6 +210,7 @@
 
 	<xsl:template name="javaPublicAttributeSetterDeclaration">
 		<xsl:param name="config" />
+		<xsl:param name="typeName" />
 
 		<!-- method name -->
 		<xsl:variable name="setterName">
@@ -226,10 +235,11 @@
 				<xsl:call-template name="javaPointerClass">
 					<xsl:with-param name="config" select="$config" />
 					<xsl:with-param name="param" select="." />
+					<xsl:with-param name="typeName" select="$typeName" />
 				</xsl:call-template>
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:value-of select="type" />
+				<xsl:value-of select="$typeName" />
 			</xsl:otherwise>
 		</xsl:choose>
 

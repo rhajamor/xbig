@@ -12,9 +12,17 @@
 	#define EXPORT
 #endif
 
-struct EXPORT B {
-	float x (int y);
-	double z;
+struct EXPORT A {
+public:
+	int get5() {return 5;}
+	int i;
 };
 
-typedef B A;
+typedef A B;
+
+struct EXPORT C {
+public:
+	int a(B b) {return b.get5();}
+	B getB();
+	virtual ~C();
+};

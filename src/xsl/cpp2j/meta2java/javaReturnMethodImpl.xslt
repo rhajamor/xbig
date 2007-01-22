@@ -57,6 +57,7 @@
 			<xsl:call-template name="javaPointerClass">
 				<xsl:with-param name="config" select="$config" />
 				<xsl:with-param name="param" select="$method" />
+				<xsl:with-param name="typeName" select="xbig:resolveTypedef($method/type, $class, $root)" />
 			</xsl:call-template>
 			<xsl:text>(new&#32;InstancePointer(</xsl:text>
 		</xsl:if>

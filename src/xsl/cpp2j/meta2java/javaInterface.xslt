@@ -33,7 +33,8 @@
 	xmlns:fn="http://www.w3.org/2005/xpath-functions"
 	xmlns:xdt="http://www.w3.org/2005/xpath-datatypes"
 	xmlns:xd="http://www.pnp-software.com/XSLTdoc"
-	xmlns:str="http://exslt.org/strings">
+	xmlns:str="http://exslt.org/strings"
+	xmlns:xbig="http://xbig.sourceforge.net/XBiG">
 
 	<xsl:import href="javaAccessMethodDeclaration.xslt" />
 	<xsl:import href="javaPublicAttribute.xslt" />
@@ -166,12 +167,15 @@
 
 		<!-- handling of public attributes -->
 		<xsl:for-each select="variable">
+			<xsl:variable name="typeName" select="xbig:resolveTypedef(type, $class, $root)"/>
 			<xsl:call-template name="javaPublicAttributeGetterDeclaration">
 				<xsl:with-param name="config" select="$config" />
+				<xsl:with-param name="typeName" select="$typeName" />
 			</xsl:call-template>
 			<xsl:text>;&#10;&#10;</xsl:text>
 			<xsl:call-template name="javaPublicAttributeSetterDeclaration">
 				<xsl:with-param name="config" select="$config" />
+				<xsl:with-param name="typeName" select="$typeName" />
 			</xsl:call-template>
 			<xsl:text>;&#10;&#10;</xsl:text>
 		</xsl:for-each>

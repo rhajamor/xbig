@@ -3,6 +3,7 @@
  */
 package org.xbig.test.t7_5;
 
+import org.junit.Assert;
 import org.junit.Test;
 /**
  * @author nenning
@@ -11,7 +12,7 @@ import org.junit.Test;
 public class BasicTests {
 	
 	@Test
-	public void print() {
-		System.out.println("BasicTests.print()");
+	public void fail() {
+		Assert.fail();
 	}
 }

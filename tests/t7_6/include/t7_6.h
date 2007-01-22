@@ -16,13 +16,18 @@ namespace n {
 	typedef int Int;
 }
 
-class A {
+class EXPORT A {
 public:
-	A();
 	typedef int Int;
 };
 
-struct B {
-	B();
+struct EXPORT B {
 	typedef int Int;
+};
+
+class EXPORT C {
+public:
+	bool isN(n::Int i) {return true;}
+	bool isA(A::Int i) {return true;}
+	bool isB(B::Int i) {return true;}
 };

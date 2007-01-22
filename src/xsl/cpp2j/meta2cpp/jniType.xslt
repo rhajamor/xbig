@@ -47,11 +47,25 @@
 		<xsl:param name="param" />
 		<xsl:param name="class" />
 
+		<!-- resolve typedefs -->
+		<xsl:variable name="resolvedType">
+			<xsl:choose>
+				<!-- c-tors don't have a type -->
+				<xsl:when test="not($param/type)">
+					<xsl:value-of select="'long'"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="xbig:resolveTypedef($param/type, $class, $root)"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+
 		<xsl:variable name="type_info">
 			<xsl:call-template name="metaExactTypeInfo">
 				<xsl:with-param name="root"
 					select="$config/config/cpp/jni/types" />
 				<xsl:with-param name="param" select="$param" />
+				<xsl:with-param name="typeName" select="$resolvedType" />
 			</xsl:call-template>
 		</xsl:variable>
 
@@ -63,17 +77,17 @@
 				<xsl:choose>
 
 					<!-- if this type is an enum -->
-					<xsl:when test="xbig:isEnum($param/type, $class, $root)">
+					<xsl:when test="xbig:isEnum($resolvedType, $class, $root)">
 						<xsl:value-of select="'jint'"/>
 					</xsl:when>
 
 					<!-- if this type is a class or struct -->
-					<xsl:when test="xbig:isClassOrStruct($param/type, $class, $root)">
+					<xsl:when test="xbig:isClassOrStruct($resolvedType, $class, $root)">
 						<xsl:value-of select="'jlong'"/>
 					</xsl:when>
 
 					<xsl:otherwise>
-						<xsl:value-of select="$param/type"/>
+						<xsl:value-of select="$resolvedType"/>
 					</xsl:otherwise>
 				</xsl:choose>
 			</xsl:when>

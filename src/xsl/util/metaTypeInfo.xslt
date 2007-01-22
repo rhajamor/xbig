@@ -46,10 +46,11 @@
 	<xsl:template name="metaTypeInfo">
 		<xsl:param name="root" />
 		<xsl:param name="param" />
+		<xsl:param name="typeName" />
 
 		<!-- shortcut for meta type -->
 		<xsl:variable name="meta_type"
-			select="if($param/type) then $param/type else 'long'" />
+			select="if($typeName) then $typeName else 'long'" />
 
 		<!-- shortcut for param passing type -->
 		<xsl:variable name="pass_type" select="$param/@passedBy" />
@@ -78,12 +79,14 @@
 	<xsl:template name="metaFirstTypeInfo">
 		<xsl:param name="root" />
 		<xsl:param name="param" />
+		<xsl:param name="typeName" />
 
 		<!-- calculate all suitable type informations -->
 		<xsl:variable name="type_infos">
 			<xsl:call-template name="metaTypeInfo">
 				<xsl:with-param name="root" select="$root" />
 				<xsl:with-param name="param" select="$param" />
+				<xsl:with-param name="typeName" select="$typeName" />
 			</xsl:call-template>
 		</xsl:variable>
 
@@ -91,7 +94,7 @@
 		<xsl:if test="count($type_infos) = 0">
 			<xsl:message terminate="yes">
 				ERROR: no type info for meta type '
-				<xsl:value-of select="$param/type" />
+				<xsl:value-of select="$typeName" />
 				' found.
 			</xsl:message>
 		</xsl:if>
@@ -104,12 +107,14 @@
 	<xsl:template name="metaExactTypeInfo">
 		<xsl:param name="root" />
 		<xsl:param name="param" />
+		<xsl:param name="typeName" />
 
 		<!-- calculate all suitable type informations -->
 		<xsl:variable name="type_infos">
 			<xsl:call-template name="metaTypeInfo">
 				<xsl:with-param name="root" select="$root" />
 				<xsl:with-param name="param" select="$param" />
+				<xsl:with-param name="typeName" select="$typeName" />
 			</xsl:call-template>
 		</xsl:variable>
 
@@ -117,7 +122,7 @@
 		<xsl:if test="count($type_infos) = 0">
 			<xsl:message terminate="yes">
 				ERROR: no type info for meta type '
-				<xsl:value-of select="$param/type" />
+				<xsl:value-of select="$typeName" />
 				' found.
 			</xsl:message>
 		</xsl:if>
@@ -343,6 +348,26 @@
 			</xsl:otherwise>
 		</xsl:choose>
 
+	</xsl:function>
+
+
+	<xd:doc type="function">
+		<xd:short>resolve a typedef</xd:short>
+	</xd:doc>
+	<xsl:function name="xbig:resolveTypedef" as="xs:string">
+		<xsl:param name="type" as="xs:string"/>
+		<xsl:param name="currentNode"/> <!-- must be a class, struct or namespace element -->
+		<xsl:param name="inputTreeRoot"/>
+
+		<xsl:choose>
+			<xsl:when test="xbig:isTypedef($type, $currentNode, $inputTreeRoot)">
+				<xsl:variable name="typedefNode" select="$inputTreeRoot//typedef[@fullName = xbig:getFullTypeName($type, $currentNode, $inputTreeRoot)]"/>
+				<xsl:value-of select="xbig:resolveTypedef($typedefNode/@basetype, $typedefNode/.., $inputTreeRoot)"/>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="$type"/>
+			</xsl:otherwise>
+		</xsl:choose>
 	</xsl:function>
 
 

@@ -51,12 +51,16 @@
 		<xsl:param name="class" />
 		<xsl:param name="writingNativeMethod" />
 
+		<!-- first of all: resolve typedefs -->
+		<xsl:variable name="resolvedType" select="xbig:resolveTypedef($param/type, $class, $root)"/>
+
 		<!-- extract jni type depending on meta type, const/non-const, pass type -->
 		<xsl:variable name="type_info">
 			<xsl:call-template name="metaFirstTypeInfo">
 				<xsl:with-param name="root" 
 					select="$config/config/java/types" />
 				<xsl:with-param name="param" select="$param" />
+				<xsl:with-param name="typeName" select="$resolvedType" />
 			</xsl:call-template>
 		</xsl:variable>
 
@@ -70,6 +74,7 @@
 				<xsl:call-template name="javaPointerClass">
 					<xsl:with-param name="config" select="$config" />
 					<xsl:with-param name="param" select="$param" />
+					<xsl:with-param name="typeName" select="$resolvedType" />
 				</xsl:call-template>
 			</xsl:when>
 
@@ -78,31 +83,31 @@
 				<xsl:choose>
 
 					<!-- if this type is an enum -->
-					<xsl:when test="xbig:isEnum($param/type, $class, $root)">
+					<xsl:when test="xbig:isEnum($resolvedType, $class, $root)">
 						<xsl:choose>
 							<xsl:when test="$writingNativeMethod eq 'true'">
 								<xsl:value-of select="'int'"/>
 							</xsl:when>
 							<xsl:otherwise>
-								<xsl:value-of select="xbig:getFullJavaName($param/type, $class, $root, $config)"/>
+								<xsl:value-of select="xbig:getFullJavaName($resolvedType, $class, $root, $config)"/>
 							</xsl:otherwise>
 						</xsl:choose>
 					</xsl:when>
 
 					<!-- if this type is a class or struct -->
-					<xsl:when test="xbig:isClassOrStruct($param/type, $class, $root)">
+					<xsl:when test="xbig:isClassOrStruct($resolvedType, $class, $root)">
 						<xsl:choose>
 							<xsl:when test="$writingNativeMethod eq 'true'">
 								<xsl:value-of select="'long'"/>
 							</xsl:when>
 							<xsl:otherwise>
-								<xsl:value-of select="xbig:getFullJavaName($param/type, $class, $root, $config)"/>
+								<xsl:value-of select="xbig:getFullJavaName($resolvedType, $class, $root, $config)"/>
 							</xsl:otherwise>
 						</xsl:choose>
 					</xsl:when>
 
 					<xsl:otherwise>
-						<xsl:value-of select="xbig:getFullJavaName($param/type, $class, $root, $config)"/>
+						<xsl:value-of select="xbig:getFullJavaName($resolvedType, $class, $root, $config)"/>
 					</xsl:otherwise>
 				</xsl:choose>
 			</xsl:when>
@@ -119,6 +124,7 @@
 	<xsl:template name="javaPointerClass">
 		<xsl:param name="config" />
 		<xsl:param name="param" />
+		<xsl:param name="typeName" />
 
 		<!-- extract jni type depending on meta type, const/non-const, pass type -->
 		<xsl:variable name="type_info">
@@ -126,11 +132,12 @@
 				<xsl:with-param name="root" 
 					select="$config/config/java/types" />
 				<xsl:with-param name="param" select="$param" />
+				<xsl:with-param name="typeName" select="$typeName" />
 			</xsl:call-template>
 		</xsl:variable>
 
 		<xsl:choose>
-			<xsl:when test="$param/type ne 'int'">
+			<xsl:when test="$typeName ne 'int'">
 				<xsl:value-of>
 					<xsl:call-template name="firstLetterToUpperCase">
 						<xsl:with-param name="name">
@@ -149,7 +156,7 @@
 			</xsl:when>
 
 			<!-- IntegerPointer is a special name -->
-			<xsl:when test="$param/type eq 'int'">
+			<xsl:when test="$typeName eq 'int'">
 				<xsl:value-of select="'IntegerPointer'" />
 			</xsl:when>
 		</xsl:choose>

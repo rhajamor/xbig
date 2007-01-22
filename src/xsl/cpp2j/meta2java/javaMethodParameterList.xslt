@@ -88,15 +88,18 @@
 				<xsl:value-of select="'.object.pointer'" />
 			</xsl:if>
 
+			<!-- resolve typedefs -->
+			<xsl:variable name="resolvedType" select="xbig:resolveTypedef(./type, $class, $root)"/>
+
 			<!-- if this parameter is a enum -->
 			<xsl:if test="($callingNativeMethod eq 'true') and
-				 		  (xbig:isEnum(./type, $class, $root))">
+				 		  (xbig:isEnum($resolvedType, $class, $root))">
 				<xsl:value-of select="'.value'" />
 			</xsl:if>
 
 			<!-- if this parameter is a class or struct -->
 			<xsl:if test="($callingNativeMethod eq 'true') and
-				 		  (xbig:isClassOrStruct(./type, $class, $root))">
+				 		  (xbig:isClassOrStruct($resolvedType, $class, $root))">
 				<xsl:value-of select="'.getInstancePointer().pointer'" />
 			</xsl:if>
 

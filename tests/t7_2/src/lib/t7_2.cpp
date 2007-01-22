@@ -1,14 +1,17 @@
 
 
 #include "t7_2.h"
-#include <iostream>
 
-A::A() {
-	std::cout << "t7_2: A::A()" << std::endl;
+B* b_ptr = 0;
+
+B C::getB() {
+	if (b_ptr == 0) b_ptr = new B;
+	return *b_ptr;
 }
 
-int A::a(float b) {
-	std::cout << "t7_2: A::a(float b)" << std::endl;
-	std::cout << "b: " << b << std::endl;
-	return (int)b;
+C::~C() {
+	if (b_ptr != 0) {
+		delete b_ptr;
+		b_ptr = 0;
+	}
 }

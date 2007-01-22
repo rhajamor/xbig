@@ -14,8 +14,14 @@
 
 class EXPORT A {
 public:
-	A();
-	int a(float b);
+	int get5() {return 5;}
 };
 
 typedef A B;
+
+class EXPORT C {
+public:
+	int a(B b) {return b.get5();}
+	B getB();
+	virtual ~C();
+};

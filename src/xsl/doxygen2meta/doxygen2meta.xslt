@@ -133,8 +133,18 @@
 
 			<!-- global typedefs -->
 			<!-- <xsl:for-each select="doxygen/compounddef[@kind='typedef']"> -->
-			<xsl:for-each select="doxygen/compounddef[@kind='file']/sectiondef[@kind='typedef']">
-				<xsl:call-template name="typedef" />
+			<xsl:for-each select="doxygen/compounddef[@kind='file']/sectiondef[@kind='']">
+				<xsl:choose>
+					<!-- if there are more than one entries in all.xml -->
+					<xsl:when test="last() > 1">
+						<xsl:if test="position() = 1">
+							<xsl:call-template name="typedef" />
+						</xsl:if>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:call-template name="typedef" />
+					</xsl:otherwise>
+				</xsl:choose>
 			</xsl:for-each>
 
 			<!-- global enums -->
@@ -249,8 +259,18 @@
 			</xsl:for-each>
 
 			<!-- global typedefs -->
-			<xsl:for-each select="sectiondef[@kind='typedef']">
-				<xsl:call-template name="typedef" />
+			<xsl:for-each select="sectiondef[@kind='']">
+				<xsl:choose>
+					<!-- if there are more than one entries in all.xml -->
+					<xsl:when test="last() > 1">
+						<xsl:if test="position() = 1">
+							<xsl:call-template name="typedef" />
+						</xsl:if>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:call-template name="typedef" />
+					</xsl:otherwise>
+				</xsl:choose>
 			</xsl:for-each>
 
 			<!-- global enums -->
@@ -646,7 +666,18 @@
 		<xsl:for-each select="memberdef[@kind='typedef']">
 			<xsl:element name="typedef">
 				<xsl:attribute name="name" select="name" />
-				<xsl:attribute name="fullName" select="concat(../../compoundname, '::', name)" />
+				<xsl:attribute name="fullName">
+					<xsl:choose>
+						<xsl:when test="../../@kind = 'namespace' 
+										or ../../@kind = 'class' 
+										or ../../@kind = 'struct'">
+							<xsl:value-of select="concat(../../compoundname, '::', name)"/>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:value-of select="name"/>
+						</xsl:otherwise>
+					</xsl:choose>
+				</xsl:attribute>
 				<xsl:attribute name="protection" select="@prot" />
 
 				<xsl:variable name="type"

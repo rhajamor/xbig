@@ -70,12 +70,26 @@
 		<xsl:param name="param" />
 		<xsl:param name="class" />
 
+		<!-- resolve typedefs -->
+		<xsl:variable name="resolvedType">
+			<xsl:choose>
+				<!-- c-tors don't have a type -->
+				<xsl:when test="not($param/type)">
+					<xsl:value-of select="'long'"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="xbig:resolveTypedef($param/type, $class, $root)"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+
 		<!-- shortcut to type conversion configurations -->
 		<xsl:variable name="type_info">
 			<xsl:call-template name="metaExactTypeInfo">
 				<xsl:with-param name="root"
 					select="$config/config/cpp/jni/types" />
 				<xsl:with-param name="param" select="$param" />
+				<xsl:with-param name="typeName" select="$resolvedType" />
 			</xsl:call-template>
 		</xsl:variable>
 
@@ -126,14 +140,14 @@
 					<xsl:when test="not($param/type)">
 						<xsl:value-of select="'void'"/>
 					</xsl:when>
-					<xsl:when test="xbig:isClassOrStruct($param/type, $class, $root)">
-						<xsl:value-of select="xbig:getFullTypeName($param/type, $class, $root)"/>
+					<xsl:when test="xbig:isClassOrStruct($resolvedType, $class, $root)">
+						<xsl:value-of select="xbig:getFullTypeName($resolvedType, $class, $root)"/>
 					</xsl:when>
 					<xsl:when test="xbig:isEnum($param/type, $class, $root)">
-						<xsl:value-of select="xbig:getFullTypeName($param/type, $class, $root)"/>
+						<xsl:value-of select="xbig:getFullTypeName($resolvedType, $class, $root)"/>
 					</xsl:when>
 					<xsl:otherwise>
-						<xsl:value-of select="$param/type"/>
+						<xsl:value-of select="$resolvedType"/>
 					</xsl:otherwise>
 				</xsl:choose>
 			</xsl:variable>
@@ -170,12 +184,16 @@
 		<xsl:param name="method" />
 		<xsl:param name="param" />
 
+		<!-- resolve typedefs -->
+		<xsl:variable name="resolvedType" select="xbig:resolveTypedef($param/type, $class, $root)"/>
+
 		<!-- shortcut to type conversion configurations -->
 		<xsl:variable name="type_info">
 			<xsl:call-template name="metaExactTypeInfo">
 				<xsl:with-param name="root"
 					select="$config/config/cpp/jni/types" />
 				<xsl:with-param name="param" select="$param" />
+				<xsl:with-param name="typeName" select="$resolvedType" />
 			</xsl:call-template>
 		</xsl:variable>
 
@@ -187,15 +205,15 @@
 
 			<!-- test for enums -->
 			<xsl:choose>
-				<xsl:when test="xbig:isEnum($param/type, $class, $root)">
+				<xsl:when test="xbig:isEnum($resolvedType, $class, $root)">
 					<xsl:value-of select="
-						concat('(', xbig:getFullTypeName($param/type, $class, $root), ')', $param_name)" />
+						concat('(', xbig:getFullTypeName($resolvedType, $class, $root), ')', $param_name)" />
 				</xsl:when>
 
 				<!-- if this type is a class or struct -->
-				<xsl:when test="xbig:isClassOrStruct($param/type, $class, $root)">
+				<xsl:when test="xbig:isClassOrStruct($resolvedType, $class, $root)">
 					<xsl:variable name="part1" select="'*reinterpret_cast&lt; '"/>
-					<xsl:variable name="part2" select="xbig:getFullTypeName($param/type, $class, $root)" />
+					<xsl:variable name="part2" select="xbig:getFullTypeName($resolvedType, $class, $root)" />
 					<xsl:variable name="part3" select="'* &gt;('"/>
 					<xsl:variable name="part4" select="$param_name" />
 					<xsl:variable name="part5" select="')'"/>
@@ -235,12 +253,16 @@
 		<xsl:param name="param" />
 		<xsl:param name="name" />
 
+		<!-- resolve typedefs -->
+		<xsl:variable name="resolvedType" select="xbig:resolveTypedef($param/type, $class, $root)"/>
+
 		<!-- shortcut to type conversion configurations -->
 		<xsl:variable name="type_info">
 			<xsl:call-template name="metaExactTypeInfo">
 				<xsl:with-param name="root"
 					select="$config/config/cpp/jni/types" />
 				<xsl:with-param name="param" select="$param" />
+				<xsl:with-param name="typeName" select="$resolvedType" />
 			</xsl:call-template>
 		</xsl:variable>
 
@@ -250,9 +272,13 @@
 
 		<!-- no conversion function available -->
 		<xsl:if test="not($type_info/type/cpp2jni)">
+
+			<!-- resolve typedefs for return type -->
+			<xsl:variable name="resolvedReturnType" select="xbig:resolveTypedef($method/type, $class, $root)"/>
+
 			<xsl:choose>
 				<!-- if this method returns an object -->
-				<xsl:when test="xbig:isClassOrStruct($method/type, $class, $root)">
+				<xsl:when test="xbig:isClassOrStruct($resolvedReturnType, $class, $root)">
 					<xsl:variable name="returnCast">
 						<!-- produces warning: address of local variable ‘_cpp_result’ returned -->
 						<xsl:value-of select="'reinterpret_cast&lt;jlong&gt;(&amp;'"/>
@@ -451,6 +477,7 @@
 				</xsl:when>
 				<!-- if we return an object, we have to store it's address -->
 				<!-- Produces warning: taking address of temporary
+					 typedef resolving is missing here
 				<xsl:when test="xbig:isClassOrStruct($method/type, $class, $root)">
 					<xsl:variable name="returnType" select="concat(xbig:cpp-type($config, $method, $class), '*')"/>
 					<xsl:value-of select="xbig:cpp-replace($line9, '#cpp_return_type#', $returnType)"/>
@@ -507,6 +534,7 @@
 					<xsl:value-of select="$line13" />
 				</xsl:when>
 				<!-- Produces warning: taking address of temporary
+					 typedef resolving is missing here
 				<xsl:when test="xbig:isClassOrStruct($method/type, $class, $root)">
 					<xsl:variable name="cppThis" select="$var_config/cpp/object/@name"/>
 					<xsl:variable name="searchFor">

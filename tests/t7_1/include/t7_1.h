@@ -2,7 +2,7 @@
  *
  * Test file for the XSLT Bindings Generator (XBiG)
  *
- * It handles a typedef for a simple type
+ * It handles a typedef for a primitive type
  *
  ******************************************************************/
 
@@ -13,3 +13,8 @@
 #endif
 
 typedef int Int;
+
+class EXPORT A {
+public:
+	Int a(Int b) {return b;}
+};

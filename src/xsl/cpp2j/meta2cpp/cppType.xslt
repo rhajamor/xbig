@@ -44,11 +44,15 @@
 		<xsl:param name="config" />
 		<xsl:param name="param" />
 
+		<!-- resolve typedefs -->
+		<xsl:variable name="resolvedType" select="xbig:resolveTypedef($param/type, $class, $root)"/>
+
 		<xsl:variable name="type_info">
 			<xsl:call-template name="metaFirstTypeInfo">
 				<xsl:with-param name="root"
 					select="$config/config/cpp/jni/types" />
 				<xsl:with-param name="param" select="$param" />
+				<xsl:with-param name="typeName" select="$resolvedType" />
 			</xsl:call-template>
 		</xsl:variable>
 

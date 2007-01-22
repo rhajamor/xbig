@@ -6,11 +6,10 @@ int main(int argc, char* argv[])
 {
    B a;
 
-   int b = a.a(7.3);
-   if (b == 7)
-      std::cout << "OK, b == 7\n";
+   if (a.get5() == 5)
+      std::cout << "OK\n";
    else
-      std::cout << "ERROR: b != 7\n";
+      std::cout << "ERROR";
 
    std::cout << "done" << std::endl;
 }
