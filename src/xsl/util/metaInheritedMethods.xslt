@@ -163,7 +163,7 @@
 							<!-- OK, we know this method is duplicate, but we have to generate it once -->
 							<!-- again the id trick -->
 							<!-- we must take the first one, to use the correct class name in JNI for multiple inheritance -->
-							<xsl:if test="count(../function[name = $currentMethod/name][position() = 1] | $currentMethod) = 1">
+							<xsl:if test="count(../function[name = $currentMethod/name][@const = $currentMethod/@const][position() = 1] | $currentMethod) = 1">
 								<xsl:copy-of select="." />
 							</xsl:if>
 						</xsl:when>

@@ -24,6 +24,7 @@
 	http://www.gnu.org/copyleft/lesser.txt.
 	
 	Author: Frank Bielig
+			Christoph Nenning
 	
 -->
 
@@ -45,7 +46,7 @@
 		<xsl:param name="method" />
 
 		<!-- iterate throw all parameters -->
-		<xsl:for-each select="parameters/parameter">
+		<xsl:for-each select="$method/parameters/parameter">
 
 			<!-- write signature of parameter type -->
 			<xsl:call-template name="metaParameterSignature">

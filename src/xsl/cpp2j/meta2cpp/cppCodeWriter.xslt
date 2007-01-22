@@ -121,12 +121,12 @@
 					<!-- if const -->
 					<!-- TODO check for const pointers (int* const) -->
 					<xsl:choose>
-					<xsl:when test="$param/type/@const eq 'true'">
-						<xsl:value-of select="concat('const ', $type_info/type/@cpp)" />
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:value-of select="$type_info/type/@cpp" />
-					</xsl:otherwise>
+						<xsl:when test="$param/type/@const eq 'true'">
+							<xsl:value-of select="concat('const ', $type_info/type/@cpp)" />
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:value-of select="$type_info/type/@cpp" />
+						</xsl:otherwise>
 					</xsl:choose>
 				</xsl:otherwise>
 			</xsl:choose>

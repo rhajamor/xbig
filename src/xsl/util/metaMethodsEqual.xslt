@@ -76,16 +76,23 @@
 											<xsl:value-of select="true()"/>
 										</xsl:when>
 										<xsl:when test="$referencePointerAreEqual=true()">
-											<!-- if $referencePointerAreEqual is true, references and pointer should be handled equally -->
-											<xsl:if test="./type = $meth2/parameters/parameter[position()]/type and
-														(
-															./@passedBy = 'reference' and $meth2/parameters/parameter[position()]/@passedBy='pointer'
-															or
-															./@passedBy = 'pointer' and $meth2/parameters/parameter[position()]/@passedBy='reference'
-														)">
-												<xsl:value-of select="true()"/>
-											</xsl:if>
+											<xsl:choose>
+
+												<!-- if $referencePointerAreEqual is true, references and pointer should be handled equally -->
+												<xsl:when test="./type = $meth2/parameters/parameter[position()]/type and
+															(
+																./@passedBy = 'reference' and $meth2/parameters/parameter[position()]/@passedBy='pointer'
+																or
+																./@passedBy = 'pointer' and $meth2/parameters/parameter[position()]/@passedBy='reference'
+															)">
+													<xsl:value-of select="true()"/>
+												</xsl:when>
+												<xsl:otherwise>
+													<xsl:value-of select="false()"/>
+												</xsl:otherwise>
+											</xsl:choose>
 										</xsl:when>
+
 										<!-- parameter type or passed by is different -->
 										<xsl:otherwise>
 											<xsl:value-of select="false()"/>
@@ -97,7 +104,7 @@
 
 						<!-- calc one result of all parameters -->
 						<xsl:choose>
-							<xsl:when test="$parameterEquality/* = false()">
+							<xsl:when test="not($parameterEquality) or $parameterEquality/* = false()">
 								<xsl:value-of select="false()"/>
 							</xsl:when>
 							<xsl:otherwise>

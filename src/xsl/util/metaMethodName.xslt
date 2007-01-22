@@ -81,8 +81,9 @@
 
 		<!-- write meta signature if parameters available -->
 		<xsl:variable name="method_params">
-			<xsl:if test="count(parameters/parameter) > 0 and
-						  $method/@public_attribute_setter ne 'true'">
+			<xsl:if test="count($method/parameters/parameter) > 0 and
+						  (not($method/@public_attribute_setter) or 
+						  $method/@public_attribute_setter ne 'true')">
 
 				<!-- write parameter seperation -->
 				<xsl:text>__</xsl:text>
@@ -142,6 +143,12 @@
 			</xsl:attribute>
 
 			<xsl:element name="type">
+				<xsl:attribute name="const">
+					<xsl:value-of select="$method/type/@const" />
+				</xsl:attribute>
+				<xsl:attribute name="constPointer">
+					<xsl:value-of select="$method/type/@constPointer" />
+				</xsl:attribute>
 				<xsl:value-of select="$method/type" />
 			</xsl:element>
 			<xsl:element name="definition">
