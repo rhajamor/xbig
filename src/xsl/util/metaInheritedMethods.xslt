@@ -56,7 +56,7 @@
 				<xsl:with-param name="config" select="$config" />
 				<xsl:with-param name="class" select="$class" />
 			</xsl:call-template>
-		</xsl:variable>
+		</xsl:variable>		
 
 		<xsl:for-each select="$methodList/function">
 			<xsl:choose>
@@ -108,16 +108,33 @@
 				<xsl:with-param name="class" select="$class" />
 			</xsl:call-template>
 		</xsl:variable>
+		
+		<xsl:variable name="allInheritedMethodsWithoutConstParams">
+			<xsl:for-each select="$allInheritedMethods/function">
+				<xsl:choose>
+					<!-- change if function has const parameters passed by value -->
+					<xsl:when test="count(current()/parameters/parameter[./type/@const = 'true']) > 0">
+						<xsl:call-template name="copyFunctionAndRemoveConstFromByValuePassedParams">
+							<xsl:with-param name="functionNode" select="current()"/>
+						</xsl:call-template>
+					</xsl:when>
+					<!-- function has no const parameters passed by value -->
+					<xsl:otherwise>
+						<xsl:copy-of select="." />
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:for-each>
+		</xsl:variable>
  
 		<!-- filter -->
- 		<xsl:for-each select="$allInheritedMethods/function">
+ 		<xsl:for-each select="$allInheritedMethodsWithoutConstParams/function">
  			<xsl:variable name="currentMethod" select="."/>
  			<xsl:variable name="currentMethodPos" select="position()"/>
 			<xsl:choose>
 
 				<!-- filter c-tors -->
 				<xsl:when test="not(type) and name != $class/@name">
-				</xsl:when>
+				</xsl:when>							
 
 				<!-- filter duplicate methods -->
 				<xsl:when test="count(../function[name = $currentMethod/name]) > 1">
@@ -128,7 +145,7 @@
 							<xsl:if test="count(. | $currentMethod) != 1"> <!-- here I use the trick with count() and the union operator (|) to test a node's identity -->
 								<xsl:element name="check">
 									<xsl:choose>
-										<xsl:when test="xbig:areTheseMethodsEqual($currentMethod, .)">
+										<xsl:when test="xbig:areTheseMethodsEqual($currentMethod, .,false())">
 											<xsl:value-of select="true()" />
 										</xsl:when>
 										<xsl:otherwise>
@@ -255,7 +272,7 @@
 											<xsl:if test="$currentMethod != .">
 												<xsl:element name="check">
 													<xsl:choose>
-														<xsl:when test="xbig:areTheseMethodsEqual($currentMethod, .) and ./@virt != 'pure-virtual'">
+														<xsl:when test="xbig:areTheseMethodsEqual($currentMethod, .,false()) and ./@virt != 'pure-virtual'">
 															<xsl:value-of select="false()" />
 														</xsl:when>
 														<xsl:otherwise>
@@ -305,6 +322,60 @@
 		</xsl:choose>
 
 	</xsl:function>
+	
+	<xsl:template name="copyFunctionAndRemoveConstFromByValuePassedParams">
+		<xsl:param name="functionNode"/>
+		<xsl:element name="function">
+			<!-- copy all attributes -->
+			<xsl:for-each select="$functionNode/@*">
+					<xsl:copy-of select="." />
+			</xsl:for-each>
+			
+			<!-- copy all attributes except parameters -->
+			<xsl:for-each select="$functionNode/*">
+				<xsl:if test="name() != 'parameters'">
+					<xsl:copy-of select="." />
+				</xsl:if>
+			</xsl:for-each>
+			
+			<xsl:element name="parameters">
+				<xsl:for-each select="$functionNode/parameters/parameter">
+					<xsl:choose>
+						<!-- change type of param -->
+						<xsl:when test="./type/@const = 'true' and ./@passedBy= 'value'">
+							<xsl:call-template name="copyParamAndSetConstFalse">
+								<xsl:with-param name="paramNode" select="."/>
+							</xsl:call-template>
+						</xsl:when>
+						<!-- just copy param -->
+						<xsl:otherwise>
+							<xsl:copy-of select="." />
+						</xsl:otherwise>
+					</xsl:choose>
+				</xsl:for-each>
+			</xsl:element>
+		</xsl:element>
+	</xsl:template>
 
+	<xsl:template name="copyParamAndSetConstFalse">
+		<xsl:param name="paramNode" />
+		<xsl:element name="parameter">
+			<!-- copy all attributes -->
+			<xsl:for-each select="$paramNode/@*">
+					<xsl:copy-of select="." />
+			</xsl:for-each>
+			
+			<!-- copy all children except type -->
+			<xsl:for-each select="$paramNode/*">
+				<xsl:if test="name() != 'type'">
+					<xsl:copy-of select="." />
+				</xsl:if>
+			</xsl:for-each>
 
+			<xsl:element name="type">
+				<xsl:attribute name="const" select="'true'"/>
+				<xsl:value-of select="$paramNode/type"/>
+			</xsl:element>
+		</xsl:element>
+	</xsl:template>
 </xsl:stylesheet>

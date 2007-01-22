@@ -41,11 +41,20 @@
 
 	<xd:doc type="function">
 		<xd:short>check if two methods have the same name and parameter types</xd:short>
+		<xd:param name="meth1">
+			Node of the meta layer which contains the first function to compare.
+		</xd:param>
+		<xd:param name="meth2">
+			Node of the meta layer which contains the second function to compare.
+		</xd:param>
+		<xd:param name="referencePointerAreEqual">
+			If true function parameters passed by reference or pointer will be equal.
+		</xd:param>		
 	</xd:doc>
 	<xsl:function name="xbig:areTheseMethodsEqualExceptConst" as="xs:boolean">
 		<xsl:param name="meth1"/>
 		<xsl:param name="meth2"/>
-
+		<xsl:param name="referencePointerAreEqual"/>
 		<xsl:choose>
 
 			<!-- test if both methods have the same name -->
@@ -66,7 +75,17 @@
 														./@passedBy = $meth2/parameters/parameter[position()]/@passedBy">
 											<xsl:value-of select="true()"/>
 										</xsl:when>
-
+										<xsl:when test="$referencePointerAreEqual=true()">
+											<!-- if $referencePointerAreEqual is true, references and pointer should be handled equally -->
+											<xsl:if test="./type = $meth2/parameters/parameter[position()]/type and
+														(
+															./@passedBy = 'reference' and $meth2/parameters/parameter[position()]/@passedBy='pointer'
+															or
+															./@passedBy = 'pointer' and $meth2/parameters/parameter[position()]/@passedBy='reference'
+														)">
+												<xsl:value-of select="true()"/>
+											</xsl:if>
+										</xsl:when>
 										<!-- parameter type or passed by is different -->
 										<xsl:otherwise>
 											<xsl:value-of select="false()"/>
@@ -104,12 +123,22 @@
 
 	<xd:doc type="function">
 		<xd:short>check if two methods have the same constness, same name and parameter types</xd:short>
+		<xd:param name="meth1">
+			Node of the meta layer which contains the first function to compare.
+		</xd:param>
+		<xd:param name="meth2">
+			Node of the meta layer which contains the second function to compare.
+		</xd:param>
+		<xd:param name="referencePointerAreEqual">
+			If true function parameters passed by reference or pointer will be equal.
+		</xd:param>
 	</xd:doc>
 	<xsl:function name="xbig:areTheseMethodsEqual" as="xs:boolean">
 		<xsl:param name="meth1"/>
 		<xsl:param name="meth2"/>
+		<xsl:param name="referencePointerAreEqual"/>
 
-		<xsl:variable name="equalWithoutConst" select="xbig:areTheseMethodsEqualExceptConst($meth1, $meth2)"/>
+		<xsl:variable name="equalWithoutConst" select="xbig:areTheseMethodsEqualExceptConst($meth1, $meth2, $referencePointerAreEqual)"/>
 
 		<!-- test if both methods have the same constness -->
 		<xsl:choose>

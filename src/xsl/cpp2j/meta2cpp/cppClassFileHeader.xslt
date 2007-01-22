@@ -37,7 +37,7 @@
 
 	<xsl:import href="cppFileHeader.xslt" />
 	<xsl:import href="cppMethodDeclaration.xslt" />
-
+	<xsl:import href="../meta2java/javaUtil.xslt" />
 
 	<xd:doc type="stylesheet">
 		<xd:short>Generation of types inside a namespace</xd:short>
@@ -84,9 +84,16 @@
 				<xsl:with-param name="class" select="$class" />
 			</xsl:call-template>
 		</xsl:variable>
+		
+		<!-- remove function that are equal to java -->		
+		<xsl:variable name="inheritedMethodsForJava">
+			<xsl:call-template name="getValidMethodList">
+				<xsl:with-param name="functionNodeList" select="$inheritedMethods"/>
+			</xsl:call-template>
+		</xsl:variable>
 
 		<!-- generate method impl -->
- 		<xsl:for-each select="$inheritedMethods/function">
+ 		<xsl:for-each select="$inheritedMethodsForJava/function">
 			<xsl:call-template name="cppMethodDeclaration">
 				<xsl:with-param name="config" select="$config" />
 				<xsl:with-param name="class_prefix"

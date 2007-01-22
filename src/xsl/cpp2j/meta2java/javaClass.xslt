@@ -40,6 +40,7 @@
 	<xsl:import href="javaAccessMethod.xslt" />
 	<xsl:import href="javaPublicAttribute.xslt" />
 	<xsl:import href="javaEnum.xslt" />
+	<xsl:import href="javaUtil.xslt" />
 	<xsl:import href="../../util/metaInheritedMethods.xslt" />
 
 	<xd:doc type="stylesheet">
@@ -131,8 +132,15 @@
 			</xsl:call-template>
 		</xsl:variable>
 
+		<!-- remove function that are equal to java -->		
+		<xsl:variable name="inheritedMethodsForJava">
+			<xsl:call-template name="getValidMethodList">
+				<xsl:with-param name="functionNodeList" select="$inheritedMethods"/>
+			</xsl:call-template>
+		</xsl:variable>
+		
 		<!-- generate method impl -->
- 		<xsl:for-each select="$inheritedMethods/function">
+ 		<xsl:for-each select="$inheritedMethodsForJava/function">
 			<xsl:call-template name="javaAccessMethod">
 				<xsl:with-param name="config" select="$config" />
 				<xsl:with-param name="class" select="$class" />
