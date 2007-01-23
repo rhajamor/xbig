@@ -20,6 +20,14 @@ enum EXPORT Vocals {
 	u
 };
 
+enum EXPORT Vocals2 {
+	a2,
+	e2,
+	i2,
+	o2,
+	u2
+};
+
 class EXPORT A {
 public:
 	bool isA(Vocals b);

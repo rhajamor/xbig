@@ -35,10 +35,10 @@
 
 	<import file="config_base.xml" />
 
-	<property name="cpp.compiler" value="msvc" />
+	<property name="cpp.compiler" value="gcc" />
+	<property name="cpp.platform" value="linux" />
 	<property name="cpp.api" value="default" />
 	<property name="cpp.debug" value="true" />
-	<property name="cpp.platform" value="win32" />
 	<property name="cpp.tasks" value="cpptasks-1.0.0.b4.jar" />
 
 	<property name="dir.cpp.base" value="${dir.cur}" />
