@@ -26,7 +26,7 @@ package org.xbig.base;
  * int. This allows the user to work with primitive values returned in a pointer
  * or by reference.
  * 
- * @author hrung
+ * @author Kai Klesatschke
  */
 public abstract class NumberPointer<T> extends NativeObject {
 
