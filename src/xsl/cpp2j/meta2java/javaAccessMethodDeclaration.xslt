@@ -118,11 +118,22 @@
 		<!-- write return type if available-->
 		<xsl:if test="$return_type">
 			<xsl:text>&#32;</xsl:text>
-			<xsl:call-template name="javaType">
-				<xsl:with-param name="config" select="$config" />
-				<xsl:with-param name="param" select="$method" />
-				<xsl:with-param name="class" select="$class" />
-			</xsl:call-template>
+			<xsl:choose>
+				<!-- if a template parameter is returned -->
+				<xsl:when test="$class/templateparameters/templateparameter
+								[@templateType='class'][@templateDeclaration = $return_type]">
+					<!-- <xsl:value-of select="'void'"/> -->
+					<xsl:value-of select="$return_type"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:call-template name="javaType">
+						<xsl:with-param name="config" select="$config" />
+						<xsl:with-param name="param" select="$method" />
+						<xsl:with-param name="class" select="$class" />
+						<xsl:with-param name="typeName" select="$method/type" />
+					</xsl:call-template>
+				</xsl:otherwise>
+			</xsl:choose>
 		</xsl:if>
 
 		<!-- write method name -->
@@ -132,6 +143,19 @@
 		<!-- begin parameter declaration -->
 		<xsl:text>(</xsl:text>
 
+		<!-- if a template parameter is returned, we need an additional parameter -->
+		<!-- 
+		<xsl:if test="$class/templateparameters/templateparameter
+						[@templateType='class'][@templateDeclaration = $return_type]">
+			<xsl:value-of select="$return_type"/>
+			<xsl:text>&#32;</xsl:text>
+			<xsl:value-of select="$config/config/java/generics/returnvalueasparametername"/>
+			<xsl:if test="$method/parameters/parameter">
+				<xsl:text>,&#32;</xsl:text>
+			</xsl:if>
+		</xsl:if>
+		 -->
+
 		<!-- iterator through all parameters -->
 		<xsl:for-each select="$method/parameters/parameter">
 
@@ -140,6 +164,7 @@
 				<xsl:with-param name="config" select="$config" />
 				<xsl:with-param name="param" select="." />
 				<xsl:with-param name="class" select="$class" />
+				<xsl:with-param name="typeName" select="./type" />
 			</xsl:call-template>
 
 			<!-- seperator type and name -->

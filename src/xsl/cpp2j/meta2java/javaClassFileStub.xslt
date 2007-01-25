@@ -107,7 +107,7 @@
 				</xsl:result-document>
 
 				<!-- generate Class if necessary -->
-				<xsl:if test="not(xbig:areThereUnimplementedAbstractMethods(.))">
+				<xsl:if test="not(xbig:areThereUnimplementedAbstractMethods(.)) and not(./@template)">
 
 					<!-- compose filename of current class -->
 					<xsl:variable name="filename"

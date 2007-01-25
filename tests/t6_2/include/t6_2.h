@@ -22,6 +22,22 @@ struct EXPORT B {
 	void b(T c);
 };
 
+
+class EXPORT C {
+public:
+	int get5() { return 5;}
+};
+
+class EXPORT Tester {
+public:
+	bool a(B<C> a) { return 5 == a.a().get5();}
+	B<C> b() {return m;}
+private:
+	B<C> m;
+};
+
+
+/********************************************************************************************************/
 template <class T>
 T B<T>::a() {
 	std::cout << "t6_2: B::a()" << std::endl;

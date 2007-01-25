@@ -29,11 +29,11 @@
 -->
 
 
-<project name="t6_1" default="all" basedir=".">
+<project name="t6_3" default="all" basedir=".">
 
 	<property name="dir.cur" location="." />
 	<property name="dir.top" location="../.." />
-	<property name="lib.name" value="t6_1" />
+	<property name="lib.name" value="t6_3" />
 	
 	<import file="${dir.top}/src/ant/cpp2j.xml" />
 	
@@ -42,37 +42,11 @@
 
 	<!-- Compilation of test library -->
 	<target name="compile-lib-base" depends="init">
-		<cpp-shared-lib name="t6_1" />
-		<cpp-shared-test name="simple" libs="t6_1" />
+		<cpp-shared-lib name="t6_3" />
+		<cpp-shared-test name="simple" libs="t6_3" />
 	</target>
 
-	<!-- Compilation of extra JNI code -->
-	<target name="compile-extra-jni" depends="java-include-init, init">
-		<cpp-lib-compile name="myimpl" outdir="${dir.cpp.build.config}"
-			srcdir="${dir.cur}/src/java/org/xbig/test/t6_1/" type="shared">
-			<!-- TODO: put all "shared" in a property -->
-			<extraincludes>
-				<includepath path="${dir.cur}/src/java/org/xbig/test/t6_1/" />
-				<includepath path="${dir.cur.build.cpp.include}" />
-				<includepath path="${dir.java.include}" />
-				<includepath path="${dir.java.include.os}" />
-			</extraincludes>
-			<extralibraries>
-				<libset libs="t6_1" dir="${dir.cpp.build.config}/shared"/>
-			</extralibraries>
-		</cpp-lib-compile>
-		<!-- copy extra jni code, so that it can be found -->
-		<copy todir="${dir.cur}">
-			<fileset dir="${dir.cpp.build.config}/shared" includes="*myimpl*.*" />
-		</copy>
-	</target>
-
-	<target name="all" depends="compile-lib-base, compile-extra-jni, javalib-test">
-		<!-- delete extra jni code -->
-		<delete quiet="true" failonerror="false">
-			<fileset dir="." includes="*myimpl*.*"/>
-		</delete>
-	</target>
+	<target name="all" depends="compile-lib-base, javalib-test"></target>
 
 	<target name="clean" depends="cpp-clean">
 		<delete dir="${dir.cpp.build}" />

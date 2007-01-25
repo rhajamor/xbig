@@ -70,6 +70,20 @@
 		<xsl:value-of select="$class/@name" />
 		<xsl:value-of select="$config/config/java/interface/suffix" />
 
+		<!-- if this class is a template -->
+		<xsl:if test="$class/@template">
+			<xsl:text>&#32;&lt;&#32;</xsl:text>
+			<xsl:for-each select="$class/templateparameters/templateparameter
+								[@templateType = 'class' or @templateType = 'typename']">
+				<xsl:value-of select="@templateDeclaration"/>
+				<xsl:text>&#32;extends&#32;INativeObject</xsl:text>
+				<xsl:if test="position() != last()">
+					<xsl:text>,&#32;</xsl:text>
+				</xsl:if>
+			</xsl:for-each>
+			<xsl:text>&#32;&gt;</xsl:text>
+		</xsl:if>
+
 		<xsl:text>&#32;extends&#32;</xsl:text>
 		<xsl:text>INativeObject&#32;</xsl:text>
 

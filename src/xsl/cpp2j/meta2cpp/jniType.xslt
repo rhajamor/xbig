@@ -76,6 +76,11 @@
 			<xsl:when test="not($type_info/type/@jni)">
 				<xsl:choose>
 
+					<!-- if this type is a parametrized template -->
+					<xsl:when test="contains($resolvedType, '&lt;')">
+						<xsl:value-of select="'jlong'"/>
+					</xsl:when>
+
 					<!-- if this type is an enum -->
 					<xsl:when test="xbig:isEnum($resolvedType, $class, $root)">
 						<xsl:value-of select="'jint'"/>

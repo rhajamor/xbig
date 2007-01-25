@@ -53,6 +53,7 @@
 		<xsl:variable name="method_name" select="$method/name" />
 
 		<!-- shortcut for return type, take long for constructors, pointers and references -->
+		<!-- 
 		<xsl:variable name="return_type">
 			<xsl:choose>
 				<xsl:when test="$method/@passedBy='pointer' or $method/@passedBy='reference'">
@@ -63,6 +64,7 @@
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
+		 -->
 
 		<!-- shortcut for static property -->
 		<xsl:variable name="static" select="$method/@static" />
@@ -107,23 +109,36 @@
 
 		<!-- write return type -->
 		<xsl:choose>
+
+			<!-- if this method returns a parametrized template -->
+			<xsl:when test="contains($method/type, '&lt;')">
+				<!-- <value-of select="'long'" /> -->
+				<xsl:text>long</xsl:text>
+			</xsl:when>
+
 			<xsl:when test="($method/@passedBy eq 'pointer') or ($method/@passedBy eq 'reference')">
 				<xsl:value-of select="'long'" />
 			</xsl:when>
-			<xsl:when test="not($method/type)"> <!-- c-tor -->
+
+			<!-- c-tor -->
+			<xsl:when test="not($method/type)">
 				<xsl:value-of select="'long'" />
 			</xsl:when>
+
 			<xsl:when test="xbig:isClassOrStruct($method/type, $class, $root)">
 				<xsl:value-of select="'long'" />
 			</xsl:when>
+
 			<xsl:when test="xbig:isEnum($method/type, $class, $root)">
 				<xsl:value-of select="'int'" />
 			</xsl:when>
+
 			<xsl:otherwise>
 				<xsl:call-template name="javaType">
 					<xsl:with-param name="config" select="$config" />
 					<xsl:with-param name="param" select="$method" />
 					<xsl:with-param name="class" select="$class" />
+					<xsl:with-param name="typeName" select="$method/type" />
 				</xsl:call-template>
 			</xsl:otherwise>
 		</xsl:choose>

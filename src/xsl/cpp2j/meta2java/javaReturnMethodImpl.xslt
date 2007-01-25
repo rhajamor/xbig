@@ -62,6 +62,22 @@
 			<xsl:text>(new&#32;InstancePointer(</xsl:text>
 		</xsl:if>
 
+		<!-- create casted native object for returned parametrized templates -->
+		<xsl:if test="contains($method/type, '&lt;')">
+			<xsl:text>(</xsl:text>
+			<xsl:call-template name="javaType">
+				<xsl:with-param name="config" select="$config" />
+				<xsl:with-param name="param" select="$method" />
+				<xsl:with-param name="class" select="$class" />
+				<xsl:with-param name="typeName" select="$method/type" />
+			</xsl:call-template>
+			<xsl:text>)&#32;</xsl:text>
+			<xsl:text>(org.xbig.base.INativeObject)&#32;</xsl:text>
+			<xsl:text>new&#32;</xsl:text>
+			<xsl:text>org.xbig.base.ParametrizedTemplateReturnPlaceHolder</xsl:text>
+			<xsl:text>(new&#32;InstancePointer(</xsl:text>
+		</xsl:if>
+
 		<!-- create native object when necessary -->
 		<xsl:if test="xbig:isClassOrStruct($method/type, $class, $root)">
 			<xsl:text>new&#32;</xsl:text>
@@ -107,6 +123,9 @@
 
 		<!-- close Pointer and InstancePointer c-tor calls -->
 		<xsl:if test="$method/@passedBy='pointer' or $method/@passedBy='reference'">
+			<xsl:text>))</xsl:text>
+		</xsl:if>
+		<xsl:if test="contains($method/type, '&lt;')"><!-- for returned parametrized templates -->
 			<xsl:text>))</xsl:text>
 		</xsl:if>
 		<xsl:if test="xbig:isClassOrStruct($method/type, $class, $root)">

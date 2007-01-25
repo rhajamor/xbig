@@ -20,8 +20,29 @@ public:
 	A();
 	T a();
 	void b(T c);
+	T c(T a);
+	~A();
+private:
+	T t;
 };
 
+class EXPORT C {
+public:
+	int get5() { return 5;}
+};
+
+class EXPORT Tester {
+public:
+	Tester();
+	bool a(A<C> a);
+	A<C> b();
+	~Tester();
+private:
+	A<C> m;
+};
+
+
+/********************************************************************************************************/
 template <class T>
 A<T>::A() {
 	std::cout << "t6_1: A::A()" << std::endl;
@@ -30,14 +51,24 @@ A<T>::A() {
 template <class T>
 T A<T>::a() {
 	std::cout << "t6_1: A::a()" << std::endl;
-	T x;
-	std::cout << "T: " << typeid(x).name() << std::endl;
-	return x;
+	std::cout << "T is of type: " << typeid(t).name() << std::endl;
+	return t;
 }
 
 template <class T>
 void A<T>::b(T c) {
 	std::cout << "t6_1: A::b(T c)" << std::endl;
-	std::cout << "c: " << c << std::endl;
 	std::cout << "c of type: " << typeid(c).name() << std::endl;
+}
+
+template <class T>
+T A<T>::c(T a) {
+	std::cout << "t6_1: A::c(T a)" << std::endl;
+	std::cout << "a of type: " << typeid(a).name() << std::endl;
+	return a;
+}
+
+template <class T>
+A<T>::~A() {
+	std::cout << "t6_1: A::~A()" << std::endl;
 }

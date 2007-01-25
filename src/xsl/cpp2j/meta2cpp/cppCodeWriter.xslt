@@ -140,8 +140,12 @@
 					<xsl:when test="not($param/type)">
 						<xsl:value-of select="'void'"/>
 					</xsl:when>
+					<!-- TODO resolve fullnames of template and it's parameters -->
+					<xsl:when test="contains($resolvedType, '&lt;')">
+						<xsl:value-of select="concat($resolvedType, '*')"/>
+					</xsl:when>
 					<xsl:when test="xbig:isClassOrStruct($resolvedType, $class, $root)">
-						<xsl:value-of select="xbig:getFullTypeName($resolvedType, $class, $root)"/>
+						<xsl:value-of select="concat(xbig:getFullTypeName($resolvedType, $class, $root), '*')"/>
 					</xsl:when>
 					<xsl:when test="xbig:isEnum($param/type, $class, $root)">
 						<xsl:value-of select="xbig:getFullTypeName($resolvedType, $class, $root)"/>
@@ -202,9 +206,20 @@
 
 		<!-- no conversion function available -->
 		<xsl:if test="not($type_info/type/jni2cpp)">
-
-			<!-- test for enums -->
 			<xsl:choose>
+
+				<!-- if this type is a parametrized template -->
+				<!-- TODO resolve fullnames of template and it's parameters -->
+				<xsl:when test="contains($resolvedType, '&lt;')">
+					<xsl:variable name="part1" select="'reinterpret_cast&lt; '"/>
+					<xsl:variable name="part2" select="$resolvedType" />
+					<xsl:variable name="part3" select="'* &gt;('"/>
+					<xsl:variable name="part4" select="$param_name" />
+					<xsl:variable name="part5" select="')'"/>
+					<xsl:value-of select="concat($part1, $part2, $part3, $part4, $part5)" />
+				</xsl:when>
+
+				<!-- test for enums -->
 				<xsl:when test="xbig:isEnum($resolvedType, $class, $root)">
 					<xsl:value-of select="
 						concat('(', xbig:getFullTypeName($resolvedType, $class, $root), ')', $param_name)" />
@@ -212,7 +227,7 @@
 
 				<!-- if this type is a class or struct -->
 				<xsl:when test="xbig:isClassOrStruct($resolvedType, $class, $root)">
-					<xsl:variable name="part1" select="'*reinterpret_cast&lt; '"/>
+					<xsl:variable name="part1" select="'reinterpret_cast&lt; '"/>
 					<xsl:variable name="part2" select="xbig:getFullTypeName($resolvedType, $class, $root)" />
 					<xsl:variable name="part3" select="'* &gt;('"/>
 					<xsl:variable name="part4" select="$param_name" />
@@ -277,11 +292,23 @@
 			<xsl:variable name="resolvedReturnType" select="xbig:resolveTypedef($method/type, $class, $root)"/>
 
 			<xsl:choose>
+				<!-- if this type is a parametrized template -->
+				<!-- TODO resolve fullnames of template and it's parameters -->
+				<xsl:when test="contains($resolvedType, '&lt;')">
+					<xsl:variable name="returnCast">
+						<!-- produces warning: address of local variable ‘_cpp_result’ returned -->
+						<xsl:value-of select="'reinterpret_cast&lt;jlong&gt;('"/>
+						<xsl:value-of select="$param_name"/>
+						<xsl:value-of select="')'"/>
+					</xsl:variable>
+					<xsl:value-of select="$returnCast"/>
+				</xsl:when>
+
 				<!-- if this method returns an object -->
 				<xsl:when test="xbig:isClassOrStruct($resolvedReturnType, $class, $root)">
 					<xsl:variable name="returnCast">
 						<!-- produces warning: address of local variable ‘_cpp_result’ returned -->
-						<xsl:value-of select="'reinterpret_cast&lt;jlong&gt;(&amp;'"/>
+						<xsl:value-of select="'reinterpret_cast&lt;jlong&gt;('"/>
 						<xsl:value-of select="$param_name"/>
 						<xsl:value-of select="')'"/>
 					</xsl:variable>
@@ -400,7 +427,8 @@
 
 		<!-- replace library pointer variable -->
 		<xsl:variable name="line6"
-			select="xbig:cpp-replace($line5, '#cpp_this#', $var_config/cpp/object/@name)" />
+			select="xbig:cpp-replace($line5, '#cpp_this#', $var_config/cpp/object/@name)">
+		</xsl:variable>
 
 		<!-- replace parameter conversions -->
 		<xsl:variable name="line7">
@@ -441,8 +469,10 @@
 							select="$method/parameters/parameter">
 
 							<!-- write parameter name -->
-							<xsl:if test="@passedBy='reference'">
-							<xsl:value-of select="'*'" />
+							<xsl:if test="@passedBy='reference' or
+										  xbig:isClassOrStruct(xbig:resolveTypedef(./type, $class, $root), $class, $root) or
+										  contains(type, '&lt;')">
+								<xsl:value-of select="'*'" />
 							</xsl:if>
 							<xsl:value-of
 								select="xbig:cpp-param($config, name)" />
@@ -469,25 +499,8 @@
 			select="if(matches($line8, '#cpp_return#')) then xbig:cpp-replace($line8, '#cpp_return#', xbig:cpp-to-jni($config, $class, $method, $method, '#cpp_return_var#')) else $line8" />
 
 		<!-- replace return type -->
-		<xsl:variable name="line10">
-			<xsl:choose>
-				<!-- saxon needs this in case of a constructor -->
-				<xsl:when test="not($method/type)">
-					<xsl:value-of select="xbig:cpp-replace($line9, '#cpp_return_type#', xbig:cpp-type($config, $method, $class))"/>
-				</xsl:when>
-				<!-- if we return an object, we have to store it's address -->
-				<!-- Produces warning: taking address of temporary
-					 typedef resolving is missing here
-				<xsl:when test="xbig:isClassOrStruct($method/type, $class, $root)">
-					<xsl:variable name="returnType" select="concat(xbig:cpp-type($config, $method, $class), '*')"/>
-					<xsl:value-of select="xbig:cpp-replace($line9, '#cpp_return_type#', $returnType)"/>
-				</xsl:when>
-				 -->
-				<xsl:otherwise>
-					<xsl:value-of select="xbig:cpp-replace($line9, '#cpp_return_type#', xbig:cpp-type($config, $method, $class))"/>
-				</xsl:otherwise>
-			</xsl:choose>
-		</xsl:variable>
+		<xsl:variable name="line10"
+			select="xbig:cpp-replace($line9, '#cpp_return_type#', xbig:cpp-type($config, $method, $class))"/>
 
 		<!-- replace class name -->
 		<xsl:variable name="line11"
@@ -534,8 +547,8 @@
 					<xsl:value-of select="$line13" />
 				</xsl:when>
 				<!-- Produces warning: taking address of temporary
-					 typedef resolving is missing here
-				<xsl:when test="xbig:isClassOrStruct($method/type, $class, $root)">
+					 typedef resolving is missing here -->
+				<xsl:when test="xbig:isClassOrStruct($method/type, $class, $root) or contains($method/type, '&lt;')">
 					<xsl:variable name="cppThis" select="$var_config/cpp/object/@name"/>
 					<xsl:variable name="searchFor">
 						<xsl:value-of select="'= '"/>
@@ -547,7 +560,7 @@
 					</xsl:variable>
 					<xsl:value-of select="replace($line13, $searchFor, $replaceWith)" />
 				</xsl:when>
-				 -->
+
 				<xsl:otherwise>
 					<xsl:value-of select="$line13" />
 				</xsl:otherwise>

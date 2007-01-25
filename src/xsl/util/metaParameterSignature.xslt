@@ -69,8 +69,16 @@
 		<!-- ************************************************************ -->
 
 		<!-- map type to signature with mapping table from configuration -->
-		<xsl:variable name="type_signature"
-			select="$sigs/type[@meta=$param_type]/@signature" />
+		<xsl:variable name="type_signature">
+			<xsl:choose>
+				<xsl:when test="contains($param_type, '&lt;')">
+					<xsl:value-of select="$sigs/type[@meta='long']/@signature"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="$sigs/type[@meta=$param_type]/@signature"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
 
 		<!-- ensure valid signature -->
 		<xsl:if test="empty($type_signature)">

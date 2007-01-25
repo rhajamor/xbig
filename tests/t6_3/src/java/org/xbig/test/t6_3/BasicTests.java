@@ -1,15 +1,16 @@
 /**
  * 
  */
-package org.xbig.test.t6_2;
+package org.xbig.test.t6_3;
 
 import org.junit.Assert;
 import org.junit.Test;
 import org.xbig.base.InstancePointer;
 import org.xbig.base.NativeObject;
 import org.xbig.C;
-import org.xbig.IB;
+import org.xbig.IA;
 import org.xbig.IC;
+import org.xbig.ID;
 import org.xbig.Tester;
 /**
  * @author nenning
@@ -17,34 +18,24 @@ import org.xbig.Tester;
  */
 public class BasicTests {
 
-
-	static class MyImpl extends NativeObject implements org.xbig.IB < org.xbig.IC > {
+	static class MyImpl extends NativeObject implements org.xbig.IA < org.xbig.IC, org.xbig.ID > {
 		public void delete() {
 		}
 		public IC a() {
 			return null;
 		}
 
-		public void b(IC c) {
+		public void b(ID c) {
 		}
 
-		public IC c(IC a) {
+		public ID c(IC a) {
 			return null;
-		}
-		public void sety(IC value) {
-		}
-		public IC gety() {
-			return null;
-		}
-		public void setx(int value) {
-		}
-		public int getx() {
-			return 0;
 		}
 	}
 
+
 	@Test
-	public void useTemplateStruct() {
+	public void useTemplateWithTwoParameters() {
 		// when the above code compiles, this test is passed
 	}
 }

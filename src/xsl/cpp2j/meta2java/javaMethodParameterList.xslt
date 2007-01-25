@@ -63,13 +63,20 @@
 						 ((./@passedBy eq 'pointer') or (./@passedBy eq 'reference'))">
 						<xsl:value-of select="'long'" />
 					</xsl:when>
-					
+
+					<!-- if this parameter is a parametrized template -->
+					<xsl:when test="($writingNativeMethod eq 'true') and
+						 (contains(./type, '&lt;'))">
+						<xsl:value-of select="'long'" />
+					</xsl:when>
+
 					<xsl:otherwise>
 						<xsl:call-template name="javaType">
 							<xsl:with-param name="config" select="$config" />
 							<xsl:with-param name="param" select="." />
 							<xsl:with-param name="class" select="$class" />
 							<xsl:with-param name="writingNativeMethod" select="$writingNativeMethod" />
+							<xsl:with-param name="typeName" select="./type" />
 						</xsl:call-template>
 					</xsl:otherwise>
 				</xsl:choose>
@@ -100,6 +107,12 @@
 			<!-- if this parameter is a class or struct -->
 			<xsl:if test="($callingNativeMethod eq 'true') and
 				 		  (xbig:isClassOrStruct($resolvedType, $class, $root))">
+				<xsl:value-of select="'.getInstancePointer().pointer'" />
+			</xsl:if>
+
+			<!-- if this parameter is a parametrized template -->
+			<xsl:if test="($callingNativeMethod eq 'true') and
+				 		  (contains($resolvedType, '&lt;'))">
 				<xsl:value-of select="'.getInstancePointer().pointer'" />
 			</xsl:if>
 

@@ -50,9 +50,65 @@
 		<xsl:param name="param" />
 		<xsl:param name="class" />
 		<xsl:param name="writingNativeMethod" />
+		<xsl:param name="typeName" />
 
-		<!-- first of all: resolve typedefs -->
-		<xsl:variable name="resolvedType" select="xbig:resolveTypedef($param/type, $class, $root)"/>
+		<!-- if this type is a parametrized template -->
+		<xsl:variable name="typeIsTemplate">
+			<xsl:choose>
+				<xsl:when test="contains($typeName, '&lt;')">
+					<xsl:value-of select="true()"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="false()"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		<xsl:variable name="templateBaseType">
+			<xsl:choose>
+				<xsl:when test="$typeIsTemplate = true()">
+					<xsl:value-of select="substring-before($typeName, '&lt;')"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="$typeName"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		<xsl:variable name="templateBracket">
+			<xsl:choose>
+				<xsl:when test="$typeIsTemplate = true()">
+					<!-- resolve types of template parameters -->
+					<xsl:variable name="bracket" select="substring-after($typeName, '&lt;')"/>
+					<xsl:variable name="insideBracket"
+						select="normalize-space(substring($bracket, 0, string-length($bracket)-1))"/>
+					<xsl:variable name="insideBracketResolved">
+						<xsl:variable name="tokens">
+							<xsl:call-template name="str:split">
+								<xsl:with-param name="string" select="$insideBracket" />
+								<xsl:with-param name="pattern" select="','" />
+							</xsl:call-template>
+						</xsl:variable>
+						<xsl:for-each select="$tokens/*">
+							<xsl:call-template name="javaType">
+								<xsl:with-param name="config" select="$config" />
+								<xsl:with-param name="param" select="$param" />
+								<xsl:with-param name="class" select="$class" />
+								<xsl:with-param name="typeName" select="normalize-space(.)"/>
+							</xsl:call-template>
+							<xsl:if test="position() != last()">
+								<xsl:value-of select="', '"/>
+							</xsl:if>
+						</xsl:for-each>
+					</xsl:variable>
+					<xsl:value-of select="concat('&lt; ', $insideBracketResolved, ' &gt;')"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="''"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+
+		<!-- resolve typedefs -->
+		<xsl:variable name="resolvedType" select="xbig:resolveTypedef($templateBaseType, $class, $root)"/>
 
 		<!-- extract jni type depending on meta type, const/non-const, pass type -->
 		<xsl:variable name="type_info">
@@ -82,6 +138,20 @@
 			<xsl:when test="not($type_info/type/@java)">
 				<xsl:choose>
 
+					<!-- template parameter used as method parameter or return type -->
+					<xsl:when test="$class/templateparameters/templateparameter
+									[@templateType='class' or @templateType='typename']
+									[@templateDeclaration = $resolvedType]">
+						<xsl:choose>
+							<xsl:when test="$writingNativeMethod eq 'true'">
+								<xsl:value-of select="'long'"/>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:value-of select="$resolvedType"/>
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:when>
+
 					<!-- if this type is an enum -->
 					<xsl:when test="xbig:isEnum($resolvedType, $class, $root)">
 						<xsl:choose>
@@ -101,7 +171,8 @@
 								<xsl:value-of select="'long'"/>
 							</xsl:when>
 							<xsl:otherwise>
-								<xsl:value-of select="xbig:getFullJavaName($resolvedType, $class, $root, $config)"/>
+								<!-- add the template angle bracket -->
+								<xsl:value-of select="concat(xbig:getFullJavaName($resolvedType, $class, $root, $config), $templateBracket)"/>
 							</xsl:otherwise>
 						</xsl:choose>
 					</xsl:when>
