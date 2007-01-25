@@ -362,12 +362,77 @@
 		<xsl:choose>
 			<xsl:when test="xbig:isTypedef($type, $currentNode, $inputTreeRoot)">
 				<xsl:variable name="typedefNode" select="$inputTreeRoot//typedef[@fullName = xbig:getFullTypeName($type, $currentNode, $inputTreeRoot)]"/>
-				<xsl:value-of select="xbig:resolveTypedef($typedefNode/@basetype, $typedefNode/.., $inputTreeRoot)"/>
+				<xsl:choose>
+
+					<!-- if this is a typedef for a template, there is a class -->
+					<xsl:when test="contains($typedefNode/@basetype, '&lt;')">
+						<!-- <xsl:value-of select="xbig:getFullTypeName($typedefNode/@basetype, $typedefNode/.., $inputTreeRoot)"/> -->
+						<xsl:value-of select="$type"/>
+					</xsl:when>
+
+					<xsl:otherwise>
+						<xsl:value-of select="xbig:resolveTypedef($typedefNode/@basetype, $typedefNode/.., $inputTreeRoot)"/>
+					</xsl:otherwise>
+				</xsl:choose>
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:value-of select="$type"/>
 			</xsl:otherwise>
 		</xsl:choose>
+	</xsl:function>
+
+
+	<xd:doc type="function">
+		<xd:short>find full name of a template and for all of it's parameters</xd:short>
+	</xd:doc>
+	<xsl:function name="xbig:getFullTemplateName" as="xs:string">
+		<xsl:param name="type" as="xs:string"/>
+		<xsl:param name="currentNode"/> <!-- must be a class, struct or namespace element -->
+		<xsl:param name="inputTreeRoot"/>
+
+		<!-- get fullname of the template itself (the A in A<B>) -->
+		<xsl:variable name="templateBaseType">
+			<xsl:value-of select="xbig:getFullTypeName(normalize-space(substring-before($type, '&lt;'))
+									, $currentNode, $inputTreeRoot)"/>
+		</xsl:variable>
+
+		<!-- handle the type parameters -->
+		<xsl:variable name="templateBracket">
+			<xsl:variable name="bracket" select="substring-after($type, '&lt;')"/>
+			<xsl:variable name="insideBracket"
+				select="normalize-space(substring($bracket, 0, string-length($bracket)-1))"/>
+
+			<xsl:variable name="insideBracketResolved">
+				<xsl:variable name="tokens">
+					<xsl:call-template name="str:split">
+						<xsl:with-param name="string" select="$insideBracket" />
+						<xsl:with-param name="pattern" select="','" />
+					</xsl:call-template>
+				</xsl:variable>
+				<xsl:for-each select="$tokens/*">
+					<xsl:variable name="normalizedToken" select="normalize-space(.)"/>
+					<xsl:choose>
+						<xsl:when test="contains(., '&lt;')">
+							<xsl:value-of select="xbig:getFullTemplateName(
+										$normalizedToken, $currentNode, $inputTreeRoot)"/>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:value-of select="xbig:getFullTypeName(xbig:resolveTypedef(
+										$normalizedToken, $currentNode, $inputTreeRoot)
+										, $currentNode, $inputTreeRoot)"/>
+						</xsl:otherwise>
+					</xsl:choose>
+
+					<xsl:if test="position() != last()">
+						<xsl:value-of select="', '"/>
+					</xsl:if>
+				</xsl:for-each>
+			</xsl:variable>
+			<xsl:value-of select="concat('&lt; ', $insideBracketResolved, ' &gt;')"/>
+		</xsl:variable>
+
+		<!-- return -->
+		<xsl:value-of select="concat($templateBaseType, $templateBracket)"/>
 	</xsl:function>
 
 

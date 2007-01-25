@@ -129,7 +129,7 @@
 			<xsl:text>))</xsl:text>
 		</xsl:if>
 		<xsl:if test="xbig:isClassOrStruct($method/type, $class, $root)">
-			<xsl:text>)), true</xsl:text>
+			<xsl:text>))</xsl:text>
 		</xsl:if>
 		<xsl:if test="xbig:isEnum($method/type, $class, $root)">
 			<xsl:text>)</xsl:text>

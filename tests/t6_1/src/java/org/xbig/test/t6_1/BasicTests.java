@@ -45,7 +45,7 @@ public class BasicTests {
 		private native static final long MyImpl();
 
 		public IC a() {
-			return new org.xbig.C(new InstancePointer(a(this.object.pointer)), true);
+			return new org.xbig.C(new InstancePointer(a(this.object.pointer)));
 		}
 		private native final long a(long _pointer_);
 
@@ -56,7 +56,7 @@ public class BasicTests {
 
 		public IC c(IC a) {
 			return new org.xbig.C(new InstancePointer(
-					c(this.object.pointer, a.getInstancePointer().pointer)), true);
+					c(this.object.pointer, a.getInstancePointer().pointer)));
 		}
 		private native final long c(long _pointer_, long a);
 	}

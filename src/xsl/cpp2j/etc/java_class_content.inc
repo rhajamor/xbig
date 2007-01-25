@@ -1,25 +1,15 @@
 
-protected #classname#(org.xbig.base.InstancePointer p) {
+/**
+ * <p>
+ * This constructor is public for internal useage only!
+ * Do not use it!
+ * </p>
+ */
+public #classname#(org.xbig.base.InstancePointer p) {
 	super(p);
 }
 
-/**
- * <p>
- * Usually this constructor should not be used!
- * But there is an exception:
- * </p>
- * <br></br>
- * <p>
- * This constructor can be used for template return values.
- * see org.xbig.base.ParametrizedTemplateReturnPlaceHolder
- * </p>
- * <br></br>
- * <p>
- * set p to the InstancePointer of the object you get
- * and remote to true
- * </p>
- */
-public #classname#(org.xbig.base.InstancePointer p, boolean remote) {
+protected #classname#(org.xbig.base.InstancePointer p, boolean remote) {
 	super(p, remote);
 }
 

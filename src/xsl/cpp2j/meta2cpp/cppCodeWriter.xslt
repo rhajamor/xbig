@@ -140,9 +140,9 @@
 					<xsl:when test="not($param/type)">
 						<xsl:value-of select="'void'"/>
 					</xsl:when>
-					<!-- TODO resolve fullnames of template and it's parameters -->
 					<xsl:when test="contains($resolvedType, '&lt;')">
-						<xsl:value-of select="concat($resolvedType, '*')"/>
+						<xsl:value-of select="concat(xbig:getFullTemplateName($resolvedType, $class, $root)
+												, '*')"/>
 					</xsl:when>
 					<xsl:when test="xbig:isClassOrStruct($resolvedType, $class, $root)">
 						<xsl:value-of select="concat(xbig:getFullTypeName($resolvedType, $class, $root), '*')"/>
@@ -209,10 +209,10 @@
 			<xsl:choose>
 
 				<!-- if this type is a parametrized template -->
-				<!-- TODO resolve fullnames of template and it's parameters -->
 				<xsl:when test="contains($resolvedType, '&lt;')">
 					<xsl:variable name="part1" select="'reinterpret_cast&lt; '"/>
-					<xsl:variable name="part2" select="$resolvedType" />
+					<xsl:variable name="part2" select="xbig:getFullTemplateName(
+														$resolvedType, $class, $root)" />
 					<xsl:variable name="part3" select="'* &gt;('"/>
 					<xsl:variable name="part4" select="$param_name" />
 					<xsl:variable name="part5" select="')'"/>
@@ -293,7 +293,6 @@
 
 			<xsl:choose>
 				<!-- if this type is a parametrized template -->
-				<!-- TODO resolve fullnames of template and it's parameters -->
 				<xsl:when test="contains($resolvedType, '&lt;')">
 					<xsl:variable name="returnCast">
 						<!-- produces warning: address of local variable ‘_cpp_result’ returned -->
@@ -546,9 +545,10 @@
 				<xsl:when test="not($method/type)">
 					<xsl:value-of select="$line13" />
 				</xsl:when>
-				<!-- Produces warning: taking address of temporary
-					 typedef resolving is missing here -->
-				<xsl:when test="xbig:isClassOrStruct($method/type, $class, $root) or contains($method/type, '&lt;')">
+				<!-- Produces warning: taking address of temporary -->
+				<xsl:when test="xbig:isClassOrStruct(xbig:resolveTypedef($method/type, $class, $root)
+								, $class, $root) or
+								contains($method/type, '&lt;')">
 					<xsl:variable name="cppThis" select="$var_config/cpp/object/@name"/>
 					<xsl:variable name="searchFor">
 						<xsl:value-of select="'= '"/>

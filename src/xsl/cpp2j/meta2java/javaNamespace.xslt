@@ -61,9 +61,17 @@
 		<!-- extract Java namespace from configuration -->
 		<!-- <xsl:variable name="java_ns_name"
 			select="$config/config/java/namespaces/namespace[@name=$meta_ns_name]" /> -->
-		<xsl:variable name="java_ns_name"
-			select="concat($config/config/java/namespaces/packageprefix/text(),
-						   '.', replace($meta_ns_name,'::', '.'))" />
+		<xsl:variable name="java_ns_name">
+			<xsl:choose>
+				<xsl:when test="not($meta_ns_name) or $meta_ns_name = ''">
+					<xsl:value-of select="$config/config/java/namespaces/packageprefix/text()"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="concat($config/config/java/namespaces/packageprefix/text(),
+						   '.', replace($meta_ns_name,'::', '.'))"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
 
 		<!-- if no mapping in Java configuration vailable -->
 		<xsl:if test="empty($java_ns_name)">
