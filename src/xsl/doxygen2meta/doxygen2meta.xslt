@@ -1618,10 +1618,21 @@
 		<!-- template attributes -->
 		<xsl:if test="templateparamlist">
 			<xsl:attribute name="template" select="'true'" />
+<!-- 
 			<xsl:attribute name="templateType"
 				select="templateparamlist/param/type" />
 			<xsl:attribute name="templateDeclaration"
 				select="templateparamlist/param/declname" />
+ -->
+			<xsl:element name="templateparameters">
+				<xsl:for-each select="templateparamlist/param">
+					<xsl:element name="templateparameter">
+						<xsl:attribute name="templateType" select="type" />
+						<xsl:attribute name="templateDeclaration" select="declname" />
+					</xsl:element>
+				</xsl:for-each>
+			</xsl:element>
+
 			<xsl:for-each select="inheritancegraph/node">
 				<xsl:if test="link/@refid=$refid">
 					<xsl:variable name="childnode"
@@ -1638,7 +1649,9 @@
 					</xsl:for-each>
 				</xsl:if>
 			</xsl:for-each>
-		</xsl:if>
+
+		</xsl:if> <!-- template -->
+
 		<!-- getting the right name of inner classes -->
 		<xsl:variable name="name"
 			select="substring-after(compoundname,'::')" />
