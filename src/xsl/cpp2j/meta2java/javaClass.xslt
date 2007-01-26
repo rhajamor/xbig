@@ -42,6 +42,7 @@
 	<xsl:import href="javaEnum.xslt" />
 	<xsl:import href="javaUtil.xslt" />
 	<xsl:import href="../../util/metaInheritedMethods.xslt" />
+	<xsl:import href="../../util/createClassFromTemplateTypedef.xslt" />
 
 	<xd:doc type="stylesheet">
 		<xd:short>Generate mapping of a single original class or struct</xd:short>
@@ -60,7 +61,8 @@
 		<xsl:variable name="class_name" select="$class/@name" />
 
 		<!-- find out if we create an inner class -->
-		<xsl:variable name="isInnerClass" select="../name() eq 'class' or ../name() eq 'struct'"/>
+		<xsl:variable name="isInnerClass" select="../name() eq 'class' or ../name() eq 'struct' or
+												  $class/@isInnerClass = 'true'"/>
 
 		<!-- write class declaration -->
 		<xsl:text>public </xsl:text>
@@ -114,6 +116,33 @@
 				<xsl:with-param name="enum" select="." />
 				<xsl:with-param name="buildFile" select="$buildFile" />
 			</xsl:call-template>
+		</xsl:for-each>
+
+		<!-- check if we have to generate a class for a typedef -->
+		<xsl:for-each select="typedef">
+			<xsl:if test="contains(./@basetype, '&lt;')">
+				<xsl:variable name="templateBaseName"
+						select="normalize-space(substring-before(./@basetype, '&lt;'))"/>
+				<xsl:variable name="fullTemplateBaseName"
+						select="xbig:getFullTypeName($templateBaseName, ., $root)"/>
+				<xsl:variable name="templateNode" select="$root//*[@fullName = $fullTemplateBaseName]"/>
+				<xsl:variable name="generatedClass">
+					<xsl:call-template name="createClassFromTemplateTypedef">
+						<xsl:with-param name="template" select="$templateNode"/>
+						<xsl:with-param name="typedef" select="."/>
+						<xsl:with-param name="isInnerClass" select="true()"/>
+					</xsl:call-template>
+				</xsl:variable>
+
+				<!-- generate the class -->
+				<xsl:for-each select="$generatedClass/*">
+					<xsl:call-template name="javaClass">
+						<xsl:with-param name="config" select="$config" />
+						<xsl:with-param name="class" select="." />
+						<xsl:with-param name="buildFile" select="$buildFile" />
+					</xsl:call-template>
+				</xsl:for-each>
+			</xsl:if>
 		</xsl:for-each>
 
 		<!-- if additional class content defined in configuration -->

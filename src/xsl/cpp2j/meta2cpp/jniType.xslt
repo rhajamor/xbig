@@ -81,6 +81,11 @@
 						<xsl:value-of select="'jlong'"/>
 					</xsl:when>
 
+					<!-- if this is a typedef for a template -->
+					<xsl:when test="xbig:isTemplateTypedef($resolvedType, $class, $root)">
+						<xsl:value-of select="'jlong'"/>
+					</xsl:when>
+
 					<!-- if this type is an enum -->
 					<xsl:when test="xbig:isEnum($resolvedType, $class, $root)">
 						<xsl:value-of select="'jint'"/>

@@ -115,6 +115,18 @@
 				<xsl:value-of select="." />
 				<xsl:value-of select="$config/config/java/interface/suffix" />
 
+				<!-- if this class is a typedef for a template -->
+				<xsl:if test="$class/typeparameters">
+					<xsl:value-of select="'&lt; '"/>
+					<xsl:for-each select="$class/typeparameters/typepara">
+						<xsl:value-of select="xbig:getFullJavaName(@used, $class, $root, $config)"/>
+						<xsl:if test="position()!=last()">
+							<xsl:text>, </xsl:text>
+						</xsl:if>
+					</xsl:for-each>
+					<xsl:value-of select="' &gt;'"/>
+				</xsl:if>
+
 				<!-- gen commas as seperator between base interfaces -->
 				<xsl:if test="position()!=last()">
 					<xsl:text>, </xsl:text>
@@ -140,6 +152,33 @@
 				<xsl:with-param name="class" select="." />
 				<xsl:with-param name="buildFile" select="$buildFile" />
 			</xsl:call-template>
+		</xsl:for-each>
+
+		<!-- check if we have to generate a class for a typedef -->
+		<xsl:for-each select="typedef">
+			<xsl:if test="contains(./@basetype, '&lt;')">
+				<xsl:variable name="templateBaseName"
+						select="normalize-space(substring-before(./@basetype, '&lt;'))"/>
+				<xsl:variable name="fullTemplateBaseName"
+						select="xbig:getFullTypeName($templateBaseName, ., $root)"/>
+				<xsl:variable name="templateNode" select="$root//*[@fullName = $fullTemplateBaseName]"/>
+				<xsl:variable name="generatedClass">
+					<xsl:call-template name="createClassFromTemplateTypedef">
+						<xsl:with-param name="template" select="$templateNode"/>
+						<xsl:with-param name="typedef" select="."/>
+						<xsl:with-param name="isInnerClass" select="true()"/>
+					</xsl:call-template>
+				</xsl:variable>
+
+				<!-- generate the class -->
+				<xsl:for-each select="$generatedClass/*">
+					<xsl:call-template name="javaInterface">
+						<xsl:with-param name="config" select="$config" />
+						<xsl:with-param name="class" select="." />
+						<xsl:with-param name="buildFile" select="$buildFile" />
+					</xsl:call-template>
+				</xsl:for-each>
+			</xsl:if>
 		</xsl:for-each>
 
 		<xsl:variable name="methodsForJava">

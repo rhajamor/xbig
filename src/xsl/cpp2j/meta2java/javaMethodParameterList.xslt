@@ -116,6 +116,12 @@
 				<xsl:value-of select="'.getInstancePointer().pointer'" />
 			</xsl:if>
 
+			<!-- if this parameter is a template typedef -->
+			<xsl:if test="($callingNativeMethod eq 'true') and
+				 		  (xbig:isTemplateTypedef($resolvedType, $class, $root))">
+				<xsl:value-of select="'.getInstancePointer().pointer'" />
+			</xsl:if>
+
 			<!-- if another parameter follows, write seperator -->
 			<xsl:if test="position()!=last()">
 				<xsl:text>,&#32;</xsl:text>

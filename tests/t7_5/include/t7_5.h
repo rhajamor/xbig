@@ -17,39 +17,49 @@
 template <class T>
 struct EXPORT B {
 	int x;
-	T y;
+	//T y;
 	T a();
 	void b(T c);
+private:
+	T t;
+};
+
+class EXPORT Z {
+public:
+	int get7() {return 7;}
 };
 
 class EXPORT A {
 public:
-	A();
+	int get3() {return 3;}
+	typedef B<Z> Y;
 };
 
-typedef B<int> C;
+//typedef B<int> C;
 typedef B<A> D;
 
+class Tester {
+public:
+	bool a(D a) {return a.a().get3() == 3;}
+	D b() {return d;}
+	bool x(A::Y a) {return a.a().get7() == 7;}
+	A::Y z() {return y;}
+private:
+	D d;
+	A::Y y;
+};
 
-std::ostream& operator << (std::ostream& output, A) {
-	output << "A";
-}
 
-A::A() {
-	std::cout << "t7_5: A::A()" << std::endl;
-}
-
+/********************************************************************************************************/
 template <class T>
 T B<T>::a() {
 	std::cout << "t7_5: B::a()" << std::endl;
-	T x;
-	std::cout << "T: " << typeid(x).name() << std::endl;
-	return x;
+	std::cout << "T: " << typeid(t).name() << std::endl;
+	return t;
 }
 
 template <class T>
 void B<T>::b(T c) {
 	std::cout << "t7_5: B::b(T c)" << std::endl;
-	std::cout << "c: " << c << std::endl;
 	std::cout << "c of type: " << typeid(c).name() << std::endl;
 }

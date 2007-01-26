@@ -3,7 +3,7 @@
 #include <iostream>
 
 int main(int argc, char* argv[]) 
-{
+{/*
    C a;
    int b = a.a();
    a.b(b);
@@ -40,6 +40,6 @@ int main(int argc, char* argv[])
    A d;
    s.y = c;
    d = s.y;
-
+*/
    std::cout << "done" << std::endl;
 }

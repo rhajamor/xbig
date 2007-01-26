@@ -34,8 +34,8 @@
 	version="2.0">
 
 	<xsl:import href="cppNamespace.xslt" />
-	<xsl:import href="cppGlobals.xslt" />
-	<xsl:import href="cppEnum.xslt" />
+	<!--<xsl:import href="cppGlobals.xslt" />
+	<xsl:import href="cppEnum.xslt" />-->
 
 	<xd:doc type="stylesheet">
 		<xd:author>Frank Bielig</xd:author>
@@ -82,6 +82,7 @@
 
 
 			<!-- global classes and structs -->
+			<!--
 			<xsl:for-each select="class">
 				<xsl:call-template name="cppGlobals">
 					<xsl:with-param name="meta_ns_name" select="''" />
@@ -98,9 +99,11 @@
 					<xsl:with-param name="config" select="$config" />
 				</xsl:call-template>
 			</xsl:for-each>
+			-->
 
 
 			<!-- global enums -->
+			<!--
 			<xsl:for-each select="enumeration">
 				<xsl:call-template name="cppGlobals">
 					<xsl:with-param name="meta_ns_name" select="''" />
@@ -109,6 +112,7 @@
 					<xsl:with-param name="config" select="$config" />
 				</xsl:call-template>
 			</xsl:for-each>
+			-->
 
 
 			<xsl:text>done</xsl:text>

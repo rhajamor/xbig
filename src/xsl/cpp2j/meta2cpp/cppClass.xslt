@@ -41,6 +41,7 @@
 	<xsl:import href="cppEnum.xslt" />
 	<xsl:import href="../../util/path.xslt" />
 	<xsl:import href="../../util/metaInheritedMethods.xslt" />
+	<xsl:import href="../../util/createClassFromTemplateTypedef.xslt" />
 
 	<xd:doc type="stylesheet">
 		<xd:short>Generation of types inside other types</xd:short>
@@ -55,8 +56,9 @@
 		<!-- we cannot create JNI functions for templates -->
 		<xsl:if test="not(./@template)">
 
-		<!-- find out if we create an inner class -->
-		<xsl:variable name="isInnerClass" select="../name() eq 'class' or ../name() eq 'struct'"/>
+			<!-- find out if we create an inner class -->
+			<xsl:variable name="isInnerClass" select="../name() eq 'class' or ../name() eq 'struct' or
+													  @isInnerClass = 'true'"/>
 
 			<!-- compose filename of current class without suffix -->
 			<!-- the 00024 is for the $ of inner classes -->
@@ -149,6 +151,34 @@
 						<xsl:with-param name="lib_dir" select="$lib_dir" />
 						<xsl:with-param name="config" select="$config" />
 					</xsl:call-template>
+				</xsl:for-each>
+
+				<!-- check if we have to generate a class for a typedef -->
+				<xsl:for-each select="typedef">
+					<xsl:if test="contains(./@basetype, '&lt;')">
+						<xsl:variable name="templateBaseName"
+								select="normalize-space(substring-before(./@basetype, '&lt;'))"/>
+						<xsl:variable name="fullTemplateBaseName"
+								select="xbig:getFullTypeName($templateBaseName, ., $root)"/>
+						<xsl:variable name="templateNode" select="$root//*[@fullName = $fullTemplateBaseName]"/>
+						<xsl:variable name="generatedClass">
+							<xsl:call-template name="createClassFromTemplateTypedef">
+								<xsl:with-param name="template" select="$templateNode"/>
+								<xsl:with-param name="typedef" select="."/>
+								<xsl:with-param name="isInnerClass" select="true()"/>
+							</xsl:call-template>
+						</xsl:variable>
+		
+						<!-- generate the class -->
+						<xsl:for-each select="$generatedClass/*">
+							<xsl:call-template name="cppClass">
+								<xsl:with-param name="ns_prefix" select="$class_prefix" />
+								<xsl:with-param name="include_dir" select="$include_dir" />
+								<xsl:with-param name="lib_dir" select="$lib_dir" />
+								<xsl:with-param name="config" select="$config" />
+							</xsl:call-template>
+						</xsl:for-each>
+					</xsl:if>
 				</xsl:for-each>
 
 			<!-- end of abstract class check -->

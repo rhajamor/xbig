@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <!--	
 	This source file is part of XBiG
 	(XSLT Bindings Generator)
 	For the latest info, see http://sourceforge.net/projects/xbig
 	
-	Copyright (c) 2006 The XBiG Development Teamv
+	Copyright (c) 2006 The XBiG Development Team
 	Also see acknowledgements in Readme.html
 	
 	This program is free software; you can redistribute it and/or modify it under
@@ -1452,34 +1452,36 @@
 	</xd:doc>
 	<!-- cursor on doxygen/compounddef/sectiondef -->
 	<xsl:template name="variable">
-		<xsl:element name="variable">
-			<!--
-				<xsl:attribute name="static">
-				<xsl:choose>
-				<xsl:when test="starts-with(type,'const')">
-				<xsl:value-of select="'true'"/>
-				</xsl:when>
-				<xsl:otherwise>
-				<xsl:value-of select="'false'"/>
-				</xsl:otherwise>
-				</xsl:choose>
-				</xsl:attribute>
-			-->
-			<xsl:if test="type and type!='virtual'">
-				<xsl:call-template name="type" />
-			</xsl:if>
-			<xsl:if test="argsstring!=''">
-				<xsl:element name="argsstring">
-					<xsl:value-of select="argsstring" />
+		<xsl:for-each select="memberdef[@kind='variable']">
+			<xsl:element name="variable">
+				<!--
+					<xsl:attribute name="static">
+					<xsl:choose>
+					<xsl:when test="starts-with(type,'const')">
+					<xsl:value-of select="'true'"/>
+					</xsl:when>
+					<xsl:otherwise>
+					<xsl:value-of select="'false'"/>
+					</xsl:otherwise>
+					</xsl:choose>
+					</xsl:attribute>
+				-->
+				<xsl:if test="type and type!='virtual'">
+					<xsl:call-template name="type" />
+				</xsl:if>
+				<xsl:if test="argsstring!=''">
+					<xsl:element name="argsstring">
+						<xsl:value-of select="argsstring" />
+					</xsl:element>
+				</xsl:if>
+				<xsl:element name="definition">
+					<xsl:value-of select="definition" />
 				</xsl:element>
-			</xsl:if>
-			<xsl:element name="definition">
-				<xsl:value-of select="definition" />
+				<xsl:element name="name">
+					<xsl:value-of select="name" />
+				</xsl:element>
 			</xsl:element>
-			<xsl:element name="name">
-				<xsl:value-of select="name" />
-			</xsl:element>
-		</xsl:element>
+		</xsl:for-each>
 	</xsl:template>
 
 	<!-- ############ DOCUMENTATION ############ -->

@@ -125,6 +125,10 @@
 				<xsl:value-of select="'long'" />
 			</xsl:when>
 
+			<xsl:when test="xbig:isTemplateTypedef($method/type, $class, $root)">
+				<xsl:value-of select="'long'" />
+			</xsl:when>
+
 			<xsl:when test="xbig:isClassOrStruct($method/type, $class, $root)">
 				<xsl:value-of select="'long'" />
 			</xsl:when>

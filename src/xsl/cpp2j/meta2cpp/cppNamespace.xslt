@@ -38,6 +38,7 @@
 
 	<xsl:import href="cppClass.xslt" />
 	<xsl:import href="cppEnum.xslt" />
+	<xsl:import href="../../util/createClassFromTemplateTypedef.xslt" />
 
 	<xd:doc type="stylesheet">
 		<xd:short>Generation of types inside a namespace</xd:short>
@@ -65,9 +66,17 @@
 		<!-- extract Java namespace from configuration -->
 		<!-- <xsl:variable name="java_ns_name"
 			select="$java_config/namespaces/namespace[@name=$meta_ns_name]" /> -->
-		<xsl:variable name="java_ns_name"
-			select="concat($config/config/java/namespaces/packageprefix/text(),
-						   '.', replace($meta_ns_name,'::', '.'))" />
+		<xsl:variable name="java_ns_name">
+			<xsl:choose>
+				<xsl:when test="not($meta_ns_name) or $meta_ns_name = ''">
+					<xsl:value-of select="$config/config/java/namespaces/packageprefix/text()"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="concat($config/config/java/namespaces/packageprefix/text(),
+						   '.', replace($meta_ns_name,'::', '.'))"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
 
 		<!-- if no mapping in Java configuration vailable -->
 		<xsl:if test="empty($java_ns_name)">
@@ -108,6 +117,34 @@
 				<xsl:with-param name="lib_dir" select="$lib_dir" />
 				<xsl:with-param name="config" select="$config" />
 			</xsl:call-template>
+		</xsl:for-each>
+
+		<!-- check if we have to generate a class for a typedef -->
+		<xsl:for-each select="typedef">
+			<xsl:if test="contains(./@basetype, '&lt;')">
+				<xsl:variable name="templateBaseName"
+						select="normalize-space(substring-before(./@basetype, '&lt;'))"/>
+				<xsl:variable name="fullTemplateBaseName"
+						select="xbig:getFullTypeName($templateBaseName, ., $root)"/>
+				<xsl:variable name="templateNode" select="$root//*[@fullName = $fullTemplateBaseName]"/>
+				<xsl:variable name="generatedClass">
+					<xsl:call-template name="createClassFromTemplateTypedef">
+						<xsl:with-param name="template" select="$templateNode"/>
+						<xsl:with-param name="typedef" select="."/>
+						<xsl:with-param name="isInnerClass" select="false()"/>
+					</xsl:call-template>
+				</xsl:variable>
+
+				<!-- generate the class -->
+				<xsl:for-each select="$generatedClass/*">
+					<xsl:call-template name="cppClass">
+						<xsl:with-param name="ns_prefix" select="$ns_prefix" />
+						<xsl:with-param name="include_dir" select="$include_dir" />
+						<xsl:with-param name="lib_dir" select="$lib_dir" />
+						<xsl:with-param name="config" select="$config" />
+					</xsl:call-template>
+				</xsl:for-each>
+			</xsl:if>
 		</xsl:for-each>
 
 	</xsl:template>

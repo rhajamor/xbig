@@ -144,8 +144,13 @@
 						<xsl:value-of select="concat(xbig:getFullTemplateName($resolvedType, $class, $root)
 												, '*')"/>
 					</xsl:when>
+					<xsl:when test="xbig:isTemplateTypedef($resolvedType, $class, $root)">
+						<xsl:value-of select="concat(xbig:getFullTypeName($resolvedType, $class, $root)
+												, '*')"/>
+					</xsl:when>
 					<xsl:when test="xbig:isClassOrStruct($resolvedType, $class, $root)">
-						<xsl:value-of select="concat(xbig:getFullTypeName($resolvedType, $class, $root), '*')"/>
+						<xsl:value-of select="concat(xbig:getFullTypeName($resolvedType, $class, $root)
+												, '*')"/>
 					</xsl:when>
 					<xsl:when test="xbig:isEnum($param/type, $class, $root)">
 						<xsl:value-of select="xbig:getFullTypeName($resolvedType, $class, $root)"/>
@@ -212,23 +217,33 @@
 				<xsl:when test="contains($resolvedType, '&lt;')">
 					<xsl:variable name="part1" select="'reinterpret_cast&lt; '"/>
 					<xsl:variable name="part2" select="xbig:getFullTemplateName(
-														$resolvedType, $class, $root)" />
+														$resolvedType, $class, $root)"/>
 					<xsl:variable name="part3" select="'* &gt;('"/>
-					<xsl:variable name="part4" select="$param_name" />
+					<xsl:variable name="part4" select="$param_name"/>
 					<xsl:variable name="part5" select="')'"/>
-					<xsl:value-of select="concat($part1, $part2, $part3, $part4, $part5)" />
+					<xsl:value-of select="concat($part1, $part2, $part3, $part4, $part5)"/>
+				</xsl:when>
+
+				<!-- if this is a typedef for a template -->
+				<xsl:when test="xbig:isTemplateTypedef($resolvedType, $class, $root)">
+					<xsl:variable name="part1" select="'reinterpret_cast&lt; '"/>
+					<xsl:variable name="part2" select="xbig:getFullTypeName($resolvedType, $class, $root)"/>
+					<xsl:variable name="part3" select="'* &gt;('"/>
+					<xsl:variable name="part4" select="$param_name"/>
+					<xsl:variable name="part5" select="')'"/>
+					<xsl:value-of select="concat($part1, $part2, $part3, $part4, $part5)"/>
 				</xsl:when>
 
 				<!-- test for enums -->
 				<xsl:when test="xbig:isEnum($resolvedType, $class, $root)">
 					<xsl:value-of select="
-						concat('(', xbig:getFullTypeName($resolvedType, $class, $root), ')', $param_name)" />
+						concat('(', xbig:getFullTypeName($resolvedType, $class, $root), ')', $param_name)"/>
 				</xsl:when>
 
 				<!-- if this type is a class or struct -->
 				<xsl:when test="xbig:isClassOrStruct($resolvedType, $class, $root)">
 					<xsl:variable name="part1" select="'reinterpret_cast&lt; '"/>
-					<xsl:variable name="part2" select="xbig:getFullTypeName($resolvedType, $class, $root)" />
+					<xsl:variable name="part2" select="xbig:getFullTypeName($resolvedType, $class, $root)"/>
 					<xsl:variable name="part3" select="'* &gt;('"/>
 					<xsl:variable name="part4" select="$param_name" />
 					<xsl:variable name="part5" select="')'"/>
@@ -289,11 +304,23 @@
 		<xsl:if test="not($type_info/type/cpp2jni)">
 
 			<!-- resolve typedefs for return type -->
-			<xsl:variable name="resolvedReturnType" select="xbig:resolveTypedef($method/type, $class, $root)"/>
+			<xsl:variable name="resolvedReturnType"
+					select="xbig:resolveTypedef($method/type, $class, $root)"/>
 
 			<xsl:choose>
 				<!-- if this type is a parametrized template -->
 				<xsl:when test="contains($resolvedType, '&lt;')">
+					<xsl:variable name="returnCast">
+						<!-- produces warning: address of local variable ‘_cpp_result’ returned -->
+						<xsl:value-of select="'reinterpret_cast&lt;jlong&gt;('"/>
+						<xsl:value-of select="$param_name"/>
+						<xsl:value-of select="')'"/>
+					</xsl:variable>
+					<xsl:value-of select="$returnCast"/>
+				</xsl:when>
+
+				<!-- if this is a typedef for a template -->
+				<xsl:when test="xbig:isTemplateTypedef($resolvedType, $class, $root)">
 					<xsl:variable name="returnCast">
 						<!-- produces warning: address of local variable ‘_cpp_result’ returned -->
 						<xsl:value-of select="'reinterpret_cast&lt;jlong&gt;('"/>
@@ -384,9 +411,12 @@
 		<xsl:variable name="line0">
 			<!-- if const overloading is used, we have to find out the original name -->
 			<xsl:choose>
-				<xsl:when test="$method/@const = 'true' and not($class/function[name = $method/name][@const = 'true'])">
-					<xsl:variable name="methodNameWithoutPrefix" select="substring-after($method/name, $config/config/java/constoverloading/prefix)"/>
-					<xsl:variable name="methodName" select="substring-before($methodNameWithoutPrefix, $config/config/java/constoverloading/suffix)"/>
+				<xsl:when test="$method/@const = 'true' and not($class/function
+						[name = $method/name][@const = 'true'])">
+					<xsl:variable name="methodNameWithoutPrefix" select="substring-after(
+						$method/name, $config/config/java/constoverloading/prefix)"/>
+					<xsl:variable name="methodName" select="substring-before(
+						$methodNameWithoutPrefix, $config/config/java/constoverloading/suffix)"/>
 					<xsl:value-of select="xbig:cpp-replace($org_line, '#cpp_method#', $methodName)" />
 				</xsl:when>
 				<xsl:otherwise>
@@ -400,7 +430,8 @@
 			<xsl:choose>
 				<!-- if we call a const method -->
 				<xsl:when test="$method/@const = 'true'">
-					<xsl:value-of  select="xbig:cpp-replace($line0, '#cpp_class#', concat('const ', $class/@fullName))"/>
+					<xsl:value-of  select="xbig:cpp-replace($line0, '#cpp_class#', concat(
+								'const ', $class/@fullName))"/>
 				</xsl:when>
 				<xsl:otherwise>
 					<xsl:value-of  select="xbig:cpp-replace($line0, '#cpp_class#', $class/@fullName)"/>
@@ -469,7 +500,10 @@
 
 							<!-- write parameter name -->
 							<xsl:if test="@passedBy='reference' or
-										  xbig:isClassOrStruct(xbig:resolveTypedef(./type, $class, $root), $class, $root) or
+										  xbig:isClassOrStruct(xbig:resolveTypedef(./type, $class, $root)
+										  		, $class, $root) or
+										  xbig:isTemplateTypedef(xbig:resolveTypedef(./type, $class, $root)
+										  		, $class, $root) or
 										  contains(type, '&lt;')">
 								<xsl:value-of select="'*'" />
 							</xsl:if>
@@ -495,7 +529,9 @@
 
 		<!-- replace return statement -->
 		<xsl:variable name="line9"
-			select="if(matches($line8, '#cpp_return#')) then xbig:cpp-replace($line8, '#cpp_return#', xbig:cpp-to-jni($config, $class, $method, $method, '#cpp_return_var#')) else $line8" />
+			select="if(matches($line8, '#cpp_return#')) then xbig:cpp-replace(
+				$line8, '#cpp_return#', xbig:cpp-to-jni(
+				$config, $class, $method, $method, '#cpp_return_var#')) else $line8" />
 
 		<!-- replace return type -->
 		<xsl:variable name="line10"
@@ -511,33 +547,50 @@
 		<!-- <xsl:variable name="line12"
 			select="xbig:cpp-replace($line11, '#cpp_attribute#', $method/attribute_name)" /> -->
 		<xsl:variable name="line12"
-			select="xbig:cpp-replace($line11, '#cpp_attribute#', substring($method/name, string-length($config/config/meta/publicattribute/get)+3))" />
+			select="xbig:cpp-replace($line11, '#cpp_attribute#', substring(
+				$method/name, string-length($config/config/meta/publicattribute/get)+3))" />
 
 		<!-- replace name of class the method was inherited from -->
-		<xsl:variable name="methodClassWithPreStuffTokens">
-			<xsl:call-template name="str:split">
-				<xsl:with-param name="string" select="$method/definition" />
-				<xsl:with-param name="pattern" select="' '" />
-			</xsl:call-template>
+		<xsl:variable name="classThisMethodWasInheritedFrom">
+			<xsl:choose>
+				<!-- if this is a typedef for a template -->
+				<xsl:when test="$class/typeparameters">
+					<xsl:value-of select="$class/@fullName"/>
+				</xsl:when>
+
+				<!-- a normal class -->
+				<xsl:otherwise>
+					<xsl:variable name="methodClassWithPreStuffTokens">
+						<xsl:call-template name="str:split">
+							<xsl:with-param name="string" select="$method/definition" />
+							<xsl:with-param name="pattern" select="' '" />
+						</xsl:call-template>
+					</xsl:variable>
+					<xsl:variable name="methodClassTokens">
+						<xsl:call-template name="str:split">
+							<xsl:with-param name="string"
+								select="$methodClassWithPreStuffTokens/*[last()]" />
+							<xsl:with-param name="pattern" select="'::'" />
+						</xsl:call-template>
+					</xsl:variable>
+					<xsl:variable name="methodClassFullName">
+						<xsl:for-each select="$methodClassTokens/*">
+							<xsl:if test="position() != last()">
+								<xsl:value-of select="." />
+							</xsl:if>
+							<xsl:if test="(position() != last()) and (position() != last()-1)">
+								<xsl:value-of select="'::'" />
+							</xsl:if>
+						</xsl:for-each>
+					</xsl:variable>
+					<xsl:value-of select="$methodClassFullName"/>
+				</xsl:otherwise>
+			</xsl:choose>
 		</xsl:variable>
-		<xsl:variable name="methodClassTokens">
-			<xsl:call-template name="str:split">
-				<xsl:with-param name="string" select="$methodClassWithPreStuffTokens/*[last()]" />
-				<xsl:with-param name="pattern" select="'::'" />
-			</xsl:call-template>
-		</xsl:variable>
-		<xsl:variable name="methodClassFullName">
-			<xsl:for-each select="$methodClassTokens/*">
-				<xsl:if test="position() != last()">
-					<xsl:value-of select="." />
-				</xsl:if>
-				<xsl:if test="(position() != last()) and (position() != last()-1)">
-					<xsl:value-of select="'::'" />
-				</xsl:if>
-			</xsl:for-each>
-		</xsl:variable>
+		
 		<xsl:variable name="line13"
-			select="xbig:cpp-replace($line12, '#cpp_inherited_method_class#', $methodClassFullName)" />
+			select="xbig:cpp-replace($line12, '#cpp_inherited_method_class#', 
+										$classThisMethodWasInheritedFrom)" />
 
 		<!-- if an object is returned, we need it's address -->
 		<xsl:variable name="line14">
@@ -547,7 +600,9 @@
 				</xsl:when>
 				<!-- Produces warning: taking address of temporary -->
 				<xsl:when test="xbig:isClassOrStruct(xbig:resolveTypedef($method/type, $class, $root)
-								, $class, $root) or
+									, $class, $root) or
+								xbig:isTemplateTypedef(xbig:resolveTypedef($method/type, $class, $root)
+									, $class, $root) or
 								contains($method/type, '&lt;')">
 					<xsl:variable name="cppThis" select="$var_config/cpp/object/@name"/>
 					<xsl:variable name="searchFor">

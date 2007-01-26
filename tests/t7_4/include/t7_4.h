@@ -20,18 +20,29 @@ public:
 	A();
 	T a();
 	void b(T c);
+private:
+	T t;
 };
 
-class B {};
+class B {
+public:
+	int get3() {return 3;}
+};
 
-typedef A<int> C;
+//typedef A<int> C;
 typedef A<B> D;
 
 
-std::ostream& operator << (std::ostream& output, B) {
-	output << "B";
-}
+class Tester {
+public:
+	bool a(D a) {return a.a().get3() == 3;}
+	D b() {return d;}
+private:
+	D d;
+};
 
+
+/********************************************************************************************************/
 template <class T>
 A<T>::A() {
 	std::cout << "t7_4: A::A()" << std::endl;
@@ -40,14 +51,12 @@ A<T>::A() {
 template <class T>
 T A<T>::a() {
 	std::cout << "t7_4: A::a()" << std::endl;
-	T x;
-	std::cout << "T: " << typeid(x).name() << std::endl;
-	return x;
+	std::cout << "T: " << typeid(t).name() << std::endl;
+	return t;
 }
 
 template <class T>
 void A<T>::b(T c) {
 	std::cout << "t7_4: A::b(T c)" << std::endl;
-	std::cout << "c: " << c << std::endl;
 	std::cout << "c of type: " << typeid(c).name() << std::endl;
 }

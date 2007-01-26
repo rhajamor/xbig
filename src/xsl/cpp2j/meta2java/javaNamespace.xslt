@@ -37,6 +37,7 @@
 	xmlns:xbig="http://xbig.sourceforge.net/XBiG">
 
 	<xsl:import href="javaClassFileStub.xslt" />
+	<xsl:import href="../../util/createClassFromTemplateTypedef.xslt" />
 
 	<xd:doc type="stylesheet">
 		<xd:short>Generation of types inside a namespace</xd:short>
@@ -105,6 +106,8 @@
 				<xsl:with-param name="buildFile" select="$buildFile" />
 			</xsl:call-template>
 		</xsl:for-each>
+
+		<!-- iteration over all enums inside current namespace -->
 		<xsl:for-each select="enumeration">
 			<xsl:call-template name="javaClassFileStub">
 				<xsl:with-param name="java_ns_dir" select="$java_ns_dir" />
@@ -113,6 +116,35 @@
 				<xsl:with-param name="config" select="$config" />
 				<xsl:with-param name="buildFile" select="$buildFile" />
 			</xsl:call-template>
+		</xsl:for-each>
+
+		<!-- check if we have to generate a class for a typedef -->
+		<xsl:for-each select="typedef">
+			<xsl:if test="contains(./@basetype, '&lt;')">
+				<xsl:variable name="templateBaseName"
+						select="normalize-space(substring-before(./@basetype, '&lt;'))"/>
+				<xsl:variable name="fullTemplateBaseName"
+						select="xbig:getFullTypeName($templateBaseName, ., $root)"/>
+				<xsl:variable name="templateNode" select="$root//*[@fullName = $fullTemplateBaseName]"/>
+				<xsl:variable name="generatedClass">
+					<xsl:call-template name="createClassFromTemplateTypedef">
+						<xsl:with-param name="template" select="$templateNode"/>
+						<xsl:with-param name="typedef" select="."/>
+						<xsl:with-param name="isInnerClass" select="false()"/>
+					</xsl:call-template>
+				</xsl:variable>
+
+				<!-- generate the class -->
+				<xsl:for-each select="$generatedClass/*">
+					<xsl:call-template name="javaClassFileStub">
+						<xsl:with-param name="java_ns_dir" select="$java_ns_dir" />
+						<xsl:with-param name="java_ns_name" select="$java_ns_name" />
+						<xsl:with-param name="outdir" select="$outdir" />
+						<xsl:with-param name="config" select="$config" />
+						<xsl:with-param name="buildFile" select="$buildFile" />
+					</xsl:call-template>
+				</xsl:for-each>
+			</xsl:if>
 		</xsl:for-each>
 
 	</xsl:template>

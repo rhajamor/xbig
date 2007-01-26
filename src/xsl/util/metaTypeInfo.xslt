@@ -256,6 +256,28 @@
 
 
 	<xd:doc type="function">
+		<xd:short>check if a type is a typedef for a template</xd:short>
+	</xd:doc>
+	<xsl:function name="xbig:isTemplateTypedef" as="xs:boolean">
+		<xsl:param name="type"/>
+		<xsl:param name="currentNode"/> <!-- must be a class, struct or namespace element -->
+		<xsl:param name="inputTreeRoot"/>
+
+		<xsl:variable name="fullName" select="xbig:getFullTypeName($type, $currentNode, $inputTreeRoot)"/>
+		<xsl:variable name="typedefNode" select="$inputTreeRoot//typedef[@fullName = $fullName]"/>
+
+		<xsl:choose>
+			<xsl:when test="contains($typedefNode/@basetype, '&lt;')">
+				<xsl:value-of select="true()" />
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="false()" />
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:function>
+
+
+	<xd:doc type="function">
 		<xd:short>resolve the full c++ name of a type, including the namespace</xd:short>
 	</xd:doc>
 	<xsl:function name="xbig:getFullTypeName" as="xs:string">

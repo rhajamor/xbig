@@ -3,7 +3,7 @@
 #include <iostream>
 
 int main(int argc, char* argv[]) 
-{
+{/*
    C a;
    int b = a.a();
    a.b(b);
@@ -11,6 +11,6 @@ int main(int argc, char* argv[])
    D s;
    B obj = s.a();
    s.b(obj);
-
+*/
    std::cout << "done" << std::endl;
 }

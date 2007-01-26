@@ -78,10 +78,19 @@
 			<xsl:text>(new&#32;InstancePointer(</xsl:text>
 		</xsl:if>
 
+		<!-- if this is a template typedef -->
+		<xsl:if test="xbig:isTemplateTypedef($method/type, $class, $root)">
+			<xsl:text>new&#32;</xsl:text>
+			<xsl:value-of select="xbig:getFullJavaClassAndNotInterfaceName(
+									$method/type, $class, $root, $config)"/>
+			<xsl:text>(new&#32;InstancePointer(</xsl:text>
+		</xsl:if>
+
 		<!-- create native object when necessary -->
 		<xsl:if test="xbig:isClassOrStruct($method/type, $class, $root)">
 			<xsl:text>new&#32;</xsl:text>
-			<xsl:value-of select="xbig:getFullJavaClassAndNotInterfaceName($method/type, $class, $root, $config)"/>
+			<xsl:value-of select="xbig:getFullJavaClassAndNotInterfaceName(
+									$method/type, $class, $root, $config)"/>
 			<xsl:text>(new&#32;InstancePointer(</xsl:text>
 		</xsl:if>
 
@@ -126,6 +135,9 @@
 			<xsl:text>))</xsl:text>
 		</xsl:if>
 		<xsl:if test="contains($method/type, '&lt;')"><!-- for returned parametrized templates -->
+			<xsl:text>))</xsl:text>
+		</xsl:if>
+		<xsl:if test="xbig:isTemplateTypedef($method/type, $class, $root)">
 			<xsl:text>))</xsl:text>
 		</xsl:if>
 		<xsl:if test="xbig:isClassOrStruct($method/type, $class, $root)">

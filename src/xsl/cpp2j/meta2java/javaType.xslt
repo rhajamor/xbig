@@ -152,6 +152,19 @@
 						</xsl:choose>
 					</xsl:when>
 
+					<!-- if this type is a template typedef -->
+					<xsl:when test="xbig:isTemplateTypedef($resolvedType, $class, $root)">
+						<xsl:choose>
+							<xsl:when test="$writingNativeMethod eq 'true'">
+								<xsl:value-of select="'long'"/>
+							</xsl:when>
+							<xsl:otherwise>
+								<!-- add the template angle bracket -->
+								<xsl:value-of select="concat(xbig:getFullJavaName($resolvedType, $class, $root, $config), $templateBracket)"/>
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:when>
+
 					<!-- if this type is an enum -->
 					<xsl:when test="xbig:isEnum($resolvedType, $class, $root)">
 						<xsl:choose>
@@ -258,8 +271,10 @@
 			</xsl:variable>
 
 			<xsl:choose>
-				<!-- Use generated Interface for classes and structs -->
-				<xsl:when test="xbig:isClassOrStruct($fullNameAsReturned, $currentNode, $inputTreeRoot)">
+				<!-- Use generated Interface for classes and structs,
+					 for template typedefs as well -->
+				<xsl:when test="xbig:isClassOrStruct($fullNameAsReturned, $currentNode, $inputTreeRoot) or
+								xbig:isTemplateTypedef($fullNameAsReturned, $currentNode, $inputTreeRoot)">
 					<xsl:for-each select="$fullNameTokens/token">
 						<xsl:if test="position() = last()">
 							<xsl:value-of select="$config/config/java/interface/prefix" />

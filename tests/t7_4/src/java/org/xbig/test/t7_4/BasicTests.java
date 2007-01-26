@@ -5,6 +5,10 @@ package org.xbig.test.t7_4;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.xbig.IA;
+import org.xbig.IB;
+import org.xbig.ID;
+import org.xbig.Tester;
 /**
  * @author nenning
  *
@@ -12,7 +16,15 @@ import org.junit.Test;
 public class BasicTests {
 	
 	@Test
-	public void fail() {
-		Assert.fail();
+	public void useTemplateTypedef() {
+		Tester t = new Tester();
+
+		ID d = t.b();
+		IB b = d.a();
+		Assert.assertEquals(3, b.get3());
+		Assert.assertTrue(t.a(d));
+		d.b(b);
+
+		t.delete();
 	}
 }

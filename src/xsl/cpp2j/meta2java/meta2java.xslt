@@ -34,7 +34,7 @@
 	version="2.0">
 
 	<xsl:import href="javaNamespace.xslt" />
-	<xsl:import href="javaGlobals.xslt" />
+	<!--<xsl:import href="javaGlobals.xslt" />-->
 
 	<xd:doc type="stylesheet">
 		<xd:author>Frank Bielig</xd:author>
@@ -77,6 +77,7 @@
 
 
 			<!-- global classes and structs -->
+			<!--
 			<xsl:for-each select="class">
 				<xsl:call-template name="javaGlobals">
 					<xsl:with-param name="meta_ns_name" 
@@ -95,9 +96,11 @@
 					<xsl:with-param name="buildFile" select="$buildFile" />
 				</xsl:call-template>
 			</xsl:for-each>
+			-->
 
 
 			<!-- global enums -->
+			<!--
 			<xsl:for-each select="enumeration">
 				<xsl:call-template name="javaGlobals">
 					<xsl:with-param name="meta_ns_name" 
@@ -107,6 +110,7 @@
 					<xsl:with-param name="buildFile" select="$buildFile" />
 				</xsl:call-template>
 			</xsl:for-each>
+			-->
 
 
 			<xsl:text>done</xsl:text>
