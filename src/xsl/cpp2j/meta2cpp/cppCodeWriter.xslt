@@ -542,13 +542,17 @@
 			select="xbig:cpp-replace($line10, '#cpp_return_var#', $var_config/cpp/result/@name)" />
 
 		<!-- replace public attribute -->
-		<!-- ARGH: WTF is this not working ????? -->
-		<!-- TODO make this generic -->
-		<!-- <xsl:variable name="line12"
-			select="xbig:cpp-replace($line11, '#cpp_attribute#', $method/attribute_name)" /> -->
-		<xsl:variable name="line12"
-			select="xbig:cpp-replace($line11, '#cpp_attribute#', substring(
-				$method/name, string-length($config/config/meta/publicattribute/get)+3))" />
+		<xsl:variable name="line12">
+			<xsl:choose>
+				<xsl:when test="$method/attribute_name">
+					<xsl:value-of select="xbig:cpp-replace(
+										  $line11, '#cpp_attribute#', $method/attribute_name)"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="$line11"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
 
 		<!-- replace name of class the method was inherited from -->
 		<xsl:variable name="classThisMethodWasInheritedFrom">

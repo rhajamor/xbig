@@ -17,7 +17,7 @@
 template <class T>
 struct EXPORT B {
 	int x;
-	//T y;
+	T y;
 	T a();
 	void b(T c);
 private:

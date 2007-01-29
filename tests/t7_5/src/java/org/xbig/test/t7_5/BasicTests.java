@@ -26,6 +26,9 @@ public class BasicTests {
 		Assert.assertTrue(t.a(d));
 		d.b(a);
 
+		d.sety(a);
+		Assert.assertEquals(3, d.gety().get3());
+
 		t.delete();
 	}
 
@@ -38,6 +41,9 @@ public class BasicTests {
 		Assert.assertEquals(7, z.get7());
 		Assert.assertTrue(t.x(y));
 		y.b(z);
+
+		y.sety(z);
+		Assert.assertEquals(7, y.gety().get7());
 
 		t.delete();
 	}

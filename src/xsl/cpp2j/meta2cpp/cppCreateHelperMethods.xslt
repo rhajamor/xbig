@@ -34,6 +34,8 @@
 	xmlns:xdt="http://www.w3.org/2005/xpath-datatypes"
 	xmlns:xd="http://www.pnp-software.com/XSLTdoc">
 
+	<xsl:import href="../../util/createFunctionsForPublicAttribute.xslt" />
+
 	<xd:doc type="stylesheet">
 		<xd:short>Creation of a XML structure for additional methods, like d-tors</xd:short>
 	</xd:doc>
@@ -79,95 +81,10 @@
 		</xsl:element>
 
 		<!-- create getters and setters for public attributes -->
-		<!-- getter -->
 		<xsl:for-each select="variable">
-			<xsl:element name="function">
-				<xsl:attribute name="public_attribute_getter">
-					<xsl:text>true</xsl:text>
-				</xsl:attribute>
-				<xsl:attribute name="virt">
-					<xsl:text>non-virtual</xsl:text>
-				</xsl:attribute>
-				<xsl:attribute name="visibility">
-					<xsl:text>public</xsl:text>
-				</xsl:attribute>
-				<xsl:attribute name="static">
-					<xsl:value-of select="@static" />
-				</xsl:attribute>
-				<xsl:attribute name="const">
-					<xsl:value-of select="@const" />
-				</xsl:attribute>
-				<xsl:attribute name="passedBy">
-					<xsl:value-of select="@passedBy" />
-				</xsl:attribute>
-				<xsl:element name="attribute_name">
-					<xsl:value-of select="name"/>
-				</xsl:element>
-				<xsl:element name="type">
-					<xsl:value-of select="type" />
-				</xsl:element>
-				<xsl:element name="name">
-					<xsl:value-of>
-						<xsl:value-of select="'__'"/>
-						<xsl:value-of select="$config/config/meta/publicattribute/get/text()"/>
-						<xsl:value-of select="name"/>
-					</xsl:value-of>
-				</xsl:element>
-				<xsl:element name="definition">
-					<xsl:value-of select="definition" />
-				</xsl:element>
-			</xsl:element>
-
-			<!-- setter -->
-			<xsl:element name="function">
-				<xsl:attribute name="public_attribute_setter">
-					<xsl:text>true</xsl:text>
-				</xsl:attribute>
-				<xsl:attribute name="virt">
-					<xsl:text>non-virtual</xsl:text>
-				</xsl:attribute>
-				<xsl:attribute name="visibility">
-					<xsl:text>public</xsl:text>
-				</xsl:attribute>
-				<xsl:attribute name="static">
-					<xsl:value-of select="@static" />
-				</xsl:attribute>
-				<xsl:attribute name="const">
-					<xsl:value-of select="@const" />
-				</xsl:attribute>
-				<xsl:attribute name="passedBy">
-					<xsl:value-of select="@passedBy" />
-				</xsl:attribute>
-				<xsl:element name="attribute_name">
-					<xsl:value-of select="name"/>
-				</xsl:element>
-				<xsl:element name="type">
-					<xsl:text>void</xsl:text>
-				</xsl:element>
-				<xsl:element name="name">
-					<xsl:value-of>
-						<xsl:value-of select="'__'"/>
-						<xsl:value-of select="$config/config/meta/publicattribute/set/text()"/>
-						<xsl:value-of select="name"/>
-					</xsl:value-of>
-				</xsl:element>
-				<xsl:element name="definition">
-					<xsl:value-of select="definition" />
-				</xsl:element>
-				<xsl:element name="parameters">
-					<xsl:element name="parameter">
-						<xsl:attribute name="passedBy">
-							<xsl:value-of select="@passedBy" />
-						</xsl:attribute>
-						<xsl:element name="type">
-							<xsl:value-of select="type" />
-						</xsl:element>
-						<xsl:element name="name">
-							<xsl:value-of select="$config/config/cpp/variables/jni/attributevalue/@name" />
-						</xsl:element>
-					</xsl:element>
-				</xsl:element>
-			</xsl:element>
+			<xsl:call-template name="createFunctionsForPublicAttribute">
+				<xsl:with-param name="variable" select="."/>
+			</xsl:call-template>
 		</xsl:for-each>
 
 	</xsl:template>

@@ -37,10 +37,10 @@
 	xmlns:xbig="http://xbig.sourceforge.net/XBiG">
 
 	<xsl:import href="javaAccessMethodDeclaration.xslt" />
-	<xsl:import href="javaPublicAttribute.xslt" />
 	<xsl:import href="javaUtil.xslt" />
 	<xsl:import href="../../exslt/str.split.template.xsl" />
 	<xsl:import href="../../util/metaMethodName.xslt" />
+	<xsl:import href="../../util/createFunctionsForPublicAttribute.xslt" />
 
 	<xd:doc type="stylesheet">
 		<xd:short>
@@ -220,18 +220,24 @@
 
 		<!-- handling of public attributes -->
 		<xsl:for-each select="variable">
-			<xsl:variable name="typeName" select="xbig:resolveTypedef(type, $class, $root)"/>
-			<xsl:call-template name="javaPublicAttributeGetterDeclaration">
-				<xsl:with-param name="config" select="$config" />
-				<xsl:with-param name="typeName" select="$typeName" />
-			</xsl:call-template>
-			<xsl:text>;&#10;&#10;</xsl:text>
-			<xsl:call-template name="javaPublicAttributeSetterDeclaration">
-				<xsl:with-param name="config" select="$config" />
-				<xsl:with-param name="typeName" select="$typeName" />
-			</xsl:call-template>
-			<xsl:text>;&#10;&#10;</xsl:text>
+			<xsl:variable name="publicAttributeGettersAndSetters">
+				<xsl:call-template name="createFunctionsForPublicAttribute">
+					<xsl:with-param name="variable" select="."/>
+				</xsl:call-template>
+			</xsl:variable>
+
+			<xsl:for-each select="$publicAttributeGettersAndSetters/function">
+				<xsl:call-template name="javaAccessMethodDeclaration">
+					<xsl:with-param name="config" select="$config" />
+					<xsl:with-param name="class" select="$class" />
+					<xsl:with-param name="method" select="." />
+				</xsl:call-template>
+
+				<!-- finish declaration -->
+				<xsl:text>;&#10;&#10;</xsl:text>
+			</xsl:for-each>
 		</xsl:for-each>
+
 
 		<!-- close class declaration  -->
 		<xsl:text>};&#10;&#10;</xsl:text>

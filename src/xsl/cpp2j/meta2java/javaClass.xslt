@@ -38,11 +38,11 @@
 
 	<xsl:import href="javaNativeMethod.xslt" />
 	<xsl:import href="javaAccessMethod.xslt" />
-	<xsl:import href="javaPublicAttribute.xslt" />
 	<xsl:import href="javaEnum.xslt" />
 	<xsl:import href="javaUtil.xslt" />
 	<xsl:import href="../../util/metaInheritedMethods.xslt" />
 	<xsl:import href="../../util/createClassFromTemplateTypedef.xslt" />
+	<xsl:import href="../../util/createFunctionsForPublicAttribute.xslt" />
 
 	<xd:doc type="stylesheet">
 		<xd:short>Generate mapping of a single original class or struct</xd:short>
@@ -185,10 +185,26 @@
  
  		<!-- generate public attributes getters and setters -->
  		<xsl:for-each select="$inheritedMethods/attribute/variable">
- 			<xsl:call-template name="javaPublicAttribute">
-				<xsl:with-param name="config" select="$config" />
-			</xsl:call-template>
- 		</xsl:for-each>
+			<xsl:variable name="publicAttributeGettersAndSetters">
+				<xsl:call-template name="createFunctionsForPublicAttribute">
+					<xsl:with-param name="variable" select="."/>
+				</xsl:call-template>
+			</xsl:variable>
+
+			<xsl:for-each select="$publicAttributeGettersAndSetters/function">
+				<xsl:call-template name="javaAccessMethod">
+					<xsl:with-param name="config" select="$config" />
+					<xsl:with-param name="class" select="$class" />
+					<xsl:with-param name="method" select="." />
+				</xsl:call-template>
+	
+				<xsl:call-template name="javaNativeMethod">
+					<xsl:with-param name="config" select="$config" />
+					<xsl:with-param name="class" select="$class" />
+					<xsl:with-param name="method" select="." />
+				</xsl:call-template>
+			</xsl:for-each>
+		</xsl:for-each>
 
 
 		<!-- close class declaration  -->
