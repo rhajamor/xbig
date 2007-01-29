@@ -70,6 +70,10 @@
 				<xsl:value-of select="$variable/name"/>
 			</xsl:element>
 			<xsl:element name="type">
+				<!-- for primitive types as template parameters -->
+				<xsl:if test="$variable/type/@originalType">
+					<xsl:attribute name="originalType" select="$variable/type/@originalType"/>
+				</xsl:if>
 				<xsl:value-of select="$variable/type" />
 			</xsl:element>
 			<xsl:element name="name">
@@ -127,6 +131,10 @@
 						<xsl:value-of select="$variable/@passedBy" />
 					</xsl:attribute>
 					<xsl:element name="type">
+						<!-- for primitive types as template parameters -->
+						<xsl:if test="$variable/type/@originalType">
+							<xsl:attribute name="originalType" select="$variable/type/@originalType"/>
+						</xsl:if>
 						<xsl:value-of select="$variable/type" />
 					</xsl:element>
 					<xsl:element name="name">

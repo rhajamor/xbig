@@ -76,7 +76,10 @@
 			<xsl:for-each select="$class/templateparameters/templateparameter
 								[@templateType = 'class' or @templateType = 'typename']">
 				<xsl:value-of select="@templateDeclaration"/>
-				<xsl:text>&#32;extends&#32;INativeObject</xsl:text>
+
+				<!-- outcommented for primitive types as template parameters -->
+				<!-- <xsl:text>&#32;extends&#32;INativeObject</xsl:text> -->
+
 				<xsl:if test="position() != last()">
 					<xsl:text>,&#32;</xsl:text>
 				</xsl:if>
@@ -119,7 +122,18 @@
 				<xsl:if test="$class/typeparameters">
 					<xsl:value-of select="'&lt; '"/>
 					<xsl:for-each select="$class/typeparameters/typepara">
-						<xsl:value-of select="xbig:getFullJavaName(@used, $class, $root, $config)"/>
+						<xsl:variable name="usedType" select="@used"/>
+		
+						<xsl:choose>
+							<!-- check for primitive types -->
+							<xsl:when test="$config/config/java/types/type[@meta = $usedType]">
+								<xsl:value-of select="$config/config/java/types/type
+													  [@meta = $usedType]/@genericParameter"/>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:value-of select="xbig:getFullJavaName(@used, $class, $root, $config)"/>
+							</xsl:otherwise>
+						</xsl:choose>
 						<xsl:if test="position()!=last()">
 							<xsl:text>, </xsl:text>
 						</xsl:if>

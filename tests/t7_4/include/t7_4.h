@@ -29,16 +29,19 @@ public:
 	int get3() {return 3;}
 };
 
-//typedef A<int> C;
+typedef A<int> C;
 typedef A<B> D;
 
 
 class Tester {
 public:
 	bool a(D a) {return a.a().get3() == 3;}
-	D b() {return d;}
+	D b() {return md;}
+	void c(C a) {mc = a;}
+	C d() {return mc;}
 private:
-	D d;
+	D md;
+	C mc;
 };
 
 

@@ -571,29 +571,29 @@
 	<java>
 		<types>
 
-			<type meta="void" java="void" />
-			<type meta="bool" java="boolean" />
+			<type meta="void" java="void" genericParameter="void"/>
+			<type meta="bool" java="boolean" genericParameter="boolean"/>
 
-			<type meta="char" java="char" />
-			<type meta="signed char" java="byte" />
-			<type meta="unsigned char" java="short" />
+			<type meta="char" java="char" genericParameter="Byte"/>
+			<type meta="signed char" java="byte" genericParameter="Byte"/>
+			<type meta="unsigned char" java="short" genericParameter="Short"/>
 
-			<type meta="short" java="short" />
-			<type meta="signed short" java="short" />
-			<type meta="unsigned short" java="int" />
+			<type meta="short" java="short" genericParameter="Short"/>
+			<type meta="signed short" java="short" genericParameter="Short"/>
+			<type meta="unsigned short" java="int" genericParameter="Integer"/>
 
-			<type meta="int" java="int" />
-			<type meta="signed int" java="int" />
-			<type meta="unsigned int" java="long" />
+			<type meta="int" java="int" genericParameter="Integer"/>
+			<type meta="signed int" java="int" genericParameter="Integer"/>
+			<type meta="unsigned int" java="long" genericParameter="Long"/>
 
-			<type meta="long" java="long" />
-			<type meta="signed long" java="long" />
-			<type meta="unsigned long" java="long long" />
+			<type meta="long" java="long" genericParameter="Long"/>
+			<type meta="signed long" java="long" genericParameter="Long"/>
+			<type meta="unsigned long" java="long long" genericParameter="BigInteger"/>
 
-			<type meta="double" java="double" />
-			<type meta="float" java="float" />
+			<type meta="double" java="double" genericParameter="Double"/>
+			<type meta="float" java="float" genericParameter="Float"/>
 
-			<type meta="std::string" java="String" />
+			<type meta="std::string" java="String" genericParameter="String"/>
 
 		</types>
 

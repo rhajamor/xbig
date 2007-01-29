@@ -33,7 +33,8 @@
 	xmlns:xs="http://www.w3.org/2001/XMLSchema"
 	xmlns:fn="http://www.w3.org/2005/xpath-functions"
 	xmlns:xdt="http://www.w3.org/2005/xpath-datatypes"
-	xmlns:xd="http://www.pnp-software.com/XSLTdoc">
+	xmlns:xd="http://www.pnp-software.com/XSLTdoc"
+	xmlns:xbig="http://xbig.sourceforge.net/XBiG">
 
 	<xsl:import href="javaType.xslt" />
 
@@ -97,7 +98,8 @@
 			</xsl:when>
 
 			<!-- abstract function -->
-			<!-- this is not necessary because of the interfaces that are generated for multiple inheritance -->
+			<!-- this is not necessary because of the interfaces 
+				 that are generated for multiple inheritance -->
 			<xsl:when test="$virtuality = 'pure-virtual'">
 				<!-- <xsl:text>&#32;abstract</xsl:text> -->
 			</xsl:when>
@@ -118,19 +120,40 @@
 		<!-- write return type if available-->
 		<xsl:if test="$return_type">
 			<xsl:text>&#32;</xsl:text>
+
 			<xsl:choose>
+				<!-- if this is a typedef for a template and the type parameter is a primitive -->
+				<xsl:when test="$method/type/@originalType">
+					<xsl:choose>
+						<xsl:when test="$method/type/@originalType != $return_type and
+										$config/config/java/types/type[@meta = $return_type]">
+							<xsl:value-of select="$config/config/java/types/type
+												  [@meta = $return_type]/@genericParameter"/>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:call-template name="javaType">
+								<xsl:with-param name="config" select="$config" />
+								<xsl:with-param name="param" select="$method" />
+								<xsl:with-param name="class" select="$class" />
+								<xsl:with-param name="typeName" select="$return_type" />
+							</xsl:call-template>
+						</xsl:otherwise>
+					</xsl:choose>
+				</xsl:when>
+
 				<!-- if a template parameter is returned -->
 				<xsl:when test="$class/templateparameters/templateparameter
 								[@templateType='class'][@templateDeclaration = $return_type]">
 					<!-- <xsl:value-of select="'void'"/> -->
 					<xsl:value-of select="$return_type"/>
 				</xsl:when>
+
 				<xsl:otherwise>
 					<xsl:call-template name="javaType">
 						<xsl:with-param name="config" select="$config" />
 						<xsl:with-param name="param" select="$method" />
 						<xsl:with-param name="class" select="$class" />
-						<xsl:with-param name="typeName" select="$method/type" />
+						<xsl:with-param name="typeName" select="$return_type" />
 					</xsl:call-template>
 				</xsl:otherwise>
 			</xsl:choose>
@@ -160,12 +183,36 @@
 		<xsl:for-each select="$method/parameters/parameter">
 
 			<!-- write parameter type -->
-			<xsl:call-template name="javaType">
-				<xsl:with-param name="config" select="$config" />
-				<xsl:with-param name="param" select="." />
-				<xsl:with-param name="class" select="$class" />
-				<xsl:with-param name="typeName" select="./type" />
-			</xsl:call-template>
+			<xsl:choose>
+
+				<!-- if this is a typedef for a template and the type parameter is a primitive -->
+				<xsl:when test="./type/@originalType">
+					<xsl:choose>
+						<xsl:when test="./type/@originalType != ./type and
+										$config/config/java/types/type[@meta = current()/type]">
+							<xsl:value-of select="$config/config/java/types/type
+												  [@meta = current()/type]/@genericParameter"/>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:call-template name="javaType">
+								<xsl:with-param name="config" select="$config" />
+								<xsl:with-param name="param" select="$method" />
+								<xsl:with-param name="class" select="$class" />
+								<xsl:with-param name="typeName" select="./type" />
+							</xsl:call-template>
+						</xsl:otherwise>
+					</xsl:choose>
+				</xsl:when>
+
+				<xsl:otherwise>
+					<xsl:call-template name="javaType">
+						<xsl:with-param name="config" select="$config" />
+						<xsl:with-param name="param" select="." />
+						<xsl:with-param name="class" select="$class" />
+						<xsl:with-param name="typeName" select="./type" />
+					</xsl:call-template>
+				</xsl:otherwise>
+			</xsl:choose>
 
 			<!-- seperator type and name -->
 			<xsl:text>&#32;</xsl:text>

@@ -7,6 +7,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.xbig.IA;
 import org.xbig.IB;
+import org.xbig.IC;
 import org.xbig.ID;
 import org.xbig.IZ;
 import org.xbig.Tester;
@@ -28,6 +29,11 @@ public class BasicTests {
 
 		d.sety(a);
 		Assert.assertEquals(3, d.gety().get3());
+
+		IC c = t.d();
+		t.c(c);
+		int i = c.a();
+		c.b(i);
 
 		t.delete();
 	}

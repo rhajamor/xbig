@@ -63,10 +63,18 @@
 				<xsl:element name="para">
 						<xsl:variable name="normalizedToken" select="normalize-space(.)"/>
 						<xsl:choose>
+							<!-- templates as type parameters -->
 							<xsl:when test="contains(., '&lt;')">
 								<xsl:value-of select="concat('::', xbig:getFullTemplateName(
 											$normalizedToken, $typedef, $root))"/>
 							</xsl:when>
+
+							<!-- primitive types -->
+							<xsl:when test="$config/config/meta/signatures/type[@meta = $normalizedToken]">
+								<xsl:value-of select="$normalizedToken"/>
+							</xsl:when>
+
+							<!-- classes, ... -->
 							<xsl:otherwise>
 								<xsl:value-of select="concat('::', xbig:getFullTypeName(xbig:resolveTypedef(
 											$normalizedToken, $typedef, $root), $typedef, $root))"/>
@@ -221,6 +229,9 @@
 		<xsl:param name="resolvedTypeParas"/>
 
 		<xsl:element name="type">
+			<!-- for primitive types as template parameters, needed in javaAccessMethodDeclaration.xslt -->
+			<xsl:attribute name="originalType" select="$type"/>
+
 			<xsl:if test="$type/@const">
 				<xsl:attribute name="const" select="'true'"/>
 			</xsl:if>

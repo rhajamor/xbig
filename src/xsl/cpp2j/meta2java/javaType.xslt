@@ -258,48 +258,75 @@
 		<xsl:param name="inputTreeRoot"/>
 		<xsl:param name="config"/>
 
-		<!-- get full meta / c++ name -->
-		<xsl:variable name="fullNameAsReturned" select="xbig:getFullTypeName($type, $currentNode, $inputTreeRoot)"/>
-
-		<!-- add java specific stuff to class name -->
-		<xsl:variable name="fullName">
-			<xsl:variable name="fullNameTokens">
-				<xsl:call-template name="str:split">
-					<xsl:with-param name="string" select="$fullNameAsReturned" />
-					<xsl:with-param name="pattern" select="'::'" />
-				</xsl:call-template>
+		<xsl:variable name="javaTypeName">
+			<xsl:variable name="typeWithoutGlobalNSPrefix">
+				<xsl:choose>
+					<xsl:when test="starts-with($type, '::')">
+						<xsl:value-of select="substring-after($type, '::')"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="$type"/>
+					</xsl:otherwise>
+				</xsl:choose>
 			</xsl:variable>
 
+			<!-- check if this is a primitive type -->
 			<xsl:choose>
-				<!-- Use generated Interface for classes and structs,
-					 for template typedefs as well -->
-				<xsl:when test="xbig:isClassOrStruct($fullNameAsReturned, $currentNode, $inputTreeRoot) or
-								xbig:isTemplateTypedef($fullNameAsReturned, $currentNode, $inputTreeRoot)">
-					<xsl:for-each select="$fullNameTokens/token">
-						<xsl:if test="position() = last()">
-							<xsl:value-of select="$config/config/java/interface/prefix" />
-						</xsl:if>
-						<xsl:value-of select="." />
-						<xsl:choose>
-							<xsl:when test="position() = last()">
-								<xsl:value-of select="$config/config/java/interface/suffix" />
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:value-of select="'::'" />
-							</xsl:otherwise>
-						</xsl:choose>
-					</xsl:for-each>
+				<xsl:when test="$config/config/java/types/type[@meta = $typeWithoutGlobalNSPrefix]">
+					<xsl:value-of select="$config/config/java/types/type
+										  [@meta = $typeWithoutGlobalNSPrefix]/@java"/>
 				</xsl:when>
 
 				<xsl:otherwise>
-					<xsl:value-of select="$fullNameAsReturned"/>
+
+					<!-- get full meta / c++ name -->
+					<xsl:variable name="fullNameAsReturned" select="xbig:getFullTypeName($type, $currentNode, $inputTreeRoot)"/>
+			
+					<!-- add java specific stuff to class name -->
+					<xsl:variable name="fullName">
+						<xsl:variable name="fullNameTokens">
+							<xsl:call-template name="str:split">
+								<xsl:with-param name="string" select="$fullNameAsReturned" />
+								<xsl:with-param name="pattern" select="'::'" />
+							</xsl:call-template>
+						</xsl:variable>
+			
+						<xsl:choose>
+							<!-- Use generated Interface for classes and structs,
+								 for template typedefs as well -->
+							<xsl:when test="xbig:isClassOrStruct($fullNameAsReturned, $currentNode, $inputTreeRoot) or
+											xbig:isTemplateTypedef($fullNameAsReturned, $currentNode, $inputTreeRoot)">
+								<xsl:for-each select="$fullNameTokens/token">
+									<xsl:if test="position() = last()">
+										<xsl:value-of select="$config/config/java/interface/prefix" />
+									</xsl:if>
+									<xsl:value-of select="." />
+									<xsl:choose>
+										<xsl:when test="position() = last()">
+											<xsl:value-of select="$config/config/java/interface/suffix" />
+										</xsl:when>
+										<xsl:otherwise>
+											<xsl:value-of select="'::'" />
+										</xsl:otherwise>
+									</xsl:choose>
+								</xsl:for-each>
+							</xsl:when>
+			
+							<xsl:otherwise>
+								<xsl:value-of select="$fullNameAsReturned"/>
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:variable>
+
+					<xsl:variable name="nsPrefix" select="$config/config/java/namespaces/packageprefix"/>
+					<xsl:variable name="fullNameWithDots" select="replace($fullName, '::', '.')"/>
+					<xsl:value-of select="concat($nsPrefix, '.', $fullNameWithDots)"/>
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
 
-		<xsl:variable name="nsPrefix" select="$config/config/java/namespaces/packageprefix"/>
-		<xsl:variable name="fullNameWithDots" select="replace($fullName, '::', '.')"/>
-		<xsl:value-of select="concat($nsPrefix, '.', $fullNameWithDots)"/>
+		<!-- return -->
+		<xsl:value-of select="$javaTypeName"/>
 
 	</xsl:function>
 

@@ -35,17 +35,22 @@ public:
 	typedef B<Z> Y;
 };
 
-//typedef B<int> C;
+typedef B<int> C;
 typedef B<A> D;
 
 class Tester {
 public:
 	bool a(D a) {return a.a().get3() == 3;}
-	D b() {return d;}
+	D b() {return md;}
+
+	void c(C a) {mc = a;}
+	C d() {return mc;}
+
 	bool x(A::Y a) {return a.a().get7() == 7;}
 	A::Y z() {return y;}
 private:
-	D d;
+	D md;
+	C mc;
 	A::Y y;
 };
 
