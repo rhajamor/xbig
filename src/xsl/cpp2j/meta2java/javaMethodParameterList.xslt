@@ -89,8 +89,19 @@
 			<!-- write parameter name -->
 			<xsl:value-of select="name" />
 
+			<!-- extract jni type depending on meta type, const/non-const, pass type
+				 needed for next if -->
+			<xsl:variable name="type_info">
+				<xsl:call-template name="metaFirstTypeInfo">
+					<xsl:with-param name="root" 
+						select="$config/config/java/types" />
+					<xsl:with-param name="param" select="." />
+					<xsl:with-param name="typeName" select="./type" />
+				</xsl:call-template>
+			</xsl:variable>
+
 			<!-- if we call a native method and have to pass an InstancePointer -->
-			<xsl:if test="($callingNativeMethod eq 'true') and
+			<xsl:if test="($callingNativeMethod eq 'true') and $type_info/type/@java and
 				 		  ((./@passedBy eq 'pointer') or (./@passedBy eq 'reference'))">
 				<xsl:value-of select="'.object.pointer'" />
 			</xsl:if>

@@ -166,15 +166,18 @@
 
 			<xsl:variable name="pass">
 				<xsl:choose>
-					<xsl:when test="$param/@passedBy eq 'pointer'">
+					<xsl:when test="$param/@passedBy eq 'pointer' and $type_info/type/@cpp">
 						<xsl:text>*</xsl:text>
 					</xsl:when>
-					<xsl:when test="$param/@passedBy eq 'reference'">
+					<xsl:when test="$param/@passedBy eq 'reference' and $type_info/type/@cpp">
 						<xsl:text>&amp;</xsl:text>
 					</xsl:when>
 					<xsl:when test="$param/type/@array">
 						<xsl:value-of select="$param/type/@array" />
 					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="''" />
+					</xsl:otherwise>
 				</xsl:choose>
 			</xsl:variable>
 
@@ -499,12 +502,13 @@
 							select="$method/parameters/parameter">
 
 							<!-- write parameter name -->
-							<xsl:if test="@passedBy='reference' or
+							<xsl:if test="@passedBy='reference' or ((
 										  xbig:isClassOrStruct(xbig:resolveTypedef(./type, $class, $root)
 										  		, $class, $root) or
 										  xbig:isTemplateTypedef(xbig:resolveTypedef(./type, $class, $root)
 										  		, $class, $root) or
-										  contains(type, '&lt;')">
+										  contains(type, '&lt;')
+										  ) and @passedBy != 'pointer')">
 								<xsl:value-of select="'*'" />
 							</xsl:if>
 							<xsl:value-of
@@ -603,11 +607,12 @@
 					<xsl:value-of select="$line13" />
 				</xsl:when>
 				<!-- Produces warning: taking address of temporary -->
-				<xsl:when test="xbig:isClassOrStruct(xbig:resolveTypedef($method/type, $class, $root)
+				<xsl:when test="(xbig:isClassOrStruct(xbig:resolveTypedef($method/type, $class, $root)
 									, $class, $root) or
 								xbig:isTemplateTypedef(xbig:resolveTypedef($method/type, $class, $root)
 									, $class, $root) or
-								contains($method/type, '&lt;')">
+								contains($method/type, '&lt;')
+								) and $method/@passedBy != 'pointer'">
 					<xsl:variable name="cppThis" select="$var_config/cpp/object/@name"/>
 					<xsl:variable name="searchFor">
 						<xsl:value-of select="'= '"/>

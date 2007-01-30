@@ -45,6 +45,17 @@
 		<xsl:param name="class" />
 		<xsl:param name="method" />
 
+		<!-- extract jni type depending on meta type, const/non-const, pass type
+			 needed for some ifs -->
+		<xsl:variable name="type_info">
+			<xsl:call-template name="metaFirstTypeInfo">
+				<xsl:with-param name="root" 
+					select="$config/config/java/types" />
+				<xsl:with-param name="param" select="." />
+				<xsl:with-param name="typeName" select="./type" />
+			</xsl:call-template>
+		</xsl:variable>
+
 		<!-- shortcut for static attribute -->
 		<xsl:variable name="static" select="$method/@static" />
 
@@ -52,7 +63,8 @@
 		<xsl:text>&#32;return&#32;</xsl:text>
 
 		<!-- create Pointer object when necessary -->
-		<xsl:if test="$method/@passedBy='pointer' or $method/@passedBy='reference'">
+		<xsl:if test="($method/@passedBy='pointer' or $method/@passedBy='reference')
+						and $type_info/type/@java">
 			<xsl:text>new&#32;</xsl:text>
 			<xsl:call-template name="javaPointerClass">
 				<xsl:with-param name="config" select="$config" />
@@ -131,7 +143,8 @@
 		</xsl:call-template>
 
 		<!-- close Pointer and InstancePointer c-tor calls -->
-		<xsl:if test="$method/@passedBy='pointer' or $method/@passedBy='reference'">
+		<xsl:if test="($method/@passedBy='pointer' or $method/@passedBy='reference')
+						and $type_info/type/@java">
 			<xsl:text>))</xsl:text>
 		</xsl:if>
 		<xsl:if test="contains($method/type, '&lt;')"><!-- for returned parametrized templates -->
