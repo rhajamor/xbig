@@ -203,10 +203,6 @@
 						#nl#// parameter conversions
 						#cpp_conversions#
 						#nl#
-						#nl#// cast pointer to C++ object
-						#nl##cpp_class#* #cpp_this# =
-						reinterpret_cast&lt;#cpp_class#*&gt;(#jni_pointer#);
-						#nl#
 						#nl#// call library method
 						#nl##cpp_return_type# #cpp_return_var# =
 						    #cpp_class#::#cpp_attribute#;
@@ -230,10 +226,6 @@
 					<static>
 						#nl#// parameter conversions
 						#cpp_conversions#
-						#nl#
-						#nl#// cast pointer to C++ object
-						#nl##cpp_class#* #cpp_this# =
-						reinterpret_cast&lt;#cpp_class#*&gt;(#jni_pointer#);
 						#nl#
 						#nl#// call library method
 						#nl##cpp_class#::#cpp_attribute# = #cpp_params#;

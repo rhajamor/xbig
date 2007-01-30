@@ -55,29 +55,22 @@
 			or normal method -->
 		<!-- <xsl:variable name="mcfg"
 			select="if($method/type) then $meta_config/method/name else $meta_config/constructor/name" /> -->
-		<xsl:variable name="mcfg">
+		<xsl:variable name="method_name">
 			<xsl:choose>
 				<xsl:when test="not($method/type)">
-					<xsl:value-of select="$meta_config/constructor/name" />
+					<xsl:value-of select="concat($meta_config/constructor/name/prefix, 
+											$method/name, $meta_config/constructor/name/suffix)" />
 				</xsl:when>
 				<!-- destructor -->
-				<xsl:when test="$method/name() = $meta_config/destructor/name">
-					<xsl:value-of select="''" />
+				<xsl:when test="$method/name = $meta_config/destructor/name">
+					<xsl:value-of select="$method/name" />
 				</xsl:when>
 				<xsl:otherwise>
-					<xsl:value-of select="$meta_config/method/name"/>
+					<xsl:value-of select="concat($meta_config/method/name/prefix, 
+											$method/name, $meta_config/method/name/suffix)" />
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
-
-		<!-- shortcut of given function name -->
-		<xsl:variable name="org_method_name">
-				<xsl:value-of select="$method/name"/>
-		</xsl:variable>
-
-		<!-- expand to fuel method name -->
-		<xsl:variable name="method_name"
-			select="concat($mcfg/prefix, $org_method_name, $mcfg/suffix)" />
 
 		<!-- write meta signature if parameters available -->
 		<xsl:variable name="method_params">

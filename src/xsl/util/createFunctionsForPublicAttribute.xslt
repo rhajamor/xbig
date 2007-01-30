@@ -89,60 +89,62 @@
 		</xsl:element>
 
 		<!-- setter -->
-		<xsl:element name="function">
-			<xsl:attribute name="public_attribute_setter">
-				<xsl:text>true</xsl:text>
-			</xsl:attribute>
-			<xsl:attribute name="virt">
-				<xsl:text>non-virtual</xsl:text>
-			</xsl:attribute>
-			<xsl:attribute name="visibility">
-				<xsl:text>public</xsl:text>
-			</xsl:attribute>
-			<xsl:attribute name="static">
-				<xsl:value-of select="$variable/@static" />
-			</xsl:attribute>
-			<xsl:attribute name="const">
-				<xsl:value-of select="$variable/@const" />
-			</xsl:attribute>
-			<xsl:attribute name="passedBy">
-				<!-- <xsl:value-of select="$variable/@passedBy" /> -->
-				<xsl:value-of select="'value'" />
-			</xsl:attribute>
-			<xsl:element name="attribute_name">
-				<xsl:value-of select="$variable/name"/>
-			</xsl:element>
-			<xsl:element name="type">
-				<xsl:text>void</xsl:text>
-			</xsl:element>
-			<xsl:element name="name">
-				<xsl:value-of>
-					<!-- <xsl:value-of select="'__'"/> -->
-					<xsl:value-of select="$config/config/meta/publicattribute/set/text()"/>
+		<xsl:if test="$variable/@const != 'true'">
+			<xsl:element name="function">
+				<xsl:attribute name="public_attribute_setter">
+					<xsl:text>true</xsl:text>
+				</xsl:attribute>
+				<xsl:attribute name="virt">
+					<xsl:text>non-virtual</xsl:text>
+				</xsl:attribute>
+				<xsl:attribute name="visibility">
+					<xsl:text>public</xsl:text>
+				</xsl:attribute>
+				<xsl:attribute name="static">
+					<xsl:value-of select="$variable/@static" />
+				</xsl:attribute>
+				<xsl:attribute name="const">
+					<xsl:value-of select="$variable/@const" />
+				</xsl:attribute>
+				<xsl:attribute name="passedBy">
+					<!-- <xsl:value-of select="$variable/@passedBy" /> -->
+					<xsl:value-of select="'value'" />
+				</xsl:attribute>
+				<xsl:element name="attribute_name">
 					<xsl:value-of select="$variable/name"/>
-				</xsl:value-of>
-			</xsl:element>
-			<xsl:element name="definition">
-				<xsl:value-of select="$variable/definition" />
-			</xsl:element>
-			<xsl:element name="parameters">
-				<xsl:element name="parameter">
-					<xsl:attribute name="passedBy">
-						<xsl:value-of select="$variable/@passedBy" />
-					</xsl:attribute>
-					<xsl:element name="type">
-						<!-- for primitive types as template parameters -->
-						<xsl:if test="$variable/type/@originalType">
-							<xsl:attribute name="originalType" select="$variable/type/@originalType"/>
-						</xsl:if>
-						<xsl:value-of select="$variable/type" />
-					</xsl:element>
-					<xsl:element name="name">
-						<xsl:value-of select="$config/config/cpp/variables/jni/attributevalue/@name" />
+				</xsl:element>
+				<xsl:element name="type">
+					<xsl:text>void</xsl:text>
+				</xsl:element>
+				<xsl:element name="name">
+					<xsl:value-of>
+						<!-- <xsl:value-of select="'__'"/> -->
+						<xsl:value-of select="$config/config/meta/publicattribute/set/text()"/>
+						<xsl:value-of select="$variable/name"/>
+					</xsl:value-of>
+				</xsl:element>
+				<xsl:element name="definition">
+					<xsl:value-of select="$variable/definition" />
+				</xsl:element>
+				<xsl:element name="parameters">
+					<xsl:element name="parameter">
+						<xsl:attribute name="passedBy">
+							<xsl:value-of select="$variable/@passedBy" />
+						</xsl:attribute>
+						<xsl:element name="type">
+							<!-- for primitive types as template parameters -->
+							<xsl:if test="$variable/type/@originalType">
+								<xsl:attribute name="originalType" select="$variable/type/@originalType"/>
+							</xsl:if>
+							<xsl:value-of select="$variable/type" />
+						</xsl:element>
+						<xsl:element name="name">
+							<xsl:value-of select="$config/config/cpp/variables/jni/attributevalue/@name" />
+						</xsl:element>
 					</xsl:element>
 				</xsl:element>
 			</xsl:element>
-		</xsl:element>
+		</xsl:if>
 
 	</xsl:template>
 </xsl:stylesheet>

@@ -1466,6 +1466,28 @@
 					</xsl:choose>
 					</xsl:attribute>
 				-->
+				<xsl:attribute name="visibility" select="@prot" />
+				<xsl:attribute name="static">
+					<xsl:choose>
+						<xsl:when test="@static='yes'">
+							<xsl:value-of select="'true'" />
+						</xsl:when>
+						<xsl:when test="@static='no'">
+							<xsl:value-of select="'false'" />
+						</xsl:when>
+					</xsl:choose>
+				</xsl:attribute>
+				<xsl:attribute name="const">
+					<xsl:choose>
+						<xsl:when test="@const='yes'">
+							<xsl:value-of select="'true'" />
+						</xsl:when>
+						<xsl:when test="@const='no' or not(@const)">
+							<xsl:value-of select="'false'" />
+						</xsl:when>
+					</xsl:choose>
+				</xsl:attribute>
+
 				<xsl:if test="type and type!='virtual'">
 					<xsl:call-template name="type" />
 				</xsl:if>

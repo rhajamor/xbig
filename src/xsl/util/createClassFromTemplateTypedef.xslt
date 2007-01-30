@@ -137,7 +137,10 @@
 			<xsl:for-each select="$template/variable">
 				<xsl:element name="variable">
 
-					<xsl:attribute name="passedBy" select="./@passedBy"/>
+					<xsl:attribute name="visibility" select="./@visibility"/>
+               		<xsl:attribute name="static" select="./@static"/>
+               		<xsl:attribute name="const" select="./@const"/>
+               		<xsl:attribute name="passedBy" select="./@passedBy"/>
 
 					<xsl:element name="name">
 						<xsl:value-of select="./name"/>

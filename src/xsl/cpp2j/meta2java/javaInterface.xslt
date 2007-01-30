@@ -219,8 +219,8 @@
 				</xsl:choose>
 			</xsl:variable>
 
-			<!-- interfaces cannot have consructors -->
-			<xsl:if test="name!=$class/@name">
+			<!-- interfaces cannot have consructors or static methods -->
+			<xsl:if test="name!=$class/@name and @static!='true'">
 				<xsl:call-template name="javaAccessMethodDeclaration">
 					<xsl:with-param name="config" select="$config" />
 					<xsl:with-param name="class" select="$class" />
@@ -234,22 +234,24 @@
 
 		<!-- handling of public attributes -->
 		<xsl:for-each select="variable">
-			<xsl:variable name="publicAttributeGettersAndSetters">
-				<xsl:call-template name="createFunctionsForPublicAttribute">
-					<xsl:with-param name="variable" select="."/>
-				</xsl:call-template>
-			</xsl:variable>
+			<xsl:if test="@static != 'true'">
+				<xsl:variable name="publicAttributeGettersAndSetters">
+					<xsl:call-template name="createFunctionsForPublicAttribute">
+						<xsl:with-param name="variable" select="."/>
+					</xsl:call-template>
+				</xsl:variable>
 
-			<xsl:for-each select="$publicAttributeGettersAndSetters/function">
-				<xsl:call-template name="javaAccessMethodDeclaration">
-					<xsl:with-param name="config" select="$config" />
-					<xsl:with-param name="class" select="$class" />
-					<xsl:with-param name="method" select="." />
-				</xsl:call-template>
+				<xsl:for-each select="$publicAttributeGettersAndSetters/function">
+					<xsl:call-template name="javaAccessMethodDeclaration">
+						<xsl:with-param name="config" select="$config" />
+						<xsl:with-param name="class" select="$class" />
+						<xsl:with-param name="method" select="." />
+					</xsl:call-template>
 
-				<!-- finish declaration -->
-				<xsl:text>;&#10;&#10;</xsl:text>
-			</xsl:for-each>
+					<!-- finish declaration -->
+					<xsl:text>;&#10;&#10;</xsl:text>
+				</xsl:for-each>
+			</xsl:if>
 		</xsl:for-each>
 
 
