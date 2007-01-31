@@ -29,11 +29,14 @@
 #ifndef _Included_jni_base_all_
 #define _Included_jni_base_all_
 
+#include "jni_base.h"
 #include "jni_char_pointer.h"
 #include "jni_double_pointer.h"
 #include "jni_float_pointer.h"
 #include "jni_integer_pointer.h"
 #include "jni_long_pointer.h"
+#include "jni_native_object_pointer.h"
 #include "jni_short_pointer.h"
+#include "jni_string_pointer.h"
 
 #endif

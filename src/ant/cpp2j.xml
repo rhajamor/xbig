@@ -315,6 +315,7 @@
 			</extraincludes>
 			<extralibraries>
 				<libset libs="${lib.name}" dir="${dir.cpp.build.config}/shared"/>
+				<libset libs="cpp2j-base" dir="${dir.prj.base}/src/c/build/${cpp.platform}/${cpp.compiler}/${cpp.compiler.config}/shared"/>
 			</extralibraries>
 		</cpp-lib-compile>
 	</target>
@@ -335,6 +336,7 @@
 			</extraincludes>
 			<extralibraries>
 				<libset libs="${lib.name}" dir="${dir.cpp.build.config}/shared"/>
+				<libset libs="cpp2j-base" dir="${dir.prj.base}/src/c/build/${cpp.platform}/${cpp.compiler}/${cpp.compiler.config}/shared"/>
 			</extralibraries>
 		</cpp-lib-compile>
 	</target>

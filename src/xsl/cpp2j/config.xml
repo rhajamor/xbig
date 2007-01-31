@@ -522,7 +522,7 @@
 				</type>
 				<type meta="double" jni="jdouble" />
 				
-				<type meta="float" pass="pointer" jni="jlong" cpp="float*" returntype="float&amp;">
+				<type meta="float" pass="pointer" jni="jlong" cpp="float*">
 					<jni2cpp>
 						reinterpret_cast&lt;float*&gt;(#jni_var#)
 					</jni2cpp>					
@@ -530,7 +530,7 @@
 						reinterpret_cast&lt;jlong&gt;(#cpp_var#)
 					</cpp2jni>
 				</type>				
-				<type meta="float" pass="reference" jni="jlong" cpp="float*">
+				<type meta="float" pass="reference" jni="jlong" cpp="float*" returntype="float&amp;">
 					<jni2cpp>
 						reinterpret_cast&lt;float*&gt;(#jni_var#)
 					</jni2cpp>
@@ -540,6 +540,23 @@
 				</type>
 				<type meta="float" jni="jfloat" />				
 
+				<type meta="std::string" pass="pointer" jni="jlong" cpp="std::string*">
+					<jni2cpp>
+						reinterpret_cast&lt;std::string*&gt;(#jni_var#)
+					</jni2cpp>					
+					<cpp2jni>
+						reinterpret_cast&lt;jlong&gt;(#cpp_var#)
+					</cpp2jni>
+				</type>				
+				<type meta="std::string" pass="reference" jni="jlong" cpp="std::string*"
+						 returntype="std::string&amp;">
+					<jni2cpp>
+						reinterpret_cast&lt;std::string*&gt;(#jni_var#)
+					</jni2cpp>
+					<cpp2jni>
+						reinterpret_cast&lt;jlong&gt;(&amp;#cpp_var#)
+					</cpp2jni>
+				</type>
 				<type meta="std::string" jni="jstring">
 					<jni2cpp>
 						org::xbig::jni::to_stdstring(#jni_env#, #jni_var#)
