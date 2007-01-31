@@ -29,11 +29,11 @@
 -->
 
 
-<project name="t12_1" default="all" basedir=".">
+<project name="t14_1" default="all" basedir=".">
 
 	<property name="dir.cur" location="." />
 	<property name="dir.top" location="../.." />
-	<property name="lib.name" value="t12_1" />
+	<property name="lib.name" value="t14_1" />
 	
 	<import file="${dir.top}/src/ant/cpp2j.xml" />
 	
@@ -42,8 +42,8 @@
 
 	<!-- Compilation of test library -->
 	<target name="compile-lib-base" depends="init">
-		<cpp-shared-lib name="t12_1" />
-		<cpp-shared-test name="simple" libs="t12_1" />
+		<cpp-shared-lib name="t14_1" />
+		<cpp-shared-test name="simple" libs="t14_1" />
 	</target>
 
 	<target name="all" depends="compile-lib-base, javalib-test"></target>
