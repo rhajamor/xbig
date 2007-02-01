@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE AntProject []>
+
+<!--
+	
+	This source file is part of XBiG
+		(XSLT Bindings Generator)
+	For the latest info, see http://sourceforge.net/projects/xbig
+	
+	Copyright (c) 2006 The XBiG Development Team
+	Also see acknowledgements in Readme.html
+	
+	This program is free software; you can redistribute it and/or modify it under
+	the terms of the GNU Lesser General Public License as published by the Free Software
+	Foundation; either version 2 of the License, or (at your option) any later
+	version.
+	
+	This program is distributed in the hope that it will be useful, but WITHOUT
+	ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+	FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
+	
+	You should have received a copy of the GNU Lesser General Public License along with
+	this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+	Place - Suite 330, Boston, MA 02111-1307, USA, or go to
+	http://www.gnu.org/copyleft/lesser.txt.
+	
+	Author: Frank Bielig
+	
+-->
+
+
+<project name="t9_1" default="all" basedir=".">
+
+	<property name="dir.cur" location="." />
+	<property name="dir.top" location="../.." />
+	<property name="lib.name" value="t9_1" />
+	
+	<import file="${dir.top}/src/ant/cpp2j.xml" />
+	
+	<!-- Initialization -->
+	<target name="init" depends="cpp2j.init"></target>
+
+	<!-- Compilation of test library -->
+	<target name="compile-lib-base" depends="init">
+		<cpp-shared-lib name="t9_1" />
+		<cpp-shared-test name="simple" libs="t9_1" />
+	</target>
+
+	<target name="all" depends="compile-lib-base, javalib-test"></target>
+
+	<target name="testjni" depends="testcompilejni"></target>
+
+	<target name="clean" depends="cpp-clean">
+		<delete dir="${dir.cpp.build}" />
+	</target>
+
+</project>
