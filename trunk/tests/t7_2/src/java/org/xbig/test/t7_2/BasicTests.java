@@ -27,6 +27,7 @@ public class BasicTests {
 		((A)a).delete();
 
 		a = c.getB();
+		a.delete();
 
 		c.delete();
 	}

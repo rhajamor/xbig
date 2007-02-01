@@ -28,12 +28,17 @@ public class BasicTests {
 		d.b(a);
 
 		d.sety(a);
-		Assert.assertEquals(3, d.gety().get3());
+		IA a2 = d.gety();
+		Assert.assertEquals(3, a2.get3());
+		a2.delete();
+		a.delete();
+		d.delete();
 
 		IC c = t.d();
 		t.c(c);
 		int i = c.a();
 		c.b(i);
+		c.delete();
 
 		t.delete();
 	}
@@ -49,7 +54,11 @@ public class BasicTests {
 		y.b(z);
 
 		y.sety(z);
-		Assert.assertEquals(7, y.gety().get7());
+		IZ z2 = y.gety();
+		Assert.assertEquals(7, z2.get7());
+		z2.delete();
+		z.delete();
+		y.delete();
 
 		t.delete();
 	}

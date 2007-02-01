@@ -619,8 +619,33 @@
 						<xsl:value-of select="$cppThis"/>
 					</xsl:variable>
 					<xsl:variable name="replaceWith">
-						<xsl:value-of select="'= &amp; '"/>
-						<xsl:value-of select="$cppThis"/>
+						<xsl:choose>
+
+							<!-- we have to move local objects to the heap -->
+							<xsl:when test="$method/@passedBy = 'value'">
+								<xsl:value-of select="'= new '"/>
+								<xsl:variable name="resolvedType"
+											select="xbig:resolveTypedef($method/type, $class, $root)"/>
+								<xsl:choose>
+									<xsl:when test="contains($resolvedType, '&lt;')">
+										<xsl:value-of select="xbig:getFullTemplateName(
+														$resolvedType, $class, $root)"/>
+									</xsl:when>
+									<xsl:otherwise>
+										<xsl:value-of select="xbig:getFullTypeName(
+														$resolvedType, $class, $root)"/>
+									</xsl:otherwise>
+					 			</xsl:choose>
+								<xsl:value-of select="'('"/>
+								<xsl:value-of select="$cppThis"/>
+							</xsl:when>
+
+							<!-- passed by reference -->
+							<xsl:otherwise>
+								<xsl:value-of select="'= &amp; '"/>
+								<xsl:value-of select="$cppThis"/>
+							</xsl:otherwise>
+						</xsl:choose>
 					</xsl:variable>
 					<xsl:value-of select="replace($line13, $searchFor, $replaceWith)" />
 				</xsl:when>
@@ -631,8 +656,29 @@
 			</xsl:choose>
 		</xsl:variable>
 
+		<!-- create closing paranthesis -->
+		<xsl:variable name="line15">
+			<xsl:choose>
+				<xsl:when test="not($method/type)">
+					<xsl:value-of select="replace($line14, '#optional_closing_bracket#', '')" />
+				</xsl:when>
+				<xsl:when test="(xbig:isClassOrStruct(xbig:resolveTypedef($method/type, $class, $root)
+									, $class, $root) or
+								xbig:isTemplateTypedef(xbig:resolveTypedef($method/type, $class, $root)
+									, $class, $root) or
+								contains($method/type, '&lt;')
+								) and $method/@passedBy = 'value'">
+					<xsl:value-of select="replace($line14, '#optional_closing_bracket#', ')')" />
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="replace($line14, '#optional_closing_bracket#', '')" />
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		
+
 		<xsl:variable name="result"
-			select="xbig:cpp-replace(normalize-space($line14),'#nl#', $config/config/cpp/format/indent)" />
+			select="xbig:cpp-replace(normalize-space($line15),'#nl#', $config/config/cpp/format/indent)" />
 
 		<!-- real writing of code line -->
 		<xsl:value-of select="$result" />

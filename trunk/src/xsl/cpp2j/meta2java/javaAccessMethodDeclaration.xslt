@@ -126,7 +126,8 @@
 				<xsl:when test="$method/type/@originalType">
 					<xsl:choose>
 						<xsl:when test="$method/type/@originalType != $return_type and
-										$config/config/java/types/type[@meta = $return_type]">
+										$config/config/java/types/type[@meta = $return_type] and
+										$method/@passedBy = 'value'">
 							<xsl:value-of select="$config/config/java/types/type
 												  [@meta = $return_type]/@genericParameter"/>
 						</xsl:when>
@@ -143,7 +144,8 @@
 
 				<!-- if a template parameter is returned -->
 				<xsl:when test="$class/templateparameters/templateparameter
-								[@templateType='class'][@templateDeclaration = $return_type]">
+								[@templateType='class'][@templateDeclaration = $return_type] and
+								$method/@passedBy = 'value'">
 					<!-- <xsl:value-of select="'void'"/> -->
 					<xsl:value-of select="$return_type"/>
 				</xsl:when>

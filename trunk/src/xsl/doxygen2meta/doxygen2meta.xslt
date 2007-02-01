@@ -53,6 +53,12 @@
 	</xd:doc>
 	<xsl:output method="xml" version="1.0" encoding="iso-8859-1"
 		indent="yes" />
+
+
+	<!-- global Parameters -->
+	<xsl:param name="externalTypes" />
+
+
 	<!-- ############################## MAIN - calls namespace ############################## -->
 	<xd:doc>
 		<xd:short>Generate the root node of the XML file.</xd:short>
@@ -192,6 +198,11 @@
 					select="doxygen/compounddef[@kind='file']/sectiondef[@kind='']/memberdef[@kind='variable']/definition[not(.=following::definition)]/.." />
 				<xsl:for-each select="$unique-variable-list">
 					<xsl:call-template name="variable" />
+				</xsl:for-each>
+
+				<!-- external types, like C++ STL -->
+				<xsl:for-each select="$externalTypes/external/types/*">
+					<xsl:copy-of select="."/>
 				</xsl:for-each>
 
 			</xsl:element>
@@ -721,9 +732,29 @@
 					</xsl:choose>
 				</xsl:attribute>
 				<xsl:attribute name="protection" select="@prot" />
+				<xsl:attribute name="basetype" select="normalize-space(./type)" />
 
+				<!-- copy all includes into meta output -->
+				<xsl:choose>
+					<xsl:when test="../../@kind = 'class' or ../../@kind = 'struct'">
+						<xsl:copy-of copy-namespaces="no" select="../../includes"/>
+					</xsl:when>
+
+					<!-- inside a file -->
+					<xsl:otherwise>
+						<xsl:element name="includes">
+							<xsl:attribute name="local" select="'yes'"/>
+							<xsl:value-of select="../../compoundname"/>
+						</xsl:element>
+					</xsl:otherwise>
+				</xsl:choose>
+
+				<!-- 
 				<xsl:variable name="type"
 					select="replace(type,'std::string','String')" />
+				 -->
+				<!-- 
+				<xsl:variable name="type" select="type"/>
 				<xsl:choose>
 					<xsl:when
 						test="contains($type,'std::') or contains($type,',')">
@@ -738,7 +769,9 @@
 						<xsl:variable name="string1"
 							select="substring-after($type,'&lt; ')" />
 						<xsl:choose>
+						 -->
 							<!-- e.g. std::multimap< std::pair<size_t, size_t>, std::pair<size_t, size_t> > -->
+							<!-- 
 							<xsl:when
 								test="starts-with($string1,'std::')">
 								<xsl:variable name="type1"
@@ -799,7 +832,9 @@
 									</xsl:with-param>
 								</xsl:call-template>
 								<xsl:choose>
+								 -->
 									<!-- e.g. std::map<Vector3, size_t, vectorLess> -->
+									<!-- 
 									<xsl:when
 										test="contains($string2,',')">
 										<xsl:call-template
@@ -808,7 +843,9 @@
 												select="normalize-space(substring-before($string2,','))" />
 										</xsl:call-template>
 									</xsl:when>
+									 -->
 									<!-- e.g. std::map<Vector3, size_t> -->
+									<!-- 
 									<xsl:otherwise>
 										<xsl:call-template
 											name="typeMap">
@@ -853,7 +890,9 @@
 							</xsl:otherwise>
 						</xsl:choose>
 					</xsl:when>
+					 -->
 					<!-- iterator, simple typedefs -->
+					<!-- 
 					<xsl:otherwise>
 						<xsl:attribute name="basetype" select="type" />
 						<xsl:variable name="basetype" select="type" />
@@ -890,16 +929,19 @@
 										<xsl:attribute name="type"
 											select="normalize-space(substring-before($string1,'&gt;'))" />
 									</xsl:otherwise>
+									 -->
 									<!--
 										<xsl:otherwise>
 										<xsl:attribute name="type" select="type/ref[@kindref='compound']"/>
 										</xsl:otherwise>
 									-->
+									<!-- 
 								</xsl:choose>
 							</xsl:when>
 						</xsl:choose>
 					</xsl:otherwise>
 				</xsl:choose>
+				 -->
 
 				<!-- documentation -->
 				<xsl:call-template name="documentation" />

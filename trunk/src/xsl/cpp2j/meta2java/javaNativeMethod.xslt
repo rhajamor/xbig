@@ -89,7 +89,8 @@
 				<xsl:text>&#32;final</xsl:text>
 			</xsl:when>
 
-			<!-- this is not necessary because of the interfaces that are generated for multiple inheritance -->
+			<!-- this is not necessary because 
+				 of the interfaces that are generated for multiple inheritance -->
 			<xsl:when test="$virtuality = 'pure-virtual'">
 				<!-- <xsl:text>&#32;abstract</xsl:text> -->
 			</xsl:when>
@@ -106,6 +107,18 @@
 
 		<!-- write seperator for return type -->
 		<xsl:text>&#32;</xsl:text>
+
+		<!-- resolve typedefs -->
+		<xsl:variable name="resolvedType">
+			<xsl:choose>
+				<xsl:when test="not($method/type)">
+					<xsl:value-of select="''"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="xbig:resolveTypedef($method/type, $class, $root)"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
 
 		<!-- write return type -->
 		<xsl:choose>
@@ -125,15 +138,15 @@
 				<xsl:value-of select="'long'" />
 			</xsl:when>
 
-			<xsl:when test="xbig:isTemplateTypedef($method/type, $class, $root)">
+			<xsl:when test="xbig:isTemplateTypedef($resolvedType, $class, $root)">
 				<xsl:value-of select="'long'" />
 			</xsl:when>
 
-			<xsl:when test="xbig:isClassOrStruct($method/type, $class, $root)">
+			<xsl:when test="xbig:isClassOrStruct($resolvedType, $class, $root)">
 				<xsl:value-of select="'long'" />
 			</xsl:when>
 
-			<xsl:when test="xbig:isEnum($method/type, $class, $root)">
+			<xsl:when test="xbig:isEnum($resolvedType, $class, $root)">
 				<xsl:value-of select="'int'" />
 			</xsl:when>
 

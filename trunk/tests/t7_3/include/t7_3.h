@@ -22,7 +22,8 @@ typedef A B;
 
 struct EXPORT C {
 public:
-	int a(B b) {return b.get5();}
-	B getB();
-	virtual ~C();
+	int a(B b) {mb = b; return b.get5();}
+	B getB() {return mb;}
+private:
+	B mb;
 };

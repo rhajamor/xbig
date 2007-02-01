@@ -116,6 +116,10 @@
 			<xsl:for-each select="$template/includes">
 				<xsl:copy-of select="."/>
 			</xsl:for-each>
+			<xsl:for-each select="$typedef/includes">
+				<xsl:copy-of select="."/>
+			</xsl:for-each>
+
 			<!-- copy inner classes -->
 			<xsl:for-each select="$template/class">
 				<xsl:copy-of select="."/>
