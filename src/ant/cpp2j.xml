@@ -1,0 +1,421 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE AntProject []>
+
+<!--
+	This source file is part of XBiG
+		(XSLT Bindings Generator)
+	For the latest info, see http://sourceforge.net/projects/xbig
+	
+	Copyright (c) 2006 The XBiG Development Team
+	Also see acknowledgements in Readme.html
+	
+	This program is free software; you can redistribute it and/or modify it under
+	the terms of the GNU Lesser General Public License as published by the Free Software
+	Foundation; either version 2 of the License, or (at your option) any later
+	version.
+	
+	This program is distributed in the hope that it will be useful, but WITHOUT
+	ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+	FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
+	
+	You should have received a copy of the GNU Lesser General Public License along with
+	this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+	Place - Suite 330, Boston, MA 02111-1307, USA, or go to
+	http://www.gnu.org/copyleft/lesser.txt.
+	
+	Author: Frank Bielig
+			Kai Klesatschke <kai.klesatschke@netallied.de>
+-->
+
+<project name="cpp2j" default="echo-props" basedir="../..">
+
+	<!-- ..................................................................... -->
+	<!-- names -->
+	<!-- ..................................................................... -->
+
+	<property name="lib.xbig" value="${lib.name}-xbig" />
+
+	<!-- ..................................................................... -->
+	<!-- imports -->
+	<!-- ..................................................................... -->
+
+	<import file="util/util_java.xml" />
+	<import file="util/util_cpp.xml" />
+	<import file="util/util_doxygen.xml" />
+	<import file="util/util_xsl.xml" />
+
+	<!-- ..................................................................... -->
+	<!-- directories -->
+	<!-- ..................................................................... -->
+
+	<property name="dir.doxygen.input.cpp" value="${dir.cpp.inc}" />
+	<property name="dir.meta.output" value="${dir.cur.build}/meta" />
+
+	<property name="dir.prj.src.xsl.doxygen2meta"
+		value="${dir.prj.src.xsl}/doxygen2meta" />
+	<property name="dir.prj.src.xsl.meta2java"
+		value="${dir.prj.src.xsl}/cpp2j/meta2java" />
+	<property name="dir.prj.src.xsl.meta2cpp"
+		value="${dir.prj.src.xsl}/cpp2j/meta2cpp" />
+	<property name="dir.prj.src.xsl.util"
+		value="${dir.prj.src.xsl}/util" />
+	<property name="dir.prj.src.ant.jalopy"
+		value="${dir.prj.src.ant}/jalopy" />
+
+	<property name="dir.cpp2j.config"
+		value="${dir.prj.src.xsl}/cpp2j" />
+		
+	<property name="dir.cur.build.java" value="${dir.cur.build}/java" />
+	<property name="dir.cur.build.cpp" value="${dir.cur.build}/cpp" />
+	<property name="dir.cur.build.cpp.include"
+		value="${dir.cur.build.cpp}/include" />
+	<property name="dir.cur.build.cpp.src"
+		value="${dir.cur.build.cpp}/src" />
+	<property name="dir.cur.build.cpp.src.lib"
+		value="${dir.cur.build.cpp.src}/lib" />
+
+	<!-- ..................................................................... -->
+	<!-- files -->
+	<!-- ..................................................................... -->
+
+	<property name="file.doxygen.config.xml" value="xml.doxygen" />
+	<property name="file.meta.output.doxygen" value="all.xml" />
+	<property name="file.meta.xml" value="meta.xml" />
+
+	<property name="file.meta2java.log" value="meta2java.log" />
+	<property name="file.meta2cpp.log" value="meta2cpp.log" />
+
+	<property name="file.xslt.doxygen2meta" value="doxygen2meta.xslt" />
+	<property name="file.xslt.meta2java" value="meta2java.xslt" />
+	<property name="file.xslt.meta2cpp" value="meta2cpp.xslt" />
+
+	<property name="file.config.project" value="config.xml" />
+
+	<property name="file.config.jalopy" value="jalopy.xml" />
+
+	<!-- ..................................................................... -->
+	<!-- paths -->
+	<!-- ..................................................................... -->
+
+	<property name="path.doxygen.config.xml"
+		value="${dir.prj.src.doxygen}/${file.doxygen.config.xml}" />
+	<property name="path.meta.output.doxygen"
+		value="${dir.meta.output}/${file.meta.output.doxygen}" />
+	<property name="path.meta.xml"
+		value="${dir.meta.output}/${file.meta.xml}" />
+
+	<property name="path.xslt.doxygen2meta"
+		value="${dir.prj.src.xsl.doxygen2meta}/${file.xslt.doxygen2meta}" />
+	<property name="path.xslt.meta2java"
+		value="${dir.prj.src.xsl.meta2java}/${file.xslt.meta2java}" />
+	<property name="path.xslt.meta2cpp"
+		value="${dir.prj.src.xsl.meta2cpp}/${file.xslt.meta2cpp}" />
+
+	<property name="path.meta2java.log"
+		value="${dir.cur.build.java}/meta2java.log" />
+	<property name="path.meta2cpp.log"
+		value="${dir.cur.build.cpp}/meta2cpp.log" />
+
+	<property name="path.config.project"
+		value="${dir.cpp2j.config}/${file.config.project}" />
+
+	<property name="path.config.jalopy"
+		value="${dir.prj.src.ant.jalopy}/${file.config.jalopy}" />
+
+	<!-- ..................................................................... -->
+	<!-- basic targets (init, echo-props, clean) -->
+	<!-- ..................................................................... -->
+
+	<!-- Initialization -->
+	<target name="init"
+		depends="util.cpp.init, util.java.init, util.doxygen.init, util.xsl.init">
+	</target>
+
+	<target name="echo-props"
+		depends="init, config.cpp.echo-props, config.java.echo-props, config.doxygen.echo-props, config.xsl.echo-props" />
+
+	<target name="clean"
+		depends="init, java-clean, doxygen-clean, cpp-clean, xsl-clean">
+	</target>
+
+	<!-- ..................................................................... -->
+	<!-- Generate interface description by doxygen -->
+	<!-- ..................................................................... -->
+
+	<target name="doxygen-xml-create-dep" depends="init">
+		<uptodate property="uptodate.doxygen.xml.create">
+			<srcfiles dir="${dir.doxygen.input.cpp}" includes="**/*.h" />
+			<mapper type="merge" to="${path.doxygen.output.xml.index}" />
+		</uptodate>
+	</target>
+
+	<target name="doxygen-xml-create" depends="doxygen-xml-create-dep"
+		unless="uptodate.doxygen.xml.create">
+		<mkdir dir="${dir.doxygen.output.xml}" />
+		<echo
+			message="create XML interface defintion into ${dir.doxygen.output.xml}" />
+		<doxygen srcdir="${dir.doxygen.input.cpp}"
+			tgtdir="${dir.doxygen.output.xml}" config="${path.doxygen.xml}" />
+	</target>
+
+	<target name="doxygen-xml-clean" depends="init">
+		<delete dir="${dir.doxygen.output.xml}" />
+	</target>
+
+	<!-- ..................................................................... -->
+	<!-- Combine doxygen output into one file -->
+	<!-- ..................................................................... -->
+
+	<target name="doxygen-xml-combine-dep">
+		<uptodate property="uptodate.doxygen.combine">
+			<srcfiles dir="${dir.doxygen.output.xml}"
+				includes="**/*.xml*" />
+			<mapper type="merge" to="${path.meta.output.doxygen}" />
+		</uptodate>
+	</target>
+
+	<target name="doxygen-xml-combine"
+		depends="doxygen-xml-create, doxygen-xml-combine-dep"
+		unless="uptodate.doxygen.combine">
+		<mkdir dir="${dir.meta.output}" />
+		<saxon source="${path.doxygen.output.xml.index}"
+			target="${path.meta.output.doxygen}"
+			style="${path.doxygen.input.xslt.combine}" />
+	</target>
+
+	<target name="doxygen-xml-combine-clean"
+		depends="doxygen-xml-clean">
+		<delete file="${path.doxygen.combine}" />
+	</target>
+
+	<!-- ..................................................................... -->
+	<!-- Convert doxygen output into meta format -->
+	<!-- ..................................................................... -->
+
+	<target name="doxygen2meta-dep">
+		<uptodate property="uptodate.doxygen2meta">
+			<srcfiles dir="${dir.prj.src.xsl.doxygen2meta}"
+				includes="**/*.x*" />
+			<srcfiles dir="${dir.prj.src.xsl.util}"
+				includes="**/*.x*" />
+			<srcfiles dir="${dir.meta.output}"
+				includes="${file.meta.output.doxygen}" />
+			<mapper type="merge" to="${path.meta.xml}" />
+		</uptodate>
+	</target>
+
+	<target name="doxygen2meta"
+		depends="doxygen-xml-combine, doxygen2meta-dep"
+		unless="uptodate.doxygen2meta">
+		<saxon source="${path.meta.output.doxygen}"
+			target="${path.meta.xml}" style="${path.xslt.doxygen2meta}" />
+	</target>
+
+	<target name="doxygen2meta-clean">
+		<delete file="${path.meta}" />
+	</target>
+
+	<!-- ..................................................................... -->
+	<!-- Convert meta description into java -->
+	<!-- ..................................................................... -->
+
+	<target name="meta2java-dep">
+		<uptodate property="uptodate.meta2java">
+			<srcfiles dir="${dir.prj.src.xsl.meta2java}"
+				includes="**/*.x*" />
+			<srcfiles dir="${dir.prj.src.xsl.util}"
+				includes="**/*.x*" />
+			<srcfiles dir="${dir.cur}" includes="**/*.xml" />
+			<srcfiles dir="${dir.cur}" includes="**/*.txt" />
+			<srcfiles dir="${dir.cur}" includes="**/*.inc" />
+			<srcfiles dir="${dir.meta.output}"
+				includes="${file.meta.xml}" />
+			<mapper type="merge" to="${path.meta2java.log}" />
+		</uptodate>
+	</target>
+
+	<target name="meta2java" depends="doxygen2meta, meta2java-dep"
+		unless="uptodate.meta2java">
+		<mkdir dir="${dir.cur.build.java}" />
+		<saxon source="${path.meta.xml}" target="${path.meta2java.log}"
+			style="${path.xslt.meta2java}">
+			<params>
+				<arg value="outdir=${dir.cur.build.java}" />
+				<arg value="+config=${path.config.project}" />
+				<arg value="+buildFile=${dir.cur}/build.xml" />
+			</params>
+		</saxon>
+		<!-- jalopy caused problems:
+				- crashed when more than one file gets formatted (eg t3_1)
+				- made enums uncompileable (eg t9_1)
+		-->
+		<!--
+		<jalopy fileformat="unix" convention="${path.config.jalopy}"
+			history="none" loglevel="warn" threads="5">
+			<fileset dir="${dir.cur.build.java}">
+				<include name="**/*.java" />
+			</fileset>
+		</jalopy>
+		-->
+	</target>
+
+	<target name="meta2java-clean">
+		<delete dir="${dir.cur.build.java}" />
+	</target>
+
+	<!-- ..................................................................... -->
+	<!-- Convert meta description into C++ -->
+	<!-- ..................................................................... -->
+
+	<target name="meta2cpp-dep">
+		<uptodate property="uptodate.meta2cpp">
+			<srcfiles dir="${dir.prj.src.xsl.meta2cpp}"
+				includes="**/*.x*" />
+			<srcfiles dir="${dir.prj.src.xsl.util}"
+				includes="**/*.x*" />
+			<srcfiles dir="${dir.cur}" includes="**/*.xml" />
+			<srcfiles dir="${dir.cur}" includes="**/*.txt" />
+			<srcfiles dir="${dir.cur}" includes="**/*.inc" />
+			<srcfiles dir="${dir.meta.output}"
+				includes="${file.meta.xml}" />
+			<mapper type="merge" to="${path.meta2cpp.log}" />
+		</uptodate>
+	</target>
+
+	<target name="meta2cpp" depends="doxygen2meta, meta2cpp-dep"
+		unless="uptodate.meta2cpp">
+		<mkdir dir="${dir.cur.build.cpp}" />
+		<saxon source="${path.meta.xml}" target="${path.meta2cpp.log}"
+			style="${path.xslt.meta2cpp}">
+			<params>
+				<arg value="include_dir=${dir.cur.build.cpp.include}" />
+				<arg value="lib_dir=${dir.cur.build.cpp.src.lib}" />
+				<arg value="+config=${path.config.project}" />
+			</params>
+		</saxon>
+	</target>
+
+	<target name="meta2cpp-clean">
+		<delete dir="${dir.cur.build.cpp}" />
+	</target>
+
+	<!-- ..................................................................... -->
+	<!-- Create shared library of generated C++ code -->
+	<!-- ..................................................................... -->
+
+	<target name="jnilib" depends="meta2cpp">
+		<cpp-lib-compile name="${lib.xbig}" outdir="${dir.cpp.build.config}"
+			srcdir="${dir.cur.build.cpp.src.lib}" type="shared">
+			<!-- TODO: put all "shared" in a property -->
+			<extraincludes>
+				<includepath path="${dir.prj.src.c}/include" />
+				<includepath path="${dir.cur.build.cpp.include}" />
+				<includepath path="${dir.java.include}" />
+				<includepath path="${dir.java.include.os}" />
+			</extraincludes>
+			<extralibraries>
+				<libset libs="${lib.name}" dir="${dir.cpp.build.config}/shared"/>
+				<libset libs="cpp2j-base" dir="${dir.prj.base}/src/c/build/${cpp.platform}/${cpp.compiler}/${cpp.compiler.config}/shared"/>
+			</extralibraries>
+		</cpp-lib-compile>
+	</target>
+
+	<!-- ..................................................................... -->
+	<!-- Create shared library of generated C++ code, to test manual changes -->
+	<!-- ..................................................................... -->
+
+	<target name="testcompilejni" depends="java-include-init, init">
+		<cpp-lib-compile name="${lib.xbig}" outdir="${dir.cpp.build.config}"
+			srcdir="${dir.cur.build.cpp.src.lib}" type="shared">
+			<!-- TODO: put all "shared" in a property -->
+			<extraincludes>
+				<includepath path="${dir.prj.src.c}/include" />
+				<includepath path="${dir.cur.build.cpp.include}" />
+				<includepath path="${dir.java.include}" />
+				<includepath path="${dir.java.include.os}" />
+			</extraincludes>
+			<extralibraries>
+				<libset libs="${lib.name}" dir="${dir.cpp.build.config}/shared"/>
+				<libset libs="cpp2j-base" dir="${dir.prj.base}/src/c/build/${cpp.platform}/${cpp.compiler}/${cpp.compiler.config}/shared"/>
+			</extralibraries>
+		</cpp-lib-compile>
+	</target>
+
+	<!-- ..................................................................... -->
+	<!-- Create archive of generated Java code -->
+	<!-- ..................................................................... -->
+	
+	<target name="javalib" depends="meta2java">
+		<javalib name="${lib.xbig}">
+			<sources>
+				<src path="${dir.prj.src.java}">
+				</src>
+				<src path="${dir.cur.build.java}" />
+				<!--  <src path="${dir.cur.src.java}" /> -->
+			</sources>
+		</javalib>
+	</target>
+
+	<!-- ..................................................................... -->
+	<!-- Compile Junit tests for generated Java code -->
+	<!-- ..................................................................... -->
+
+	<target name="compile-junit" depends="javalib">
+		<javac 
+			srcdir="${dir.cur.src.java}" 
+			destdir="${dir.cur.build.java.class}" 
+			classpath="${dir.prj.src.ant.jar}/junit-4.1.0.jar">
+		</javac>
+		<jar destfile="${dir.cur.build.java.jar}/${lib.xbig}-test.jar"
+			basedir="${dir.cur.build.java.class}" includes="**/test/**/*.class" />
+	</target>
+
+	<!-- ..................................................................... -->
+	<!-- Test of generated Java code -->
+	<!-- ..................................................................... -->
+	
+	<target name="javalib-test" depends="javalib, jnilib, compile-junit">
+		<!-- put native libs in a dir where it can be found -->
+		<copy todir="${dir.cur}">
+			<fileset dir="${dir.cpp.build.config}/shared" includes="*${lib.name}*.*" />
+			<fileset dir="${dir.prj.base}/src/c/build/${cpp.platform}/${cpp.compiler}/${cpp.compiler.config}/shared" includes="*cpp2j-base.*" />
+		</copy>
+		<!-- this has been put into run.sh -->
+		<!--<exec executable="export" os="linux">
+			<arg value="LD_LIBRARY_PATH=./"/>
+		</exec>-->
+<!--
+		<condition property="runningOnWin">
+			<os family="windows"/>
+		</condition>
+		<property name="path.delimiter" value=";" if="runningOnWin" />
+		<property name="path.delimiter" value=":" unless="runningOnWin" />
+-->
+		<junit printsummary="yes" fork="yes" haltonfailure="yes" >
+			<formatter type="plain" usefile="false" />			
+			<test name="org.xbig.test.${lib.name}.AllTests" />
+			<classpath>
+				<fileset dir="${dir.cur.build.java.jar}" includes="${lib.xbig}*.jar" />
+				<fileset dir="${dir.prj.src.ant.jar}" includes="junit-4.1.0.jar"/>
+			</classpath>
+
+			<!--
+			<jvmarg unless="runningOnWin" value="-Djava.library.path=${dir.cpp.build.config}/shared:${dir.prj.base}/bin/c/${cpp.platform}/${cpp.compiler}/${cpp.compiler.config}/shared"/>
+			<jvmarg if="runningOnWin" value="-Djava.library.path=${dir.cpp.build.config}/shared;${dir.prj.base}/bin/c/${cpp.platform}/${cpp.compiler}/${cpp.compiler.config}/shared"/>
+			<jvmarg value="-Djava.library.path=${dir.cpp.build.config}/shared${path.delimiter}${dir.prj.base}/bin/c/${cpp.platform}/${cpp.compiler}/${cpp.compiler.config}/shared"/>
+			<jvmarg value="-Djava.library.path=${dir.cpp.build.config}/shared" />
+			<jvmarg value="-Djava.library.path=${dir.cpp.build.config}/shared"/>
+			<jvmarg value="-Djava.library.path=${dir.prj.base}/bin/c/${cpp.platform}/${cpp.compiler}/${cpp.compiler.config}/shared"/>
+			<jvmarg value="-Djava.library.path=${dir.cpp.build.config}/shared:${dir.prj.base}/bin/c/${cpp.platform}/${cpp.compiler}/${cpp.compiler.config}/shared"/>
+			-->
+			<jvmarg value="-Djava.library.path=."/>
+		</junit>
+	
+		<!-- delete the previous copied files -->
+		<delete quiet="true" failonerror="false">
+			<fileset dir="." includes="*${lib.name}*.*"/>
+			<fileset dir="." includes="*cpp2j-base.*"/>
+		</delete>
+	</target>
+
+</project>
