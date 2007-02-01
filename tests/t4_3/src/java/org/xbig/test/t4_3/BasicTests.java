@@ -147,6 +147,14 @@ public class BasicTests {
 		Assert.assertEquals(6, ona.get6());
 		Assert.assertEquals(7, opqa.get7());
 
+		a.delete();
+		na.delete();
+		nma.delete();
+		oa.delete();
+		opa.delete();
+		ona.delete();
+		opqa.delete();
+
 		a = nc.getG();
 		na = nc.getN();
 		nma = nc.getM();
@@ -162,6 +170,14 @@ public class BasicTests {
 		Assert.assertEquals(3, opa.get3());
 		Assert.assertEquals(6, ona.get6());
 		Assert.assertEquals(7, opqa.get7());
+
+		a.delete();
+		na.delete();
+		nma.delete();
+		oa.delete();
+		opa.delete();
+		ona.delete();
+		opqa.delete();
 
 		a = nmc.getG();
 		na = nmc.getN();
@@ -179,6 +195,14 @@ public class BasicTests {
 		Assert.assertEquals(6, ona.get6());
 		Assert.assertEquals(7, opqa.get7());
 
+		a.delete();
+		na.delete();
+		nma.delete();
+		oa.delete();
+		opa.delete();
+		ona.delete();
+		opqa.delete();
+
 		a = oc.getG();
 		na = oc.getN();
 		nma = oc.getM();
@@ -194,6 +218,14 @@ public class BasicTests {
 		Assert.assertEquals(3, opa.get3());
 		Assert.assertEquals(6, ona.get6());
 		Assert.assertEquals(7, opqa.get7());
+
+		a.delete();
+		na.delete();
+		nma.delete();
+		oa.delete();
+		opa.delete();
+		ona.delete();
+		opqa.delete();
 
 		a = opc.getG();
 		na = opc.getN();
@@ -211,6 +243,14 @@ public class BasicTests {
 		Assert.assertEquals(6, ona.get6());
 		Assert.assertEquals(7, opqa.get7());
 
+		a.delete();
+		na.delete();
+		nma.delete();
+		oa.delete();
+		opa.delete();
+		ona.delete();
+		opqa.delete();
+
 		a = opqc.getG();
 		na = opqc.getN();
 		nma = opqc.getM();
@@ -227,6 +267,14 @@ public class BasicTests {
 		Assert.assertEquals(6, ona.get6());
 		Assert.assertEquals(7, opqa.get7());
 
+		a.delete();
+		na.delete();
+		nma.delete();
+		oa.delete();
+		opa.delete();
+		ona.delete();
+		opqa.delete();
+
 		a = onc.getG();
 		na = onc.getN();
 		nma = onc.getM();
@@ -242,6 +290,14 @@ public class BasicTests {
 		Assert.assertEquals(3, opa.get3());
 		Assert.assertEquals(6, ona.get6());
 		Assert.assertEquals(7, opqa.get7());
+
+		a.delete();
+		na.delete();
+		nma.delete();
+		oa.delete();
+		opa.delete();
+		ona.delete();
+		opqa.delete();
 
 		c.delete();
 		nc.delete();

@@ -160,7 +160,8 @@
 							</xsl:when>
 							<xsl:otherwise>
 								<!-- add the template angle bracket -->
-								<xsl:value-of select="concat(xbig:getFullJavaName($resolvedType, $class, $root, $config), $templateBracket)"/>
+								<xsl:value-of select="concat(xbig:getFullJavaName(
+												$resolvedType, $class, $root, $config), $templateBracket)"/>
 							</xsl:otherwise>
 						</xsl:choose>
 					</xsl:when>
@@ -172,7 +173,8 @@
 								<xsl:value-of select="'int'"/>
 							</xsl:when>
 							<xsl:otherwise>
-								<xsl:value-of select="xbig:getFullJavaName($resolvedType, $class, $root, $config)"/>
+								<xsl:value-of select="xbig:getFullJavaName(
+														$resolvedType, $class, $root, $config)"/>
 							</xsl:otherwise>
 						</xsl:choose>
 					</xsl:when>
@@ -185,7 +187,8 @@
 							</xsl:when>
 							<xsl:otherwise>
 								<!-- add the template angle bracket -->
-								<xsl:value-of select="concat(xbig:getFullJavaName($resolvedType, $class, $root, $config), $templateBracket)"/>
+								<xsl:value-of select="concat(xbig:getFullJavaName(
+												$resolvedType, $class, $root, $config), $templateBracket)"/>
 							</xsl:otherwise>
 						</xsl:choose>
 					</xsl:when>
@@ -221,7 +224,7 @@
 		</xsl:variable>
 
 		<xsl:choose>
-			<xsl:when test="$typeName ne 'int'">
+			<xsl:when test="$type_info/type/@java ne 'int'">
 				<xsl:value-of>
 					<xsl:call-template name="firstLetterToUpperCase">
 						<xsl:with-param name="name">
@@ -240,7 +243,7 @@
 			</xsl:when>
 
 			<!-- IntegerPointer is a special name -->
-			<xsl:when test="$typeName eq 'int'">
+			<xsl:when test="$type_info/type/@java eq 'int'">
 				<xsl:value-of select="'IntegerPointer'" />
 			</xsl:when>
 		</xsl:choose>
@@ -280,7 +283,8 @@
 				<xsl:otherwise>
 
 					<!-- get full meta / c++ name -->
-					<xsl:variable name="fullNameAsReturned" select="xbig:getFullTypeName($type, $currentNode, $inputTreeRoot)"/>
+					<xsl:variable name="fullNameAsReturned" select="xbig:getFullTypeName(
+																$type, $currentNode, $inputTreeRoot)"/>
 			
 					<!-- add java specific stuff to class name -->
 					<xsl:variable name="fullName">
@@ -294,8 +298,11 @@
 						<xsl:choose>
 							<!-- Use generated Interface for classes and structs,
 								 for template typedefs as well -->
-							<xsl:when test="xbig:isClassOrStruct($fullNameAsReturned, $currentNode, $inputTreeRoot) or
-											xbig:isTemplateTypedef($fullNameAsReturned, $currentNode, $inputTreeRoot)">
+							<xsl:when test="xbig:isClassOrStruct(
+												$fullNameAsReturned, $currentNode, $inputTreeRoot)
+											or
+											xbig:isTemplateTypedef(
+												$fullNameAsReturned, $currentNode, $inputTreeRoot)">
 								<xsl:for-each select="$fullNameTokens/token">
 									<xsl:if test="position() = last()">
 										<xsl:value-of select="$config/config/java/interface/prefix" />
@@ -332,7 +339,8 @@
 
 
 	<xd:doc type="function">
-		<xd:short>resolve the full java name of a type, including the package but not of it's interface</xd:short>
+		<xd:short>resolve the full java name of a type, 
+					including the package but not of it's interface</xd:short>
 	</xd:doc>
 	<xsl:function name="xbig:getFullJavaClassAndNotInterfaceName" as="xs:string">
 		<xsl:param name="type" as="xs:string"/>

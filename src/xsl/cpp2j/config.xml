@@ -61,6 +61,7 @@
 			<type meta="float" signature="F" />
 
 			<type meta="std::string" signature="s" />
+			<type meta="size_t" signature="i" />
 
 			<!-- mapping of non-const passing methods for parameters -->
 
@@ -165,7 +166,7 @@
 					#nl#
 					#nl#// call library method
 					#nl##cpp_return_type# #cpp_return_var# =
-					   #cpp_inherited_method_class#::#cpp_method#(#cpp_params#);
+					   #cpp_inherited_method_class#::#cpp_method#(#cpp_params#)#optional_closing_bracket#;
 					#nl#return #cpp_return#;
 				</return>
 			</static>
@@ -192,7 +193,8 @@
 					#nl#
 					#nl#// call library method
 					#nl##cpp_return_type# #cpp_return_var# =
-					    #cpp_this#->#cpp_inherited_method_class#::#cpp_method#(#cpp_params#);
+					    #cpp_this#->#cpp_inherited_method_class#::#cpp_method#(#cpp_params#)
+					    #optional_closing_bracket#;
 					#nl#return #cpp_return#;
 				</return>				
 			</normal>
@@ -205,7 +207,7 @@
 						#nl#
 						#nl#// call library method
 						#nl##cpp_return_type# #cpp_return_var# =
-						    #cpp_class#::#cpp_attribute#;
+						    #cpp_class#::#cpp_attribute##optional_closing_bracket#;
 						#nl#return #cpp_return#;
 					</static>
 					<nonstatic>
@@ -218,7 +220,7 @@
 						#nl#
 						#nl#// call library method
 						#nl##cpp_return_type# #cpp_return_var# =
-						    #cpp_this#->#cpp_attribute#;
+						    #cpp_this#->#cpp_attribute##optional_closing_bracket#;
 						#nl#return #cpp_return#;
 					</nonstatic>
 				</get>
@@ -276,6 +278,7 @@
 				<type meta="std::string" signature="Ljava/lang/String;" />
 				<type meta="byte" signature="B" />
 				<type meta="array" signature="[" />
+				<type meta="size_t" signature="I" />
 			</signatures>
 
 			<types>
@@ -565,6 +568,24 @@
 						org::xbig::jni::to_jstring(#jni_env#, #cpp_var#)
 					</cpp2jni>
 				</type>
+
+				<type meta="size_t" pass="pointer" jni="jlong" cpp="size_t*">
+					<jni2cpp>
+						reinterpret_cast&lt;size_t*&gt;(#jni_var#)
+					</jni2cpp>					
+					<cpp2jni>
+						reinterpret_cast&lt;jlong&gt;(#cpp_var#)
+					</cpp2jni>
+				</type>	
+				<type meta="size_t" pass="reference" jni="jlong" cpp="size_t*" returntype="size_t&amp;">
+					<jni2cpp>
+						reinterpret_cast&lt;size_t*&gt;(#jni_var#)
+					</jni2cpp>
+					<cpp2jni>
+						reinterpret_cast&lt;jlong&gt;(&amp;#cpp_var#)
+					</cpp2jni>
+				</type>
+				<type meta="size_t" jni="jint" />
 			</types>
 		</jni>
 
@@ -603,6 +624,7 @@
 			<type meta="float" java="float" genericParameter="Float"/>
 
 			<type meta="std::string" java="String" genericParameter="String"/>
+			<type meta="size_t" java="int" genericParameter="Integer"/>
 
 		</types>
 

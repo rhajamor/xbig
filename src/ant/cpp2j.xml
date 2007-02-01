@@ -90,6 +90,7 @@
 	<property name="file.xslt.meta2cpp" value="meta2cpp.xslt" />
 
 	<property name="file.config.project" value="config.xml" />
+	<property name="file.externalTypes" value="external_types.xml" />
 
 	<property name="file.config.jalopy" value="jalopy.xml" />
 
@@ -118,6 +119,9 @@
 
 	<property name="path.config.project"
 		value="${dir.cpp2j.config}/${file.config.project}" />
+
+	<property name="path.externalTypes"
+		value="${dir.cpp2j.config}/${file.externalTypes}" />
 
 	<property name="path.config.jalopy"
 		value="${dir.prj.src.ant.jalopy}/${file.config.jalopy}" />
@@ -208,7 +212,11 @@
 		depends="doxygen-xml-combine, doxygen2meta-dep"
 		unless="uptodate.doxygen2meta">
 		<saxon source="${path.meta.output.doxygen}"
-			target="${path.meta.xml}" style="${path.xslt.doxygen2meta}" />
+			target="${path.meta.xml}" style="${path.xslt.doxygen2meta}">
+			<params>
+				<arg value="+externalTypes=${path.externalTypes}" />
+			</params>
+		</saxon>
 	</target>
 
 	<target name="doxygen2meta-clean">

@@ -27,6 +27,10 @@ private:
 class B {
 public:
 	int get3() {return 3;}
+	int get() {return m;}
+	void set(int a) {m = a;}
+private:
+	int m;
 };
 
 typedef A<int> C;

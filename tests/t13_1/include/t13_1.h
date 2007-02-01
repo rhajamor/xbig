@@ -2,7 +2,7 @@
  *
  * Test file for the XSLT Bindings Generator (XBiG)
  *
- * It handles a typedef for a class
+ * It handles a typedef for an external type
  *
  ******************************************************************/
 
@@ -12,17 +12,17 @@
 	#define EXPORT
 #endif
 
-class EXPORT A {
-public:
-	int get5() {return 5;}
-};
+#include <vector>
+#include <string>
 
-typedef A B;
 
-class EXPORT C {
+typedef std::vector<std::string> StringVector;
+
+class Tester {
 public:
-	int a(B b) {mb = b; return b.get5();}
-	B getB() {return mb;}
+	void a(StringVector a) {m = a;}
+	StringVector b() {return m;}
+	StringVector c(StringVector a) {return a;}
 private:
-	B mb;
+	StringVector m;
 };

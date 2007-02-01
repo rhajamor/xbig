@@ -29,6 +29,9 @@ private:
 class EXPORT C {
 public:
 	int get5() { return 5;}
+	C(){std::cout << "t6_1: C::C()" << std::endl;}
+	C(const C& c){std::cout << "t6_1: C::C(const C&)" << std::endl;}
+	~C(){std::cout << "t6_1: C::~C()" << std::endl;}
 };
 
 class EXPORT Tester {

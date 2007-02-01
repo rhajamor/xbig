@@ -79,4 +79,14 @@ public class ParametrizedTemplateReturnPlaceHolder extends NativeObject {
 	}
 	public void delete(){
 	}
+
+	/**
+	 * <p>
+	 * This constructor is public for internal useage only!
+	 * Do not use it!
+	 * </p>
+	 */
+	public ParametrizedTemplateReturnPlaceHolder(org.xbig.base.InstancePointer p, boolean remote) {
+		super(p, remote);
+	}
 }

@@ -45,6 +45,9 @@
 		<xsl:param name="class" />
 		<xsl:param name="method" />
 
+		<!-- resolve typedefs -->
+		<xsl:variable name="resolvedType" select="xbig:resolveTypedef($method/type, $class, $root)"/>
+
 		<!-- extract jni type depending on meta type, const/non-const, pass type
 			 needed for some ifs -->
 		<xsl:variable name="type_info">
@@ -52,7 +55,7 @@
 				<xsl:with-param name="root" 
 					select="$config/config/java/types" />
 				<xsl:with-param name="param" select="." />
-				<xsl:with-param name="typeName" select="./type" />
+				<xsl:with-param name="typeName" select="$resolvedType" />
 			</xsl:call-template>
 		</xsl:variable>
 
@@ -69,7 +72,7 @@
 			<xsl:call-template name="javaPointerClass">
 				<xsl:with-param name="config" select="$config" />
 				<xsl:with-param name="param" select="$method" />
-				<xsl:with-param name="typeName" select="xbig:resolveTypedef($method/type, $class, $root)" />
+				<xsl:with-param name="typeName" select="$resolvedType" />
 			</xsl:call-template>
 			<xsl:text>(new&#32;InstancePointer(</xsl:text>
 		</xsl:if>
@@ -81,7 +84,7 @@
 				<xsl:with-param name="config" select="$config" />
 				<xsl:with-param name="param" select="$method" />
 				<xsl:with-param name="class" select="$class" />
-				<xsl:with-param name="typeName" select="$method/type" />
+				<xsl:with-param name="typeName" select="$resolvedType" />
 			</xsl:call-template>
 			<xsl:text>)&#32;</xsl:text>
 			<xsl:text>(org.xbig.base.INativeObject)&#32;</xsl:text>
@@ -91,24 +94,24 @@
 		</xsl:if>
 
 		<!-- if this is a template typedef -->
-		<xsl:if test="xbig:isTemplateTypedef($method/type, $class, $root)">
+		<xsl:if test="xbig:isTemplateTypedef($resolvedType, $class, $root)">
 			<xsl:text>new&#32;</xsl:text>
 			<xsl:value-of select="xbig:getFullJavaClassAndNotInterfaceName(
-									$method/type, $class, $root, $config)"/>
+									$resolvedType, $class, $root, $config)"/>
 			<xsl:text>(new&#32;InstancePointer(</xsl:text>
 		</xsl:if>
 
 		<!-- create native object when necessary -->
-		<xsl:if test="xbig:isClassOrStruct($method/type, $class, $root)">
+		<xsl:if test="xbig:isClassOrStruct($resolvedType, $class, $root)">
 			<xsl:text>new&#32;</xsl:text>
 			<xsl:value-of select="xbig:getFullJavaClassAndNotInterfaceName(
-									$method/type, $class, $root, $config)"/>
+									$resolvedType, $class, $root, $config)"/>
 			<xsl:text>(new&#32;InstancePointer(</xsl:text>
 		</xsl:if>
 
 		<!-- get enum when necessary -->
-		<xsl:if test="xbig:isEnum($method/type, $class, $root)">
-			<xsl:value-of select="xbig:getFullJavaName($method/type, $class, $root, $config)"/>
+		<xsl:if test="xbig:isEnum($resolvedType, $class, $root)">
+			<xsl:value-of select="xbig:getFullJavaName($resolvedType, $class, $root, $config)"/>
 			<xsl:text>.toEnum(</xsl:text>
 		</xsl:if>
 
@@ -147,16 +150,28 @@
 						and $type_info/type/@java">
 			<xsl:text>))</xsl:text>
 		</xsl:if>
-		<xsl:if test="contains($method/type, '&lt;')"><!-- for returned parametrized templates -->
+		<xsl:if test="contains($resolvedType, '&lt;')"><!-- for returned parametrized templates -->
 			<xsl:text>))</xsl:text>
+			<!-- we have copied the returned object to the heap -->
+			<xsl:if test="$method/@passedBy = 'value'">
+				<xsl:text>, false</xsl:text>
+			</xsl:if>
 		</xsl:if>
-		<xsl:if test="xbig:isTemplateTypedef($method/type, $class, $root)">
+		<xsl:if test="xbig:isTemplateTypedef($resolvedType, $class, $root)">
 			<xsl:text>))</xsl:text>
+			<!-- we have copied the returned object to the heap -->
+			<xsl:if test="$method/@passedBy = 'value'">
+				<xsl:text>, false</xsl:text>
+			</xsl:if>
 		</xsl:if>
-		<xsl:if test="xbig:isClassOrStruct($method/type, $class, $root)">
+		<xsl:if test="xbig:isClassOrStruct($resolvedType, $class, $root)">
 			<xsl:text>))</xsl:text>
+			<!-- we have copied the returned object to the heap -->
+			<xsl:if test="$method/@passedBy = 'value'">
+				<xsl:text>, false</xsl:text>
+			</xsl:if>
 		</xsl:if>
-		<xsl:if test="xbig:isEnum($method/type, $class, $root)">
+		<xsl:if test="xbig:isEnum($resolvedType, $class, $root)">
 			<xsl:text>)</xsl:text>
 		</xsl:if>
 

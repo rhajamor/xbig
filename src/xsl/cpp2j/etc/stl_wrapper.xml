@@ -1,0 +1,188 @@
+<namespace name="std" fullName="std">
+
+	<class name="vector" fullName="std::vector" template="true">
+		<templateparameters>
+			<templateparameter templateType="class" templateDeclaration="T"/>
+		</templateparameters>
+
+		<includes local="no">vector</includes>
+
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+                   passedBy="value">
+            <name>vector</name>
+            <definition>std::vector::vector</definition>
+         </function>
+
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+                   passedBy="value">
+            <name>vector</name>
+            <definition>std::vector::vector</definition>
+			<parameters>
+				<parameter passedBy="reference">
+					<type const="true">vector</type>
+					<name>c</name>
+				</parameter>
+			</parameters>
+         </function>
+
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+                   passedBy="value">
+            <name>vector</name>
+            <definition>std::vector::vector</definition>
+			<parameters>
+				<parameter passedBy="value">
+					<type const="false">size_t</type>
+					<name>num</name>
+				</parameter>
+				<parameter passedBy="reference">
+					<type const="true">T</type>
+					<name>val</name>
+				</parameter>
+			</parameters>
+         </function>
+
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="value">
+			<type>void</type>
+			<definition>void std::vector::assign</definition>
+			<name>assign</name>
+			<parameters>
+				<parameter passedBy="value">
+					<type const="false">size_t</type>
+					<name>num</name>
+				</parameter>
+				<parameter passedBy="value">
+					<type const="true">T</type>
+					<name>val</name>
+				</parameter>
+			</parameters>
+		</function>
+
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="reference">
+			<type>T</type>
+			<definition>T&amp; std::vector::at</definition>
+			<name>at</name>
+			<parameters>
+				<parameter passedBy="value">
+					<type const="false">size_t</type>
+					<name>loc</name>
+				</parameter>
+			</parameters>
+		</function>
+
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="reference">
+			<type>T</type>
+			<definition>T std::vector::back</definition>
+			<name>back</name>
+		</function>
+
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="value">
+			<type>size_t</type>
+			<definition>size_t std::vector::capacity</definition>
+			<name>capacity</name>
+		</function>
+
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="value">
+			<type>void</type>
+			<definition>void std::vector::clear</definition>
+			<name>clear</name>
+		</function>
+
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="value">
+			<type>bool</type>
+			<definition>bool std::vector::empty</definition>
+			<name>empty</name>
+		</function>
+
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="reference">
+			<type>T</type>
+			<definition>T std::vector::front</definition>
+			<name>front</name>
+		</function>
+
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="value">
+			<type>size_t</type>
+			<definition>size_t std::vector::max_size</definition>
+			<name>max_size</name>
+		</function>
+
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="value">
+			<type>void</type>
+			<definition>void std::vector::pop_back</definition>
+			<name>pop_back</name>
+		</function>
+
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="value">
+			<type>void</type>
+			<definition>void std::vector::push_back</definition>
+			<name>push_back</name>
+			<parameters>
+				<parameter passedBy="reference">
+					<type const="true">T</type>
+					<name>val</name>
+				</parameter>
+			</parameters>
+		</function>
+
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="value">
+			<type>void</type>
+			<definition>void std::vector::reserve</definition>
+			<name>reserve</name>
+			<parameters>
+				<parameter passedBy="value">
+					<type const="true">size_t</type>
+					<name>size</name>
+				</parameter>
+			</parameters>
+		</function>
+
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="value">
+			<type>void</type>
+			<definition>void std::vector::resize</definition>
+			<name>resize</name>
+			<parameters>
+				<parameter passedBy="value">
+					<type const="false">size_t</type>
+					<name>num</name>
+				</parameter>
+			</parameters>
+		</function>
+
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="value">
+			<type>void</type>
+			<definition>void std::vector::resize</definition>
+			<name>resize</name>
+			<parameters>
+				<parameter passedBy="value">
+					<type const="false">size_t</type>
+					<name>num</name>
+				</parameter>
+				<parameter passedBy="reference">
+					<type const="true">T</type>
+					<name>val</name>
+				</parameter>
+			</parameters>
+		</function>
+
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="value">
+			<type>size_t</type>
+			<definition>size_t std::vector::size</definition>
+			<name>size</name>
+		</function>
+
+	</class>
+
+</namespace>

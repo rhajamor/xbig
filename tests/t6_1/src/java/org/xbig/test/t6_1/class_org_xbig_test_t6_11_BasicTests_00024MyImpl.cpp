@@ -35,8 +35,8 @@ JNIEXPORT jlong JNICALL Java_org_xbig_test_t6_11_BasicTests_00024MyImpl_a (
   jlong _jni_pointer_ /* C++ pointer */
 ) {
   A< C >* _cpp_this = reinterpret_cast<A< C >*>(_jni_pointer_); 
-  C _cpp_result = _cpp_this->a(); 
-  return reinterpret_cast<jlong>(&_cpp_result);
+  C* _cpp_result = new C(_cpp_this->a()); 
+  return reinterpret_cast<jlong>(_cpp_result);
 }
 
 JNIEXPORT jlong JNICALL Java_org_xbig_test_t6_11_BasicTests_00024MyImpl_c (
@@ -47,8 +47,8 @@ JNIEXPORT jlong JNICALL Java_org_xbig_test_t6_11_BasicTests_00024MyImpl_c (
 ) {
   C _cpp_a = *reinterpret_cast< C* >(a); 
   A< C >* _cpp_this = reinterpret_cast<A< C >*>(_jni_pointer_); 
-  C _cpp_result = _cpp_this->c(_cpp_a); 
-  return reinterpret_cast<jlong>(&_cpp_result);
+  C* _cpp_result = new C(_cpp_this->c(_cpp_a)); 
+  return reinterpret_cast<jlong>(_cpp_result);
 }
 
 JNIEXPORT void JNICALL Java_org_xbig_test_t6_11_BasicTests_00024MyImpl__1_1delete (

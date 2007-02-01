@@ -71,11 +71,48 @@
 		<!-- include header files from original library -->
 		<xsl:text>&#10;</xsl:text>
 		<xsl:text>// import header files of original library</xsl:text>
+		<xsl:text>&#10;</xsl:text>
 		<xsl:for-each select="$class/includes">
-			<xsl:text>&#10;#include "</xsl:text>
-			<xsl:value-of select="text()" />
-			<xsl:text>"&#10;</xsl:text>
+
+			<!-- test if a file is included multiple times -->
+			<xsl:variable name="currentInclude" select="."/>
+			<xsl:choose>
+				<!-- using id trick like in metaInheritedMethods.xslt -->
+				<xsl:when test="count(../includes[text() = $currentInclude/text()]) > 1">
+					<xsl:if test="count(../includes[$currentInclude][position() = 1] | $currentInclude) = 1">
+						<xsl:choose>
+							<xsl:when test="@local = 'no'">
+								<xsl:text>#include &lt;</xsl:text>
+								<xsl:value-of select="text()"/>
+								<xsl:text>&gt;&#10;</xsl:text>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:text>#include "</xsl:text>
+								<xsl:value-of select="text()"/>
+								<xsl:text>"&#10;</xsl:text>
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:if>
+				</xsl:when>
+
+				<!-- file is included only once -->
+				<xsl:otherwise>
+					<xsl:choose>
+						<xsl:when test="@local = 'no'">
+							<xsl:text>#include &lt;</xsl:text>
+							<xsl:value-of select="text()"/>
+							<xsl:text>&gt;&#10;</xsl:text>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:text>#include "</xsl:text>
+							<xsl:value-of select="text()"/>
+							<xsl:text>"&#10;</xsl:text>
+						</xsl:otherwise>
+					</xsl:choose>
+				</xsl:otherwise>
+			</xsl:choose>
 		</xsl:for-each>
+		<xsl:text>&#10;</xsl:text>
 
 		<!-- iterate through all member functions -->
 		<!-- <xsl:for-each select="$class/function"> -->

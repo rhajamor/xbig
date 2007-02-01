@@ -45,7 +45,7 @@ public class BasicTests {
 		private native static final long MyImpl();
 
 		public IC a() {
-			return new org.xbig.C(new InstancePointer(a(this.object.pointer)));
+			return new org.xbig.C(new InstancePointer(a(this.object.pointer)), false);
 		}
 		private native final long a(long _pointer_);
 
@@ -56,7 +56,7 @@ public class BasicTests {
 
 		public IC c(IC a) {
 			return new org.xbig.C(new InstancePointer(
-					c(this.object.pointer, a.getInstancePointer().pointer)));
+					c(this.object.pointer, a.getInstancePointer().pointer)), false);
 		}
 		private native final long c(long _pointer_, long a);
 	}
@@ -78,8 +78,12 @@ public class BasicTests {
 
 		IC c = myi.a();
 		Assert.assertEquals(5, c.get5());
+		c.delete();
+
 		myi.b(c);
+
 		c = myi.c(c);
+		c.delete();
 
 		myi.delete();
 		t.delete();
