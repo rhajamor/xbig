@@ -34,6 +34,8 @@
 	version="2.0">
 
 	<xsl:import href="javaNamespace.xslt" />
+	<xsl:import href="../../util/createClassForArray.xslt" />
+	<xsl:import href="../../util/utilXmlPrint.xslt" />
 	<!--<xsl:import href="javaGlobals.xslt" />-->
 
 	<xd:doc type="stylesheet">
@@ -111,8 +113,30 @@
 				</xsl:call-template>
 			</xsl:for-each>
 			-->
-
-
+			
+			<!-- create array wrapper on demand -->
+			<!--
+			<xsl:variable name="arrays">
+				<xsl:for-each select="//type[@array='[]']">			
+					<xsl:call-template name="createClassForArray">
+						<xsl:with-param name="typeName" select="."/>
+					</xsl:call-template>				
+				</xsl:for-each>
+			</xsl:variable>
+			-->
+			<!-- transform Java namespace to directory name -->
+			<!--
+			<xsl:variable name="java_ns_dir" select="replace(@fullName,'\.', '/')" />
+			<xsl:for-each select="$arrays/*">
+				<xsl:call-template name="javaClassFileStub">
+					<xsl:with-param name="java_ns_dir" select="$java_ns_dir"/>
+					<xsl:with-param name="java_ns_name" select="@fullName"/>
+					<xsl:with-param name="outdir"  select="$outdir"/>
+					<xsl:with-param name="config"  select="$config"/>
+					<xsl:with-param name="buildFile"  select="$buildFile"/>
+				</xsl:call-template>
+			</xsl:for-each>
+			 -->
 			<xsl:text>done</xsl:text>
 		</xsl:result-document>
 
