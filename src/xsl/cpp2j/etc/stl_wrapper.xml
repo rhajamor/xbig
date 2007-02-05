@@ -5,26 +5,34 @@
 			<templateparameter templateType="class" templateDeclaration="T"/>
 		</templateparameters>
 
-		<includes local="no">vector</includes>
+		<additionalInfo>
+			<info name="value_type" typeParaPos="1"/>
+			<info name="pointer" typeParaPos="1" changePassedBy="true" newPassedBy="pointer"/>
+		</additionalInfo>
 
+		<includes local="no">vector</includes>
+<!-- 
+		<class name="iterator" fullName="std::vector::iterator">
+		</class>
+ -->
 		<function virt="non-virtual" visibility="public" static="false" const="false"
                    passedBy="value">
             <name>vector</name>
             <definition>std::vector::vector</definition>
          </function>
-
+<!-- 
 		<function virt="non-virtual" visibility="public" static="false" const="false"
                    passedBy="value">
             <name>vector</name>
             <definition>std::vector::vector</definition>
 			<parameters>
 				<parameter passedBy="reference">
-					<type const="true">vector</type>
+					<type const="true">vector&lt;T&gt;</type>
 					<name>c</name>
 				</parameter>
 			</parameters>
          </function>
-
+ -->
 		<function virt="non-virtual" visibility="public" static="false" const="false"
                    passedBy="value">
             <name>vector</name>

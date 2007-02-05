@@ -91,7 +91,7 @@
 		<xsl:text>INativeObject&#32;</xsl:text>
 
 		<!-- extended interfaces -->
-		<xsl:if test="inherits">
+		<xsl:if test="inherits/baseClass">
 			<xsl:text>,&#32;</xsl:text>
 			<xsl:for-each select="inherits/baseClass">
 
@@ -150,7 +150,7 @@
 		</xsl:if>
 
 		<!-- start interface content -->
-		<xsl:text>&#32;{&#10;</xsl:text>
+		<xsl:text>&#32;{&#10;&#10;</xsl:text>
 
 		<!-- handle inner classes & structs -->
 		<xsl:for-each select="class">
@@ -256,7 +256,7 @@
 
 
 		<!-- close class declaration  -->
-		<xsl:text>};&#10;&#10;</xsl:text>
+		<xsl:text>};&#10;</xsl:text>
 
 	</xsl:template>
 

@@ -2,7 +2,7 @@
  *
  * Test file for the XSLT Bindings Generator (XBiG)
  *
- * It handles a return values and parameters with pointer pointer.
+ * It handles return values and parameters with pointer pointer.
  *
  ******************************************************************/
 
