@@ -176,11 +176,15 @@
 				<xsl:with-param name="method" select="." />
 			</xsl:call-template>
 
+			<xsl:text>&#10;&#10;</xsl:text>
+
 			<xsl:call-template name="javaNativeMethod">
 				<xsl:with-param name="config" select="$config" />
 				<xsl:with-param name="class" select="$class" />
 				<xsl:with-param name="method" select="." />
 			</xsl:call-template>
+
+			<xsl:text>&#10;&#10;</xsl:text>
 		</xsl:for-each>
  
  		<!-- generate public attributes getters and setters -->
@@ -197,18 +201,22 @@
 					<xsl:with-param name="class" select="$class" />
 					<xsl:with-param name="method" select="." />
 				</xsl:call-template>
+
+				<xsl:text>&#10;&#10;</xsl:text>
 	
 				<xsl:call-template name="javaNativeMethod">
 					<xsl:with-param name="config" select="$config" />
 					<xsl:with-param name="class" select="$class" />
 					<xsl:with-param name="method" select="." />
 				</xsl:call-template>
+
+				<xsl:text>&#10;&#10;</xsl:text>
 			</xsl:for-each>
 		</xsl:for-each>
 
 
 		<!-- close class declaration  -->
-		<xsl:text>};&#10;&#10;</xsl:text>
+		<xsl:text>};&#10;</xsl:text>
 
 	</xsl:template>
 

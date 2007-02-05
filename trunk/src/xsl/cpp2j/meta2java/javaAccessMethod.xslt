@@ -56,9 +56,11 @@
 			<xsl:with-param name="method" select="$method" />
 		</xsl:call-template>
 
+		<xsl:text>&#32;</xsl:text>
 
 		<!-- start implementation -->
 		<xsl:text>{</xsl:text>
+		<xsl:text>&#10;</xsl:text>
 
 		<!-- choose correct implementation -->
 		<xsl:choose>
@@ -94,6 +96,7 @@
 
 
 		<!-- implementation finished -->
+		<xsl:text>&#10;</xsl:text>
 		<xsl:text>}</xsl:text>
 
 	</xsl:template>

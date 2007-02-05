@@ -71,6 +71,7 @@
 			<xsl:value-of select="normalize-space(text())" />
 		</xsl:for-each>
 		<xsl:text>&#32;**/</xsl:text>
+		<xsl:text>&#10;</xsl:text>
 
 		<!-- write method modifiers -->
 
@@ -191,14 +192,15 @@
 				<xsl:when test="./type/@originalType">
 					<xsl:choose>
 						<xsl:when test="./type/@originalType != ./type and
-										$config/config/java/types/type[@meta = current()/type]">
+										$config/config/java/types/type[@meta = current()/type] and
+										./@passedBy = 'value'">
 							<xsl:value-of select="$config/config/java/types/type
 												  [@meta = current()/type]/@genericParameter"/>
 						</xsl:when>
 						<xsl:otherwise>
 							<xsl:call-template name="javaType">
 								<xsl:with-param name="config" select="$config" />
-								<xsl:with-param name="param" select="$method" />
+								<xsl:with-param name="param" select="." />
 								<xsl:with-param name="class" select="$class" />
 								<xsl:with-param name="typeName" select="./type" />
 							</xsl:call-template>

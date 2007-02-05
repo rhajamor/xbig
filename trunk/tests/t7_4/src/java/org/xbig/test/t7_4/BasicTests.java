@@ -5,7 +5,7 @@ package org.xbig.test.t7_4;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.xbig.IA;
+//import org.xbig.IA;
 import org.xbig.IB;
 import org.xbig.IC;
 import org.xbig.ID;
