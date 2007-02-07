@@ -96,11 +96,11 @@
 			<xsl:for-each select="inherits/baseClass">
 
 				<!-- configured package -->
-				<xsl:value-of select="$config/config/java/namespaces/packageprefix"/>
-				<xsl:text>.</xsl:text>
+				<!--<xsl:value-of select="$config/config/java/namespaces/packageprefix"/>
+				<xsl:text>.</xsl:text>-->
 
 				<!-- all namespaces -->
-				<xsl:variable name="baseClassFullNameTokens">
+				<!--<xsl:variable name="baseClassFullNameTokens">
 					<xsl:call-template name="str:split">
 						<xsl:with-param name="string" select="@fullBaseClassName" />
 						<xsl:with-param name="pattern" select="'::'" />
@@ -111,12 +111,15 @@
 						<xsl:value-of select="." />
 						<xsl:text>.</xsl:text>
 					</xsl:if>
-				</xsl:for-each>
+				</xsl:for-each>-->
 
 				<!-- interface name -->
-				<xsl:value-of select="$config/config/java/interface/prefix" />
+				<!--<xsl:value-of select="$config/config/java/interface/prefix" />
 				<xsl:value-of select="." />
-				<xsl:value-of select="$config/config/java/interface/suffix" />
+				<xsl:value-of select="$config/config/java/interface/suffix" />-->
+
+				<!-- this should be more generic than the above code -->
+				<xsl:value-of select="xbig:getFullJavaName(./@fullBaseClassName, $class, $root, $config)"/>
 
 				<!-- if this class is a typedef for a template -->
 				<xsl:if test="$class/typeparameters">

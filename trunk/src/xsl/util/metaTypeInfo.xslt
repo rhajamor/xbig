@@ -203,6 +203,24 @@
 			<xsl:when test="boolean($inputTreeRoot//class[@fullName = $fullName])">
 				<xsl:value-of select="true()" />
 			</xsl:when>
+
+			<!-- typedef for template with inner class -->
+			<xsl:when test="boolean($currentNode/typeparameters)">
+				<!-- TODO make this general, to handle multiple levels of inner inner classes -->
+				<xsl:variable name="originalTemplateNode">
+					<xsl:copy-of select="$inputTreeRoot//*
+												[@fullName = $currentNode/@originalTemplateFullName]"/>
+				</xsl:variable>
+				<xsl:choose>
+					<xsl:when test="boolean($originalTemplateNode/*/@name = substring-after($type, '::'))">
+						<xsl:value-of select="true()" />
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="false()" />
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:when>
+
 			<xsl:otherwise>
 				<xsl:value-of select="false()" />
 			</xsl:otherwise>
@@ -224,6 +242,24 @@
 			<xsl:when test="boolean($inputTreeRoot//struct[@fullName = $fullName])">
 				<xsl:value-of select="true()" />
 			</xsl:when>
+
+			<!-- typedef for template with inner class -->
+			<xsl:when test="boolean($currentNode/typeparameters)">
+				<!-- TODO make this general, to handle multiple levels of inner inner classes -->
+				<xsl:variable name="originalTemplateNode">
+					<xsl:copy-of select="$inputTreeRoot//*
+												[@fullName = $currentNode/@originalTemplateFullName]"/>
+				</xsl:variable>
+				<xsl:choose>
+					<xsl:when test="boolean($originalTemplateNode/*/@name = substring-after($type, '::'))">
+						<xsl:value-of select="true()" />
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="false()" />
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:when>
+
 			<xsl:otherwise>
 				<xsl:value-of select="false()" />
 			</xsl:otherwise>
@@ -248,6 +284,24 @@
 			<xsl:when test="boolean($inputTreeRoot//struct[@fullName = $fullName])">
 				<xsl:value-of select="true()" />
 			</xsl:when>
+
+			<!-- typedef for template with inner class -->
+			<xsl:when test="boolean($currentNode/typeparameters)">
+				<!-- TODO make this general, to handle multiple levels of inner inner classes -->
+				<xsl:variable name="originalTemplateNode">
+					<xsl:copy-of select="$inputTreeRoot//*
+												[@fullName = $currentNode/@originalTemplateFullName]"/>
+				</xsl:variable>
+				<xsl:choose>
+					<xsl:when test="boolean($originalTemplateNode/*/@name = substring-after($type, '::'))">
+						<xsl:value-of select="true()" />
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="false()" />
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:when>
+
 			<xsl:otherwise>
 				<xsl:value-of select="false()" />
 			</xsl:otherwise>
@@ -286,14 +340,6 @@
 		<xsl:param name="inputTreeRoot"/>
 
 		<xsl:choose>
-			<!-- check parameters -->
-			<!-- <xsl:when test="not($currentNode/name() = 'class' or $currentNode/name() = 'struct' or 
-								$currentNode/name() = 'namespace')">
-				<xsl:message>ERROR: invalid current node: <xsl:value-of select="$currentNode/name()"/></xsl:message>
-				<xsl:value-of select="$type"/>
-			</xsl:when> -->
-
-			<!-- parameters ok, main function body -->
 
 			<!-- if the type contains a namespace -->
 			<xsl:when test="contains($type, '::')">
@@ -358,6 +404,24 @@
 				<xsl:value-of select="$currentNode/@fullName" />
 			</xsl:when>
 
+			<!-- special case: a typedef for a template -> generated meta class -> not in input tree -->
+			<xsl:when test="$currentNode/typeparameters">
+				<!-- TODO check if this could be made more general -->
+				<xsl:variable name="originalTypedefNode" select="$inputTreeRoot//*
+												[@fullName = $currentNode/@originalTypedefFullName]"/>
+				<xsl:choose>
+					<!-- if found, return node -->
+					<xsl:when test="$originalTypedefNode/*[@name = $type]">
+						<xsl:value-of select="$originalTypedefNode/@fullName" />
+					</xsl:when>
+					<!-- else check the parent node -->
+					<xsl:otherwise>
+						<xsl:value-of select="xbig:getNodeNameWhichContainsType
+											  ($type, $originalTypedefNode/.., $inputTreeRoot)" />
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:when>
+
 			<!-- else if the current node is the root return an empty string -->
 			<xsl:when test="$inputTreeRoot = $currentNode">
 				<xsl:value-of select="''" />
@@ -383,17 +447,20 @@
 
 		<xsl:choose>
 			<xsl:when test="xbig:isTypedef($type, $currentNode, $inputTreeRoot)">
-				<xsl:variable name="typedefNode" select="$inputTreeRoot//typedef[@fullName = xbig:getFullTypeName($type, $currentNode, $inputTreeRoot)]"/>
+				<xsl:variable name="typedefNode" select="$inputTreeRoot//typedef
+							[@fullName = xbig:getFullTypeName($type, $currentNode, $inputTreeRoot)]"/>
 				<xsl:choose>
 
 					<!-- if this is a typedef for a template, there is a class -->
 					<xsl:when test="contains($typedefNode/@basetype, '&lt;')">
-						<!-- <xsl:value-of select="xbig:getFullTypeName($typedefNode/@basetype, $typedefNode/.., $inputTreeRoot)"/> -->
+						<!-- <xsl:value-of select="xbig:getFullTypeName(
+										$typedefNode/@basetype, $typedefNode/.., $inputTreeRoot)"/> -->
 						<xsl:value-of select="$type"/>
 					</xsl:when>
 
 					<xsl:otherwise>
-						<xsl:value-of select="xbig:resolveTypedef($typedefNode/@basetype, $typedefNode/.., $inputTreeRoot)"/>
+						<xsl:value-of select="xbig:resolveTypedef(
+										$typedefNode/@basetype, $typedefNode/.., $inputTreeRoot)"/>
 					</xsl:otherwise>
 				</xsl:choose>
 			</xsl:when>

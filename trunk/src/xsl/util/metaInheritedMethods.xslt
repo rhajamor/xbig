@@ -132,9 +132,69 @@
  			<xsl:variable name="currentMethodPos" select="position()"/>
 			<xsl:choose>
 
-				<!-- filter c-tors -->
+				<!-- filter base class c-tors -->
 				<xsl:when test="not(type) and name != $class/@name">
 				</xsl:when>							
+
+				<!-- filter c-tors of current class that have unresolved types as parameters -->
+				<xsl:when test="./name = $class/@name and ./parameters">
+
+					<xsl:variable name="unresolvedTypes">
+						<xsl:for-each select="./parameters/parameter">
+							<xsl:variable name="typeName">
+								<xsl:choose>
+									<xsl:when test="starts-with(./type, '::')">
+										<xsl:value-of select="substring-after(./type, '::')"/>
+									</xsl:when>
+									<xsl:otherwise>
+										<xsl:value-of select="./type"/>
+									</xsl:otherwise>
+								</xsl:choose>
+							</xsl:variable> 
+
+							<xsl:element name="unresolved">
+								<xsl:choose>
+									<!-- primitive types -->
+									<xsl:when test="$config/config/java/types/type[@meta = $typeName]">
+										<xsl:value-of select="false()" />
+									</xsl:when>
+									<xsl:when test="xbig:isEnum($typeName, $class, $root)">
+										<xsl:value-of select="false()" />
+									</xsl:when>
+									<xsl:when test="xbig:isTypedef($typeName, $class, $root)">
+										<xsl:value-of select="false()" />
+									</xsl:when>
+									<xsl:when test="xbig:isClassOrStruct($typeName, $class, $root)">
+										<xsl:value-of select="false()" />
+									</xsl:when>
+									<xsl:when test="xbig:isTemplateTypedef($typeName, $class, $root)">
+										<xsl:value-of select="false()" />
+									</xsl:when>
+
+									<!-- template parameters -->
+									<xsl:when test="$class/templateparameters/templateparameter
+																		[@templateDeclaration = $typeName]">
+										<xsl:value-of select="false()" />
+									</xsl:when>
+
+									<!-- filter -->
+									<xsl:otherwise>
+										<xsl:value-of select="true()" />
+									</xsl:otherwise>
+								</xsl:choose>
+							</xsl:element>
+						</xsl:for-each>
+					</xsl:variable>
+
+					<!-- filter c-tor if there is at least one unresolved parameter -->
+					<xsl:choose>
+						<xsl:when test="$unresolvedTypes/* = true()">
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:copy-of select="." />
+						</xsl:otherwise>
+					</xsl:choose>
+				</xsl:when>
 
 				<!-- filter duplicate methods -->
 				<xsl:when test="count(../function[name = $currentMethod/name]) > 1">
