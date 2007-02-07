@@ -280,54 +280,47 @@
 										  [@meta = $typeWithoutGlobalNSPrefix]/@java"/>
 				</xsl:when>
 
+				<!-- enums are not defined in interfaces -->
+				<xsl:when test="xbig:isEnum($type, $currentNode, $inputTreeRoot)">
+					<xsl:variable name="fullNameAsReturned" select="xbig:getFullTypeName(
+																$type, $currentNode, $inputTreeRoot)"/>
+					<xsl:variable name="nsPrefix"
+									select="$config/config/java/namespaces/packageprefix"/>
+					<xsl:variable name="fullNameWithDots"
+							select="replace($fullNameAsReturned, '::', '.')"/>
+					<xsl:value-of select="concat($nsPrefix, '.', $fullNameWithDots)"/>
+				</xsl:when>
+
+				<!-- classes, structs, typedefs, templates -->
 				<xsl:otherwise>
 
 					<!-- get full meta / c++ name -->
 					<xsl:variable name="fullNameAsReturned" select="xbig:getFullTypeName(
 																$type, $currentNode, $inputTreeRoot)"/>
-			
+
 					<!-- add java specific stuff to class name -->
-					<xsl:variable name="fullName">
-						<xsl:variable name="fullNameTokens">
-							<xsl:call-template name="str:split">
-								<xsl:with-param name="string" select="$fullNameAsReturned" />
-								<xsl:with-param name="pattern" select="'::'" />
-							</xsl:call-template>
-						</xsl:variable>
-			
-						<xsl:choose>
-							<!-- Use generated Interface for classes and structs,
-								 for template typedefs as well -->
-							<xsl:when test="xbig:isClassOrStruct(
-												$fullNameAsReturned, $currentNode, $inputTreeRoot)
-											or
-											xbig:isTemplateTypedef(
-												$fullNameAsReturned, $currentNode, $inputTreeRoot)">
-								<xsl:for-each select="$fullNameTokens/token">
-									<xsl:if test="position() = last()">
-										<xsl:value-of select="$config/config/java/interface/prefix" />
-									</xsl:if>
-									<xsl:value-of select="." />
-									<xsl:choose>
-										<xsl:when test="position() = last()">
-											<xsl:value-of select="$config/config/java/interface/suffix" />
-										</xsl:when>
-										<xsl:otherwise>
-											<xsl:value-of select="'::'" />
-										</xsl:otherwise>
-									</xsl:choose>
-								</xsl:for-each>
-							</xsl:when>
-			
-							<xsl:otherwise>
-								<xsl:value-of select="$fullNameAsReturned"/>
-							</xsl:otherwise>
-						</xsl:choose>
+					<xsl:variable name="fullNameTokens">
+						<xsl:call-template name="str:split">
+							<xsl:with-param name="string" select="$fullNameAsReturned" />
+							<xsl:with-param name="pattern" select="'::'" />
+						</xsl:call-template>
 					</xsl:variable>
 
-					<xsl:variable name="nsPrefix" select="$config/config/java/namespaces/packageprefix"/>
-					<xsl:variable name="fullNameWithDots" select="replace($fullName, '::', '.')"/>
-					<xsl:value-of select="concat($nsPrefix, '.', $fullNameWithDots)"/>
+					<xsl:variable name="nameFromHelper" select="xbig:getFullJavaNameHelper(
+								'', '', 0, $fullNameTokens, $inputTreeRoot, $config)"/>
+
+					<xsl:choose>
+						<xsl:when test="$nameFromHelper = ''">
+							<xsl:value-of select="$type"/>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:variable name="nsPrefix"
+									select="$config/config/java/namespaces/packageprefix"/>
+							<xsl:variable name="fullNameWithDots"
+									select="replace($nameFromHelper, '::', '.')"/>
+							<xsl:value-of select="concat($nsPrefix, '.', $fullNameWithDots)"/>
+						</xsl:otherwise>
+					</xsl:choose>
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
@@ -335,6 +328,193 @@
 		<!-- return -->
 		<xsl:value-of select="$javaTypeName"/>
 
+	</xsl:function>
+
+
+	<xd:doc type="function">
+		<xd:short>Recursive helper function for getFullJavaName(). For internal usage.
+				  It takes each part of a full name and adds interface stuff from config
+				  if a part is a class or struct. So we get the right java name for inner classes.
+		</xd:short>
+	</xd:doc>
+	<xsl:function name="xbig:getFullJavaNameHelper" as="xs:string">
+		<xsl:param name="currentJavaFullName" as="xs:string"/>
+		<xsl:param name="currentMetaFullName" as="xs:string"/>
+		<xsl:param name="currentPosition"/>
+		<xsl:param name="fullNameTokens"/>
+		<xsl:param name="inputTreeRoot"/>
+		<xsl:param name="config"/>
+
+		<!-- this is ugly as hell, but this is also a very awful case, and it just has to work -->
+		<xsl:variable name="breakToken" select="'#BREAKRECURSIONTOKEN#'"/>
+
+		<!-- get current node -->
+		<xsl:variable name="currentNode">
+			<xsl:choose>
+				<xsl:when test="$currentPosition = 0">
+					<xsl:copy-of select="$inputTreeRoot/*/namespace[1]"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:copy-of select="$inputTreeRoot//*[@fullName = $currentMetaFullName]"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+
+		<!-- create first '::' in full name -->
+		<xsl:variable name="currentMetaFullNameWithDot">
+			<xsl:choose>
+				<xsl:when test="$currentMetaFullName = ''">
+					<xsl:value-of select="$currentMetaFullName"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="concat($currentMetaFullName, '::')"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+
+		<!-- create first '.' in package name -->
+		<xsl:variable name="currentJavaFullNameWithDot">
+			<xsl:choose>
+				<xsl:when test="$currentJavaFullName = ''">
+					<xsl:value-of select="$currentJavaFullName"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="concat($currentJavaFullName, '::')"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+
+		<!-- advance full name with next token -->
+		<xsl:variable name="currentNameIncremented">
+			<xsl:choose>
+
+				<!-- classes -->
+				<xsl:when test="$currentNode/*/class[@name = $fullNameTokens/*[$currentPosition+1]]">
+					<xsl:value-of select="concat($currentJavaFullNameWithDot,
+									$config/config/java/interface/prefix,
+									$fullNameTokens/*[$currentPosition+1],
+									$config/config/java/interface/suffix)"/>
+				</xsl:when>
+
+				<!-- structs -->
+				<xsl:when test="$currentNode/*/struct[@name = $fullNameTokens/*[$currentPosition+1]]">
+					<xsl:value-of select="concat($currentJavaFullNameWithDot,
+									$config/config/java/interface/prefix,
+									$fullNameTokens/*[$currentPosition+1],
+									$config/config/java/interface/suffix)"/>
+				</xsl:when>
+
+				<!-- enums -->
+				<xsl:when test="$currentNode/*/enumeration[@name = $fullNameTokens/*[$currentPosition+1]]">
+					<xsl:value-of select="concat($currentJavaFullNameWithDot,
+															$fullNameTokens/*[$currentPosition+1])"/>
+				</xsl:when>
+
+				<!-- namespaces -->
+				<xsl:when test="$currentNode/*/namespace[@name = $fullNameTokens/*[$currentPosition+1]]">
+					<xsl:value-of select="concat($currentJavaFullNameWithDot,
+															$fullNameTokens/*[$currentPosition+1])"/>
+				</xsl:when>
+
+				<!-- typedefs for templates -> generated meta class -->
+				<xsl:when test="$currentNode/*/typedef[@name = $fullNameTokens/*[$currentPosition+1]] and
+								contains($currentNode/*/typedef
+								[@name = $fullNameTokens/*[$currentPosition+1]]/@basetype, '&lt;')">
+					<!-- TODO handle more than one inner class of the template this typedef is used for -->
+					<xsl:variable name="fullNameOfBasetype" select="xbig:getFullTypeName(
+										normalize-space(substring-before($currentNode/*/typedef
+										[@name = $fullNameTokens/*[$currentPosition+1]]/@basetype, '&lt;'))
+										, $currentNode/*, $inputTreeRoot)"/>
+					<xsl:variable name="baseTypeNode"
+										select="$inputTreeRoot//*[@fullName = $fullNameOfBasetype]"/>
+					<xsl:choose>
+						<!-- if this typedef is the last token -->
+						<xsl:when test="count($fullNameTokens/*) = $currentPosition+1">
+							<xsl:value-of select="concat($currentJavaFullNameWithDot,
+									$config/config/java/interface/prefix,
+									$fullNameTokens/*[$currentPosition+1],
+									$config/config/java/interface/suffix)"/>
+						</xsl:when>
+
+						<!-- template has inner class -->
+						<xsl:when test="$baseTypeNode/class[@name = $fullNameTokens/*[$currentPosition+2]]">
+							<xsl:value-of select="concat($currentJavaFullNameWithDot,
+									$config/config/java/interface/prefix,
+									$fullNameTokens/*[$currentPosition+1],
+									$config/config/java/interface/suffix,
+									'::',
+									$config/config/java/interface/prefix,
+									$fullNameTokens/*[$currentPosition+2],
+									$config/config/java/interface/suffix,
+									$breakToken)"/>
+						</xsl:when>
+
+						<!-- template has inner struct -->
+						<xsl:when test="$baseTypeNode/struct[@name = $fullNameTokens/*[$currentPosition+2]]">
+							<xsl:value-of select="concat($currentJavaFullNameWithDot,
+									$config/config/java/interface/prefix,
+									$fullNameTokens/*[$currentPosition+1],
+									$config/config/java/interface/suffix,
+									'::',
+									$config/config/java/interface/prefix,
+									$fullNameTokens/*[$currentPosition+2],
+									$config/config/java/interface/suffix,
+									$breakToken)"/>
+						</xsl:when>
+
+						<!-- template has inner enum -->
+						<xsl:when test="$baseTypeNode/enumeration
+											[@name = $fullNameTokens/*[$currentPosition+2]]">
+							<xsl:value-of select="concat($currentJavaFullNameWithDot,
+														$config/config/java/interface/prefix,
+														$fullNameTokens/*[$currentPosition+1],
+														$config/config/java/interface/suffix,
+														'::',
+														$fullNameTokens/*[$currentPosition+2],
+														$breakToken)"/>
+						</xsl:when>
+
+						<!-- nothing inner in template -->
+						<xsl:otherwise>
+							<xsl:value-of select="''"/>
+						</xsl:otherwise>
+					</xsl:choose>
+				</xsl:when>
+
+				<!-- TODO typedefs for other stuff than templates -->
+
+				<!-- invalid type -->
+				<xsl:otherwise>
+					<xsl:value-of select="''"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+
+		<!-- return -->
+		<xsl:choose>
+			<!-- primitive types, invalid names, ... -->
+			<xsl:when test="$currentNameIncremented = ''">
+				<xsl:value-of select="''"/>
+			</xsl:when>
+
+			<!-- special case recursion end -->
+			<xsl:when test="contains($currentNameIncremented, $breakToken)">
+				<xsl:value-of select="substring-before($currentNameIncremented, $breakToken)"/>
+			</xsl:when>
+
+			<!-- recursion end -->
+			<xsl:when test="count($fullNameTokens/*) = $currentPosition +1">
+				<xsl:value-of select="$currentNameIncremented"/>
+			</xsl:when>
+
+			<!-- next recursion -->
+			<xsl:otherwise>
+				<xsl:variable name="metaNameIncrement"
+						select="concat($currentMetaFullNameWithDot, $fullNameTokens/*[$currentPosition+1])"/>
+				<xsl:value-of select="xbig:getFullJavaNameHelper($currentNameIncremented, $metaNameIncrement,
+										$currentPosition+1, $fullNameTokens, $inputTreeRoot, $config)"/>
+			</xsl:otherwise>
+		</xsl:choose>
 	</xsl:function>
 
 

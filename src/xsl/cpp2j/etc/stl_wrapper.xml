@@ -13,6 +13,11 @@
 		<includes local="no">vector</includes>
 <!-- 
 		<class name="iterator" fullName="std::vector::iterator">
+			<function virt="non-virtual" visibility="public" static="false" const="false"
+						passedBy="value">
+				<name>iterator</name>
+				<definition>std::vector::iterator::iterator</definition>
+			</function>
 		</class>
  -->
 		<function virt="non-virtual" visibility="public" static="false" const="false"

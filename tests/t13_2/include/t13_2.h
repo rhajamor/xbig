@@ -26,12 +26,12 @@ private:
 	VectorIterator() {};
 public:
 	typedef typename T::value_type ValueType;
-/*
+
 	VectorIterator(typename T::iterator start, typename T::iterator end)
 	: mCurrent(start), mEnd(end)
 	{
 	}
-*/
+
 	explicit VectorIterator(T& c)
 	: mCurrent(c.begin()), mEnd(c.end())
 	{
