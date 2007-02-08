@@ -196,6 +196,10 @@
 					</xsl:choose>
 				</xsl:when>
 
+				<!-- filter operators -->
+				<xsl:when test="starts-with(name, 'operator')">
+				</xsl:when>							
+
 				<!-- filter duplicate methods -->
 				<xsl:when test="count(../function[name = $currentMethod/name]) > 1">
 

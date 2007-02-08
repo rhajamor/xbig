@@ -246,6 +246,12 @@
 							</xsl:for-each>
 						</xsl:element>
 					</xsl:if>
+
+					<!-- copy provided jni implementation -->
+					<xsl:if test="jniImplementation">
+						<xsl:copy-of select="./jniImplementation"/>
+					</xsl:if>
+
 				</xsl:element>
 			</xsl:for-each>
 
@@ -268,12 +274,17 @@
 				<xsl:when test="$template/templateparameters/templateparameter
 								[@templateType = 'class' or @templateType = 'typename']
 								[@templateDeclaration = $type]">
-					<xsl:variable name="pos" select="
-								$template/templateparameters/templateparameter
-								[@templateType = 'class' or @templateType = 'typename']
-								[@templateDeclaration = $type]/position()"/>
+					<xsl:variable name="pos">
+						<xsl:for-each select="$template/templateparameters/templateparameter
+												[@templateType = 'class' or @templateType = 'typename']">
+							<xsl:if test="@templateDeclaration = $type">
+								<xsl:value-of select="position()"/>
+							</xsl:if>
+						</xsl:for-each>
+					</xsl:variable>
+
 					<xsl:element name="type">
-						<xsl:value-of select="$resolvedTypeParas/para[$pos]"/>
+						<xsl:value-of select="$resolvedTypeParas/para[number($pos)]"/>
 					</xsl:element>
 					<xsl:element name="passedBy">
 						<xsl:value-of select="$type/../@passedBy"/>
@@ -446,11 +457,13 @@
 		</xsl:variable>
 
 		<!-- assert there is only one type parameter -->
+		<!-- 
 		<xsl:if test="count($resolvedTypeParas/*) != 1">
 			<xsl:message>WARNING: Illegal number of type parameters:
-			<xsl:value-of select="$typedef/@fullname"/>: <xsl:value-of select="count($resolvedTypeParas/*)"/>!
+			<xsl:value-of select="$typedef/@fullname"/>: <xsl:value-of select="count($resolvedTypeParas/*)"/>
 			</xsl:message>
 		</xsl:if>
+		 -->
 		<xsl:variable name="typePara">
 			<xsl:choose>
 				<xsl:when test="starts-with($resolvedTypeParas/para[1], '::')">

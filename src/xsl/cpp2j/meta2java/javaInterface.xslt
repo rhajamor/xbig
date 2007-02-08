@@ -210,7 +210,8 @@
 			<!-- change method name if const overloading is used -->
 			<xsl:variable name="methodContainer">
 				<xsl:choose>
-					<xsl:when test="(count($methodsForJava/function[name = current()/name]) > 1) and @const='true'">
+					<xsl:when test="(count($methodsForJava/function[name = current()/name]) > 1) and
+									@const='true'">
 						<xsl:call-template name="createElementForConstOverloadedMethod">
 							<xsl:with-param name="config" select="$config" />
 							<xsl:with-param name="method" select="." />
@@ -222,8 +223,9 @@
 				</xsl:choose>
 			</xsl:variable>
 
-			<!-- interfaces cannot have consructors or static methods -->
-			<xsl:if test="name!=$class/@name and @static!='true'">
+			<!-- interfaces cannot have consructors or static methods
+				 we also don't want operators -->
+			<xsl:if test="name!=$class/@name and @static!='true' and not(starts-with(name, 'operator'))">
 				<xsl:call-template name="javaAccessMethodDeclaration">
 					<xsl:with-param name="config" select="$config" />
 					<xsl:with-param name="class" select="$class" />

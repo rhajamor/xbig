@@ -198,4 +198,133 @@
 
 	</class>
 
+	<class name="map" fullName="std::map" template="true">
+		<templateparameters>
+			<templateparameter templateType="class" templateDeclaration="K"/>
+			<templateparameter templateType="class" templateDeclaration="V"/>
+		</templateparameters>
+
+		<additionalInfo>
+			<info name="key_type" typeParaPos="1"/>
+			<info name="mapped_type" typeParaPos="2"/>
+		</additionalInfo>
+
+		<includes local="no">map</includes>
+
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="value">
+			<name>map</name>
+			<definition>std::map::map</definition>
+		</function>
+
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="value">
+			<name>clear</name>
+			<type>void</type>
+			<definition>std::map::clear</definition>
+		</function>
+
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="value">
+			<name>count</name>
+			<type>size_t</type>
+			<definition>std::map::count</definition>
+			<parameters>
+				<parameter passedBy="reference">
+					<type const="true">K</type>
+					<name>key</name>
+				</parameter>
+			</parameters>
+		</function>
+
+		<function virt="non-virtual" visibility="public" static="false" const="true"
+					passedBy="value">
+			<name>empty</name>
+			<type>bool</type>
+			<definition>std::map::empty</definition>
+		</function>
+
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="value">
+			<name>erase</name>
+			<type>size_t</type>
+			<definition>std::map::erase</definition>
+			<parameters>
+				<parameter passedBy="reference">
+					<type const="true">K</type>
+					<name>key</name>
+				</parameter>
+			</parameters>
+		</function>
+
+		<function virt="non-virtual" visibility="public" static="false" const="true"
+					passedBy="value">
+			<name>max_size</name>
+			<type>size_t</type>
+			<definition>std::map::max_size</definition>
+		</function>
+
+		<function virt="non-virtual" visibility="public" static="false" const="true"
+					passedBy="value">
+			<name>size</name>
+			<type>size_t</type>
+			<definition>std::map::size</definition>
+		</function>
+
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="reference">
+			<name>get</name>
+			<type>V</type>
+			<definition>std::map::get</definition>
+			<parameters>
+				<parameter passedBy="reference">
+					<type const="false">K</type>
+					<name>key</name>
+				</parameter>
+			</parameters>
+			<jniImplementation>
+				#nl#// parameter conversions
+				#cpp_conversions#
+				#nl#
+				#nl#// cast pointer to C++ object
+				#nl##cpp_class#* #cpp_this# =
+				reinterpret_cast&lt;#cpp_class#*&gt;(#jni_pointer#);
+				#nl#
+				#nl#// call library method
+				#nl##cpp_return_type# #cpp_return_var# =
+				    &amp; (*#cpp_this#)[#cpp_params#]#optional_closing_bracket#;
+				#nl#return #cpp_return#;
+			</jniImplementation>
+		</function>
+
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="value">
+			<name>insert</name>
+			<type>void</type>
+			<definition>std::map::insert</definition>
+			<parameters>
+				<parameter passedBy="reference">
+					<type const="false">K</type>
+					<name>key</name>
+				</parameter>
+				<parameter passedBy="reference">
+					<type const="false">V</type>
+					<name>value</name>
+				</parameter>
+			</parameters>
+			<jniImplementation>
+				#nl#// parameter conversions
+				#cpp_conversions#
+				#nl#
+				#nl#// cast pointer to C++ object
+				#nl##cpp_class#* #cpp_this# =
+				reinterpret_cast&lt;#cpp_class#*&gt;(#jni_pointer#);
+				#nl#
+				#nl#// call library method
+				#nl##cpp_this#->insert(make_pair(#cpp_params#));
+			</jniImplementation>
+		</function>
+
+	</class>
+
 </namespace>
