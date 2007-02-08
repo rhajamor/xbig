@@ -66,6 +66,13 @@
 		<!-- calculate name of code template depending on function type -->
 		<xsl:variable name="code_template">
 			<xsl:choose>
+
+				<!-- if a method has it's own template (like in stl wrapper) -->
+				<xsl:when test="boolean($method/jniImplementation)">
+					<xsl:copy-of
+						select="$method/jniImplementation" />
+				</xsl:when>
+
 				<!-- handle constructor -->
 				<xsl:when test="not($method/type)">
 					<xsl:copy-of
@@ -128,7 +135,7 @@
 						select="$config/config/cpp/method/normal/return" />
 				</xsl:when>
 				
-				<!-- handle constructor -->
+				<!-- print message for other stuff -->
 				<xsl:otherwise>
 					<xsl:message terminate="yes">
 						unhandled method:
