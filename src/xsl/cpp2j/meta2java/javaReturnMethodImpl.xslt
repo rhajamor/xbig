@@ -62,6 +62,9 @@
 		<!-- shortcut for static attribute -->
 		<xsl:variable name="static" select="$method/@static" />
 
+		<!-- class used for pointer pointer -->
+		<xsl:variable name="pointerPointerClass" select="'NativeObjectPointer'"/>
+
 		<!-- write return statement -->
 		<xsl:text>&#32;return&#32;</xsl:text>
 
@@ -69,11 +72,24 @@
 		<xsl:if test="($method/@passedBy='pointer' or $method/@passedBy='reference')
 						and $type_info/type/@java">
 			<xsl:text>new&#32;</xsl:text>
-			<xsl:call-template name="javaPointerClass">
-				<xsl:with-param name="config" select="$config" />
-				<xsl:with-param name="param" select="$method" />
-				<xsl:with-param name="typeName" select="$resolvedType" />
-			</xsl:call-template>
+			<xsl:variable name="fullTypeName">
+				<xsl:call-template name="javaPointerClass">
+					<xsl:with-param name="config" select="$config" />
+					<xsl:with-param name="param" select="$method" />
+					<xsl:with-param name="typeName" select="$resolvedType" />
+				</xsl:call-template>
+			</xsl:variable>
+			<xsl:choose>
+				<xsl:when test="$method/type/@pointerPointer = 'true'">
+					<xsl:value-of select="concat(
+									$pointerPointerClass, '&lt;')"/>
+					<xsl:value-of select="$fullTypeName"/>
+					<xsl:value-of select="'&gt;'"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="$fullTypeName"/>
+				</xsl:otherwise>
+			</xsl:choose>
 			<xsl:text>(new&#32;InstancePointer(</xsl:text>
 		</xsl:if>
 
@@ -96,16 +112,38 @@
 		<!-- if this is a template typedef -->
 		<xsl:if test="xbig:isTemplateTypedef($resolvedType, $class, $root)">
 			<xsl:text>new&#32;</xsl:text>
-			<xsl:value-of select="xbig:getFullJavaClassAndNotInterfaceName(
-									$resolvedType, $class, $root, $config)"/>
+			<xsl:choose>
+				<xsl:when test="$method/type/@pointerPointer = 'true'">
+					<xsl:value-of select="concat(
+									$pointerPointerClass, '&lt;')"/>
+					<xsl:value-of select="xbig:getFullJavaName(
+										$resolvedType, $class, $root, $config)"/>
+					<xsl:value-of select="'&gt;'"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="xbig:getFullJavaClassAndNotInterfaceName(
+											$resolvedType, $class, $root, $config)"/>
+				</xsl:otherwise>
+			</xsl:choose>
 			<xsl:text>(new&#32;InstancePointer(</xsl:text>
 		</xsl:if>
 
 		<!-- create native object when necessary -->
 		<xsl:if test="xbig:isClassOrStruct($resolvedType, $class, $root)">
 			<xsl:text>new&#32;</xsl:text>
-			<xsl:value-of select="xbig:getFullJavaClassAndNotInterfaceName(
-									$resolvedType, $class, $root, $config)"/>
+			<xsl:choose>
+				<xsl:when test="$method/type/@pointerPointer = 'true'">
+					<xsl:value-of select="concat(
+									$pointerPointerClass, '&lt;')"/>
+					<xsl:value-of select="xbig:getFullJavaName(
+										$resolvedType, $class, $root, $config)"/>
+					<xsl:value-of select="'&gt;'"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="xbig:getFullJavaClassAndNotInterfaceName(
+											$resolvedType, $class, $root, $config)"/>
+				</xsl:otherwise>
+			</xsl:choose>
 			<xsl:text>(new&#32;InstancePointer(</xsl:text>
 		</xsl:if>
 
