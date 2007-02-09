@@ -120,6 +120,9 @@
 			</xsl:call-template>
 		</xsl:variable>
 
+		<!-- class used for pointer pointer -->
+		<xsl:variable name="pointerPointerClass" select="'NativeObjectPointer'"/>
+
 		<!-- print first type found in result list -->
 		<xsl:choose>
 
@@ -127,11 +130,22 @@
 			<xsl:when test="($param/@passedBy='pointer' or $param/@passedBy='reference')
 							and ($writingNativeMethod ne 'true')
 							and $type_info/type/@java">
-				<xsl:call-template name="javaPointerClass">
-					<xsl:with-param name="config" select="$config" />
-					<xsl:with-param name="param" select="$param" />
-					<xsl:with-param name="typeName" select="$resolvedType" />
-				</xsl:call-template>
+				<xsl:variable name="fullTypeName">
+					<xsl:call-template name="javaPointerClass">
+						<xsl:with-param name="config" select="$config" />
+						<xsl:with-param name="param" select="$param" />
+						<xsl:with-param name="typeName" select="$resolvedType" />
+					</xsl:call-template>
+				</xsl:variable>
+				<xsl:choose>
+					<xsl:when test="$param/type/@pointerPointer = 'true'">
+						<xsl:value-of select="concat(
+								$pointerPointerClass, '&lt;', $fullTypeName, '&gt;')"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="$fullTypeName"/>
+					</xsl:otherwise>
+				</xsl:choose>
 			</xsl:when>
 
 			<!-- if no type info is found -> we are dealing with a class / enum / ... -->
@@ -147,7 +161,16 @@
 								<xsl:value-of select="'long'"/>
 							</xsl:when>
 							<xsl:otherwise>
-								<xsl:value-of select="$resolvedType"/>
+								<xsl:variable name="fullTypeName" select="$resolvedType"/>
+								<xsl:choose>
+									<xsl:when test="$param/type/@pointerPointer = 'true'">
+										<xsl:value-of select="concat(
+												$pointerPointerClass, '&lt;', $fullTypeName, '&gt;')"/>
+									</xsl:when>
+									<xsl:otherwise>
+										<xsl:value-of select="$fullTypeName"/>
+									</xsl:otherwise>
+								</xsl:choose>
 							</xsl:otherwise>
 						</xsl:choose>
 					</xsl:when>
@@ -160,8 +183,17 @@
 							</xsl:when>
 							<xsl:otherwise>
 								<!-- add the template angle bracket -->
-								<xsl:value-of select="concat(xbig:getFullJavaName(
-												$resolvedType, $class, $root, $config), $templateBracket)"/>
+								<xsl:variable name="fullTypeName" select="xbig:getFullJavaName(
+														$resolvedType, $class, $root, $config)"/>
+								<xsl:choose>
+									<xsl:when test="$param/type/@pointerPointer = 'true'">
+										<xsl:value-of select="concat(
+												$pointerPointerClass, '&lt;', $fullTypeName, '&gt;')"/>
+									</xsl:when>
+									<xsl:otherwise>
+										<xsl:value-of select="$fullTypeName"/>
+									</xsl:otherwise>
+								</xsl:choose>
 							</xsl:otherwise>
 						</xsl:choose>
 					</xsl:when>
@@ -173,8 +205,17 @@
 								<xsl:value-of select="'int'"/>
 							</xsl:when>
 							<xsl:otherwise>
-								<xsl:value-of select="xbig:getFullJavaName(
+								<xsl:variable name="fullTypeName" select="xbig:getFullJavaName(
 														$resolvedType, $class, $root, $config)"/>
+								<xsl:choose>
+									<xsl:when test="$param/type/@pointerPointer = 'true'">
+										<xsl:value-of select="concat(
+												$pointerPointerClass, '&lt;', $fullTypeName, '&gt;')"/>
+									</xsl:when>
+									<xsl:otherwise>
+										<xsl:value-of select="$fullTypeName"/>
+									</xsl:otherwise>
+								</xsl:choose>
 							</xsl:otherwise>
 						</xsl:choose>
 					</xsl:when>
@@ -187,14 +228,33 @@
 							</xsl:when>
 							<xsl:otherwise>
 								<!-- add the template angle bracket -->
-								<xsl:value-of select="concat(xbig:getFullJavaName(
+								<xsl:variable name="fullTypeName" select="concat(xbig:getFullJavaName(
 												$resolvedType, $class, $root, $config), $templateBracket)"/>
+								<xsl:choose>
+									<xsl:when test="$param/type/@pointerPointer = 'true'">
+										<xsl:value-of select="concat(
+												$pointerPointerClass, '&lt;', $fullTypeName, '&gt;')"/>
+									</xsl:when>
+									<xsl:otherwise>
+										<xsl:value-of select="$fullTypeName"/>
+									</xsl:otherwise>
+								</xsl:choose>
 							</xsl:otherwise>
 						</xsl:choose>
 					</xsl:when>
 
 					<xsl:otherwise>
-						<xsl:value-of select="xbig:getFullJavaName($resolvedType, $class, $root, $config)"/>
+						<xsl:variable name="fullTypeName" select="xbig:getFullJavaName(
+									$resolvedType, $class, $root, $config)"/>
+						<xsl:choose>
+							<xsl:when test="$param/type/@pointerPointer = 'true'">
+								<xsl:value-of select="concat(
+										$pointerPointerClass, '&lt;', $fullTypeName, '&gt;')"/>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:value-of select="$fullTypeName"/>
+							</xsl:otherwise>
+						</xsl:choose>
 					</xsl:otherwise>
 				</xsl:choose>
 			</xsl:when>

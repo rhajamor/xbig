@@ -1346,15 +1346,28 @@
 			<!-- passed by pointer -->
 			<xsl:when test="contains(type,'*')">
 				<xsl:attribute name="passedBy" select="'pointer'" />
+				<xsl:call-template name="typeMap">
+					<xsl:with-param name="type" select="type" />
+				</xsl:call-template>
+				<!-- 
 				<xsl:variable name="type"
 					select="substring-before(type,' *')" />
+				 -->
+				<!-- 
 				<xsl:choose>
+					 -->
 					<!-- current class is a template -->
+					<!-- 
 					<xsl:when
 						test="../../templateparamlist or ../../../templateparamlist">
 						<xsl:call-template name="typeMap">
+							 -->
+							<!-- 
 							<xsl:with-param name="type"
 								select="substring-before(type,' *')" />
+							 -->
+							<!-- 
+							<xsl:with-param name="type" select="type" />
 						</xsl:call-template>
 					</xsl:when>
 					<xsl:when test="type/ref">
@@ -1366,11 +1379,17 @@
 					</xsl:when>
 					<xsl:otherwise>
 						<xsl:call-template name="typeMap">
+							 -->
+							<!-- 
 							<xsl:with-param name="type"
 								select="substring-before(type,' *')" />
+							 -->
+							<!-- 
+							<xsl:with-param name="type" select="type" />
 						</xsl:call-template>
 					</xsl:otherwise>
 				</xsl:choose>
+				 -->
 			</xsl:when>
 			<!-- passed by value -->
 			<xsl:otherwise>
@@ -1498,10 +1517,51 @@
 				</xsl:variable>
 
 				<!-- remove parameter passing modifiers -->
-				<xsl:variable name="stripped_type"
-					select="replace($non_const_type, '[\*&amp;\[].*$', '')" />
+				<!-- 
+				<xsl:variable name="stripped_type" select="replace($non_const_type, '[\*&amp;\[].*$', '')"/>
+				 -->
+				<xsl:variable name="typeWithoutRef" select="replace($non_const_type, '[&amp;\[].*$', '')"/>
 
-				<xsl:value-of select="normalize-space($stripped_type)" />
+				<xsl:variable name="pointerPointerToken" select="'#POINTER_POINTER_TOKEN#'"/>
+				<xsl:variable name="stripped_type">
+					<xsl:choose>
+						<xsl:when test="contains($typeWithoutRef, '*')">
+							<xsl:choose>
+								<!-- recognize pointer pointer -->
+								<xsl:when test="contains(substring-after($typeWithoutRef, '*'), '*')">
+									<!-- keep some '*' to recognize pointer pointer -->
+									<!-- 
+									<xsl:value-of select="concat(substring-before($typeWithoutRef, '*'),
+																 substring-after($typeWithoutRef, '*'))"/>
+									 -->
+									
+									<xsl:value-of select="concat(substring-before($typeWithoutRef, '*'),
+															$pointerPointerToken)"/>
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:value-of select="substring-before($typeWithoutRef, '*')"/>
+								</xsl:otherwise>
+							</xsl:choose>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:value-of select="$typeWithoutRef"/>
+						</xsl:otherwise>
+					</xsl:choose>
+				</xsl:variable>
+
+				<xsl:if test="contains($stripped_type, $pointerPointerToken)">
+					<xsl:attribute name="pointerPointer" select="'true'"/>
+				</xsl:if>
+
+				<xsl:choose>
+					<xsl:when test="contains($stripped_type, $pointerPointerToken)">
+						<xsl:value-of select="normalize-space(substring-before($stripped_type,
+												$pointerPointerToken))" />
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="normalize-space($stripped_type)" />
+					</xsl:otherwise>
+				</xsl:choose>
 			</xsl:element>
 		</xsl:if>
 	</xsl:template>

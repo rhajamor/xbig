@@ -102,6 +102,21 @@
 			</xsl:message>
 		</xsl:if>
 
+		<xsl:variable name="const"
+			select="if($param/type/@const eq 'true') then 'const ' else ''" />
+
+		<!-- add '*' for pointer pointer -->
+		<xsl:variable name="pointerPointer">
+			<xsl:choose>
+				<xsl:when test="$param/type/@pointerPointer = 'true'">
+					<xsl:value-of select="'*'"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="''"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+
 		<!-- if explicit conversion given -->
 		<xsl:if test="$type_info/type/@cpp">
 			<xsl:choose>
@@ -120,14 +135,7 @@
 				<xsl:otherwise>
 					<!-- if const -->
 					<!-- TODO check for const pointers (int* const) -->
-					<xsl:choose>
-						<xsl:when test="$param/type/@const eq 'true'">
-							<xsl:value-of select="concat('const ', $type_info/type/@cpp)" />
-						</xsl:when>
-						<xsl:otherwise>
-							<xsl:value-of select="$type_info/type/@cpp" />
-						</xsl:otherwise>
-					</xsl:choose>
+					<xsl:value-of select="concat($const, $type_info/type/@cpp, $pointerPointer)"/>
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:if>
@@ -161,9 +169,6 @@
 				</xsl:choose>
 			</xsl:variable>
 
-			<xsl:variable name="const"
-				select="if($param/type/@const eq 'true') then 'const ' else ''" />
-
 			<xsl:variable name="pass">
 				<xsl:choose>
 					<xsl:when test="$param/@passedBy eq 'pointer' and $type_info/type/@cpp">
@@ -181,7 +186,7 @@
 				</xsl:choose>
 			</xsl:variable>
 
-			<xsl:value-of select="concat($const,$type,$pass)" />
+			<xsl:value-of select="concat($const, $type, $pass, $pointerPointer)"/>
 		</xsl:if>
 
 	</xsl:function>
@@ -212,6 +217,18 @@
 		<!-- shortcut for parameter name -->
 		<xsl:variable name="param_name" select="$param/name" />
 
+		<!-- find out if we have a pointer pointer pointer -->
+		<xsl:variable name="pointerPointerAddOn">
+			<xsl:choose>
+				<xsl:when test="$param/type/@pointerPointer = 'true'">
+					<xsl:value-of select="'*'"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="''"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+
 		<!-- no conversion function available -->
 		<xsl:if test="not($type_info/type/jni2cpp)">
 			<xsl:choose>
@@ -221,20 +238,22 @@
 					<xsl:variable name="part1" select="'reinterpret_cast&lt; '"/>
 					<xsl:variable name="part2" select="xbig:getFullTemplateName(
 														$resolvedType, $class, $root)"/>
-					<xsl:variable name="part3" select="'* &gt;('"/>
-					<xsl:variable name="part4" select="$param_name"/>
-					<xsl:variable name="part5" select="')'"/>
-					<xsl:value-of select="concat($part1, $part2, $part3, $part4, $part5)"/>
+					<xsl:variable name="part3" select="$pointerPointerAddOn"/>
+					<xsl:variable name="part4" select="'* &gt;('"/>
+					<xsl:variable name="part5" select="$param_name"/>
+					<xsl:variable name="part6" select="')'"/>
+					<xsl:value-of select="concat($part1, $part2, $part3, $part4, $part5, $part6)"/>
 				</xsl:when>
 
 				<!-- if this is a typedef for a template -->
 				<xsl:when test="xbig:isTemplateTypedef($resolvedType, $class, $root)">
 					<xsl:variable name="part1" select="'reinterpret_cast&lt; '"/>
 					<xsl:variable name="part2" select="xbig:getFullTypeName($resolvedType, $class, $root)"/>
-					<xsl:variable name="part3" select="'* &gt;('"/>
-					<xsl:variable name="part4" select="$param_name"/>
-					<xsl:variable name="part5" select="')'"/>
-					<xsl:value-of select="concat($part1, $part2, $part3, $part4, $part5)"/>
+					<xsl:variable name="part3" select="$pointerPointerAddOn"/>
+					<xsl:variable name="part4" select="'* &gt;('"/>
+					<xsl:variable name="part5" select="$param_name"/>
+					<xsl:variable name="part6" select="')'"/>
+					<xsl:value-of select="concat($part1, $part2, $part3, $part4, $part5, $part6)"/>
 				</xsl:when>
 
 				<!-- test for enums -->
@@ -247,10 +266,11 @@
 				<xsl:when test="xbig:isClassOrStruct($resolvedType, $class, $root)">
 					<xsl:variable name="part1" select="'reinterpret_cast&lt; '"/>
 					<xsl:variable name="part2" select="xbig:getFullTypeName($resolvedType, $class, $root)"/>
-					<xsl:variable name="part3" select="'* &gt;('"/>
-					<xsl:variable name="part4" select="$param_name" />
-					<xsl:variable name="part5" select="')'"/>
-					<xsl:value-of select="concat($part1, $part2, $part3, $part4, $part5)" />
+					<xsl:variable name="part3" select="$pointerPointerAddOn"/>
+					<xsl:variable name="part4" select="'* &gt;('"/>
+					<xsl:variable name="part5" select="$param_name"/>
+					<xsl:variable name="part6" select="')'"/>
+					<xsl:value-of select="concat($part1, $part2, $part3, $part4, $part5, $part6)"/>
 				</xsl:when>
 
 				<xsl:otherwise>
@@ -263,14 +283,17 @@
 		<xsl:if test="$type_info/type/jni2cpp">
 			<!-- perform general code transformations -->
 			<xsl:variable name="code1"
-				select="xbig:code($config, $type_info/type/jni2cpp, $class, $method)" />
+				select="xbig:code($config, $type_info/type/jni2cpp, $class, $method)"/>
+
+			<!-- add the pointer pointer '*' -->
+			<xsl:variable name="code2" select="replace($code1, '[\*]', concat('*', $pointerPointerAddOn))"/>
 
 			<!-- replace parameter name in code fragment -->
-			<xsl:variable name="code2"
-				select="replace($code1,'#jni_var#', $param_name)" />
+			<xsl:variable name="code3"
+				select="replace($code2,'#jni_var#', $param_name)"/>
 
 			<!-- write conversion code -->
-			<xsl:value-of select="$code2" />
+			<xsl:value-of select="$code3"/>
 		</xsl:if>
 
 	</xsl:function>

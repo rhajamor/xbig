@@ -396,6 +396,9 @@
 			<xsl:if test="$type/@constPointer">
 				<xsl:attribute name="constPointer" select="'true'"/>
 			</xsl:if>
+			<xsl:if test="$type/@pointerPointer">
+				<xsl:attribute name="pointerPointer" select="'true'"/>
+			</xsl:if>
 
 			<xsl:value-of select="$typeAndPassedBy/type"/>
 		</xsl:element>
