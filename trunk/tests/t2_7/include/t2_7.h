@@ -17,3 +17,4 @@ public:
 	static int a(float b);
 	static int b;
 };
+int A::b;
