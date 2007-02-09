@@ -151,37 +151,59 @@
 
 				<!-- global typedefs -->
 				<!-- <xsl:for-each select="doxygen/compounddef[@kind='typedef']"> -->
-				<xsl:for-each
-					select="doxygen/compounddef[@kind='file']/sectiondef[@kind='']">
-					<xsl:choose>
-						<!-- if there are more than one entries in all.xml -->
-						<xsl:when test="last() > 1">
-							<xsl:if test="position() = 1">
-								<xsl:call-template name="typedef" />
-							</xsl:if>
-						</xsl:when>
-						<xsl:otherwise>
+				<!-- check doxygen version -->
+				<xsl:choose>
+					<xsl:when test="/doxygen/@version='1.5.1-p1'">
+						<xsl:for-each
+								select="doxygen/compounddef[@kind='file']/sectiondef[@kind='typedef']">
 							<xsl:call-template name="typedef" />
-						</xsl:otherwise>
-					</xsl:choose>
-				</xsl:for-each>
+						</xsl:for-each>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:for-each
+							select="doxygen/compounddef[@kind='file']/sectiondef[@kind='']">
+							<xsl:choose>
+								<!-- if there are more than one entries in all.xml -->
+								<xsl:when test="last() > 1">
+									<xsl:if test="position() = 1">
+										<xsl:call-template name="typedef" />
+									</xsl:if>
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:call-template name="typedef" />
+								</xsl:otherwise>
+							</xsl:choose>
+						</xsl:for-each>
+					</xsl:otherwise>
+				</xsl:choose>
 
 				<!-- global enums -->
 				<!-- <xsl:for-each select="doxygen/compounddef[@kind='enum']"> -->
-				<xsl:for-each
-					select="doxygen/compounddef[@kind='file']/sectiondef[@kind='']/memberdef[@kind='enum']">
-					<xsl:choose>
-						<!-- if there are more than one entries in all.xml -->
-						<xsl:when test="last() > 1">
-							<xsl:if test="position() = 1">
-								<xsl:call-template name="enumeration" />
-							</xsl:if>
-						</xsl:when>
-						<xsl:otherwise>
+				<!-- check doxygen version -->
+				<xsl:choose>
+					<xsl:when test="/doxygen/@version='1.5.1-p1'">
+						<xsl:for-each select="doxygen/compounddef[@kind='file']/
+								sectiondef[@kind='enum']/memberdef[@kind='enum']">
 							<xsl:call-template name="enumeration" />
-						</xsl:otherwise>
-					</xsl:choose>
-				</xsl:for-each>
+						</xsl:for-each>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:for-each select="doxygen/compounddef[@kind='file']/
+								sectiondef[@kind='']/memberdef[@kind='enum']">
+							<xsl:choose>
+								<!-- if there are more than one entries in all.xml -->
+								<xsl:when test="last() > 1">
+									<xsl:if test="position() = 1">
+										<xsl:call-template name="enumeration" />
+									</xsl:if>
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:call-template name="enumeration" />
+								</xsl:otherwise>
+							</xsl:choose>
+						</xsl:for-each>
+					</xsl:otherwise>
+				</xsl:choose>
 
 				<!-- global functions -->
 				<!-- <xsl:for-each select="doxygen/compounddef[@kind='func']"> -->
@@ -293,35 +315,58 @@
 			</xsl:for-each>
 
 			<!-- global typedefs -->
-			<xsl:for-each select="sectiondef[@kind='']">
-				<xsl:choose>
-					<!-- if there are more than one entries in all.xml -->
-					<xsl:when test="last() > 1">
-						<xsl:if test="position() = 1">
-							<xsl:call-template name="typedef" />
-						</xsl:if>
-					</xsl:when>
-					<xsl:otherwise>
+			<!-- <xsl:for-each select="doxygen/compounddef[@kind='typedef']"> -->
+			<!-- check doxygen version -->
+			<xsl:choose>
+				<xsl:when test="/doxygen/@version='1.5.1-p1'">
+					<xsl:for-each
+							select="sectiondef[@kind='typedef']">
 						<xsl:call-template name="typedef" />
-					</xsl:otherwise>
-				</xsl:choose>
-			</xsl:for-each>
+					</xsl:for-each>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:for-each
+						select="sectiondef[@kind='']">
+						<xsl:choose>
+							<!-- if there are more than one entries in all.xml -->
+							<xsl:when test="last() > 1">
+								<xsl:if test="position() = 1">
+									<xsl:call-template name="typedef" />
+								</xsl:if>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:call-template name="typedef" />
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:for-each>
+				</xsl:otherwise>
+			</xsl:choose>
 
 			<!-- global enums -->
-			<xsl:for-each
-				select="sectiondef[@kind='']/memberdef[@kind='enum']">
-				<xsl:choose>
-					<!-- if there are more than one entries in all.xml -->
-					<xsl:when test="last() > 1">
-						<xsl:if test="position() = 1">
-							<xsl:call-template name="enumeration" />
-						</xsl:if>
-					</xsl:when>
-					<xsl:otherwise>
+			<!-- <xsl:for-each select="doxygen/compounddef[@kind='enum']"> -->
+			<!-- check doxygen version -->
+			<xsl:choose>
+				<xsl:when test="/doxygen/@version='1.5.1-p1'">
+					<xsl:for-each select="sectiondef[@kind='enum']/memberdef[@kind='enum']">
 						<xsl:call-template name="enumeration" />
-					</xsl:otherwise>
-				</xsl:choose>
-			</xsl:for-each>
+					</xsl:for-each>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:for-each select="sectiondef[@kind='']/memberdef[@kind='enum']">
+						<xsl:choose>
+							<!-- if there are more than one entries in all.xml -->
+							<xsl:when test="last() > 1">
+								<xsl:if test="position() = 1">
+									<xsl:call-template name="enumeration" />
+								</xsl:if>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:call-template name="enumeration" />
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:for-each>
+				</xsl:otherwise>
+			</xsl:choose>
 
 			<!-- global variables in the namespace -->
 			<!-- create unique list of variables because of a bug in doxygen -->
@@ -1135,8 +1180,10 @@
 	<xsl:template name="function">
 		<xsl:for-each select="memberdef">
 			<!-- test if function belongs to actual class (the location test could be deleted)  -->
+			<!-- 
 			<xsl:if
 				test="ends-with(location/@file,../../includes) and starts-with(@id,../../@id)">
+			 -->
 				<xsl:choose>
 					<!-- destructor - do nothing -->
 					<xsl:when test="starts-with(name,'~')" />
@@ -1236,7 +1283,9 @@
 						</xsl:element>
 					</xsl:otherwise>
 				</xsl:choose>
+			<!-- 
 			</xsl:if>
+			 -->
 		</xsl:for-each>
 	</xsl:template>
 	<!-- ##################### TYPE - calls typeMap ##################### -->
@@ -1721,6 +1770,7 @@
 		<!-- getting the right name of inner classes -->
 		<xsl:variable name="name"
 			select="substring-after(compoundname,'::')" />
+		<!-- 
 		<xsl:if test="contains($name,'::')">
 			<xsl:attribute name="name"
 				select="substring-after($name,'::')" />
@@ -1737,6 +1787,7 @@
 				</xsl:if>
 			</xsl:if>
 		</xsl:if>
+		 -->
 
 		<!-- copy all includes into meta output -->
 		<xsl:copy-of copy-namespaces="no" select="includes" />

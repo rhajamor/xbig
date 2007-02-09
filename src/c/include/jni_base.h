@@ -32,16 +32,21 @@
 #include <jni.h>
 #include <string>
 
+
+#ifdef WIN32
+	#define EXPORT __declspec(dllexport)
+#else
+	#define EXPORT
+#endif
+
+
 namespace org { namespace xbig { namespace jni {
 	
-std::string
-to_stdstring(JNIEnv* env, jstring jString);
+EXPORT std::string to_stdstring(JNIEnv* env, jstring jString);
 
-jstring
-to_jstring(JNIEnv* env, const std::string& str);
+EXPORT jstring to_jstring(JNIEnv* env, const std::string& str);
 
-jstring
-to_jstring(JNIEnv* env, const char*);
+EXPORT jstring to_jstring(JNIEnv* env, const char*);
 
 
 }}}
