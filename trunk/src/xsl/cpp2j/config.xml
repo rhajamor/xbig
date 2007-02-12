@@ -165,7 +165,7 @@
 					#cpp_conversions#
 					#nl#
 					#nl#// call library method
-					#nl##cpp_return_type# #cpp_return_var# =
+					#nl##cpp_return_type# #cpp_return_var# = #optional_return_conversion#
 					   #cpp_inherited_method_class#::#cpp_method#(#cpp_params#)#optional_closing_bracket#;
 					#nl#return #cpp_return#;
 				</return>
@@ -206,7 +206,7 @@
 						#cpp_conversions#
 						#nl#
 						#nl#// call library method
-						#nl##cpp_return_type# #cpp_return_var# =
+						#nl##cpp_return_type# #cpp_return_var# = #optional_return_conversion#
 						    #cpp_class#::#cpp_attribute##optional_closing_bracket#;
 						#nl#return #cpp_return#;
 					</static>
@@ -219,7 +219,7 @@
 						reinterpret_cast&lt;#cpp_class#*&gt;(#jni_pointer#);
 						#nl#
 						#nl#// call library method
-						#nl##cpp_return_type# #cpp_return_var# =
+						#nl##cpp_return_type# #cpp_return_var# = #optional_return_conversion#
 						    #cpp_this#->#cpp_attribute##optional_closing_bracket#;
 						#nl#return #cpp_return#;
 					</nonstatic>
