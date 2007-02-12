@@ -283,11 +283,42 @@
 						</xsl:for-each>
 					</xsl:variable>
 
+					<!-- TODO pointer pointer stuff, also implicit: T* foo() with T: A* -->
+
+					<!-- handle pointers as type parameters -->
+					<xsl:variable name="selectedTypePara" select="$resolvedTypeParas/para[number($pos)]"/>
+					<xsl:variable name="changedPassedByType">
+						<xsl:choose>
+							<xsl:when test="contains($selectedTypePara, '*')">
+								<xsl:value-of
+										select="normalize-space(substring-before($selectedTypePara, '*'))"/>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:value-of select="$selectedTypePara"/>
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:variable>
+
+					<!-- return -->
 					<xsl:element name="type">
-						<xsl:value-of select="$resolvedTypeParas/para[number($pos)]"/>
+						<xsl:choose>
+							<xsl:when test="starts-with($changedPassedByType, '::')">
+								<xsl:value-of select="substring-after($changedPassedByType, '::')"/>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:value-of select="$changedPassedByType"/>
+							</xsl:otherwise>
+						</xsl:choose>
 					</xsl:element>
 					<xsl:element name="passedBy">
-						<xsl:value-of select="$type/../@passedBy"/>
+						<xsl:choose>
+							<xsl:when test="contains($selectedTypePara, '*')">
+								<xsl:value-of select="'pointer'"/>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:value-of select="$type/../@passedBy"/>
+							</xsl:otherwise>
+						</xsl:choose>
 					</xsl:element>
 				</xsl:when>
 
@@ -390,6 +421,7 @@
 			<!-- for primitive types as template parameters, needed in javaAccessMethodDeclaration.xslt -->
 			<xsl:attribute name="originalType" select="$type"/>
 
+			<!-- 
 			<xsl:if test="$type/@const">
 				<xsl:attribute name="const" select="'true'"/>
 			</xsl:if>
@@ -399,6 +431,13 @@
 			<xsl:if test="$type/@pointerPointer">
 				<xsl:attribute name="pointerPointer" select="'true'"/>
 			</xsl:if>
+			<xsl:if test="$type/@array">
+				<xsl:attribute name="array" select="$type/@array"/>
+			</xsl:if>
+			 -->
+			<xsl:for-each select="$type/@*">
+				<xsl:copy-of select="."/>
+			</xsl:for-each>
 
 			<xsl:value-of select="$typeAndPassedBy/type"/>
 		</xsl:element>
