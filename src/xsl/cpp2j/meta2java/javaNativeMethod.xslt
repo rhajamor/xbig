@@ -120,6 +120,10 @@
 			</xsl:choose>
 		</xsl:variable>
 
+		<!-- for performance reasons -->
+		<xsl:variable name="fullTypeName"
+					select="xbig:getFullTypeName($resolvedType, $class, $root)"/>
+
 		<!-- write return type -->
 		<xsl:choose>
 
@@ -138,15 +142,15 @@
 				<xsl:value-of select="'long'" />
 			</xsl:when>
 
-			<xsl:when test="xbig:isTemplateTypedef($resolvedType, $class, $root)">
+			<xsl:when test="xbig:isTemplateTypedef($fullTypeName, $class, $root)">
 				<xsl:value-of select="'long'" />
 			</xsl:when>
 
-			<xsl:when test="xbig:isClassOrStruct($resolvedType, $class, $root)">
+			<xsl:when test="xbig:isClassOrStruct($fullTypeName, $class, $root)">
 				<xsl:value-of select="'long'" />
 			</xsl:when>
 
-			<xsl:when test="xbig:isEnum($resolvedType, $class, $root)">
+			<xsl:when test="xbig:isEnum($fullTypeName, $class, $root)">
 				<xsl:value-of select="'int'" />
 			</xsl:when>
 

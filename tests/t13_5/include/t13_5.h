@@ -15,6 +15,7 @@
 #include <map>
 
 
+namespace n {
 class EXPORT A {
 public:
 	void set(int i) {m = i;}
@@ -24,15 +25,19 @@ private:
 };
 
 
-typedef std::map<unsigned short, A * > AptrMap;
+class EXPORT OuterClass {
+public:
+	typedef std::map<unsigned short, A * > AptrMap;
+};
 
 
 class Tester {
 public:
-	void a(AptrMap a) {m = a;}
-	AptrMap b() {return m;}
-	AptrMap c(AptrMap a) {return a;}
+	void a(OuterClass::AptrMap a) {m = a;}
+	OuterClass::AptrMap b() {return m;}
+	OuterClass::AptrMap c(OuterClass::AptrMap a) {return a;}
 
 private:
-	AptrMap m;
+	OuterClass::AptrMap m;
 };
+}

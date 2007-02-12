@@ -371,8 +371,13 @@
 
 				<!-- use type used in template -->
 				<xsl:otherwise>
+
+					<!-- for performance reasons -->
+					<xsl:variable name="fullTypeName"
+							select="xbig:getFullTypeName($type, $template, $root)"/>
+
 					<xsl:choose>
-						<xsl:when test="xbig:isClassOrStruct($type, $template, $root)">
+						<xsl:when test="xbig:isClassOrStruct($fullTypeName, $template, $root)">
 							<xsl:element name="type">
 								<xsl:value-of select="concat('::', xbig:getFullTypeName(
 													$type, $template, $root))"/>
@@ -381,7 +386,7 @@
 								<xsl:value-of select="$type/../@passedBy"/>
 							</xsl:element>
 						</xsl:when>
-						<xsl:when test="xbig:isEnum($type, $template, $root)">
+						<xsl:when test="xbig:isEnum($fullTypeName, $template, $root)">
 							<xsl:element name="type">
 								<xsl:value-of select="concat('::', xbig:getFullTypeName(
 													$type, $template, $root))"/>
@@ -390,7 +395,7 @@
 								<xsl:value-of select="$type/../@passedBy"/>
 							</xsl:element>
 						</xsl:when>
-						<xsl:when test="xbig:isTypedef($type, $template, $root)">
+						<xsl:when test="xbig:isTypedef($fullTypeName, $template, $root)">
 							<xsl:element name="type">
 								<xsl:value-of select="concat('::', xbig:getFullTypeName(
 													xbig:resolveTypedef($type, $template, $root)

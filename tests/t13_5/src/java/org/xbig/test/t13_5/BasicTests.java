@@ -8,12 +8,12 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.xbig.base.IntegerPointer;
 //import org.xbig.std.Imap;
-import org.xbig.IA;
-import org.xbig.IAptrMap;
-import org.xbig.ITester;
-import org.xbig.A;
-import org.xbig.AptrMap;
-import org.xbig.Tester;
+import org.xbig.n.IA;
+import org.xbig.n.IOuterClass.IAptrMap;
+import org.xbig.n.ITester;
+import org.xbig.n.A;
+import org.xbig.n.OuterClass.AptrMap;
+import org.xbig.n.Tester;
 /**
  * @author nenning
  *

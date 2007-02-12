@@ -155,7 +155,11 @@
 		<xsl:param name="currentNode"/> <!-- must be a class, struct or namespace element -->
 		<xsl:param name="inputTreeRoot"/>
 
+		<!-- for performance reasons -->
+		<!-- 
 		<xsl:variable name="fullName" select="xbig:getFullTypeName($type, $currentNode, $inputTreeRoot)"/>
+		 -->
+		<xsl:variable name="fullName" select="$type"/>
 
 		<xsl:choose>
 			<xsl:when test="boolean($inputTreeRoot//enumeration[@fullName = $fullName])">
@@ -176,7 +180,11 @@
 		<xsl:param name="currentNode"/> <!-- must be a class, struct or namespace element -->
 		<xsl:param name="inputTreeRoot"/>
 
+		<!-- for performance reasons -->
+		<!-- 
 		<xsl:variable name="fullName" select="xbig:getFullTypeName($type, $currentNode, $inputTreeRoot)"/>
+		 -->
+		<xsl:variable name="fullName" select="$type"/>
 
 		<xsl:choose>
 			<xsl:when test="boolean($inputTreeRoot//typedef[@fullName = $fullName])">
@@ -197,7 +205,11 @@
 		<xsl:param name="currentNode"/> <!-- must be a class, struct or namespace element -->
 		<xsl:param name="inputTreeRoot"/>
 
+		<!-- for performance reasons -->
+		<!-- 
 		<xsl:variable name="fullName" select="xbig:getFullTypeName($type, $currentNode, $inputTreeRoot)"/>
+		 -->
+		<xsl:variable name="fullName" select="$type"/>
 
 		<xsl:choose>
 			<xsl:when test="boolean($inputTreeRoot//class[@fullName = $fullName])">
@@ -236,7 +248,11 @@
 		<xsl:param name="currentNode"/> <!-- must be a class, struct or namespace element -->
 		<xsl:param name="inputTreeRoot"/>
 
+		<!-- for performance reasons -->
+		<!-- 
 		<xsl:variable name="fullName" select="xbig:getFullTypeName($type, $currentNode, $inputTreeRoot)"/>
+		 -->
+		<xsl:variable name="fullName" select="$type"/>
 
 		<xsl:choose>
 			<xsl:when test="boolean($inputTreeRoot//struct[@fullName = $fullName])">
@@ -275,7 +291,11 @@
 		<xsl:param name="currentNode"/> <!-- must be a class, struct or namespace element -->
 		<xsl:param name="inputTreeRoot"/>
 
+		<!-- for performance reasons -->
+		<!-- 
 		<xsl:variable name="fullName" select="xbig:getFullTypeName($type, $currentNode, $inputTreeRoot)"/>
+		 -->
+		<xsl:variable name="fullName" select="$type"/>
 
 		<xsl:choose>
 			<xsl:when test="boolean($inputTreeRoot//class[@fullName = $fullName])">
@@ -317,7 +337,11 @@
 		<xsl:param name="currentNode"/> <!-- must be a class, struct or namespace element -->
 		<xsl:param name="inputTreeRoot"/>
 
+		<!-- for performance reasons -->
+		<!-- 
 		<xsl:variable name="fullName" select="xbig:getFullTypeName($type, $currentNode, $inputTreeRoot)"/>
+		 -->
+		<xsl:variable name="fullName" select="$type"/>
 		<xsl:variable name="typedefNode" select="$inputTreeRoot//typedef[@fullName = $fullName]"/>
 
 		<xsl:choose>

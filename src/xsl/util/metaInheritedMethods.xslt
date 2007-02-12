@@ -153,21 +153,26 @@
 							</xsl:variable> 
 
 							<xsl:element name="unresolved">
+
+								<!-- for performance reasons -->
+								<xsl:variable name="fullTypeName"
+										select="xbig:getFullTypeName($typeName, $class, $root)"/>
+
 								<xsl:choose>
 									<!-- primitive types -->
 									<xsl:when test="$config/config/java/types/type[@meta = $typeName]">
 										<xsl:value-of select="false()" />
 									</xsl:when>
-									<xsl:when test="xbig:isEnum($typeName, $class, $root)">
+									<xsl:when test="xbig:isEnum($fullTypeName, $class, $root)">
 										<xsl:value-of select="false()" />
 									</xsl:when>
-									<xsl:when test="xbig:isTypedef($typeName, $class, $root)">
+									<xsl:when test="xbig:isTypedef($fullTypeName, $class, $root)">
 										<xsl:value-of select="false()" />
 									</xsl:when>
-									<xsl:when test="xbig:isClassOrStruct($typeName, $class, $root)">
+									<xsl:when test="xbig:isClassOrStruct($fullTypeName, $class, $root)">
 										<xsl:value-of select="false()" />
 									</xsl:when>
-									<xsl:when test="xbig:isTemplateTypedef($typeName, $class, $root)">
+									<xsl:when test="xbig:isTemplateTypedef($fullTypeName, $class, $root)">
 										<xsl:value-of select="false()" />
 									</xsl:when>
 

@@ -74,25 +74,30 @@
 
 			<!-- if no type info is found -> we are dealing with a class / enum / ... -->
 			<xsl:when test="not($type_info/type/@jni)">
+
+				<!-- for performance reasons -->
+				<xsl:variable name="fullTypeName"
+							select="xbig:getFullTypeName($resolvedType, $class, $root)"/>
+
 				<xsl:choose>
 
 					<!-- if this type is a parametrized template -->
-					<xsl:when test="contains($resolvedType, '&lt;')">
+					<xsl:when test="contains($fullTypeName, '&lt;')">
 						<xsl:value-of select="'jlong'"/>
 					</xsl:when>
 
 					<!-- if this is a typedef for a template -->
-					<xsl:when test="xbig:isTemplateTypedef($resolvedType, $class, $root)">
+					<xsl:when test="xbig:isTemplateTypedef($fullTypeName, $class, $root)">
 						<xsl:value-of select="'jlong'"/>
 					</xsl:when>
 
 					<!-- if this type is an enum -->
-					<xsl:when test="xbig:isEnum($resolvedType, $class, $root)">
+					<xsl:when test="xbig:isEnum($fullTypeName, $class, $root)">
 						<xsl:value-of select="'jint'"/>
 					</xsl:when>
 
 					<!-- if this type is a class or struct -->
-					<xsl:when test="xbig:isClassOrStruct($resolvedType, $class, $root)">
+					<xsl:when test="xbig:isClassOrStruct($fullTypeName, $class, $root)">
 						<xsl:value-of select="'jlong'"/>
 					</xsl:when>
 
