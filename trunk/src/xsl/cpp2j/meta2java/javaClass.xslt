@@ -85,7 +85,7 @@
 		<xsl:value-of select="$class_name" />
 		<xsl:value-of select="$config/config/java/interface/suffix" />
 		 -->
-		<xsl:value-of select="xbig:getFullJavaName($class_name, $class, $root, $config)"/>
+		<xsl:value-of select="xbig:getFullJavaName($class/@fullName, $class, $root, $config)"/>
 
 		<!-- start class content -->
 		<xsl:text>&#32;{&#10;</xsl:text>

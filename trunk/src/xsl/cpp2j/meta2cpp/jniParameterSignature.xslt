@@ -47,16 +47,19 @@
 		<xsl:param name="escape" />
 		<xsl:param name="class" />
 
+		<!-- for performance reasons -->
+		<xsl:variable name="fullTypeName" select="xbig:getFullTypeName($meta_type, $class, $root)"/>
+
 		<!-- map type to signature with mapping table from configuration -->
 		<xsl:variable name="signature">
 			<xsl:choose>
 				<xsl:when test="$config/config/cpp/jni/signatures/type[@meta=$meta_type]/@signature">
 					<xsl:value-of select="$config/config/cpp/jni/signatures/type[@meta=$meta_type]/@signature" />
 				</xsl:when>
-				<xsl:when test="xbig:isClassOrStruct($meta_type, $class, $root)">
+				<xsl:when test="xbig:isClassOrStruct($fullTypeName, $class, $root)">
 					<xsl:value-of select="$config/config/cpp/jni/signatures/type[@meta='long']/@signature" />
 				</xsl:when>
-				<xsl:when test="xbig:isEnum($meta_type, $class, $root)">
+				<xsl:when test="xbig:isEnum($fullTypeName, $class, $root)">
 					<xsl:value-of select="$config/config/cpp/jni/signatures/type[@meta='int']/@signature" />
 				</xsl:when>
 				<xsl:otherwise>

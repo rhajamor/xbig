@@ -48,6 +48,10 @@
 		<!-- resolve typedefs -->
 		<xsl:variable name="resolvedType" select="xbig:resolveTypedef($method/type, $class, $root)"/>
 
+		<!-- for performance reasons -->
+		<xsl:variable name="fullTypeName"
+					select="xbig:getFullTypeName($resolvedType, $class, $root)"/>
+
 		<!-- extract jni type depending on meta type, const/non-const, pass type
 			 needed for some ifs -->
 		<xsl:variable name="type_info">
@@ -72,7 +76,7 @@
 		<xsl:if test="($method/@passedBy='pointer' or $method/@passedBy='reference')
 						and ($type_info/type/@java or $resolvedType = 'void')">
 			<xsl:text>new&#32;</xsl:text>
-			<xsl:variable name="fullTypeName">
+			<xsl:variable name="fullTypeNameWithPointer">
 				<xsl:call-template name="javaPointerClass">
 					<xsl:with-param name="config" select="$config" />
 					<xsl:with-param name="param" select="$method" />
@@ -83,11 +87,11 @@
 				<xsl:when test="$method/type/@pointerPointer = 'true'">
 					<xsl:value-of select="concat(
 									$pointerPointerClass, '&lt;')"/>
-					<xsl:value-of select="$fullTypeName"/>
+					<xsl:value-of select="$fullTypeNameWithPointer"/>
 					<xsl:value-of select="'&gt;'"/>
 				</xsl:when>
 				<xsl:otherwise>
-					<xsl:value-of select="$fullTypeName"/>
+					<xsl:value-of select="$fullTypeNameWithPointer"/>
 				</xsl:otherwise>
 			</xsl:choose>
 			<xsl:text>(new&#32;InstancePointer(</xsl:text>
@@ -110,46 +114,46 @@
 		</xsl:if>
 
 		<!-- if this is a template typedef -->
-		<xsl:if test="xbig:isTemplateTypedef($resolvedType, $class, $root)">
+		<xsl:if test="xbig:isTemplateTypedef($fullTypeName, $class, $root)">
 			<xsl:text>new&#32;</xsl:text>
 			<xsl:choose>
 				<xsl:when test="$method/type/@pointerPointer = 'true'">
 					<xsl:value-of select="concat(
 									$pointerPointerClass, '&lt;')"/>
 					<xsl:value-of select="xbig:getFullJavaName(
-										$resolvedType, $class, $root, $config)"/>
+											$fullTypeName, $class, $root, $config)"/>
 					<xsl:value-of select="'&gt;'"/>
 				</xsl:when>
 				<xsl:otherwise>
 					<xsl:value-of select="xbig:getFullJavaClassAndNotInterfaceName(
-											$resolvedType, $class, $root, $config)"/>
+											$fullTypeName, $class, $root, $config)"/>
 				</xsl:otherwise>
 			</xsl:choose>
 			<xsl:text>(new&#32;InstancePointer(</xsl:text>
 		</xsl:if>
 
 		<!-- create native object when necessary -->
-		<xsl:if test="xbig:isClassOrStruct($resolvedType, $class, $root)">
+		<xsl:if test="xbig:isClassOrStruct($fullTypeName, $class, $root)">
 			<xsl:text>new&#32;</xsl:text>
 			<xsl:choose>
 				<xsl:when test="$method/type/@pointerPointer = 'true'">
 					<xsl:value-of select="concat(
 									$pointerPointerClass, '&lt;')"/>
 					<xsl:value-of select="xbig:getFullJavaName(
-										$resolvedType, $class, $root, $config)"/>
+											$fullTypeName, $class, $root, $config)"/>
 					<xsl:value-of select="'&gt;'"/>
 				</xsl:when>
 				<xsl:otherwise>
 					<xsl:value-of select="xbig:getFullJavaClassAndNotInterfaceName(
-											$resolvedType, $class, $root, $config)"/>
+											$fullTypeName, $class, $root, $config)"/>
 				</xsl:otherwise>
 			</xsl:choose>
 			<xsl:text>(new&#32;InstancePointer(</xsl:text>
 		</xsl:if>
 
 		<!-- get enum when necessary -->
-		<xsl:if test="xbig:isEnum($resolvedType, $class, $root)">
-			<xsl:value-of select="xbig:getFullJavaName($resolvedType, $class, $root, $config)"/>
+		<xsl:if test="xbig:isEnum($fullTypeName, $class, $root)">
+			<xsl:value-of select="xbig:getFullJavaName($fullTypeName, $class, $root, $config)"/>
 			<xsl:text>.toEnum(</xsl:text>
 		</xsl:if>
 
@@ -195,21 +199,21 @@
 				<xsl:text>, false</xsl:text>
 			</xsl:if>
 		</xsl:if>
-		<xsl:if test="xbig:isTemplateTypedef($resolvedType, $class, $root)">
+		<xsl:if test="xbig:isTemplateTypedef($fullTypeName, $class, $root)">
 			<xsl:text>))</xsl:text>
 			<!-- we have copied the returned object to the heap -->
 			<xsl:if test="$method/@passedBy = 'value'">
 				<xsl:text>, false</xsl:text>
 			</xsl:if>
 		</xsl:if>
-		<xsl:if test="xbig:isClassOrStruct($resolvedType, $class, $root)">
+		<xsl:if test="xbig:isClassOrStruct($fullTypeName, $class, $root)">
 			<xsl:text>))</xsl:text>
 			<!-- we have copied the returned object to the heap -->
 			<xsl:if test="$method/@passedBy = 'value'">
 				<xsl:text>, false</xsl:text>
 			</xsl:if>
 		</xsl:if>
-		<xsl:if test="xbig:isEnum($resolvedType, $class, $root)">
+		<xsl:if test="xbig:isEnum($fullTypeName, $class, $root)">
 			<xsl:text>)</xsl:text>
 		</xsl:if>
 

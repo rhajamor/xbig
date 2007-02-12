@@ -83,6 +83,10 @@
 			</xsl:choose>
 		</xsl:variable>
 
+		<!-- for performance reasons -->
+		<xsl:variable name="fullTypeName"
+				select="xbig:getFullTypeName($resolvedType, $class, $root)"/>
+
 		<!-- shortcut to type conversion configurations -->
 		<xsl:variable name="type_info">
 			<xsl:call-template name="metaExactTypeInfo">
@@ -148,23 +152,20 @@
 					<xsl:when test="not($param/type)">
 						<xsl:value-of select="'void'"/>
 					</xsl:when>
-					<xsl:when test="contains($resolvedType, '&lt;')">
-						<xsl:value-of select="concat(xbig:getFullTemplateName($resolvedType, $class, $root)
-												, '*')"/>
+					<xsl:when test="contains($fullTypeName, '&lt;')">
+						<xsl:value-of select="concat($fullTypeName, '*')"/>
 					</xsl:when>
-					<xsl:when test="xbig:isTemplateTypedef($resolvedType, $class, $root)">
-						<xsl:value-of select="concat(xbig:getFullTypeName($resolvedType, $class, $root)
-												, '*')"/>
+					<xsl:when test="xbig:isTemplateTypedef($fullTypeName, $class, $root)">
+						<xsl:value-of select="concat($fullTypeName, '*')"/>
 					</xsl:when>
-					<xsl:when test="xbig:isClassOrStruct($resolvedType, $class, $root)">
-						<xsl:value-of select="concat(xbig:getFullTypeName($resolvedType, $class, $root)
-												, '*')"/>
+					<xsl:when test="xbig:isClassOrStruct($fullTypeName, $class, $root)">
+						<xsl:value-of select="concat($fullTypeName, '*')"/>
 					</xsl:when>
-					<xsl:when test="xbig:isEnum($param/type, $class, $root)">
-						<xsl:value-of select="xbig:getFullTypeName($resolvedType, $class, $root)"/>
+					<xsl:when test="xbig:isEnum($fullTypeName, $class, $root)">
+						<xsl:value-of select="$fullTypeName"/>
 					</xsl:when>
 					<xsl:otherwise>
-						<xsl:value-of select="$resolvedType"/>
+						<xsl:value-of select="$fullTypeName"/>
 					</xsl:otherwise>
 				</xsl:choose>
 			</xsl:variable>
@@ -203,6 +204,10 @@
 
 		<!-- resolve typedefs -->
 		<xsl:variable name="resolvedType" select="xbig:resolveTypedef($param/type, $class, $root)"/>
+
+		<!-- for performance reasons -->
+		<xsl:variable name="fullTypeName"
+				select="xbig:getFullTypeName($resolvedType, $class, $root)"/>
 
 		<!-- shortcut to type conversion configurations -->
 		<xsl:variable name="type_info">
@@ -246,9 +251,9 @@
 				</xsl:when>
 
 				<!-- if this is a typedef for a template -->
-				<xsl:when test="xbig:isTemplateTypedef($resolvedType, $class, $root)">
+				<xsl:when test="xbig:isTemplateTypedef($fullTypeName, $class, $root)">
 					<xsl:variable name="part1" select="'reinterpret_cast&lt; '"/>
-					<xsl:variable name="part2" select="xbig:getFullTypeName($resolvedType, $class, $root)"/>
+					<xsl:variable name="part2" select="$fullTypeName"/>
 					<xsl:variable name="part3" select="$pointerPointerAddOn"/>
 					<xsl:variable name="part4" select="'* &gt;('"/>
 					<xsl:variable name="part5" select="$param_name"/>
@@ -257,15 +262,15 @@
 				</xsl:when>
 
 				<!-- test for enums -->
-				<xsl:when test="xbig:isEnum($resolvedType, $class, $root)">
+				<xsl:when test="xbig:isEnum($fullTypeName, $class, $root)">
 					<xsl:value-of select="
-						concat('(', xbig:getFullTypeName($resolvedType, $class, $root), ')', $param_name)"/>
+						concat('(', $fullTypeName, ')', $param_name)"/>
 				</xsl:when>
 
 				<!-- if this type is a class or struct -->
-				<xsl:when test="xbig:isClassOrStruct($resolvedType, $class, $root)">
+				<xsl:when test="xbig:isClassOrStruct($fullTypeName, $class, $root)">
 					<xsl:variable name="part1" select="'reinterpret_cast&lt; '"/>
-					<xsl:variable name="part2" select="xbig:getFullTypeName($resolvedType, $class, $root)"/>
+					<xsl:variable name="part2" select="$fullTypeName"/>
 					<xsl:variable name="part3" select="$pointerPointerAddOn"/>
 					<xsl:variable name="part4" select="'* &gt;('"/>
 					<xsl:variable name="part5" select="$param_name"/>
@@ -312,6 +317,10 @@
 		<!-- resolve typedefs -->
 		<xsl:variable name="resolvedType" select="xbig:resolveTypedef($param/type, $class, $root)"/>
 
+		<!-- for performance reasons -->
+		<xsl:variable name="fullTypeName"
+				select="xbig:getFullTypeName($resolvedType, $class, $root)"/>
+
 		<!-- shortcut to type conversion configurations -->
 		<xsl:variable name="type_info">
 			<xsl:call-template name="metaExactTypeInfo">
@@ -346,7 +355,7 @@
 				</xsl:when>
 
 				<!-- if this is a typedef for a template -->
-				<xsl:when test="xbig:isTemplateTypedef($resolvedType, $class, $root)">
+				<xsl:when test="xbig:isTemplateTypedef($fullTypeName, $class, $root)">
 					<xsl:variable name="returnCast">
 						<!-- produces warning: address of local variable ‘_cpp_result’ returned -->
 						<xsl:value-of select="'reinterpret_cast&lt;jlong&gt;('"/>
@@ -357,7 +366,7 @@
 				</xsl:when>
 
 				<!-- if this method returns an object -->
-				<xsl:when test="xbig:isClassOrStruct($resolvedReturnType, $class, $root)">
+				<xsl:when test="xbig:isClassOrStruct($fullTypeName, $class, $root)">
 					<xsl:variable name="returnCast">
 						<!-- produces warning: address of local variable ‘_cpp_result’ returned -->
 						<xsl:value-of select="'reinterpret_cast&lt;jlong&gt;('"/>
@@ -513,6 +522,30 @@
 			</xsl:choose>
 		</xsl:variable>
 
+		<!-- resolve typedefs -->
+		<xsl:variable name="resolvedType">
+			<xsl:choose>
+				<xsl:when test="not($method/type)">
+					<xsl:value-of select="''"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="xbig:resolveTypedef($method/type, $class, $root)"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+
+		<!-- for performance reasons -->
+		<xsl:variable name="fullTypeName">
+			<xsl:choose>
+				<xsl:when test="not($method/type)">
+					<xsl:value-of select="''"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="xbig:getFullTypeName($resolvedType, $class, $root)"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+
 		<!-- replace parameter list -->
 		<xsl:variable name="line8">
 			<xsl:choose>
@@ -524,12 +557,18 @@
 						<xsl:for-each
 							select="$method/parameters/parameter">
 
+							<!-- resolve typedefs -->
+							<xsl:variable name="resolvedParameter" select="xbig:resolveTypedef(
+								./type, $class, $root)"/>
+
+							<!-- for performance reasons -->
+							<xsl:variable name="fullParameterTypeName"
+									select="xbig:getFullTypeName($resolvedParameter, $class, $root)"/>
+
 							<!-- write parameter name -->
 							<xsl:if test="@passedBy='reference' or ((
-										  xbig:isClassOrStruct(xbig:resolveTypedef(./type, $class, $root)
-										  		, $class, $root) or
-										  xbig:isTemplateTypedef(xbig:resolveTypedef(./type, $class, $root)
-										  		, $class, $root) or
+										  xbig:isClassOrStruct($fullParameterTypeName, $class, $root) or
+										  xbig:isTemplateTypedef($fullParameterTypeName, $class, $root) or
 										  contains(type, '&lt;')
 										  ) and @passedBy != 'pointer')">
 								<xsl:value-of select="'*'" />
@@ -633,10 +672,8 @@
 						<xsl:value-of select="''" />
 					</xsl:when>
 
-					<xsl:when test="(xbig:isClassOrStruct(xbig:resolveTypedef($method/type, $class, $root)
-										, $class, $root) or
-									xbig:isTemplateTypedef(xbig:resolveTypedef($method/type, $class, $root)
-										, $class, $root) or
+					<xsl:when test="(xbig:isClassOrStruct($fullTypeName, $class, $root) or
+									xbig:isTemplateTypedef($fullTypeName, $class, $root) or
 									contains($method/type, '&lt;')
 									) and $method/@passedBy != 'pointer'">
 						<xsl:variable name="cppThis" select="$var_config/cpp/object/@name"/>
@@ -645,16 +682,13 @@
 								<!-- we have to move local objects to the heap -->
 								<xsl:when test="$method/@passedBy = 'value'">
 									<xsl:value-of select="'new '"/>
-									<xsl:variable name="resolvedType"
-												select="xbig:resolveTypedef($method/type, $class, $root)"/>
 									<xsl:choose>
 										<xsl:when test="contains($resolvedType, '&lt;')">
 											<xsl:value-of select="xbig:getFullTemplateName(
-															$resolvedType, $class, $root)"/>
+															$fullTypeName, $class, $root)"/>
 										</xsl:when>
 										<xsl:otherwise>
-											<xsl:value-of select="xbig:getFullTypeName(
-															$resolvedType, $class, $root)"/>
+											<xsl:value-of select="$fullTypeName"/>
 										</xsl:otherwise>
 						 			</xsl:choose>
 									<xsl:value-of select="'('"/>
@@ -681,10 +715,8 @@
 				<xsl:when test="not($method/type)">
 					<xsl:value-of select="replace($line14, '#optional_closing_bracket#', '')" />
 				</xsl:when>
-				<xsl:when test="(xbig:isClassOrStruct(xbig:resolveTypedef($method/type, $class, $root)
-									, $class, $root) or
-								xbig:isTemplateTypedef(xbig:resolveTypedef($method/type, $class, $root)
-									, $class, $root) or
+				<xsl:when test="(xbig:isClassOrStruct($fullTypeName, $class, $root) or
+								xbig:isTemplateTypedef($fullTypeName, $class, $root) or
 								contains($method/type, '&lt;')
 								) and $method/@passedBy = 'value'">
 					<xsl:value-of select="replace($line14, '#optional_closing_bracket#', ')')" />

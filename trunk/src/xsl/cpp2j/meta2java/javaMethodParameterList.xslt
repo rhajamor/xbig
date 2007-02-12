@@ -109,27 +109,31 @@
 			<!-- resolve typedefs -->
 			<xsl:variable name="resolvedType" select="xbig:resolveTypedef(./type, $class, $root)"/>
 
+			<!-- for performance reasons -->
+			<xsl:variable name="fullTypeName"
+						select="xbig:getFullTypeName($resolvedType, $class, $root)"/>
+
 			<!-- if this parameter is a enum -->
 			<xsl:if test="($callingNativeMethod eq 'true') and
-				 		  (xbig:isEnum($resolvedType, $class, $root))">
+				 		  (xbig:isEnum($fullTypeName, $class, $root))">
 				<xsl:value-of select="'.value'" />
 			</xsl:if>
 
 			<!-- if this parameter is a class or struct -->
 			<xsl:if test="($callingNativeMethod eq 'true') and
-				 		  (xbig:isClassOrStruct($resolvedType, $class, $root))">
+				 		  (xbig:isClassOrStruct($fullTypeName, $class, $root))">
 				<xsl:value-of select="'.getInstancePointer().pointer'" />
 			</xsl:if>
 
 			<!-- if this parameter is a parametrized template -->
 			<xsl:if test="($callingNativeMethod eq 'true') and
-				 		  (contains($resolvedType, '&lt;'))">
+				 		  (contains($fullTypeName, '&lt;'))">
 				<xsl:value-of select="'.getInstancePointer().pointer'" />
 			</xsl:if>
 
 			<!-- if this parameter is a template typedef -->
 			<xsl:if test="($callingNativeMethod eq 'true') and
-				 		  (xbig:isTemplateTypedef($resolvedType, $class, $root))">
+				 		  (xbig:isTemplateTypedef($fullTypeName, $class, $root))">
 				<xsl:value-of select="'.getInstancePointer().pointer'" />
 			</xsl:if>
 
