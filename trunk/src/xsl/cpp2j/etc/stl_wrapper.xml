@@ -1055,8 +1055,8 @@
 				reinterpret_cast&lt;#cpp_class#*&gt;(#jni_pointer#);
 				#nl#
 				#nl#// call library method
-				#nl##cpp_return_type# #cpp_return_var# =
-				    &amp; (*#cpp_this#)[#cpp_params#]#optional_closing_bracket#;
+				#nl##cpp_return_type# #cpp_return_var# = #optional_return_conversion#
+				    (*#cpp_this#)[#cpp_params#]#optional_closing_bracket#;
 				#nl#return #cpp_return#;
 			</jniImplementation>
 		</function>
@@ -1085,7 +1085,7 @@
 				reinterpret_cast&lt;#cpp_class#*&gt;(#jni_pointer#);
 				#nl#
 				#nl#// call library method
-				#nl##cpp_this#->insert(make_pair(#cpp_params#));
+				#nl##cpp_this#->insert(std::make_pair(#cpp_params#));
 			</jniImplementation>
 		</function>
 

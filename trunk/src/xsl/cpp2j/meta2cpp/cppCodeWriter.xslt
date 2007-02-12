@@ -625,58 +625,54 @@
 
 		<!-- if an object is returned, we need it's address -->
 		<xsl:variable name="line14">
-			<xsl:choose>
-				<xsl:when test="not($method/type)">
-					<xsl:value-of select="$line13" />
-				</xsl:when>
-				<!-- Produces warning: taking address of temporary -->
-				<xsl:when test="(xbig:isClassOrStruct(xbig:resolveTypedef($method/type, $class, $root)
-									, $class, $root) or
-								xbig:isTemplateTypedef(xbig:resolveTypedef($method/type, $class, $root)
-									, $class, $root) or
-								contains($method/type, '&lt;')
-								) and $method/@passedBy != 'pointer'">
-					<xsl:variable name="cppThis" select="$var_config/cpp/object/@name"/>
-					<xsl:variable name="searchFor">
-						<xsl:value-of select="'= '"/>
-						<xsl:value-of select="$cppThis"/>
-					</xsl:variable>
-					<xsl:variable name="replaceWith">
-						<xsl:choose>
+			<xsl:variable name="searchFor" select="'#optional_return_conversion#'"/>
 
-							<!-- we have to move local objects to the heap -->
-							<xsl:when test="$method/@passedBy = 'value'">
-								<xsl:value-of select="'= new '"/>
-								<xsl:variable name="resolvedType"
-											select="xbig:resolveTypedef($method/type, $class, $root)"/>
-								<xsl:choose>
-									<xsl:when test="contains($resolvedType, '&lt;')">
-										<xsl:value-of select="xbig:getFullTemplateName(
-														$resolvedType, $class, $root)"/>
-									</xsl:when>
-									<xsl:otherwise>
-										<xsl:value-of select="xbig:getFullTypeName(
-														$resolvedType, $class, $root)"/>
-									</xsl:otherwise>
-					 			</xsl:choose>
-								<xsl:value-of select="'('"/>
-								<xsl:value-of select="$cppThis"/>
-							</xsl:when>
+			<xsl:variable name="replaceWith">
+				<xsl:choose>
+					<xsl:when test="not($method/type)">
+						<xsl:value-of select="''" />
+					</xsl:when>
 
-							<!-- passed by reference -->
-							<xsl:otherwise>
-								<xsl:value-of select="'= &amp; '"/>
-								<xsl:value-of select="$cppThis"/>
-							</xsl:otherwise>
-						</xsl:choose>
-					</xsl:variable>
-					<xsl:value-of select="replace($line13, $searchFor, $replaceWith)" />
-				</xsl:when>
+					<xsl:when test="(xbig:isClassOrStruct(xbig:resolveTypedef($method/type, $class, $root)
+										, $class, $root) or
+									xbig:isTemplateTypedef(xbig:resolveTypedef($method/type, $class, $root)
+										, $class, $root) or
+									contains($method/type, '&lt;')
+									) and $method/@passedBy != 'pointer'">
+						<xsl:variable name="cppThis" select="$var_config/cpp/object/@name"/>
+							<xsl:choose>
 
-				<xsl:otherwise>
-					<xsl:value-of select="$line13" />
-				</xsl:otherwise>
-			</xsl:choose>
+								<!-- we have to move local objects to the heap -->
+								<xsl:when test="$method/@passedBy = 'value'">
+									<xsl:value-of select="'new '"/>
+									<xsl:variable name="resolvedType"
+												select="xbig:resolveTypedef($method/type, $class, $root)"/>
+									<xsl:choose>
+										<xsl:when test="contains($resolvedType, '&lt;')">
+											<xsl:value-of select="xbig:getFullTemplateName(
+															$resolvedType, $class, $root)"/>
+										</xsl:when>
+										<xsl:otherwise>
+											<xsl:value-of select="xbig:getFullTypeName(
+															$resolvedType, $class, $root)"/>
+										</xsl:otherwise>
+						 			</xsl:choose>
+									<xsl:value-of select="'('"/>
+								</xsl:when>
+
+								<!-- passed by reference -->
+								<xsl:otherwise>
+									<xsl:value-of select="'&amp; '"/>
+								</xsl:otherwise>
+							</xsl:choose>
+					</xsl:when>
+
+					<xsl:otherwise>
+						<xsl:value-of select="''" />
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:variable>
+			<xsl:value-of select="replace($line13, $searchFor, $replaceWith)" />
 		</xsl:variable>
 
 		<!-- create closing paranthesis -->

@@ -39,8 +39,8 @@
 	<xsl:import href="../exslt/str.split.template.xsl" />
 
 	<xd:doc type="stylesheet">
-		<xd:short>Creates a meta class element for a template and a typedef. 
-				  The global variable $root must be set</xd:short>
+		<xd:short>Creates a meta class element for a type that is passed or returned by array somewhere.
+		</xd:short>
 	</xd:doc>
 
 	<xsl:template name="createClassForArray">

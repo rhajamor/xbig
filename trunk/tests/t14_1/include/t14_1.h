@@ -12,17 +12,15 @@
 	#define EXPORT
 #endif
 
-namespace ns1 
+namespace ns1
 {
 	class EXPORT A
 	{
 	public:
 		A(){}
 		~A(){}
-		
+
 		void setIntArray(int array[]) { }
 		void setAArray(A array[]) { }
-	};   
+	};
 }
-
-   
