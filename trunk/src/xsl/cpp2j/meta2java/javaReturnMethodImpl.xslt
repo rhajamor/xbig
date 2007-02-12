@@ -70,7 +70,7 @@
 
 		<!-- create Pointer object when necessary -->
 		<xsl:if test="($method/@passedBy='pointer' or $method/@passedBy='reference')
-						and $type_info/type/@java">
+						and ($type_info/type/@java or $resolvedType = 'void')">
 			<xsl:text>new&#32;</xsl:text>
 			<xsl:variable name="fullTypeName">
 				<xsl:call-template name="javaPointerClass">
