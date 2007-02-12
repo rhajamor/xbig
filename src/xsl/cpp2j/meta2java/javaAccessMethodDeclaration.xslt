@@ -68,7 +68,9 @@
 		<xsl:text>/**&#32;</xsl:text>
 		<xsl:for-each select="$method/detaileddescription/para">
 			<xsl:text>&#10;</xsl:text>
-			<xsl:value-of select="normalize-space(text())" />
+			<!-- caused a problem with ogre4j -->
+			<!-- <xsl:value-of select="normalize-space(text())" />-->
+			<xsl:value-of select="text()" />
 		</xsl:for-each>
 		<xsl:text>&#32;**/</xsl:text>
 		<xsl:text>&#10;</xsl:text>
