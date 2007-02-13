@@ -469,10 +469,14 @@
 		<xsl:param name="currentNode"/> <!-- must be a class, struct or namespace element -->
 		<xsl:param name="inputTreeRoot"/>
 
+		<!-- 
+		<xsl:variable name="fullName" select="xbig:getFullTypeName($type, $currentNode, $inputTreeRoot)"/>
+		 -->
+		<xsl:variable name="fullName" select="$type"/>
+
 		<xsl:choose>
 			<xsl:when test="xbig:isTypedef($type, $currentNode, $inputTreeRoot)">
-				<xsl:variable name="typedefNode" select="$inputTreeRoot//typedef
-							[@fullName = xbig:getFullTypeName($type, $currentNode, $inputTreeRoot)]"/>
+				<xsl:variable name="typedefNode" select="$inputTreeRoot//typedef[@fullName = $fullName]"/>
 				<xsl:choose>
 
 					<!-- if this is a typedef for a template, there is a class -->

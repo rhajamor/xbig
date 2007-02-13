@@ -91,11 +91,8 @@
 					select="doxygen/compounddef[@kind='namespace']">
 					<!-- because doxygen has a flat structure -->
 					<xsl:choose>
-						<!-- 					<xsl:when test="root()//compounddef[@kind='namespace']/innernamespace/@refid != @id">
-							<xsl:call-template name="namespace"/>
-							</xsl:when> -->
-						<xsl:when
-							test="not(root()//compounddef[@kind='namespace']/innernamespace/@refid = @id)">
+						<xsl:when test="not(root()//compounddef
+									[@kind='namespace']/innernamespace/@refid = @id)">
 							<xsl:call-template name="namespace" />
 						</xsl:when>
 					</xsl:choose>
@@ -106,20 +103,11 @@
 					select="doxygen/compounddef[@kind='class']">
 					<!-- because doxygen has a flat structure -->
 					<xsl:choose>
-						<xsl:when
-							test="root()//compounddef[@kind='class']/innerclass/@refid != @id">
+						<xsl:when test="not(root()//compounddef
+									[@kind='class' or @kind='struct' or @kind='namespace']
+									/innerclass/@refid = @id)">
 							<xsl:call-template name="class">
-								<xsl:with-param name="refid"
-									select="@id" />
-							</xsl:call-template>
-						</xsl:when>
-						<xsl:when
-							test="not(root()//compounddef[@kind='class']/innerclass/@refid = @id) and
-									not(root()//compounddef[@kind='struct']/innerclass/@refid = @id) and
-									not(root()//compounddef[@kind='namespace']/innerclass/@refid = @id)">
-							<xsl:call-template name="class">
-								<xsl:with-param name="refid"
-									select="@id" />
+								<xsl:with-param name="refid" select="@id" />
 							</xsl:call-template>
 						</xsl:when>
 					</xsl:choose>
@@ -130,17 +118,9 @@
 					select="doxygen/compounddef[@kind='struct']">
 					<!-- because doxygen has a flat structure -->
 					<xsl:choose>
-						<xsl:when
-							test="root()//compounddef[@kind='struct']/innerclass/@refid != @id">
-							<xsl:call-template name="struct">
-								<xsl:with-param name="refid"
-									select="@id" />
-							</xsl:call-template>
-						</xsl:when>
-						<xsl:when
-							test="not(root()//compounddef[@kind='class']/innerclass/@refid = @id) and
-									not(root()//compounddef[@kind='struct']/innerclass/@refid = @id) and
-									not(root()//compounddef[@kind='namespace']/innerclass/@refid = @id)">
+						<xsl:when test="not(root()//compounddef
+									[@kind='class' or @kind='struct' or @kind='namespace']
+									/innerclass/@refid = @id)">
 							<xsl:call-template name="struct">
 								<xsl:with-param name="refid"
 									select="@id" />
