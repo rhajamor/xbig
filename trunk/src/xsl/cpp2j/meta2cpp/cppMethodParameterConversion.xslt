@@ -45,12 +45,20 @@
 	</xd:doc>
 
 	<xsl:template name="cppMethodParameterConversion">
-		<xsl:param name="config" />
-		<xsl:param name="class" />
-		<xsl:param name="method" />
+		<xsl:param name="config"/>
+		<xsl:param name="class"/>
+		<xsl:param name="method"/>
 
 		<!-- iterate through all parameters for conversion -->
 		<xsl:for-each select="$method/parameters/parameter">
+
+			<!-- resolve typedefs -->
+			<xsl:variable name="resolvedParameter" select="xbig:resolveTypedef(
+				./type, $class, $root)"/>
+
+			<!-- for performance reasons -->
+			<xsl:variable name="fullTypeName"
+					select="xbig:getFullTypeName($resolvedParameter, $class, $root)"/>
 
 			<!-- parameter name for call native function -->
 			<xsl:variable name="lib_var"
@@ -61,7 +69,7 @@
 
 			<!-- write type for transformation -->
 			<!-- take cpp attribute if available, otherwise write meta -->
-			<xsl:value-of select="xbig:cpp-type($config, ., $class)" />
+			<xsl:value-of select="xbig:cpp-type($config, ., $class, $fullTypeName)" />
 
 			<!-- write seperator for variable -->
 			<xsl:text>&#32;</xsl:text>
@@ -73,7 +81,7 @@
 			<xsl:text>&#32;=&#32;</xsl:text>
 
 			<!-- write conversion to C++ type -->
-			<xsl:value-of select="xbig:jni-to-cpp($config, $class, $method, .)" />
+			<xsl:value-of select="xbig:jni-to-cpp($config, $class, $method, ., $fullTypeName)" />
 
 			<!-- finish conversion statement -->
 			<xsl:text>;</xsl:text>

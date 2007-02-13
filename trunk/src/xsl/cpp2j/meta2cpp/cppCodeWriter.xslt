@@ -66,14 +66,18 @@
 	<!-- ************************************************************ -->
 
 	<xsl:function name="xbig:cpp-type" as="xs:string">
-		<xsl:param name="config" />
-		<xsl:param name="param" />
-		<xsl:param name="class" />
+		<xsl:param name="config"/>
+		<xsl:param name="param"/>
+		<xsl:param name="class"/>
+		<xsl:param name="fullTypeName"/>
 
 		<!-- resolve typedefs -->
+		<!-- 
 		<xsl:variable name="resolvedType">
 			<xsl:choose>
+			 -->
 				<!-- c-tors don't have a type -->
+				<!-- 
 				<xsl:when test="not($param/type)">
 					<xsl:value-of select="'long'"/>
 				</xsl:when>
@@ -82,10 +86,13 @@
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
+		 -->
 
 		<!-- for performance reasons -->
+		<!-- 
 		<xsl:variable name="fullTypeName"
 				select="xbig:getFullTypeName($resolvedType, $class, $root)"/>
+		 -->
 
 		<!-- shortcut to type conversion configurations -->
 		<xsl:variable name="type_info">
@@ -93,7 +100,7 @@
 				<xsl:with-param name="root"
 					select="$config/config/cpp/jni/types" />
 				<xsl:with-param name="param" select="$param" />
-				<xsl:with-param name="typeName" select="$resolvedType" />
+				<xsl:with-param name="typeName" select="$fullTypeName" />
 			</xsl:call-template>
 		</xsl:variable>
 
@@ -201,13 +208,18 @@
 		<xsl:param name="class" />
 		<xsl:param name="method" />
 		<xsl:param name="param" />
+		<xsl:param name="fullTypeName"/>
 
 		<!-- resolve typedefs -->
+		<!-- 
 		<xsl:variable name="resolvedType" select="xbig:resolveTypedef($param/type, $class, $root)"/>
+		 -->
 
 		<!-- for performance reasons -->
+		<!-- 
 		<xsl:variable name="fullTypeName"
 				select="xbig:getFullTypeName($resolvedType, $class, $root)"/>
+		 -->
 
 		<!-- shortcut to type conversion configurations -->
 		<xsl:variable name="type_info">
@@ -215,7 +227,7 @@
 				<xsl:with-param name="root"
 					select="$config/config/cpp/jni/types" />
 				<xsl:with-param name="param" select="$param" />
-				<xsl:with-param name="typeName" select="$resolvedType" />
+				<xsl:with-param name="typeName" select="$fullTypeName" />
 			</xsl:call-template>
 		</xsl:variable>
 
@@ -239,10 +251,10 @@
 			<xsl:choose>
 
 				<!-- if this type is a parametrized template -->
-				<xsl:when test="contains($resolvedType, '&lt;')">
+				<xsl:when test="contains($fullTypeName, '&lt;')">
 					<xsl:variable name="part1" select="'reinterpret_cast&lt; '"/>
 					<xsl:variable name="part2" select="xbig:getFullTemplateName(
-														$resolvedType, $class, $root)"/>
+														$fullTypeName, $class, $root)"/>
 					<xsl:variable name="part3" select="$pointerPointerAddOn"/>
 					<xsl:variable name="part4" select="'* &gt;('"/>
 					<xsl:variable name="part5" select="$param_name"/>
@@ -308,18 +320,23 @@
 	<!-- ************************************************************ -->
 
 	<xsl:function name="xbig:cpp-to-jni" as="xs:string">
-		<xsl:param name="config" />
-		<xsl:param name="class" />
-		<xsl:param name="method" />
-		<xsl:param name="param" />
-		<xsl:param name="name" />
+		<xsl:param name="config"/>
+		<xsl:param name="class"/>
+		<xsl:param name="method"/>
+		<xsl:param name="param"/>
+		<xsl:param name="name"/>
+		<xsl:param name="fullTypeName"/>
 
 		<!-- resolve typedefs -->
+		<!-- 
 		<xsl:variable name="resolvedType" select="xbig:resolveTypedef($param/type, $class, $root)"/>
+		 -->
 
 		<!-- for performance reasons -->
+		<!-- 
 		<xsl:variable name="fullTypeName"
 				select="xbig:getFullTypeName($resolvedType, $class, $root)"/>
+		 -->
 
 		<!-- shortcut to type conversion configurations -->
 		<xsl:variable name="type_info">
@@ -327,7 +344,7 @@
 				<xsl:with-param name="root"
 					select="$config/config/cpp/jni/types" />
 				<xsl:with-param name="param" select="$param" />
-				<xsl:with-param name="typeName" select="$resolvedType" />
+				<xsl:with-param name="typeName" select="$fullTypeName" />
 			</xsl:call-template>
 		</xsl:variable>
 
@@ -339,12 +356,14 @@
 		<xsl:if test="not($type_info/type/cpp2jni)">
 
 			<!-- resolve typedefs for return type -->
+			<!-- 
 			<xsl:variable name="resolvedReturnType"
 					select="xbig:resolveTypedef($method/type, $class, $root)"/>
+			 -->
 
 			<xsl:choose>
 				<!-- if this type is a parametrized template -->
-				<xsl:when test="contains($resolvedType, '&lt;')">
+				<xsl:when test="contains($fullTypeName, '&lt;')">
 					<xsl:variable name="returnCast">
 						<!-- produces warning: address of local variable ‘_cpp_result’ returned -->
 						<xsl:value-of select="'reinterpret_cast&lt;jlong&gt;('"/>
@@ -403,9 +422,9 @@
 	<!-- ************************************************************ -->
 
 	<xsl:function name="xbig:cpp-replace" as="xs:string">
-		<xsl:param name="var" as="xs:string" />
-		<xsl:param name="from" as="xs:string" />
-		<xsl:param name="to" as="xs:string" />
+		<xsl:param name="var" as="xs:string"/>
+		<xsl:param name="from" as="xs:string"/>
+		<xsl:param name="to" as="xs:string"/>
 
 		<!-- prevent infinite recursion -->
 		<xsl:choose>
@@ -427,10 +446,10 @@
 	<!-- ************************************************************ -->
 
 	<xsl:function name="xbig:code" as="xs:string">
-		<xsl:param name="config" />
-		<xsl:param name="line" />
-		<xsl:param name="class" />
-		<xsl:param name="method" />
+		<xsl:param name="config"/>
+		<xsl:param name="line"/>
+		<xsl:param name="class"/>
+		<xsl:param name="method"/>
 
 		<!-- shortcut for full class name -->
 		<xsl:variable name="full_class_name" select="$class/@fullName" />
@@ -597,11 +616,12 @@
 		<xsl:variable name="line9"
 			select="if(matches($line8, '#cpp_return#')) then xbig:cpp-replace(
 				$line8, '#cpp_return#', xbig:cpp-to-jni(
-				$config, $class, $method, $method, '#cpp_return_var#')) else $line8" />
+				$config, $class, $method, $method, '#cpp_return_var#', $fullTypeName)) else $line8" />
 
 		<!-- replace return type -->
 		<xsl:variable name="line10"
-			select="xbig:cpp-replace($line9, '#cpp_return_type#', xbig:cpp-type($config, $method, $class))"/>
+			select="xbig:cpp-replace($line9, '#cpp_return_type#',
+				xbig:cpp-type($config, $method, $class, $fullTypeName))"/>
 
 		<!-- replace class name -->
 		<xsl:variable name="line11"
