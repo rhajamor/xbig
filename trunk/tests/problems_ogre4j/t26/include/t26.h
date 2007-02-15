@@ -26,3 +26,8 @@ typedef struct _ConfigOption
 	StringVector possibleValues;
 	bool immutable;
 } ConfigOption;
+
+class Tester {
+public:
+	void a(ConfigOption co) {}
+};

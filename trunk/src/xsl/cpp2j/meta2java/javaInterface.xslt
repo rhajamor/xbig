@@ -292,19 +292,62 @@
 
 		<!-- As there are problems with interfaces for templates, they don't get any methods -->
 		<xsl:if test="not($class/@template)">
+
 			<!-- handling of member functions -->
 			<xsl:for-each select="$methodsForJava/function">
+				<xsl:variable name="currentMethod" select="."/>
+	 			<xsl:variable name="currentMethodPos" select="position()"/>
 
 				<!-- change method name if const overloading is used -->
 				<xsl:variable name="methodContainer">
 					<xsl:choose>
-						<xsl:when test="(count($methodsForJava/function[name = current()/name]) > 1) and
-										@const='true'">
-							<xsl:call-template name="createElementForConstOverloadedMethod">
-								<xsl:with-param name="config" select="$config" />
-								<xsl:with-param name="method" select="." />
-							</xsl:call-template>
+						<xsl:when test="(count(../function[name = $currentMethod/name]) > 1)">
+							<!-- check for each method with the same name if it is equal -->
+							<xsl:variable name="equalSiblings">
+								<xsl:for-each select="../function[name = $currentMethod/name]">
+									<!-- here I use the trick with count() and the union operator (|) to test a node's identity -->
+									<xsl:if test="count(. | $currentMethod) != 1">
+										<xsl:element name="check">
+											<xsl:choose>
+												<xsl:when test="xbig:areTheseMethodsEqualExceptConst($currentMethod, .,false())">
+													<xsl:value-of select="true()" />
+												</xsl:when>
+												<xsl:otherwise>
+													<xsl:value-of select="false()" />
+												</xsl:otherwise>
+											</xsl:choose>
+										</xsl:element>
+									</xsl:if>
+								</xsl:for-each>
+							</xsl:variable>
+
+							<!-- check constness of methods with same name -->
+							<xsl:choose>
+								<xsl:when test="$equalSiblings/* = true()">
+									<xsl:choose>
+										<!-- change the name of the const version -->
+										<xsl:when test="./@const = 'true'">
+											<xsl:call-template name="createElementForConstOverloadedMethod">
+												<xsl:with-param name="config" select="$config" />
+												<xsl:with-param name="method" select="." />
+											</xsl:call-template>
+										</xsl:when>
+		
+										<!-- copy the not const version -->
+										<xsl:otherwise>
+											<xsl:copy-of select="." />
+										</xsl:otherwise>
+									</xsl:choose>
+								</xsl:when>
+
+								<!-- other method with same name but other parameters -->
+								<xsl:otherwise>
+									<xsl:copy-of select="." />
+								</xsl:otherwise>
+							</xsl:choose>
 						</xsl:when>
+
+						<!-- no const overloading for this method -->
 						<xsl:otherwise>
 							<xsl:copy-of select="." />
 						</xsl:otherwise>

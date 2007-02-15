@@ -1303,8 +1303,14 @@
 			<!-- passed by reference -->
 			<xsl:when test="contains(type,'&amp;')">
 				<xsl:attribute name="passedBy" select="'reference'" />
+				<xsl:call-template name="typeMap">
+					<xsl:with-param name="type" select="substring-before(type,' &amp;')"/>
+				</xsl:call-template>
+				<!-- 
 				<xsl:choose>
+				 -->
 					<!-- current class is a template -->
+					<!-- 
 					<xsl:when
 						test="../../templateparamlist or ../../../templateparamlist">
 						<xsl:call-template name="typeMap">
@@ -1314,7 +1320,9 @@
 					</xsl:when>
 					<xsl:when test="type/ref">
 						<xsl:call-template name="typeMap">
+							 -->
 							<!-- don't put the select instruction into the "with-param" element,will cause multiple select of type/ref -->
+							<!-- 
 							<xsl:with-param name="type">
 								<xsl:value-of select="type/ref" />
 							</xsl:with-param>
@@ -1327,6 +1335,7 @@
 						</xsl:call-template>
 					</xsl:otherwise>
 				</xsl:choose>
+				 -->
 			</xsl:when>
 			<!-- passed by pointer -->
 			<xsl:when test="contains(type,'*')">

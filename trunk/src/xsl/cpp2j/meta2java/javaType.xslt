@@ -88,12 +88,22 @@
 							</xsl:call-template>
 						</xsl:variable>
 						<xsl:for-each select="$tokens/*">
-							<xsl:call-template name="javaType">
-								<xsl:with-param name="config" select="$config" />
-								<xsl:with-param name="param" select="$param" />
-								<xsl:with-param name="class" select="$class" />
-								<xsl:with-param name="typeName" select="normalize-space(.)"/>
-							</xsl:call-template>
+							<xsl:variable name="normalizedType" select="normalize-space(.)"/>
+							<xsl:choose>
+								<!-- primitive Types are handled different -->
+								<xsl:when test="$config/config/java/types/type[@meta = $normalizedType]">
+									<xsl:value-of select="$config/config/java/types/type
+															[@meta = $normalizedType]/@genericParameter"/>
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:call-template name="javaType">
+										<xsl:with-param name="config" select="$config" />
+										<xsl:with-param name="param" select="$param" />
+										<xsl:with-param name="class" select="$class" />
+										<xsl:with-param name="typeName" select="$normalizedType"/>
+									</xsl:call-template>
+								</xsl:otherwise>
+							</xsl:choose>
 							<xsl:if test="position() != last()">
 								<xsl:value-of select="', '"/>
 							</xsl:if>
