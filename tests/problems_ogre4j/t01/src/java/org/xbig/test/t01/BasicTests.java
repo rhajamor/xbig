@@ -1,10 +1,11 @@
 /**
  * 
  */
-package org.xbig.test.t00;
+package org.xbig.test.t01;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.xbig.MoveableObject;
 /**
  * @author nenning
  *
@@ -12,7 +13,9 @@ import org.junit.Test;
 public class BasicTests {
 	
 	@Test
-	public void print() {
-		Assert.fail();
+	public void test() {
+		MoveableObject mo = new MoveableObject();
+		mo.getAnimableValueNames();
+		mo.delete();
 	}
 }

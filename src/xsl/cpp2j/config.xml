@@ -283,8 +283,22 @@
 
 			<types>
 				<type meta="void" jni="void" />
-				<type meta="void" pass="pointer" jni="void" />
-				<type meta="void" pass="reference" jni="void" />
+				<type meta="void" pass="pointer" jni="jlong" cpp="void*">
+					<jni2cpp>
+						reinterpret_cast&lt;void*&gt;(#jni_var#)
+					</jni2cpp>					
+					<cpp2jni>
+						reinterpret_cast&lt;jlong&gt;(#cpp_var#)
+					</cpp2jni>
+				</type>
+				<type meta="void" pass="reference" jni="jlong" cpp="void*" returntype="void&amp;">
+					<jni2cpp>
+						reinterpret_cast&lt;void*&gt;(#jni_var#)
+					</jni2cpp>
+					<cpp2jni>
+						reinterpret_cast&lt;jlong&gt;(&amp;#cpp_var#)
+					</cpp2jni>
+				</type>
 				
 				<type meta="bool" pass="pointer" jni="jlong" cpp="bool*">
 					<jni2cpp>
@@ -602,7 +616,7 @@
 		<types>
 
 			<type meta="void" java="void" genericParameter="void"/>
-			<type meta="bool" java="boolean" genericParameter="boolean"/>
+			<type meta="bool" java="boolean" genericParameter="Boolean"/>
 
 			<type meta="char" java="char" genericParameter="Byte"/>
 			<type meta="signed char" java="byte" genericParameter="Byte"/>
@@ -618,7 +632,7 @@
 
 			<type meta="long" java="long" genericParameter="Long"/>
 			<type meta="signed long" java="long" genericParameter="Long"/>
-			<type meta="unsigned long" java="long long" genericParameter="BigInteger"/>
+			<type meta="unsigned long" java="long" genericParameter="BigInteger"/>
 
 			<type meta="double" java="double" genericParameter="Double"/>
 			<type meta="float" java="float" genericParameter="Float"/>

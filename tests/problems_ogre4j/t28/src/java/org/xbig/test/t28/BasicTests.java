@@ -1,10 +1,11 @@
 /**
  * 
  */
-package org.xbig.test.t00;
+package org.xbig.test.t28;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.xbig.RadixSort;
 /**
  * @author nenning
  *
@@ -12,7 +13,9 @@ import org.junit.Test;
 public class BasicTests {
 	
 	@Test
-	public void print() {
-		Assert.fail();
+	public void test() {
+		RadixSort rs = new RadixSort();
+		rs.sort();
+		rs.delete();
 	}
 }

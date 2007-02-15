@@ -38,6 +38,7 @@
 			</parameters>
          </function>
  -->
+<!-- 
 		<function virt="non-virtual" visibility="public" static="false" const="false"
                    passedBy="value">
             <name>vector</name>
@@ -53,7 +54,7 @@
 				</parameter>
 			</parameters>
          </function>
-
+ -->
 		<function virt="non-virtual" visibility="public" static="false" const="false"
 					passedBy="value">
 			<type>void</type>
@@ -65,7 +66,7 @@
 					<name>num</name>
 				</parameter>
 				<parameter passedBy="value">
-					<type const="true">T</type>
+					<type const="false">T</type><!-- const has been changed manually ! -->
 					<name>val</name>
 				</parameter>
 			</parameters>
@@ -140,7 +141,7 @@
 			<name>push_back</name>
 			<parameters>
 				<parameter passedBy="reference">
-					<type const="true">T</type>
+					<type const="false">T</type><!-- const has been changed manually ! -->
 					<name>val</name>
 				</parameter>
 			</parameters>
@@ -183,7 +184,7 @@
 					<name>num</name>
 				</parameter>
 				<parameter passedBy="reference">
-					<type const="true">T</type>
+					<type const="false">T</type><!-- const has been changed manually ! -->
 					<name>val</name>
 				</parameter>
 			</parameters>
@@ -1194,8 +1195,11 @@
  -->
 	</class>
 
-	<class name="bitset" fullName="std::bitset" template="false">
-		
+	<class name="bitset" fullName="std::bitset" template="true">
+		<templateparameters>
+			<templateparameter templateType="class" templateDeclaration="T"/>
+		</templateparameters>
+
 		<includes local="no">bitset</includes>
 
 		<function virt="non-virtual" visibility="public" static="false" const="false"
@@ -1248,7 +1252,7 @@
 		<function virt="non-virtual" visibility="public" static="false" const="false"
 					passedBy="value">
 			<name>to_string</name>
-			<type>string</type>
+			<type>std::string</type>
 			<definition>std::bitset::to_string</definition>
 		</function>
 		
@@ -1258,5 +1262,26 @@
 			<type>unsigned long</type>
 			<definition>std::bitset::to_ulong</definition>
 		</function>
+	</class>
+
+	<class name="pair" fullName="std::pair" template="true">
+		<templateparameters>
+			<templateparameter templateType="class" templateDeclaration="F"/>
+			<templateparameter templateType="class" templateDeclaration="S"/>
+		</templateparameters>
+
+		<includes local="no">map</includes>
+
+		<variable visibility="public" static="false" const="false" passedBy="value">
+            <type>F</type>
+            <definition>F std::pair::first</definition>
+			<name>first</name>
+        </variable>
+
+        <variable visibility="public" static="false" const="false" passedBy="value">
+            <type>S</type>
+            <definition>S std::pair::second</definition>
+			<name>second</name>
+        </variable>
 	</class>
 </namespace>

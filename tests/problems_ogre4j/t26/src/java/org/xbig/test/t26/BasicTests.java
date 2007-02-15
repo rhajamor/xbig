@@ -1,10 +1,11 @@
 /**
  * 
  */
-package org.xbig.test.t00;
+package org.xbig.test.t26;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.xbig.ConfigOption;
 /**
  * @author nenning
  *
@@ -12,7 +13,8 @@ import org.junit.Test;
 public class BasicTests {
 	
 	@Test
-	public void print() {
-		Assert.fail();
+	public void test() {
+		ConfigOption co = new ConfigOption();
+		co.delete();
 	}
 }

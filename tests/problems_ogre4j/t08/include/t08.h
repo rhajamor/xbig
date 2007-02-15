@@ -30,6 +30,7 @@ typedef _StringBase String;
 typedef std::vector<RenderSystem*> RenderSystemList;
 
 class Animation {
+public:
 	typedef std::map<unsigned short, NumericAnimationTrack*> NumericTrackList;
 	typedef ConstMapIterator<NumericTrackList> NumericTrackIterator;
 

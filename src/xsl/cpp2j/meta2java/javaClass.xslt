@@ -91,11 +91,11 @@
 		<xsl:text>&#32;{&#10;</xsl:text>
 
 		<!-- create static initializer -->
-		<xsl:if test="not($isInnerClass)">
+		<!-- <xsl:if test="not($isInnerClass)"> -->
 			<xsl:text>static { System.loadLibrary("</xsl:text>
 			<xsl:value-of select="$buildFile/project/property[@name='lib.name']/@value"/>
 			<xsl:text>-xbig");}&#10;</xsl:text>
-		</xsl:if>
+		<!-- </xsl:if> -->
 
 		<!-- handle inner classes & structs -->
 		<xsl:for-each select="class">

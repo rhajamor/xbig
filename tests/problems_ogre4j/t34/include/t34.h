@@ -15,6 +15,7 @@
 class SceneQuery {
 public:
 	struct WorldFragment {
+		WorldFragment() {geometry = (void*)1;}
 		void* geometry;
 	};
 };

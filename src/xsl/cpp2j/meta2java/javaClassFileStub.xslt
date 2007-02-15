@@ -80,8 +80,10 @@
 				 there are problems with primitive types as type parameters
 				 when passed by pointer and problems with templates making
 				 assumptions on there type parameter like the OGRE IteratorWrappers -->
+			<!-- reenabled
 			<xsl:when test="./@template">
 			</xsl:when>
+			 -->
 
 			<!-- classes -->
 			<xsl:otherwise>

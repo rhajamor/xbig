@@ -1,10 +1,11 @@
 /**
  * 
  */
-package org.xbig.test.t00;
+package org.xbig.test.t30;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.xbig.AnimationStateIterator;
 /**
  * @author nenning
  *
@@ -12,7 +13,8 @@ import org.junit.Test;
 public class BasicTests {
 	
 	@Test
-	public void print() {
-		Assert.fail();
+	public void test() {
+		AnimationStateIterator asi = new AnimationStateIterator();
+		ase.delete();
 	}
 }

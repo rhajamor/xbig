@@ -1,10 +1,11 @@
 /**
  * 
  */
-package org.xbig.test.t00;
+package org.xbig.test.t06;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.xbig.TextureUnitState;
 /**
  * @author nenning
  *
@@ -12,7 +13,9 @@ import org.junit.Test;
 public class BasicTests {
 	
 	@Test
-	public void print() {
-		Assert.fail();
+	public void test() {
+		TextureUnitState.TextureEffect te = new TextureUnitState.TextureEffect();
+		te.getcontroller();
+		te.delete();
 	}
 }

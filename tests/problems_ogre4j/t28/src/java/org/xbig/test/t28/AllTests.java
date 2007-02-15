@@ -17,7 +17,7 @@
  * http://www.gnu.org/copyleft/lesser.txt.
  */
 
-package org.xbig.test.t00;
+package org.xbig.test.t28;
 
 import junit.framework.JUnit4TestAdapter;
 import org.junit.runner.RunWith;
