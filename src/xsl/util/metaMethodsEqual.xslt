@@ -66,24 +66,25 @@
 						<xsl:variable name="parameterEquality">
 							<xsl:for-each select="$meth1/parameters/parameter">
 								<xsl:element name="para">
+									<xsl:variable name="forLoopPosition" select="position()"/>
 									<xsl:choose>
 
 										<!-- test if each parameter has the same type 
 											 and is passed by the same way
 											 for both methods -->
-										<xsl:when test="./type = $meth2/parameters/parameter[position()]/type and
-														./@passedBy = $meth2/parameters/parameter[position()]/@passedBy">
+										<xsl:when test="./type = $meth2/parameters/parameter[$forLoopPosition]/type and
+														./@passedBy = $meth2/parameters/parameter[$forLoopPosition]/@passedBy">
 											<xsl:value-of select="true()"/>
 										</xsl:when>
 										<xsl:when test="$referencePointerAreEqual=true()">
 											<xsl:choose>
 
 												<!-- if $referencePointerAreEqual is true, references and pointer should be handled equally -->
-												<xsl:when test="./type = $meth2/parameters/parameter[position()]/type and
+												<xsl:when test="./type = $meth2/parameters/parameter[$forLoopPosition]/type and
 															(
-																./@passedBy = 'reference' and $meth2/parameters/parameter[position()]/@passedBy='pointer'
+																./@passedBy = 'reference' and $meth2/parameters/parameter[$forLoopPosition]/@passedBy='pointer'
 																or
-																./@passedBy = 'pointer' and $meth2/parameters/parameter[position()]/@passedBy='reference'
+																./@passedBy = 'pointer' and $meth2/parameters/parameter[$forLoopPosition]/@passedBy='reference'
 															)">
 													<xsl:value-of select="true()"/>
 												</xsl:when>
@@ -145,7 +146,8 @@
 		<xsl:param name="meth2"/>
 		<xsl:param name="referencePointerAreEqual"/>
 
-		<xsl:variable name="equalWithoutConst" select="xbig:areTheseMethodsEqualExceptConst($meth1, $meth2, $referencePointerAreEqual)"/>
+		<xsl:variable name="equalWithoutConst" select="xbig:areTheseMethodsEqualExceptConst(
+															$meth1, $meth2, $referencePointerAreEqual)"/>
 
 		<!-- test if both methods have the same constness -->
 		<xsl:choose>

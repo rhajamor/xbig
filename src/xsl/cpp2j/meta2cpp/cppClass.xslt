@@ -65,10 +65,10 @@
 			<xsl:variable name="class_prefix">
 				<xsl:choose>
 					<xsl:when test="$isInnerClass">
-						<xsl:value-of select="concat($ns_prefix, '_', '00024', @name)"/>
+						<xsl:value-of select="concat($ns_prefix, '_', '00024', replace(@name, '_', '_1'))"/>
 					</xsl:when>
 					<xsl:otherwise>
-						<xsl:value-of select="concat($ns_prefix, '_', @name)"/>
+						<xsl:value-of select="concat($ns_prefix, '_', replace(@name, '_', '_1'))"/>
 					</xsl:otherwise>
 				</xsl:choose>
 			</xsl:variable>

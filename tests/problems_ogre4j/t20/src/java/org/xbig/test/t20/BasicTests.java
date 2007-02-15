@@ -17,8 +17,8 @@ public class BasicTests {
 	public void test() {
 		Math m = new Math();
 		Ray r = new Ray();
-		m.intersects(r, , false);
-		m.intersects(r, , false);
+		//m.intersects(r, , false);
+		//m.intersects(r, , false);
 		r.delete();
 		m.delete();
 	}

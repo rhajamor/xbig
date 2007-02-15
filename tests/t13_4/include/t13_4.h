@@ -38,4 +38,5 @@ typedef std::stack<std::string>          StringStack;
 typedef std::set<std::string>            StringSet;
 typedef std::multiset<std::string>       StringMultiset;
 typedef std::multimap<std::string, A>    AMultimap;
+typedef std::pair<std::string, A>   	 APair;
 //typedef std::bitset<unsigned int>        IntBitset;

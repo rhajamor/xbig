@@ -24,6 +24,7 @@
 	http://www.gnu.org/copyleft/lesser.txt.
 	
 	Author: Frank Bielig
+			Christoph Nenning
 	
 -->
 
@@ -71,11 +72,12 @@
 		<!-- map type to signature with mapping table from configuration -->
 		<xsl:variable name="type_signature">
 			<xsl:choose>
-				<xsl:when test="contains($param_type, '&lt;')">
-					<xsl:value-of select="$sigs/type[@meta='long']/@signature"/>
+				<xsl:when test="$sigs/type[@meta=$param_type]">
+					<xsl:value-of select="$sigs/type[@meta=$param_type]/@signature"/>
 				</xsl:when>
 				<xsl:otherwise>
-					<xsl:value-of select="$sigs/type[@meta=$param_type]/@signature"/>
+					<xsl:value-of select="replace(replace(replace(replace(
+											$param_type, ' ', '_'), '::', '_'), '&lt;', '_'), '&gt;', '_')"/>
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
