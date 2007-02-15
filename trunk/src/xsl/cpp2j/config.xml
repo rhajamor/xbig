@@ -102,6 +102,10 @@
 			<set>set</set>
 		</publicattribute>
 
+		<parameter>
+			<defaultName>a</defaultName>
+		</parameter>
+
 	</meta>
 
 	<cpp>

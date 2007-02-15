@@ -224,7 +224,20 @@
 			<xsl:text>&#32;</xsl:text>
 
 			<!-- write parameter name -->
-			<xsl:value-of select="name" />
+			<!-- if there is no param name in original lib -->
+			<xsl:variable name="parameterPosition" select="position()"/>
+			<xsl:variable name="paramName">
+				<xsl:choose>
+					<xsl:when test="not(./name) or ./name = ''">
+						<xsl:value-of select="concat($config/config/meta/parameter/defaultName,
+												$parameterPosition)"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="./name"/>
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:variable>
+			<xsl:value-of select="$paramName" />
 
 			<!-- if another parameter follows, write seperator -->
 			<xsl:if test="position()!=last()">
