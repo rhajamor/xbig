@@ -574,6 +574,11 @@
 						<xsl:if
 							test="contains(substring-after(../../node[@id=$childid]/label,'::'),'&lt;')">
 							<xsl:element name="baseClass">
+
+								<!-- remember the full name of base classes -->
+								<xsl:attribute name="fullBaseClassName"
+									select="../../node[@id=$childid]/label" />
+
 								<xsl:variable name="baseClass"
 									select="substring-after(../../node[@id=$childid]/label,'::')" />
 								<xsl:choose>

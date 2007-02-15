@@ -1,10 +1,11 @@
 /**
  * 
  */
-package org.xbig.test.t00;
+package org.xbig.test.t11;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.xbig.UnaryOptionList;
 /**
  * @author nenning
  *
@@ -12,7 +13,8 @@ import org.junit.Test;
 public class BasicTests {
 	
 	@Test
-	public void print() {
-		Assert.fail();
+	public void test() {
+		UnaryOptionList uol = new UnaryOptionList();
+		uol.delete();
 	}
 }

@@ -1,10 +1,12 @@
 /**
  * 
  */
-package org.xbig.test.t00;
+package org.xbig.test.t17;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.xbig.base.StringPointer;
+import org.xbig.TextureUnitState;
 /**
  * @author nenning
  *
@@ -12,7 +14,11 @@ import org.junit.Test;
 public class BasicTests {
 	
 	@Test
-	public void print() {
-		Assert.fail();
+	public void test() {
+		StringPointer sp = new StringPointer("");
+		TextureUnitState tus = new TextureUnitState();
+		tus.setCubicTextureName(sp, false);
+		tus.delete();
+		sp.delete();
 	}
 }

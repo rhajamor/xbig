@@ -35,8 +35,9 @@
 	xmlns:xd="http://www.pnp-software.com/XSLTdoc"
 	xmlns:xbig="http://xbig.sourceforge.net/XBiG">
 
-	<xsl:import href="metaMethodsEqual.xslt" />
-	<xsl:import href="metaMethodName.xslt" />
+	<xsl:import href="metaMethodsEqual.xslt"/>
+	<xsl:import href="metaMethodName.xslt"/>
+	<xsl:import href="createClassFromTemplateTypedef.xslt"/><!-- needed if base class is a template -->
 
 	<xd:doc type="stylesheet">
 		<xd:short>this file contains some helper templates and functions to deal with inheritance</xd:short>
@@ -270,18 +271,66 @@
 		<xd:short>find all inherited methods, including base class c-tors and overridden methods</xd:short>
 	</xd:doc>
 	<xsl:template name="findAllInheritedMethods">
-		<xsl:param name="config" />
-		<xsl:param name="class" />
+		<xsl:param name="config"/>
+		<xsl:param name="class"/>
+		<xsl:param name="baseClassTypedef"/>
+
+		<!-- if we derive a template -->
+		<xsl:variable name="resolvedTypeParas">
+			<xsl:choose>
+				<!-- build list of type parameters -->
+				<xsl:when test="$baseClassTypedef">
+					<xsl:call-template name="buildListOfTypeParameters">
+						<xsl:with-param name="template" select="$class"/>
+						<xsl:with-param name="typedef" select="$baseClassTypedef"/>
+					</xsl:call-template>
+				</xsl:when>
+
+				<!-- do nothing -->
+				<xsl:otherwise>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
 
 		<!-- return methods -->
 		<xsl:for-each select="$class/function">
-			<xsl:copy-of select="." />
+			<xsl:choose>
+				<!-- change template types -->
+				<xsl:when test="$baseClassTypedef">
+					<xsl:call-template name="createFunctionElement">
+						<xsl:with-param name="function" select="."/>
+						<xsl:with-param name="typedef" select="$baseClassTypedef"/>
+						<xsl:with-param name="template" select="$class"/>
+						<xsl:with-param name="resolvedTypeParas" select="$resolvedTypeParas"/>
+					</xsl:call-template>
+				</xsl:when>
+
+				<!-- no template, nothing to change -->
+				<xsl:otherwise>
+					<xsl:copy-of select="."/>
+				</xsl:otherwise>
+			</xsl:choose>
 		</xsl:for-each>
 
 		<!-- inherited public attributes -->
 		<xsl:for-each select="$class/variable">
 			<xsl:element name="attribute">
-				<xsl:copy-of select="." />
+				<xsl:choose>
+					<!-- change template types -->
+					<xsl:when test="$baseClassTypedef">
+						<xsl:call-template name="createVariableElement">
+							<xsl:with-param name="variable" select="."/>
+							<xsl:with-param name="typedef" select="$baseClassTypedef"/>
+							<xsl:with-param name="template" select="$class"/>
+							<xsl:with-param name="resolvedTypeParas" select="$resolvedTypeParas"/>
+						</xsl:call-template>
+					</xsl:when>
+
+					<!-- no template, nothing to change -->
+					<xsl:otherwise>
+						<xsl:copy-of select="."/>
+					</xsl:otherwise>
+				</xsl:choose>
 			</xsl:element>
 		</xsl:for-each>
 
@@ -289,16 +338,62 @@
 		<xsl:if test="$class/inherits">
 			<xsl:for-each select="$class/inherits/baseClass">
 
-				<xsl:variable name="fullNameOfCurrentBaseClass" select="@fullBaseClassName"/>
+				<!-- find out if base class is a template -->
+				<xsl:variable name="baseClassIsTemplate">
+					<xsl:choose>
+						<xsl:when test="contains(@fullBaseClassName, '&lt;')">
+							<xsl:value-of select="true()"/>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:value-of select="false()"/>
+						</xsl:otherwise>
+					</xsl:choose>
+				</xsl:variable>
 
+				<!-- get full name of base class -->
+				<xsl:variable name="fullNameOfCurrentBaseClass">
+					<xsl:choose>
+						<xsl:when test="$baseClassIsTemplate = true()">
+							<xsl:value-of select="normalize-space(
+											substring-before(@fullBaseClassName, '&lt;'))"/>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:value-of select="@fullBaseClassName"/>
+						</xsl:otherwise>
+					</xsl:choose>
+				</xsl:variable>
+
+				<!-- generate typedef to resolve type parameters used in inheritance (ogre4j, t13) -->
+				<xsl:variable name="generatedTypedef">
+					<xsl:choose>
+						<xsl:when test="$baseClassIsTemplate = true()">
+							<xsl:element name="typedef">
+								<xsl:attribute name="name" select="$class/@name"/>
+								<xsl:attribute name="fullName" select="$class/@fullName"/>
+								<xsl:attribute name="protection" select="'public'"/>
+								<xsl:attribute name="basetype" select="@fullBaseClassName"/>
+							</xsl:element>
+						</xsl:when>
+
+						<!-- do nothing -->
+						<xsl:otherwise>
+						</xsl:otherwise>
+					</xsl:choose>
+				</xsl:variable>
+
+				<!-- recurse -->
 				<xsl:call-template name="findAllInheritedMethods">
-					<xsl:with-param name="config" select="$config" />
-					<xsl:with-param name="class" select="root()//class[@fullName=$fullNameOfCurrentBaseClass]" />
+					<xsl:with-param name="config" select="$config"/>
+					<xsl:with-param name="class" select="root()//class
+										[@fullName=$fullNameOfCurrentBaseClass]"/>
+					<xsl:with-param name="baseClassTypedef" select="$generatedTypedef/*"/>
 				</xsl:call-template>
 
 				<xsl:call-template name="findAllInheritedMethods">
-					<xsl:with-param name="config" select="$config" />
-					<xsl:with-param name="class" select="root()//struct[@fullName=$fullNameOfCurrentBaseClass]" />
+					<xsl:with-param name="config" select="$config"/>
+					<xsl:with-param name="class" select="root()//struct
+									[@fullName=$fullNameOfCurrentBaseClass]"/>
+					<xsl:with-param name="baseClassTypedef" select="$generatedTypedef/*"/>
 				</xsl:call-template>
 
 	 		</xsl:for-each>

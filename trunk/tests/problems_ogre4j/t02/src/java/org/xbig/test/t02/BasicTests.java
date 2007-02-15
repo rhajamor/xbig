@@ -1,10 +1,12 @@
 /**
  * 
  */
-package org.xbig.test.t00;
+package org.xbig.test.t02;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.xbig.Particle;
+import org.xbig.Radian;
 /**
  * @author nenning
  *
@@ -12,7 +14,14 @@ import org.junit.Test;
 public class BasicTests {
 	
 	@Test
-	public void print() {
-		Assert.fail();
+	public void test() {
+		Radian r = new Radian();
+		Particle p = new Particle();
+		p.setRotation(r);
+		p.getRotation();
+		p.setrotation(r);
+		p.getrotation();
+		p.delete();
+		r.delete();
 	}
 }

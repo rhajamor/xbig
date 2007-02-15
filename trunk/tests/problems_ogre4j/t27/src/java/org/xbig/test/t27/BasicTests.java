@@ -1,10 +1,11 @@
 /**
  * 
  */
-package org.xbig.test.t00;
+package org.xbig.test.t27;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.xbig.Bitwise;
 /**
  * @author nenning
  *
@@ -12,7 +13,9 @@ import org.junit.Test;
 public class BasicTests {
 	
 	@Test
-	public void print() {
-		Assert.fail();
+	public void test() {
+		Bitwise b = new Bitwise();
+		b.convertBitPattern();
+		b.delete();
 	}
 }

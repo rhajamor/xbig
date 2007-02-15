@@ -1,10 +1,11 @@
 /**
  * 
  */
-package org.xbig.test.t00;
+package org.xbig.test.t22;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.xbig.RenderSystemA;
 /**
  * @author nenning
  *
@@ -12,7 +13,9 @@ import org.junit.Test;
 public class BasicTests {
 	
 	@Test
-	public void print() {
-		Assert.fail();
+	public void test() {
+		RenderSystemA rsa = new RenderSystemA();
+		rsa.getName();
+		rsa.delete();
 	}
 }

@@ -89,7 +89,7 @@
 		</xsl:element>
 
 		<!-- setter -->
-		<xsl:if test="$variable/@const != 'true'">
+		<xsl:if test="$variable/type/@const != 'true' or not($variable/type/@const)">
 			<xsl:element name="function">
 				<xsl:attribute name="public_attribute_setter">
 					<xsl:text>true</xsl:text>

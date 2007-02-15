@@ -24,6 +24,7 @@
 	http://www.gnu.org/copyleft/lesser.txt.
 	
 	Author: Frank Bielig
+			Christoph Nenning
 	
 -->
 
@@ -45,6 +46,14 @@
 
 		<!-- shortcut for static attribute -->
 		<xsl:variable name="static" select="$method/@static" />
+
+		<!-- return void pointer -->
+		<xsl:if test="$method/@passedBy eq 'pointer' or $method/@passedBy eq 'reference'">
+			<xsl:text>&#32;return&#32;</xsl:text>
+			<xsl:text>new&#32;</xsl:text>
+			<xsl:text>VoidPointer</xsl:text>
+			<xsl:text>(new&#32;InstancePointer(</xsl:text>
+		</xsl:if>
 
 		<!-- write native method name -->
 		<xsl:call-template name="metaMethodName">
@@ -73,6 +82,11 @@
 			<xsl:with-param name="method" select="$method" />
 			<xsl:with-param name="callingNativeMethod" select="'true'" />
 		</xsl:call-template>
+
+		<!-- close c-tor of VoidPointer -->
+		<xsl:if test="$method/@passedBy = 'pointer' or $method/@passedBy = 'reference'">
+			<xsl:text>))</xsl:text>
+		</xsl:if>
 
 		<!-- close parameter list -->
 		<xsl:text>);</xsl:text>

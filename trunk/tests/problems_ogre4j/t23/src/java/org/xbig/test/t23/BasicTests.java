@@ -1,10 +1,11 @@
 /**
  * 
  */
-package org.xbig.test.t00;
+package org.xbig.test.t23;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.xbig.Vector;
 /**
  * @author nenning
  *
@@ -12,7 +13,9 @@ import org.junit.Test;
 public class BasicTests {
 	
 	@Test
-	public void print() {
-		Assert.fail();
+	public void test() {
+		Vector v = new Vector();
+		v.add(v);
+		v.delete();
 	}
 }

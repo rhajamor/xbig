@@ -160,7 +160,8 @@
 						<xsl:value-of select="'void'"/>
 					</xsl:when>
 					<xsl:when test="contains($fullTypeName, '&lt;')">
-						<xsl:value-of select="concat($fullTypeName, '*')"/>
+						<xsl:value-of select="concat(xbig:getFullTemplateName(
+														$fullTypeName, $class, $root), '*')"/>
 					</xsl:when>
 					<xsl:when test="xbig:isTemplateTypedef($fullTypeName, $class, $root)">
 						<xsl:value-of select="concat($fullTypeName, '*')"/>
@@ -466,11 +467,21 @@
 			<!-- if const overloading is used, we have to find out the original name -->
 			<xsl:choose>
 				<xsl:when test="$method/@const = 'true' and not($class/function
-						[name = $method/name][@const = 'true'])">
+						[name = c][@const = 'true'])">
+					<!-- TODO test with prefix set -->
 					<xsl:variable name="methodNameWithoutPrefix" select="substring-after(
 						$method/name, $config/config/java/constoverloading/prefix)"/>
-					<xsl:variable name="methodName" select="substring-before(
-						$methodNameWithoutPrefix, $config/config/java/constoverloading/suffix)"/>
+					<xsl:variable name="suffix" select="$config/config/java/constoverloading/suffix"/>
+					<xsl:variable name="methodName">
+						<xsl:choose>
+							<xsl:when test="$suffix != '' and contains($methodNameWithoutPrefix, $suffix)">
+								<xsl:value-of select="substring-before($methodNameWithoutPrefix, $suffix)"/>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:value-of select="$methodNameWithoutPrefix"/>
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:variable>
 					<xsl:value-of select="xbig:cpp-replace($org_line, '#cpp_method#', $methodName)" />
 				</xsl:when>
 				<xsl:otherwise>
@@ -492,6 +503,7 @@
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
+
 
 		<!-- replace JNI environment variable -->
 		<xsl:variable name="line2"
@@ -645,6 +657,11 @@
 			<xsl:choose>
 				<!-- if this is a typedef for a template -->
 				<xsl:when test="$class/typeparameters">
+					<xsl:value-of select="$class/@fullName"/>
+				</xsl:when>
+
+				<!-- if this method is inherited from a template -->
+				<xsl:when test="$method/@isGeneratedForTemplate">
 					<xsl:value-of select="$class/@fullName"/>
 				</xsl:when>
 

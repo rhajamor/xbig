@@ -20,6 +20,7 @@ class Controller {};
 class TextureUnitState {
 public:
 	struct TextureEffect {
+		TextureEffect() {controller = (Controller<Real>*)1;}
 		Controller<Real>* controller;
 	};
 };

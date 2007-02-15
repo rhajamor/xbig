@@ -89,6 +89,13 @@
 			<!-- write parameter name -->
 			<xsl:value-of select="name" />
 
+			<!-- resolve typedefs -->
+			<xsl:variable name="resolvedType" select="xbig:resolveTypedef(./type, $class, $root)"/>
+
+			<!-- for performance reasons -->
+			<xsl:variable name="fullTypeName"
+						select="xbig:getFullTypeName($resolvedType, $class, $root)"/>
+
 			<!-- extract jni type depending on meta type, const/non-const, pass type
 				 needed for next if -->
 			<xsl:variable name="type_info">
@@ -96,7 +103,7 @@
 					<xsl:with-param name="root" 
 						select="$config/config/java/types" />
 					<xsl:with-param name="param" select="." />
-					<xsl:with-param name="typeName" select="./type" />
+					<xsl:with-param name="typeName" select="$fullTypeName" />
 				</xsl:call-template>
 			</xsl:variable>
 
@@ -105,13 +112,6 @@
 				 		  ((./@passedBy eq 'pointer') or (./@passedBy eq 'reference'))">
 				<xsl:value-of select="'.object.pointer'" />
 			</xsl:if>
-
-			<!-- resolve typedefs -->
-			<xsl:variable name="resolvedType" select="xbig:resolveTypedef(./type, $class, $root)"/>
-
-			<!-- for performance reasons -->
-			<xsl:variable name="fullTypeName"
-						select="xbig:getFullTypeName($resolvedType, $class, $root)"/>
 
 			<!-- if this parameter is a enum -->
 			<xsl:if test="($callingNativeMethod eq 'true') and
