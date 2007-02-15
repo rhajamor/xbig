@@ -210,6 +210,7 @@
 		<xsl:param name="method" />
 		<xsl:param name="param" />
 		<xsl:param name="fullTypeName"/>
+		<xsl:param name="paramPosition"/>
 
 		<!-- resolve typedefs -->
 		<!-- 
@@ -233,7 +234,20 @@
 		</xsl:variable>
 
 		<!-- shortcut for parameter name -->
-		<xsl:variable name="param_name" select="$param/name" />
+		<!-- if there is no param name in original lib -->
+		<xsl:variable name="parameterPosition" select="$paramPosition"/>
+		<xsl:variable name="param_name">
+			<xsl:choose>
+				<xsl:when test="not($param/name) or $param/name = ''">
+					<xsl:value-of select="concat(
+									$config/config/meta/parameter/defaultName,
+									$parameterPosition)"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="$param/name"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
 
 		<!-- find out if we have a pointer pointer pointer -->
 		<xsl:variable name="pointerPointerAddOn">
@@ -604,8 +618,21 @@
 										  ) and @passedBy != 'pointer')">
 								<xsl:value-of select="'*'" />
 							</xsl:if>
-							<xsl:value-of
-								select="xbig:cpp-param($config, name)" />
+							<!-- if there is no param name in original lib -->
+							<xsl:variable name="parameterPosition" select="position()"/>
+							<xsl:variable name="paramName">
+								<xsl:choose>
+									<xsl:when test="not(./name) or ./name = ''">
+										<xsl:value-of select="concat(
+														$config/config/meta/parameter/defaultName,
+														$parameterPosition)"/>
+									</xsl:when>
+									<xsl:otherwise>
+										<xsl:value-of select="./name"/>
+									</xsl:otherwise>
+								</xsl:choose>
+							</xsl:variable>
+							<xsl:value-of select="xbig:cpp-param($config, $paramName)"/>
 
 							<!-- write seperator if neccessary -->
 							<xsl:if test="position() != last()">

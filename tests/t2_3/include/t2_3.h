@@ -16,4 +16,5 @@ class EXPORT A {
 public:
 	A();
 	int a(float b);
+	void b(int, float) {}
 };

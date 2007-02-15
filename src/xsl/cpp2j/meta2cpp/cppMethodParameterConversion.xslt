@@ -51,6 +51,7 @@
 
 		<!-- iterate through all parameters for conversion -->
 		<xsl:for-each select="$method/parameters/parameter">
+			<xsl:variable name="parameterPosition" select="position()"/>
 
 			<!-- resolve typedefs -->
 			<xsl:variable name="resolvedParameter" select="xbig:resolveTypedef(
@@ -60,9 +61,22 @@
 			<xsl:variable name="fullTypeName"
 					select="xbig:getFullTypeName($resolvedParameter, $class, $root)"/>
 
+			<!-- if there is no param name in original lib -->
+			<xsl:variable name="paramName">
+				<xsl:choose>
+					<xsl:when test="not(./name) or ./name = ''">
+						<xsl:value-of select="concat($config/config/meta/parameter/defaultName,
+												$parameterPosition)"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="./name"/>
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:variable>
+
 			<!-- parameter name for call native function -->
 			<xsl:variable name="lib_var"
-				select="xbig:cpp-param($config, name)" />
+				select="xbig:cpp-param($config, $paramName)" />
 
 			<!-- write new line seperator for parameter declaration -->
 			<xsl:text>#nl#</xsl:text>
@@ -81,7 +95,8 @@
 			<xsl:text>&#32;=&#32;</xsl:text>
 
 			<!-- write conversion to C++ type -->
-			<xsl:value-of select="xbig:jni-to-cpp($config, $class, $method, ., $fullTypeName)" />
+			<xsl:value-of select="xbig:jni-to-cpp(
+							$config, $class, $method, ., $fullTypeName, position())" />
 
 			<!-- finish conversion statement -->
 			<xsl:text>;</xsl:text>
