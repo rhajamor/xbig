@@ -54,15 +54,20 @@
 		<xsl:variable name="signature">
 			<xsl:choose>
 				<xsl:when test="$config/config/cpp/jni/signatures/type[@meta=$meta_type]/@signature">
-					<xsl:value-of select="$config/config/cpp/jni/signatures/type[@meta=$meta_type]/@signature" />
+					<xsl:value-of select="$config/config/cpp/jni/signatures/type
+								[@meta=$meta_type]/@signature" />
 				</xsl:when>
+				<!-- 
 				<xsl:when test="xbig:isClassOrStruct($fullTypeName, $class, $root)">
 					<xsl:value-of select="$config/config/cpp/jni/signatures/type[@meta='long']/@signature" />
 				</xsl:when>
 				<xsl:when test="xbig:isEnum($fullTypeName, $class, $root)">
 					<xsl:value-of select="$config/config/cpp/jni/signatures/type[@meta='int']/@signature" />
 				</xsl:when>
+				 -->
 				<xsl:otherwise>
+					<xsl:value-of select="replace(replace(replace(replace(
+										$fullTypeName, ' ', '_'), '::', '_'), '&lt;', '_'), '&gt;', '_')"/>
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
@@ -83,7 +88,8 @@
 		
 		<!-- write escaped signature -->
 		<xsl:if test="$escape">
-			<xsl:value-of select="replace(replace(replace(replace($signature, '_','_1'),'/','_'),';', '_2'),'\[','_3')" />
+			<xsl:value-of select="replace(replace(replace(replace(
+									$signature, '_','_1'),'/','_'),';', '_2'),'\[','_3')" />
 		</xsl:if>
 		
 		

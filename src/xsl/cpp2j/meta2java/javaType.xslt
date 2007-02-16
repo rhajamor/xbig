@@ -137,7 +137,7 @@
 		<!-- class used for pointer pointer -->
 		<xsl:variable name="pointerPointerClass" select="'NativeObjectPointer'"/>
 
-		<!-- print first type found in result list -->
+		<!-- choose type -->
 		<xsl:choose>
 
 			<!-- write pointer class -->
@@ -385,8 +385,13 @@
 						</xsl:call-template>
 					</xsl:variable>
 
-					<xsl:variable name="nameFromHelper" select="xbig:getFullJavaNameHelper(
-								'', '', 0, $fullNameTokens, $inputTreeRoot, $config)"/>
+					<!-- for a little better performance -->
+					<xsl:variable name="interfacePrefix" select="$config/config/java/interface/prefix"/>
+					<xsl:variable name="interfaceSuffix" select="$config/config/java/interface/suffix"/>
+
+					<xsl:variable name="nameFromHelper" select="xbig:getFullJavaNameHelper('', '', 0,
+									$fullNameTokens, $inputTreeRoot, $interfacePrefix, $interfaceSuffix)"/>
+
 					<xsl:choose>
 						<xsl:when test="$nameFromHelper = ''">
 							<xsl:value-of select="$type"/>
@@ -421,7 +426,8 @@
 		<xsl:param name="currentPosition"/>
 		<xsl:param name="fullNameTokens"/>
 		<xsl:param name="inputTreeRoot"/>
-		<xsl:param name="config"/>
+		<xsl:param name="interfacePrefix"/>
+		<xsl:param name="interfaceSuffix"/>
 
 		<!-- this is ugly as hell, but this is also a very awful case, and it just has to work -->
 		<xsl:variable name="breakToken" select="'#BREAKRECURSIONTOKEN#'"/>
@@ -469,17 +475,17 @@
 				<!-- classes -->
 				<xsl:when test="$currentNode/*/class[@name = $fullNameTokens/*[$currentPosition+1]]">
 					<xsl:value-of select="concat($currentJavaFullNameWithDot,
-									$config/config/java/interface/prefix,
+									$interfacePrefix,
 									$fullNameTokens/*[$currentPosition+1],
-									$config/config/java/interface/suffix)"/>
+									$interfaceSuffix)"/>
 				</xsl:when>
 
 				<!-- structs -->
 				<xsl:when test="$currentNode/*/struct[@name = $fullNameTokens/*[$currentPosition+1]]">
 					<xsl:value-of select="concat($currentJavaFullNameWithDot,
-									$config/config/java/interface/prefix,
+									$interfacePrefix,
 									$fullNameTokens/*[$currentPosition+1],
-									$config/config/java/interface/suffix)"/>
+									$interfaceSuffix)"/>
 				</xsl:when>
 
 				<!-- enums -->
@@ -509,34 +515,34 @@
 						<!-- if this typedef is the last token -->
 						<xsl:when test="count($fullNameTokens/*) = $currentPosition+1">
 							<xsl:value-of select="concat($currentJavaFullNameWithDot,
-									$config/config/java/interface/prefix,
+									$interfacePrefix,
 									$fullNameTokens/*[$currentPosition+1],
-									$config/config/java/interface/suffix)"/>
+									$interfaceSuffix)"/>
 						</xsl:when>
 
 						<!-- template has inner class -->
 						<xsl:when test="$baseTypeNode/class[@name = $fullNameTokens/*[$currentPosition+2]]">
 							<xsl:value-of select="concat($currentJavaFullNameWithDot,
-									$config/config/java/interface/prefix,
+									$interfacePrefix,
 									$fullNameTokens/*[$currentPosition+1],
-									$config/config/java/interface/suffix,
+									$interfaceSuffix,
 									'::',
-									$config/config/java/interface/prefix,
+									$interfacePrefix,
 									$fullNameTokens/*[$currentPosition+2],
-									$config/config/java/interface/suffix,
+									$interfaceSuffix,
 									$breakToken)"/>
 						</xsl:when>
 
 						<!-- template has inner struct -->
 						<xsl:when test="$baseTypeNode/struct[@name = $fullNameTokens/*[$currentPosition+2]]">
 							<xsl:value-of select="concat($currentJavaFullNameWithDot,
-									$config/config/java/interface/prefix,
+									$interfacePrefix,
 									$fullNameTokens/*[$currentPosition+1],
-									$config/config/java/interface/suffix,
+									$interfaceSuffix,
 									'::',
-									$config/config/java/interface/prefix,
+									$interfacePrefix,
 									$fullNameTokens/*[$currentPosition+2],
-									$config/config/java/interface/suffix,
+									$interfaceSuffix,
 									$breakToken)"/>
 						</xsl:when>
 
@@ -544,9 +550,9 @@
 						<xsl:when test="$baseTypeNode/enumeration
 											[@name = $fullNameTokens/*[$currentPosition+2]]">
 							<xsl:value-of select="concat($currentJavaFullNameWithDot,
-														$config/config/java/interface/prefix,
+														$interfacePrefix,
 														$fullNameTokens/*[$currentPosition+1],
-														$config/config/java/interface/suffix,
+														$interfaceSuffix,
 														'::',
 														$fullNameTokens/*[$currentPosition+2],
 														$breakToken)"/>
@@ -590,7 +596,8 @@
 				<xsl:variable name="metaNameIncrement"
 						select="concat($currentMetaFullNameWithDot, $fullNameTokens/*[$currentPosition+1])"/>
 				<xsl:value-of select="xbig:getFullJavaNameHelper($currentNameIncremented, $metaNameIncrement,
-										$currentPosition+1, $fullNameTokens, $inputTreeRoot, $config)"/>
+										$currentPosition+1, $fullNameTokens, $inputTreeRoot,
+										$interfacePrefix, $interfaceSuffix)"/>
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:function>

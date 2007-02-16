@@ -381,9 +381,14 @@
 									  select="xbig:getNodeNameWhichContainsType
 									  ($relPathFirstPart, $currentNode, $inputTreeRoot)"/>
 						<xsl:variable name="typeContainingNodeDots">
-							<xsl:if test="$typeContainingNodeName != ''">
-								<xsl:value-of select="concat($typeContainingNodeName, '::')"/>
-							</xsl:if>
+							<xsl:choose>
+								<xsl:when test="$typeContainingNodeName != ''">
+									<xsl:value-of select="concat($typeContainingNodeName, '::')"/>
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:value-of select="$typeContainingNodeName"/>
+								</xsl:otherwise>
+							</xsl:choose>
 						</xsl:variable>
 						<xsl:value-of select="concat($typeContainingNodeDots, $type)"/>
 					</xsl:otherwise>
