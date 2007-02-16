@@ -91,9 +91,17 @@
 
 		<!-- create const suffix if special attribute available -->
 		<xsl:variable name="const_suffix">
-			<xsl:if test="$method/@const eq 'true'">
-				<xsl:text>_const</xsl:text>
-			</xsl:if>
+			<xsl:choose>
+				<xsl:when test="not($method/@const)">
+					<xsl:text></xsl:text>
+				</xsl:when>
+				<xsl:when test="$method/@const eq 'true'">
+					<xsl:text>_const</xsl:text>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:text></xsl:text>
+				</xsl:otherwise>
+			</xsl:choose>
 		</xsl:variable>
 
 		<!-- compose full method name -->
