@@ -76,8 +76,11 @@
 			<xsl:when test="not($type_info/type/@jni)">
 
 				<!-- for performance reasons -->
+				<!-- 
 				<xsl:variable name="fullTypeName"
 							select="xbig:getFullTypeName($resolvedType, $class, $root)"/>
+				 -->
+				<xsl:variable name="fullTypeName" select="$resolvedType"/>
 
 				<xsl:choose>
 

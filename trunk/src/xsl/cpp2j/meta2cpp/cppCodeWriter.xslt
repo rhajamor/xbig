@@ -580,6 +580,7 @@
 		</xsl:variable>
 
 		<!-- for performance reasons -->
+		<!-- 
 		<xsl:variable name="fullTypeName">
 			<xsl:choose>
 				<xsl:when test="not($method/type)">
@@ -590,6 +591,8 @@
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
+		 -->
+		<xsl:variable name="fullTypeName" select="$resolvedType"/>
 
 		<!-- replace parameter list -->
 		<xsl:variable name="line8">
@@ -607,8 +610,11 @@
 								./type, $class, $root)"/>
 
 							<!-- for performance reasons -->
+							<!-- 
 							<xsl:variable name="fullParameterTypeName"
 									select="xbig:getFullTypeName($resolvedParameter, $class, $root)"/>
+							 -->
+							<xsl:variable name="fullParameterTypeName" select="$resolvedParameter"/>
 
 							<!-- write parameter name -->
 							<xsl:if test="@passedBy='reference' or ((

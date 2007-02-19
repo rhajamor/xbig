@@ -474,10 +474,10 @@
 		<xsl:param name="currentNode"/> <!-- must be a class, struct or namespace element -->
 		<xsl:param name="inputTreeRoot"/>
 
-		<!-- 
 		<xsl:variable name="fullName" select="xbig:getFullTypeName($type, $currentNode, $inputTreeRoot)"/>
-		 -->
+		<!-- 
 		<xsl:variable name="fullName" select="$type"/>
+		 -->
 
 		<xsl:choose>
 			<xsl:when test="xbig:isTypedef($type, $currentNode, $inputTreeRoot)">
@@ -498,7 +498,10 @@
 				</xsl:choose>
 			</xsl:when>
 			<xsl:otherwise>
+				<!-- 
 				<xsl:value-of select="$type"/>
+				 -->
+				<xsl:value-of select="$fullName"/>
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:function>
