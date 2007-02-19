@@ -66,8 +66,8 @@
 				</xsl:when>
 				 -->
 				<xsl:otherwise>
-					<xsl:value-of select="replace(replace(replace(replace(
-										$fullTypeName, ' ', '_'), '::', '_'), '&lt;', '_'), '&gt;', '_')"/>
+					<xsl:value-of select="replace(replace(replace(replace(replace(
+								$fullTypeName, ' ', '_'), '::', '_'), '&lt;', '_'), '&gt;', '_'), ',', '_')"/>
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
