@@ -297,8 +297,12 @@
 				<xsl:otherwise>
 
 					<!-- for performance reasons -->
+					<!-- 
 					<xsl:variable name="fullTypeName"
 							select="xbig:getFullTypeName($type, $template, $root)"/>
+					 -->
+					<xsl:variable name="fullTypeName"
+							select="xbig:resolveTypedef($type, $template, $root)"/>
 
 					<xsl:choose>
 						<xsl:when test="xbig:isClassOrStruct($fullTypeName, $template, $root)">
@@ -391,10 +395,23 @@
 		<!-- start list -->
 		<xsl:for-each select="$tokens/*">
 			<xsl:element name="para">
-				<xsl:variable name="normalizedToken" select="normalize-space(.)"/>
+				<xsl:variable name="normalizedToken">
+					<xsl:choose>
+						<xsl:when test="contains(., 'const')">
+							<!-- TODO handle int* const -->
+							<!-- TODO this produces uncompileable JNI code.
+									  We should use parameter elements for type parameters -->
+							<xsl:value-of select="normalize-space(substring-after(., 'const'))"/>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:value-of select="normalize-space(.)"/>
+						</xsl:otherwise>
+					</xsl:choose>
+				</xsl:variable>
+				
 				<xsl:choose>
 					<!-- templates as type parameters -->
-					<xsl:when test="contains(., '&lt;')">
+					<xsl:when test="contains($normalizedToken, '&lt;')">
 						<xsl:value-of select="concat('::', xbig:getFullTemplateName(
 									$normalizedToken, $typedef, $root))"/>
 					</xsl:when>
@@ -404,10 +421,23 @@
 						<xsl:value-of select="$normalizedToken"/>
 					</xsl:when>
 
-					<!-- classes, ... -->
 					<xsl:otherwise>
-						<xsl:value-of select="concat('::', xbig:getFullTypeName(xbig:resolveTypedef(
-									$normalizedToken, $typedef, $root), $typedef, $root))"/>
+						<xsl:variable name="resolvedType" select="xbig:resolveTypedef(
+																$normalizedToken, $typedef, $root)"/>
+						<xsl:choose>
+							<!-- classes, ... -->
+							<xsl:when test="xbig:isClassOrStruct($resolvedType, $template, $root)">
+									<xsl:value-of select="concat('::', $resolvedType)"/>
+							</xsl:when>
+							<xsl:when test="xbig:isEnum($resolvedType, $template, $root)">
+									<xsl:value-of select="concat('::', $resolvedType)"/>
+							</xsl:when>
+
+							<!-- unresolved type -->
+							<xsl:otherwise>
+								<xsl:value-of select="."/>
+							</xsl:otherwise>
+						</xsl:choose>
 					</xsl:otherwise>
 				</xsl:choose>
 			</xsl:element>

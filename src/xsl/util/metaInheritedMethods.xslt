@@ -209,8 +209,12 @@
 							<xsl:element name="unresolved">
 
 								<!-- for performance reasons -->
+								<!-- 
 								<xsl:variable name="fullTypeName"
 										select="xbig:getFullTypeName($typeName, $class, $root)"/>
+								 -->
+								<xsl:variable name="fullTypeName"
+										select="xbig:resolveTypedef($typeName, $class, $root)"/>
 
 								<xsl:choose>
 									<!-- primitive types -->

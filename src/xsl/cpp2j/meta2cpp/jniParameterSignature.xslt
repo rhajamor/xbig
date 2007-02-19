@@ -48,7 +48,10 @@
 		<xsl:param name="class" />
 
 		<!-- for performance reasons -->
+		<!-- 
 		<xsl:variable name="fullTypeName" select="xbig:getFullTypeName($meta_type, $class, $root)"/>
+		 -->
+		<xsl:variable name="fullTypeName" select="xbig:resolveTypedef($meta_type, $class, $root)"/>
 
 		<!-- map type to signature with mapping table from configuration -->
 		<xsl:variable name="signature">

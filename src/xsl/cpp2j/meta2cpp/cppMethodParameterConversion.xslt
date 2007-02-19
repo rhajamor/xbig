@@ -58,8 +58,11 @@
 				./type, $class, $root)"/>
 
 			<!-- for performance reasons -->
+			<!-- 
 			<xsl:variable name="fullTypeName"
 					select="xbig:getFullTypeName($resolvedParameter, $class, $root)"/>
+			 -->
+			<xsl:variable name="fullTypeName" select="$resolvedParameter"/>
 
 			<!-- if there is no param name in original lib -->
 			<xsl:variable name="paramName">

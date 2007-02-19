@@ -106,8 +106,11 @@
 			<xsl:variable name="resolvedType" select="xbig:resolveTypedef(./type, $class, $root)"/>
 
 			<!-- for performance reasons -->
+			<!-- 
 			<xsl:variable name="fullTypeName"
 						select="xbig:getFullTypeName($resolvedType, $class, $root)"/>
+			 -->
+			<xsl:variable name="fullTypeName" select="$resolvedType"/>
 
 			<!-- extract jni type depending on meta type, const/non-const, pass type
 				 needed for next if -->
