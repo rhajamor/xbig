@@ -467,7 +467,8 @@
 
 
 	<xd:doc type="function">
-		<xd:short>resolve a typedef</xd:short>
+		<xd:short>Resolves a typedef.
+		It finds out full name of passed type and returns full name of resolved type</xd:short>
 	</xd:doc>
 	<xsl:function name="xbig:resolveTypedef" as="xs:string">
 		<xsl:param name="type" as="xs:string"/>
@@ -488,7 +489,7 @@
 					<xsl:when test="contains($typedefNode/@basetype, '&lt;')">
 						<!-- <xsl:value-of select="xbig:getFullTypeName(
 										$typedefNode/@basetype, $typedefNode/.., $inputTreeRoot)"/> -->
-						<xsl:value-of select="$type"/>
+						<xsl:value-of select="$fullName"/>
 					</xsl:when>
 
 					<xsl:otherwise>
