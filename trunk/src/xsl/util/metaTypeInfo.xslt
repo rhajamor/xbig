@@ -480,7 +480,7 @@
 		 -->
 
 		<xsl:choose>
-			<xsl:when test="xbig:isTypedef($type, $currentNode, $inputTreeRoot)">
+			<xsl:when test="xbig:isTypedef($fullName, $currentNode, $inputTreeRoot)">
 				<xsl:variable name="typedefNode" select="$inputTreeRoot//typedef[@fullName = $fullName]"/>
 				<xsl:choose>
 
