@@ -416,7 +416,7 @@
 	<xd:doc type="function">
 		<xd:short>find the namespace / class / struct in which a type is declared</xd:short>
 	</xd:doc>
-	<xsl:function name="xbig:getNodeNameWhichContainsType">
+	<xsl:function name="xbig:getNodeNameWhichContainsType" as="xs:string">
 		<xsl:param name="type" as="xs:string"/>
 		<xsl:param name="currentNode"/> <!-- must be a class, struct or namespace element -->
 		<xsl:param name="inputTreeRoot"/>
@@ -452,8 +452,8 @@
 			</xsl:when>
 
 			<!-- else if the current node is the root return an empty string -->
-			<xsl:when test="$inputTreeRoot = $currentNode">
-				<xsl:value-of select="''" />
+			<xsl:when test="$inputTreeRoot is $currentNode">
+				<xsl:sequence select="''" />
 			</xsl:when>
 
 			<!-- else check the parent node -->
