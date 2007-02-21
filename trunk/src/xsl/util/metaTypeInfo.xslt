@@ -433,6 +433,37 @@
 				<xsl:value-of select="$currentNode/@fullName" />
 			</xsl:when>
 
+			<!-- check if type is defined in a baseclass -->
+			<!-- this needs revision
+			<xsl:when test="boolean($currentNode/inherits) eq true()">
+				<xsl:variable name="baseClassResults">
+					<xsl:for-each select="$currentNode/inherits/baseClass">
+						<xsl:element name="result">
+							<xsl:variable name="baseClassNode"
+									select="$inputTreeRoot//*[@fullName = current()/@fullBaseClassName]"/>
+							<xsl:value-of select="xbig:getNodeNameWhichContainsType
+											  ($type, $baseClassNode, $inputTreeRoot)"/>
+						</xsl:element>
+					</xsl:for-each>
+				</xsl:variable>
+				 -->
+
+				<!-- check if type was found in a base class -->
+				<!-- 
+				<xsl:choose>
+					<xsl:when test="$baseClassResults/*[text() != '']">
+						<xsl:value-of select="$baseClassResults/*[text() != '']"/>
+					</xsl:when> -->
+
+					<!-- else check the parent node -->
+					<!-- 
+					<xsl:otherwise>
+						<xsl:value-of select="xbig:getNodeNameWhichContainsType
+									  ($type, $currentNode/.., $inputTreeRoot)"/>
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:when> -->
+
 			<!-- special case: a typedef for a template -> generated meta class -> not in input tree -->
 			<xsl:when test="$currentNode/typeparameters">
 				<!-- TODO check if this could be made more general -->
