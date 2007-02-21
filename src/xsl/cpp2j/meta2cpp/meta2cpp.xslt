@@ -37,6 +37,9 @@
 	<!--<xsl:import href="cppGlobals.xslt" />
 	<xsl:import href="cppEnum.xslt" />-->
 
+	<!-- gives a great performance boost -->
+	<xsl:strip-space elements="*"/>
+
 	<xd:doc type="stylesheet">
 		<xd:author>Frank Bielig</xd:author>
 		<xd:copyright>OneStepAhead AG</xd:copyright>

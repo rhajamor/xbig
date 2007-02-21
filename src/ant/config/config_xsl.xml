@@ -24,6 +24,7 @@
 	http://www.gnu.org/copyleft/lesser.txt.
 	
 	Author: Frank Bielig
+			Christoph Nenning
 -->
 
 <!-- 
@@ -37,7 +38,7 @@
 
 	<property name="dir.xsl.src" value="${dir.prj.src.xsl}" />
 	<property name="jar.xsl.saxon"
-		value="${dir.prj.src.ant.jar}/saxon-8.8.0.jar" />
+		value="${dir.prj.src.ant.jar}/saxon8.jar" />
 
 	<target name="init" depends="config.base.init" ></target>
 
