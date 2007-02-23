@@ -74,8 +74,8 @@ namespace Ogre {
 	};
 
 	class SceneManager {
-	//protected:
-	public:
+	protected:
+	//public:
 		typedef std::map<String, Animation*> AnimationList;
 
 	public:
@@ -85,10 +85,12 @@ namespace Ogre {
 
 	class DefaultSceneManager : public SceneManager {
 	public:
+		DefaultSceneManager() {str = "Bulldozer";}
 		AnimationIterator getAnimationIterator() {AnimationIterator a(m); return a;}
-		const String & getTypeName (void) const {return "Bulldozer";}
+		const String & getTypeName (void) const {return str;}
 
 	private:
 		AnimationList m;
+		String str;
 	};
 }
