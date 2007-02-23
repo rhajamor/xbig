@@ -70,30 +70,7 @@
 		<xsl:param name="config"/>
 		<xsl:param name="param"/>
 		<xsl:param name="class"/>
-		<xsl:param name="fullTypeName"/>
-
-		<!-- resolve typedefs -->
-		<!-- 
-		<xsl:variable name="resolvedType">
-			<xsl:choose>
-			 -->
-				<!-- c-tors don't have a type -->
-				<!-- 
-				<xsl:when test="not($param/type)">
-					<xsl:value-of select="'long'"/>
-				</xsl:when>
-				<xsl:otherwise>
-					<xsl:value-of select="xbig:resolveTypedef($param/type, $class, $root)"/>
-				</xsl:otherwise>
-			</xsl:choose>
-		</xsl:variable>
-		 -->
-
-		<!-- for performance reasons -->
-		<!-- 
-		<xsl:variable name="fullTypeName"
-				select="xbig:getFullTypeName($resolvedType, $class, $root)"/>
-		 -->
+		<xsl:param name="fullTypeName"/>		
 
 		<!-- shortcut to type conversion configurations -->
 		<xsl:variable name="type_info">
@@ -684,57 +661,10 @@
 					<xsl:value-of select="$line11"/>
 				</xsl:otherwise>
 			</xsl:choose>
-		</xsl:variable>
-
-		<!-- replace name of class the method was inherited from -->
-		<xsl:variable name="classThisMethodWasInheritedFrom">
-			<xsl:choose>
-				<!-- if this is a typedef for a template -->
-				<xsl:when test="$class/typeparameters">
-					<xsl:value-of select="$class/@fullName"/>
-				</xsl:when>
-
-				<!-- if this method is inherited from a template -->
-				<xsl:when test="$method/@isGeneratedForTemplate">
-					<xsl:value-of select="$class/@fullName"/>
-				</xsl:when>
-
-				<!-- a normal class -->
-				<xsl:otherwise>
-					<xsl:variable name="methodClassWithPreStuffTokens">
-						<xsl:call-template name="str:split">
-							<xsl:with-param name="string" select="$method/definition" />
-							<xsl:with-param name="pattern" select="' '" />
-						</xsl:call-template>
-					</xsl:variable>
-					<xsl:variable name="methodClassTokens">
-						<xsl:call-template name="str:split">
-							<xsl:with-param name="string"
-								select="$methodClassWithPreStuffTokens/*[last()]" />
-							<xsl:with-param name="pattern" select="'::'" />
-						</xsl:call-template>
-					</xsl:variable>
-					<xsl:variable name="methodClassFullName">
-						<xsl:for-each select="$methodClassTokens/*">
-							<xsl:if test="position() != last()">
-								<xsl:value-of select="." />
-							</xsl:if>
-							<xsl:if test="(position() != last()) and (position() != last()-1)">
-								<xsl:value-of select="'::'" />
-							</xsl:if>
-						</xsl:for-each>
-					</xsl:variable>
-					<xsl:value-of select="$methodClassFullName"/>
-				</xsl:otherwise>
-			</xsl:choose>
-		</xsl:variable>
-		
-		<xsl:variable name="line13"
-			select="xbig:cpp-replace($line12, '#cpp_inherited_method_class#', 
-										$classThisMethodWasInheritedFrom)" />
+		</xsl:variable>		
 
 		<!-- if an object is returned, we need it's address -->
-		<xsl:variable name="line14">
+		<xsl:variable name="line13">
 			<xsl:variable name="searchFor" select="'#optional_return_conversion#'"/>
 
 			<xsl:variable name="replaceWith">
@@ -777,30 +707,30 @@
 					</xsl:otherwise>
 				</xsl:choose>
 			</xsl:variable>
-			<xsl:value-of select="replace($line13, $searchFor, $replaceWith)" />
+			<xsl:value-of select="replace($line12, $searchFor, $replaceWith)" />
 		</xsl:variable>
 
 		<!-- create closing paranthesis -->
-		<xsl:variable name="line15">
+		<xsl:variable name="line14">
 			<xsl:choose>
 				<xsl:when test="not($method/type)">
-					<xsl:value-of select="replace($line14, '#optional_closing_bracket#', '')" />
+					<xsl:value-of select="replace($line13, '#optional_closing_bracket#', '')" />
 				</xsl:when>
 				<xsl:when test="(xbig:isClassOrStruct($fullTypeName, $class, $root) or
 								xbig:isTemplateTypedef($fullTypeName, $class, $root) or
 								contains($method/type, '&lt;')
 								) and $method/@passedBy = 'value'">
-					<xsl:value-of select="replace($line14, '#optional_closing_bracket#', ')')" />
+					<xsl:value-of select="replace($line13, '#optional_closing_bracket#', ')')" />
 				</xsl:when>
 				<xsl:otherwise>
-					<xsl:value-of select="replace($line14, '#optional_closing_bracket#', '')" />
+					<xsl:value-of select="replace($line13, '#optional_closing_bracket#', '')" />
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
 		
 
 		<xsl:variable name="result"
-			select="xbig:cpp-replace(normalize-space($line15),'#nl#', $config/config/cpp/format/indent)" />
+			select="xbig:cpp-replace(normalize-space($line14),'#nl#', $config/config/cpp/format/indent)" />
 
 		<!-- real writing of code line -->
 		<xsl:value-of select="$result" />

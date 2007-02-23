@@ -3,7 +3,7 @@
 <!--
 	
 	This source file is part of XBiG
-		(XSLT Bindings Generator)
+	(XSLT Bindings Generator)
 	For the latest info, see http://sourceforge.net/projects/xbig
 	
 	Copyright (c) 2006 The XBiG Development Team
@@ -35,16 +35,22 @@
 	xmlns:xd="http://www.pnp-software.com/XSLTdoc"
 	xmlns:xbig="http://xbig.sourceforge.net/XBiG">
 
-	<xsl:import href="metaMethodsEqual.xslt"/>
-	<xsl:import href="metaMethodName.xslt"/>
-	<xsl:import href="createClassFromTemplateTypedef.xslt"/><!-- needed if base class is a template -->
+	<xsl:import href="metaMethodsEqual.xslt" />
+	<xsl:import href="metaMethodName.xslt" />
+	<xsl:import href="createClassFromTemplateTypedef.xslt" /><!-- needed if base class is a template -->
 
 	<xd:doc type="stylesheet">
-		<xd:short>this file contains some helper templates and functions to deal with inheritance</xd:short>
+		<xd:short>
+			this file contains some helper templates and functions to
+			deal with inheritance
+		</xd:short>
 	</xd:doc>
 
 	<xd:doc type="template">
-		<xd:short>find the inherited methods that must be implemented by java classes</xd:short>
+		<xd:short>
+			find the inherited methods that must be implemented by java
+			classes
+		</xd:short>
 	</xd:doc>
 	<!-- this template hadles const overloading -->
 	<xsl:template name="findRelevantInheritedMethods">
@@ -53,53 +59,36 @@
 
 		<!-- get the method list -->
 		<xsl:variable name="methodList">
-			<xsl:call-template name="findRelevantInheritedMethodsWithoutTakingCareAboutConstOverloading">
+			<xsl:call-template
+				name="findRelevantInheritedMethodsWithoutTakingCareAboutConstOverloading">
 				<xsl:with-param name="config" select="$config" />
 				<xsl:with-param name="class" select="$class" />
 			</xsl:call-template>
-		</xsl:variable>		
+		</xsl:variable>
 
 		<xsl:for-each select="$methodList/function">
-			<xsl:variable name="currentMethod" select="."/>
- 			<xsl:variable name="currentMethodPos" select="position()"/>
+			<xsl:variable name="currentMethod" select="." />
+			<xsl:variable name="currentMethodPos" select="position()" />
 			<xsl:choose>
-
-				<!-- if the name is not unique now, const overloading is used -->
-				<!-- 
-				<xsl:when test="count(../function[name = current()/name]) > 1">
-					<xsl:choose>
-					 -->
-						<!-- change the name of the const version -->
-						<!-- 
-						<xsl:when test="./@const = 'true'">
-							<xsl:call-template name="createElementForConstOverloadedMethod">
-								<xsl:with-param name="config" select="$config" />
-								<xsl:with-param name="method" select="." />
-							</xsl:call-template>
-						</xsl:when>
- -->
-						<!-- copy the not const version -->
-						<!-- 
-						<xsl:otherwise>
-							<xsl:copy-of select="." />
-						</xsl:otherwise>
-					</xsl:choose>
-				</xsl:when>
-				 -->
-
-				<xsl:when test="count(../function[name = $currentMethod/name]) > 1">
+				<xsl:when
+					test="count(../function[name = $currentMethod/name]) > 1">
 					<!-- check for each method with the same name if it is equal -->
 					<xsl:variable name="equalSiblings">
-						<xsl:for-each select="../function[name = $currentMethod/name]">
+						<xsl:for-each
+							select="../function[name = $currentMethod/name]">
 							<!-- here I use the trick with count() and the union operator (|) to test a node's identity -->
-							<xsl:if test="count(. | $currentMethod) != 1">
+							<xsl:if
+								test="count(. | $currentMethod) != 1">
 								<xsl:element name="check">
 									<xsl:choose>
-										<xsl:when test="xbig:areTheseMethodsEqualExceptConst($currentMethod, .,false())">
-											<xsl:value-of select="true()" />
+										<xsl:when
+											test="xbig:areTheseMethodsEqualExceptConst($currentMethod, .,false())">
+											<xsl:value-of
+												select="true()" />
 										</xsl:when>
 										<xsl:otherwise>
-											<xsl:value-of select="false()" />
+											<xsl:value-of
+												select="false()" />
 										</xsl:otherwise>
 									</xsl:choose>
 								</xsl:element>
@@ -113,9 +102,12 @@
 							<xsl:choose>
 								<!-- change the name of the const version -->
 								<xsl:when test="./@const = 'true'">
-									<xsl:call-template name="createElementForConstOverloadedMethod">
-										<xsl:with-param name="config" select="$config" />
-										<xsl:with-param name="method" select="." />
+									<xsl:call-template
+										name="createElementForConstOverloadedMethod">
+										<xsl:with-param name="config"
+											select="$config" />
+										<xsl:with-param name="method"
+											select="." />
 									</xsl:call-template>
 								</xsl:when>
 
@@ -149,9 +141,13 @@
 
 
 	<xd:doc type="template">
-		<xd:short>find the inherited methods and filter c-tors and overloaded methods</xd:short>
+		<xd:short>
+			find the inherited methods and filter c-tors and overloaded
+			methods
+		</xd:short>
 	</xd:doc>
-	<xsl:template name="findRelevantInheritedMethodsWithoutTakingCareAboutConstOverloading">
+	<xsl:template
+		name="findRelevantInheritedMethodsWithoutTakingCareAboutConstOverloading">
 		<xsl:param name="config" />
 		<xsl:param name="class" />
 
@@ -162,14 +158,17 @@
 				<xsl:with-param name="class" select="$class" />
 			</xsl:call-template>
 		</xsl:variable>
-		
+
 		<xsl:variable name="allInheritedMethodsWithoutConstParams">
 			<xsl:for-each select="$allInheritedMethods/function">
 				<xsl:choose>
 					<!-- change if function has const parameters passed by value -->
-					<xsl:when test="count(current()/parameters/parameter[./type/@const = 'true']) > 0">
-						<xsl:call-template name="copyFunctionAndRemoveConstFromByValuePassedParams">
-							<xsl:with-param name="functionNode" select="current()"/>
+					<xsl:when
+						test="count(current()/parameters/parameter[./type/@const = 'true']) > 0">
+						<xsl:call-template
+							name="copyFunctionAndRemoveConstFromByValuePassedParams">
+							<xsl:with-param name="functionNode"
+								select="current()" />
 						</xsl:call-template>
 					</xsl:when>
 					<!-- function has no const parameters passed by value -->
@@ -179,63 +178,73 @@
 				</xsl:choose>
 			</xsl:for-each>
 		</xsl:variable>
- 
+
 		<!-- filter -->
- 		<xsl:for-each select="$allInheritedMethodsWithoutConstParams/function">
- 			<xsl:variable name="currentMethod" select="."/>
- 			<xsl:variable name="currentMethodPos" select="position()"/>
+		<xsl:for-each
+			select="$allInheritedMethodsWithoutConstParams/function">
+			<xsl:variable name="currentMethod" select="." />
+			<xsl:variable name="currentMethodPos" select="position()" />
 			<xsl:choose>
 
 				<!-- filter base class c-tors -->
 				<xsl:when test="not(type) and name != $class/@name">
-				</xsl:when>							
+				</xsl:when>
 
 				<!-- filter c-tors of current class that have unresolved types as parameters -->
-				<xsl:when test="./name = $class/@name and ./parameters">
+				<xsl:when
+					test="./name = $class/@name and ./parameters">
 
 					<xsl:variable name="unresolvedTypes">
 						<xsl:for-each select="./parameters/parameter">
 							<xsl:variable name="typeName">
 								<xsl:choose>
-									<xsl:when test="starts-with(./type, '::')">
-										<xsl:value-of select="substring-after(./type, '::')"/>
+									<xsl:when
+										test="starts-with(./type, '::')">
+										<xsl:value-of
+											select="substring-after(./type, '::')" />
 									</xsl:when>
 									<xsl:otherwise>
-										<xsl:value-of select="./type"/>
+										<xsl:value-of select="./type" />
 									</xsl:otherwise>
 								</xsl:choose>
-							</xsl:variable> 
+							</xsl:variable>
 
 							<xsl:element name="unresolved">
 
 								<!-- for performance reasons -->
 								<!-- 
+									<xsl:variable name="fullTypeName"
+									select="xbig:getFullTypeName($typeName, $class, $root)"/>
+								-->
 								<xsl:variable name="fullTypeName"
-										select="xbig:getFullTypeName($typeName, $class, $root)"/>
-								 -->
-								<xsl:variable name="fullTypeName"
-										select="xbig:resolveTypedef($typeName, $class, $root)"/>
+									select="xbig:resolveTypedef($typeName, $class, $root)" />
 
 								<xsl:choose>
 									<!-- primitive types -->
-									<xsl:when test="$config/config/java/types/type[@meta = $typeName]">
+									<xsl:when
+										test="$config/config/java/types/type[@meta = $typeName]">
 										<xsl:value-of select="false()" />
 									</xsl:when>
-									<xsl:when test="xbig:isEnum($fullTypeName, $class, $root)">
+									<xsl:when
+										test="xbig:isEnum($fullTypeName, $class, $root)">
 										<xsl:value-of select="false()" />
 									</xsl:when>
-									<xsl:when test="xbig:isTypedef($fullTypeName, $class, $root)">
+									<xsl:when
+										test="xbig:isTypedef($fullTypeName, $class, $root)">
 										<xsl:value-of select="false()" />
 									</xsl:when>
-									<xsl:when test="xbig:isClassOrStruct($fullTypeName, $class, $root)">
+									<xsl:when
+										test="xbig:isClassOrStruct($fullTypeName, $class, $root)">
 										<xsl:value-of select="false()" />
 									</xsl:when>
-									<xsl:when test="xbig:isTemplateTypedef($fullTypeName, $class, $root)">
+									<xsl:when
+										test="xbig:isTemplateTypedef($fullTypeName, $class, $root)">
 										<xsl:value-of select="false()" />
 									</xsl:when>
 
 									<!-- template parameters -->
-									<xsl:when test="$class/templateparameters/templateparameter
+									<xsl:when
+										test="$class/templateparameters/templateparameter
 																		[@templateDeclaration = $typeName]">
 										<xsl:value-of select="false()" />
 									</xsl:when>
@@ -261,22 +270,28 @@
 
 				<!-- filter operators -->
 				<xsl:when test="starts-with(name, 'operator')">
-				</xsl:when>							
+				</xsl:when>
 
 				<!-- filter duplicate methods -->
-				<xsl:when test="count(../function[name = $currentMethod/name]) > 1">
+				<xsl:when
+					test="count(../function[name = $currentMethod/name]) > 1">
 					<!-- check for each method with the same name if it is equal -->
 					<xsl:variable name="equalSiblings">
-						<xsl:for-each select="../function[name = $currentMethod/name]">
+						<xsl:for-each
+							select="../function[name = $currentMethod/name]">
 							<!-- here I use the trick with count() and the union operator (|) to test a node's identity -->
-							<xsl:if test="count(. | $currentMethod) != 1">
+							<xsl:if
+								test="count(. | $currentMethod) != 1">
 								<xsl:element name="check">
 									<xsl:choose>
-										<xsl:when test="xbig:areTheseMethodsEqual($currentMethod, .,false())">
-											<xsl:value-of select="true()" />
+										<xsl:when
+											test="xbig:areTheseMethodsEqual($currentMethod, .,false())">
+											<xsl:value-of
+												select="true()" />
 										</xsl:when>
 										<xsl:otherwise>
-											<xsl:value-of select="false()" />
+											<xsl:value-of
+												select="false()" />
 										</xsl:otherwise>
 									</xsl:choose>
 								</xsl:element>
@@ -290,7 +305,8 @@
 							<!-- OK, we know this method is duplicate, but we have to generate it once -->
 							<!-- again the id trick -->
 							<!-- we must take the first one, to use the correct class name in JNI for multiple inheritance -->
-							<xsl:if test="count(../function[name = $currentMethod/name][@const = $currentMethod/@const][position() = 1] | $currentMethod) = 1">
+							<xsl:if
+								test="count(../function[name = $currentMethod/name][@const = $currentMethod/@const][position() = 1] | $currentMethod) = 1">
 								<xsl:copy-of select="." />
 							</xsl:if>
 						</xsl:when>
@@ -306,46 +322,49 @@
 				</xsl:otherwise>
 
 			</xsl:choose>
- 		</xsl:for-each>
- 
- 		<!-- filter duplicate attributes -->
-  		<xsl:for-each select="$allInheritedMethods/attribute">
+		</xsl:for-each>
+
+		<!-- filter duplicate attributes -->
+		<xsl:for-each select="$allInheritedMethods/attribute">
 			<xsl:choose>
 
-				<xsl:when test="following-sibling = .">
-				</xsl:when>
+				<xsl:when test="following-sibling = ."></xsl:when>
 
 				<xsl:otherwise>
 					<xsl:copy-of select="." />
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:for-each>
-  
+
 	</xsl:template>
 
 
 	<xd:doc type="template">
-		<xd:short>find all inherited methods, including base class c-tors and overridden methods</xd:short>
+		<xd:short>
+			find all inherited methods, including base class c-tors and
+			overridden methods
+		</xd:short>
 	</xd:doc>
 	<xsl:template name="findAllInheritedMethods">
-		<xsl:param name="config"/>
-		<xsl:param name="class"/>
-		<xsl:param name="baseClassTypedef"/>
+		<xsl:param name="config" />
+		<xsl:param name="class" />
+		<xsl:param name="baseClassTypedef" />
 
 		<!-- if we derive a template -->
 		<xsl:variable name="resolvedTypeParas">
 			<xsl:choose>
 				<!-- build list of type parameters -->
 				<xsl:when test="$baseClassTypedef">
-					<xsl:call-template name="buildListOfTypeParameters">
-						<xsl:with-param name="template" select="$class"/>
-						<xsl:with-param name="typedef" select="$baseClassTypedef"/>
+					<xsl:call-template
+						name="buildListOfTypeParameters">
+						<xsl:with-param name="template" select="$class" />
+						<xsl:with-param name="typedef"
+							select="$baseClassTypedef" />
 					</xsl:call-template>
 				</xsl:when>
 
 				<!-- do nothing -->
-				<xsl:otherwise>
-				</xsl:otherwise>
+				<xsl:otherwise></xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
 
@@ -355,16 +374,18 @@
 				<!-- change template types -->
 				<xsl:when test="$baseClassTypedef">
 					<xsl:call-template name="createFunctionElement">
-						<xsl:with-param name="function" select="."/>
-						<xsl:with-param name="typedef" select="$baseClassTypedef"/>
-						<xsl:with-param name="template" select="$class"/>
-						<xsl:with-param name="resolvedTypeParas" select="$resolvedTypeParas"/>
+						<xsl:with-param name="function" select="." />
+						<xsl:with-param name="typedef"
+							select="$baseClassTypedef" />
+						<xsl:with-param name="template" select="$class" />
+						<xsl:with-param name="resolvedTypeParas"
+							select="$resolvedTypeParas" />
 					</xsl:call-template>
 				</xsl:when>
 
 				<!-- no template, nothing to change -->
 				<xsl:otherwise>
-					<xsl:copy-of select="."/>
+					<xsl:copy-of select="." />
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:for-each>
@@ -375,17 +396,21 @@
 				<xsl:choose>
 					<!-- change template types -->
 					<xsl:when test="$baseClassTypedef">
-						<xsl:call-template name="createVariableElement">
-							<xsl:with-param name="variable" select="."/>
-							<xsl:with-param name="typedef" select="$baseClassTypedef"/>
-							<xsl:with-param name="template" select="$class"/>
-							<xsl:with-param name="resolvedTypeParas" select="$resolvedTypeParas"/>
+						<xsl:call-template
+							name="createVariableElement">
+							<xsl:with-param name="variable" select="." />
+							<xsl:with-param name="typedef"
+								select="$baseClassTypedef" />
+							<xsl:with-param name="template"
+								select="$class" />
+							<xsl:with-param name="resolvedTypeParas"
+								select="$resolvedTypeParas" />
 						</xsl:call-template>
 					</xsl:when>
 
 					<!-- no template, nothing to change -->
 					<xsl:otherwise>
-						<xsl:copy-of select="."/>
+						<xsl:copy-of select="." />
 					</xsl:otherwise>
 				</xsl:choose>
 			</xsl:element>
@@ -398,11 +423,12 @@
 				<!-- find out if base class is a template -->
 				<xsl:variable name="baseClassIsTemplate">
 					<xsl:choose>
-						<xsl:when test="contains(@fullBaseClassName, '&lt;')">
-							<xsl:value-of select="true()"/>
+						<xsl:when
+							test="contains(@fullBaseClassName, '&lt;')">
+							<xsl:value-of select="true()" />
 						</xsl:when>
 						<xsl:otherwise>
-							<xsl:value-of select="false()"/>
+							<xsl:value-of select="false()" />
 						</xsl:otherwise>
 					</xsl:choose>
 				</xsl:variable>
@@ -410,12 +436,14 @@
 				<!-- get full name of base class -->
 				<xsl:variable name="fullNameOfCurrentBaseClass">
 					<xsl:choose>
-						<xsl:when test="$baseClassIsTemplate = true()">
-							<xsl:value-of select="normalize-space(
-											substring-before(@fullBaseClassName, '&lt;'))"/>
+						<xsl:when
+							test="$baseClassIsTemplate = true()">
+							<xsl:value-of
+								select="normalize-space(
+											substring-before(@fullBaseClassName, '&lt;'))" />
 						</xsl:when>
 						<xsl:otherwise>
-							<xsl:value-of select="@fullBaseClassName"/>
+							<xsl:value-of select="@fullBaseClassName" />
 						</xsl:otherwise>
 					</xsl:choose>
 				</xsl:variable>
@@ -423,46 +451,58 @@
 				<!-- generate typedef to resolve type parameters used in inheritance (ogre4j, t13) -->
 				<xsl:variable name="generatedTypedef">
 					<xsl:choose>
-						<xsl:when test="$baseClassIsTemplate = true()">
+						<xsl:when
+							test="$baseClassIsTemplate = true()">
 							<xsl:element name="typedef">
-								<xsl:attribute name="name" select="$class/@name"/>
-								<xsl:attribute name="fullName" select="$class/@fullName"/>
-								<xsl:attribute name="protection" select="'public'"/>
-								<xsl:attribute name="basetype" select="@fullBaseClassName"/>
+								<xsl:attribute name="name"
+									select="$class/@name" />
+								<xsl:attribute name="fullName"
+									select="$class/@fullName" />
+								<xsl:attribute name="protection"
+									select="'public'" />
+								<xsl:attribute name="basetype"
+									select="@fullBaseClassName" />
 							</xsl:element>
 						</xsl:when>
 
 						<!-- do nothing -->
-						<xsl:otherwise>
-						</xsl:otherwise>
+						<xsl:otherwise></xsl:otherwise>
 					</xsl:choose>
 				</xsl:variable>
 
 				<!-- recurse -->
 				<xsl:call-template name="findAllInheritedMethods">
-					<xsl:with-param name="config" select="$config"/>
-					<xsl:with-param name="class" select="root()//class
-										[@fullName=$fullNameOfCurrentBaseClass]"/>
-					<xsl:with-param name="baseClassTypedef" select="$generatedTypedef/*"/>
+					<xsl:with-param name="config" select="$config" />
+					<xsl:with-param name="class"
+						select="root()//class
+										[@fullName=$fullNameOfCurrentBaseClass]" />
+					<xsl:with-param name="baseClassTypedef"
+						select="$generatedTypedef/*" />
 				</xsl:call-template>
 
 				<xsl:call-template name="findAllInheritedMethods">
-					<xsl:with-param name="config" select="$config"/>
-					<xsl:with-param name="class" select="root()//struct
-									[@fullName=$fullNameOfCurrentBaseClass]"/>
-					<xsl:with-param name="baseClassTypedef" select="$generatedTypedef/*"/>
+					<xsl:with-param name="config" select="$config" />
+					<xsl:with-param name="class"
+						select="root()//struct
+									[@fullName=$fullNameOfCurrentBaseClass]" />
+					<xsl:with-param name="baseClassTypedef"
+						select="$generatedTypedef/*" />
 				</xsl:call-template>
 
-	 		</xsl:for-each>
-	 	</xsl:if>
- 
+			</xsl:for-each>
+		</xsl:if>
+
 	</xsl:template>
 
 
 	<xd:doc type="function">
-		<xd:short>returns true if a class contains an inherited and unimplemented abstract method</xd:short>
+		<xd:short>
+			returns true if a class contains an inherited and
+			unimplemented abstract method
+		</xd:short>
 	</xd:doc>
-	<xsl:function name="xbig:areThereUnimplementedAbstractMethods" as="xs:boolean">
+	<xsl:function name="xbig:areThereUnimplementedAbstractMethods"
+		as="xs:boolean">
 		<xsl:param name="class" />
 
 		<!-- find all inherited methods -->
@@ -481,23 +521,32 @@
 
 						<!-- check for implementations of abstract methods -->
 						<xsl:when test="@virt='pure-virtual'">
-							<xsl:variable name="currentMethod" select="." />
+							<xsl:variable name="currentMethod"
+								select="." />
 							<xsl:choose>
-	
+
 								<!-- check if there are methods with the same name -->
-								<xsl:when test="count(../function[name = $currentMethod/name]) != 1">
-									<xsl:variable name="siblingChecks">
+								<xsl:when
+									test="count(../function[name = $currentMethod/name]) != 1">
+									<xsl:variable
+										name="siblingChecks">
 
 										<!-- check for other methods to be equal -->
-										<xsl:for-each select="../function[name = $currentMethod/name]">
-											<xsl:if test="$currentMethod != .">
-												<xsl:element name="check">
+										<xsl:for-each
+											select="../function[name = $currentMethod/name]">
+											<xsl:if
+												test="$currentMethod != .">
+												<xsl:element
+													name="check">
 													<xsl:choose>
-														<xsl:when test="xbig:areTheseMethodsEqual($currentMethod, .,false()) and ./@virt != 'pure-virtual'">
-															<xsl:value-of select="false()" />
+														<xsl:when
+															test="xbig:areTheseMethodsEqual($currentMethod, .,false()) and ./@virt != 'pure-virtual'">
+															<xsl:value-of
+																select="false()" />
 														</xsl:when>
 														<xsl:otherwise>
-															<xsl:value-of select="true()" />
+															<xsl:value-of
+																select="true()" />
 														</xsl:otherwise>
 													</xsl:choose>
 												</xsl:element>
@@ -507,22 +556,25 @@
 
 									<!-- calc one result of all sibling checks -->
 									<xsl:choose>
-										<xsl:when test="$siblingChecks/* = true()">
-											<xsl:value-of select="true()"/>
+										<xsl:when
+											test="$siblingChecks/* = true()">
+											<xsl:value-of
+												select="true()" />
 										</xsl:when>
 										<xsl:otherwise>
-											<xsl:value-of select="false()"/>
+											<xsl:value-of
+												select="false()" />
 										</xsl:otherwise>
 									</xsl:choose>
 								</xsl:when>
-	
+
 								<!-- if there is no other method with the same name as the abstract one -->
 								<xsl:otherwise>
 									<xsl:value-of select="true()" />
 								</xsl:otherwise>
 							</xsl:choose>
 						</xsl:when>
-	
+
 						<!-- if method is not abstract -->
 						<xsl:otherwise>
 							<xsl:value-of select="false()" />
@@ -535,37 +587,42 @@
 		<!-- return true if there is at least one abstract method -->
 		<xsl:choose>
 			<xsl:when test="$allCheckResults/* = true()">
-				<xsl:value-of select="true()"/>
+				<xsl:value-of select="true()" />
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:value-of select="false()"/>
+				<xsl:value-of select="false()" />
 			</xsl:otherwise>
 		</xsl:choose>
 
 	</xsl:function>
-	
-	<xsl:template name="copyFunctionAndRemoveConstFromByValuePassedParams">
-		<xsl:param name="functionNode"/>
+
+	<xsl:template
+		name="copyFunctionAndRemoveConstFromByValuePassedParams">
+		<xsl:param name="functionNode" />
 		<xsl:element name="function">
 			<!-- copy all attributes -->
 			<xsl:for-each select="$functionNode/@*">
-					<xsl:copy-of select="." />
+				<xsl:copy-of select="." />
 			</xsl:for-each>
-			
+
 			<!-- copy all attributes except parameters -->
 			<xsl:for-each select="$functionNode/*">
 				<xsl:if test="name() != 'parameters'">
 					<xsl:copy-of select="." />
 				</xsl:if>
 			</xsl:for-each>
-			
+
 			<xsl:element name="parameters">
-				<xsl:for-each select="$functionNode/parameters/parameter">
+				<xsl:for-each
+					select="$functionNode/parameters/parameter">
 					<xsl:choose>
 						<!-- change type of param -->
-						<xsl:when test="./type/@const = 'true' and ./@passedBy= 'value'">
-							<xsl:call-template name="copyParamAndSetConstFalse">
-								<xsl:with-param name="paramNode" select="."/>
+						<xsl:when
+							test="./type/@const = 'true' and ./@passedBy= 'value'">
+							<xsl:call-template
+								name="copyParamAndSetConstFalse">
+								<xsl:with-param name="paramNode"
+									select="." />
 							</xsl:call-template>
 						</xsl:when>
 						<!-- just copy param -->
@@ -583,9 +640,9 @@
 		<xsl:element name="parameter">
 			<!-- copy all attributes -->
 			<xsl:for-each select="$paramNode/@*">
-					<xsl:copy-of select="." />
+				<xsl:copy-of select="." />
 			</xsl:for-each>
-			
+
 			<!-- copy all children except type -->
 			<xsl:for-each select="$paramNode/*">
 				<xsl:if test="name() != 'type'">
@@ -594,9 +651,30 @@
 			</xsl:for-each>
 
 			<xsl:element name="type">
-				<xsl:attribute name="const" select="'true'"/>
-				<xsl:value-of select="$paramNode/type"/>
+				<xsl:attribute name="const" select="'true'" />
+				<xsl:value-of select="$paramNode/type" />
 			</xsl:element>
 		</xsl:element>
 	</xsl:template>
+
+	<xd:doc type="function">
+		<xd:short>
+			Returns true if the given function is a ctor. False otherwise.
+		</xd:short>
+		<xd:param name="class">The parent class node.</xd:param>
+		<xd:param name="function">The function node to check.</xd:param>
+	</xd:doc>
+	<xsl:function name="xbig:isCtor" as="xs:boolean">
+		<xsl:param name="class" />
+		<xsl:param name="function" />
+		<xsl:choose>
+			<xsl:when test="$function/name = $class/@name">
+				<!-- this is a ctor: skip it -->
+				<xsl:value-of select="true()" />
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="false()" />
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:function>
 </xsl:stylesheet>

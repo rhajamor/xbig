@@ -53,6 +53,7 @@
 		<xsl:param name="lib_dir" />
 		<xsl:param name="config" />
 
+		<xsl:message>Generating C code for class <xsl:value-of select="./@fullName"/></xsl:message>
 		<!-- we cannot create JNI functions for templates -->
 		<xsl:if test="not(./@template)">
 
@@ -90,8 +91,9 @@
 				select="concat($lib_dir, '/', $main_filename,'.cpp')" />
 
 			<!-- check if this class is abstract -->
+<!--
 			<xsl:if test="not(xbig:areThereUnimplementedAbstractMethods(.))">
-
+ -->
 				<!-- generate description for helper methods -->
 				<xsl:variable name="helper_methods">
 					<xsl:for-each select=".">
@@ -182,8 +184,9 @@
 				</xsl:for-each>
 
 			<!-- end of abstract class check -->
+<!-- 
 			</xsl:if>
-
+ -->
 			<!-- inner enums -->
 			<xsl:for-each select="enumeration">
 				<xsl:call-template name="cppEnum">

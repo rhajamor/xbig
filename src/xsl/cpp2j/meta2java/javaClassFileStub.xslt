@@ -50,7 +50,8 @@
 		<xsl:param name="outdir" />
 		<xsl:param name="config" />
 		<xsl:param name="buildFile" />
-
+		
+		<xsl:message>Generating Java code for class <xsl:value-of select="./@fullName"/></xsl:message>
 		<!-- test if we handle a class or an enum -->
 		<xsl:choose>
 			<xsl:when test="./name() = 'enumeration'">
@@ -116,8 +117,11 @@
 				</xsl:result-document>
 
 				<!-- generate Class if necessary -->
+<!--
+				generate even for abstract classes
 				<xsl:if test="not(xbig:areThereUnimplementedAbstractMethods(.)) and not(./@template)">
-
+ -->				
+				<xsl:if test="not(./@template)">
 					<!-- compose filename of current class -->
 					<xsl:variable name="filename"
 						select="concat($outdir, '/', $java_ns_dir, '/', @name, '.java')" />

@@ -2,7 +2,10 @@
 <XSLTdocConfig>
   <Title>XBiG</Title>
   <Introduction>
-    XSLT Bindings Generator doc.
+    <p>Documentation of the XBiG XSL sources.</p>
+    <p>The XSLT Bindings Generator - XBiG - is a project 
+    that uses XSL transformations to generate foreign function 
+    interfaces (bindings) for libraries.</p>
   </Introduction>
   
   <!-- 

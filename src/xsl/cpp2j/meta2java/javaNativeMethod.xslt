@@ -112,7 +112,8 @@
 		<xsl:variable name="resolvedType">
 			<xsl:choose>
 				<xsl:when test="not($method/type)">
-					<xsl:value-of select="''"/>
+					<!-- <xsl:value-of select="''"/> -->
+					<xsl:sequence select="''"/>
 				</xsl:when>
 				<xsl:otherwise>
 					<xsl:value-of select="xbig:resolveTypedef($method/type, $class, $root)"/>

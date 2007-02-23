@@ -27,7 +27,11 @@ public class BasicTests {
 		Assert.assertEquals(i, (int)f);
 
 		b.b();
-
+		
+        IA ab = b.getA();
+        i = ab.a(f);
+        Assert.assertEquals((int)f, i);
+        
 		((B)b).delete();
 	}
 }

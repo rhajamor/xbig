@@ -24,4 +24,5 @@ public:
 	B();
 	int a(float b);
 	float c(int d);
+	A* getA();
 };
