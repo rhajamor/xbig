@@ -41,7 +41,8 @@
 	<xsl:import href="../../exslt/str.split.template.xsl" />
 
 	<xd:doc type="stylesheet">
-		<xd:short></xd:short>
+		<xd:short>Takes a source template from config and replaces the fields.
+		With helper functions.</xd:short>
 	</xd:doc>
 
 	<!-- ************************************************************ -->

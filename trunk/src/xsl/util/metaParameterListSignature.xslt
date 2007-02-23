@@ -38,7 +38,7 @@
 	<xsl:import href="metaParameterSignature.xslt" />
 
 	<xd:doc type="stylesheet">
-		<xd:short></xd:short>
+		<xd:short>Iterats over all parameters of a method.</xd:short>
 	</xd:doc>
 
 	<xsl:template name="metaParameterListSignature">

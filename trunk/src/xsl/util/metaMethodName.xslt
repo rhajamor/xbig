@@ -38,7 +38,7 @@
 	<xsl:import href="metaParameterListSignature.xslt" />
 
 	<xd:doc type="stylesheet">
-		<xd:short></xd:short>
+		<xd:short>Changing of method names for meta.</xd:short>
 	</xd:doc>
 
 	<!-- method name prefix -->

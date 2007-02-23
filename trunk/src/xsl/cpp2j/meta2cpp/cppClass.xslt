@@ -44,7 +44,7 @@
 	<xsl:import href="../../util/createClassFromTemplateTypedef.xslt" />
 
 	<xd:doc type="stylesheet">
-		<xd:short>Generation of types inside other types</xd:short>
+		<xd:short>Generation of jni functions for java classes.</xd:short>
 	</xd:doc>
 
 	<xsl:template name="cppClass">

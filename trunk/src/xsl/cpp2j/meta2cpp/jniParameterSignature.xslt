@@ -38,7 +38,7 @@
 
 
 	<xd:doc type="stylesheet">
-		<xd:short></xd:short>
+		<xd:short>finds signature for single parameters.</xd:short>
 	</xd:doc>
 
 	<xsl:template name="jniParameterSignature">

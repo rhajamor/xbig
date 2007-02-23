@@ -36,7 +36,7 @@
 
 
 	<xd:doc type="stylesheet">
-		<xd:short>Generation of types inside a namespace</xd:short>
+		<xd:short>Takes file header from config and puts it into current result document.</xd:short>
 	</xd:doc>
 
 	<xsl:template name="cppFileHeader">
