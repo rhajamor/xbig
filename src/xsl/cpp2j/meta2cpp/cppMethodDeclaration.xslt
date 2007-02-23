@@ -40,7 +40,7 @@
 	<xsl:import href="jniType.xslt" />
 
 	<xd:doc type="stylesheet">
-		<xd:short>Generation of JNI function headers, with javah like comment</xd:short>
+		<xd:short>Generation of JNI function headers, with javah like comment.</xd:short>
 	</xd:doc>
 
 	<xsl:template name="cppMethodDeclaration">
@@ -71,7 +71,7 @@
 
 
 
-	<xd:doc type="stylesheet">
+	<xd:doc type="template">
 		<xd:short>
 			Generate method comments prior method declarations
 		</xd:short>
@@ -161,9 +161,9 @@
 	</xsl:template>
 
 
-	<xd:doc type="stylesheet">
+	<xd:doc type="template">
 		<xd:short>
-			Generate method declarations
+			Generate method declarations.
 		</xd:short>
 	</xd:doc>
 	<xsl:template name="cppRealMethodDeclaration">

@@ -40,7 +40,7 @@
 	<xsl:import href="../meta2java/javaUtil.xslt" />
 
 	<xd:doc type="stylesheet">
-		<xd:short>Generation of types inside a namespace</xd:short>
+		<xd:short>Generation of jni header files.</xd:short>
 	</xd:doc>
 
 	<xsl:template name="cppClassFileHeader">

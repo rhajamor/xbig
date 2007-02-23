@@ -38,7 +38,7 @@
 	<xsl:import href="../../util/path.xslt"/>
 
 	<xd:doc type="stylesheet">
-		<xd:short>Generation of files for enum helper classes</xd:short>
+		<xd:short>Generation of files for enum helper classes.</xd:short>
 	</xd:doc>
 
 	<xsl:template name="cppEnum">

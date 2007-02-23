@@ -39,7 +39,7 @@
 	<xsl:import href="cppEnum.xslt" />
 
 	<xd:doc type="stylesheet">
-		<xd:short>Generation of types outside a namespace</xd:short>
+		<xd:short>Deprecated.</xd:short>
 	</xd:doc>
 
 	<xsl:template name="cppGlobals">

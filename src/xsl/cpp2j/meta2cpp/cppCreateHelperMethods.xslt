@@ -37,7 +37,7 @@
 	<xsl:import href="../../util/createFunctionsForPublicAttribute.xslt" />
 
 	<xd:doc type="stylesheet">
-		<xd:short>Creation of a XML structure for additional methods, like d-tors</xd:short>
+		<xd:short>Creation of meta elements for additional methods, like d-tors</xd:short>
 	</xd:doc>
 
 	<xsl:template name="cppCreateHelperMethods">
