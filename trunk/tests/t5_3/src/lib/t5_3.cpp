@@ -26,3 +26,8 @@ float B::c(int d) {
 	std::cout << "d: " << d << std::endl;
 	return (float)d;
 }
+
+A* B::getA(){ 
+	std::cout << "t5_3: B::getA()" << std::endl;
+	return this; 
+}

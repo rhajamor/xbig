@@ -3,7 +3,7 @@
 <!--
 	
 	This source file is part of XBiG
-		(XSLT Bindings Generator)
+	(XSLT Bindings Generator)
 	For the latest info, see http://sourceforge.net/projects/xbig
 	
 	Copyright (c) 2006 The XBiG Development Team
@@ -32,11 +32,13 @@
 	xmlns:xs="http://www.w3.org/2001/XMLSchema"
 	xmlns:fn="http://www.w3.org/2005/xpath-functions"
 	xmlns:xdt="http://www.w3.org/2005/xpath-datatypes"
-	xmlns:xd="http://www.pnp-software.com/XSLTdoc">
+	xmlns:xd="http://www.pnp-software.com/XSLTdoc"
+	xmlns:xbig="http://xbig.sourceforge.net/XBiG">
 
 	<xsl:import href="cppFileHeader.xslt" />
 	<xsl:import href="cppMethodImpl.xslt" />
 	<xsl:import href="../meta2java/javaUtil.xslt" />
+	<xsl:import href="../../util/metaInheritedMethods.xslt" />
 
 	<xd:doc type="stylesheet">
 		<xd:short>Generation of jni src files.</xd:short>
@@ -48,6 +50,9 @@
 		<xsl:param name="class_prefix" />
 		<xsl:param name="header_filename" />
 		<xsl:param name="helper_methods" />
+
+		<xsl:variable name="isAbstract"
+			select="xbig:areThereUnimplementedAbstractMethods($class)" />		
 
 		<!-- write file header with copyright information -->
 		<xsl:call-template name="cppFileHeader">
@@ -75,20 +80,22 @@
 		<xsl:for-each select="$class/includes">
 
 			<!-- test if a file is included multiple times -->
-			<xsl:variable name="currentInclude" select="."/>
+			<xsl:variable name="currentInclude" select="." />
 			<xsl:choose>
 				<!-- using id trick like in metaInheritedMethods.xslt -->
-				<xsl:when test="count(../includes[text() = $currentInclude/text()]) > 1">
-					<xsl:if test="count(../includes[$currentInclude][position() = 1] | $currentInclude) = 1">
+				<xsl:when
+					test="count(../includes[text() = $currentInclude/text()]) > 1">
+					<xsl:if
+						test="count(../includes[$currentInclude][position() = 1] | $currentInclude) = 1">
 						<xsl:choose>
 							<xsl:when test="@local = 'no'">
 								<xsl:text>#include &lt;</xsl:text>
-								<xsl:value-of select="text()"/>
+								<xsl:value-of select="text()" />
 								<xsl:text>&gt;&#10;</xsl:text>
 							</xsl:when>
 							<xsl:otherwise>
 								<xsl:text>#include "</xsl:text>
-								<xsl:value-of select="text()"/>
+								<xsl:value-of select="text()" />
 								<xsl:text>"&#10;</xsl:text>
 							</xsl:otherwise>
 						</xsl:choose>
@@ -100,12 +107,12 @@
 					<xsl:choose>
 						<xsl:when test="@local = 'no'">
 							<xsl:text>#include &lt;</xsl:text>
-							<xsl:value-of select="text()"/>
+							<xsl:value-of select="text()" />
 							<xsl:text>&gt;&#10;</xsl:text>
 						</xsl:when>
 						<xsl:otherwise>
 							<xsl:text>#include "</xsl:text>
-							<xsl:value-of select="text()"/>
+							<xsl:value-of select="text()" />
 							<xsl:text>"&#10;</xsl:text>
 						</xsl:otherwise>
 					</xsl:choose>
@@ -123,25 +130,26 @@
 				<xsl:with-param name="class" select="$class" />
 			</xsl:call-template>
 		</xsl:variable>
-		
-		<!-- remove function that are equal to java -->		
+
+		<!-- remove function that are equal to java -->
 		<xsl:variable name="inheritedMethodsForJava">
 			<xsl:call-template name="getValidMethodList">
-				<xsl:with-param name="functionNodeList" select="$inheritedMethods"/>
+				<xsl:with-param name="functionNodeList"
+					select="$inheritedMethods" />
 			</xsl:call-template>
 		</xsl:variable>
 
 		<!-- generate method impl -->
- 		<xsl:for-each select="$inheritedMethodsForJava/function">
-
-			<xsl:call-template name="cppMethodImpl">
-				<xsl:with-param name="config" select="$config" />
-				<xsl:with-param name="class_prefix"
-					select="$class_prefix" />
-				<xsl:with-param name="class" select="$class" />
-				<xsl:with-param name="method" select="." />
-			</xsl:call-template>
-
+		<xsl:for-each select="$inheritedMethodsForJava/function">			
+			<xsl:if test="$isAbstract = false() or xbig:isCtor($class,.) = false()">
+				<xsl:call-template name="cppMethodImpl">
+					<xsl:with-param name="config" select="$config" />
+					<xsl:with-param name="class_prefix"
+						select="$class_prefix" />
+					<xsl:with-param name="class" select="$class" />
+					<xsl:with-param name="method" select="." />
+				</xsl:call-template>
+			</xsl:if>
 		</xsl:for-each>
 
 		<!-- iterate through all helper functions -->
@@ -156,6 +164,6 @@
 			</xsl:call-template>
 
 		</xsl:for-each>
-		
+
 	</xsl:template>
 </xsl:stylesheet>

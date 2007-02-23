@@ -161,7 +161,7 @@
 					#cpp_conversions#
 					#nl#
 					#nl#// call library method
-					#nl##cpp_inherited_method_class#::#cpp_method#(#cpp_params#);
+					#nl##cpp_class#::#cpp_method#(#cpp_params#);
 				</void>
 				<return>
 					#nl#// static method of class #cpp_class# with return value				
@@ -170,7 +170,7 @@
 					#nl#
 					#nl#// call library method
 					#nl##cpp_return_type# #cpp_return_var# = #optional_return_conversion#
-					   #cpp_inherited_method_class#::#cpp_method#(#cpp_params#)#optional_closing_bracket#;
+					   #cpp_class#::#cpp_method#(#cpp_params#)#optional_closing_bracket#;
 					#nl#return #cpp_return#;
 				</return>
 			</static>
@@ -185,7 +185,7 @@
 					reinterpret_cast&lt;#cpp_class#*&gt;(#jni_pointer#);
 					#nl#
 					#nl#// call library method
-					#nl##cpp_this#->#cpp_inherited_method_class#::#cpp_method#(#cpp_params#);
+					#nl##cpp_this#->#cpp_method#(#cpp_params#);
 				</void>
 			    <return>
 			    	#nl#// parameter conversions
@@ -197,7 +197,7 @@
 					#nl#
 					#nl#// call library method
 					#nl##cpp_return_type# #cpp_return_var# = #optional_return_conversion#
-					    #cpp_this#->#cpp_inherited_method_class#::#cpp_method#(#cpp_params#)
+					    #cpp_this#->#cpp_method#(#cpp_params#)
 					    #optional_closing_bracket#;
 					#nl#return #cpp_return#;
 				</return>				
@@ -323,7 +323,7 @@
 				<type meta="bool" jni="jboolean" />
 
 				<type meta="char" pass="pointer" const="true"				
-					jni="jstring" cpp="std::string" >
+					jni="jstring" cpp="char*" >
 					<jni2cpp>
 						org::xbig::jni::to_stdstring(#jni_env#, #jni_var#)
 					</jni2cpp>					

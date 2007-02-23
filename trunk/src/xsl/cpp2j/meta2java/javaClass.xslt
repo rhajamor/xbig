@@ -3,7 +3,7 @@
 <!--
 	
 	This source file is part of XBiG
-		(XSLT Bindings Generator)
+	(XSLT Bindings Generator)
 	For the latest info, see http://sourceforge.net/projects/xbig
 	
 	Copyright (c) 2006 The XBiG Development Team
@@ -24,7 +24,7 @@
 	http://www.gnu.org/copyleft/lesser.txt.
 	
 	Author: Frank Bielig
-			Christoph Nenning
+	Christoph Nenning
 	
 -->
 
@@ -42,16 +42,22 @@
 	<xsl:import href="javaUtil.xslt" />
 	<xsl:import href="../../util/metaInheritedMethods.xslt" />
 	<xsl:import href="../../util/createClassFromTemplateTypedef.xslt" />
-	<xsl:import href="../../util/createFunctionsForPublicAttribute.xslt" />
+	<xsl:import
+		href="../../util/createFunctionsForPublicAttribute.xslt" />
 
 	<xd:doc type="stylesheet">
-		<xd:short>Generate mapping of a single original class or struct</xd:short>
+		<xd:short>
+			Generate mapping of a single original class or struct
+		</xd:short>
 	</xd:doc>
 
 	<xsl:template name="javaClass">
 		<xsl:param name="config" />
 		<xsl:param name="class" />
 		<xsl:param name="buildFile" />
+
+		<xsl:variable name="isAbstract"
+			select="xbig:areThereUnimplementedAbstractMethods($class)" />
 
 		<!-- shortcut for class configuration -->
 		<xsl:variable name="class_config"
@@ -61,13 +67,14 @@
 		<xsl:variable name="class_name" select="$class/@name" />
 
 		<!-- find out if we create an inner class -->
-		<xsl:variable name="isInnerClass" select="../name() eq 'class' or ../name() eq 'struct' or
-												  $class/@isInnerClass = 'true'"/>
+		<xsl:variable name="isInnerClass"
+			select="../name() eq 'class' or ../name() eq 'struct' or
+												  $class/@isInnerClass = 'true'" />
 
 		<!-- write class declaration -->
-		<xsl:text>public </xsl:text>
+		<xsl:text>public&#32;</xsl:text>
 		<xsl:if test="$isInnerClass">
-			<xsl:text>static </xsl:text>
+			<xsl:text>static&#32;</xsl:text>
 		</xsl:if>
 		<xsl:text>class&#32;</xsl:text>
 		<xsl:value-of select="$class_name" />
@@ -81,20 +88,22 @@
 		<!-- implement interface -->
 		<xsl:text>&#32;implements&#32;</xsl:text>
 		<!-- 
-		<xsl:value-of select="$config/config/java/interface/prefix" />
-		<xsl:value-of select="$class_name" />
-		<xsl:value-of select="$config/config/java/interface/suffix" />
-		 -->
-		<xsl:value-of select="xbig:getFullJavaName($class/@fullName, $class, $root, $config)"/>
+			<xsl:value-of select="$config/config/java/interface/prefix" />
+			<xsl:value-of select="$class_name" />
+			<xsl:value-of select="$config/config/java/interface/suffix" />
+		-->
+		<xsl:value-of
+			select="xbig:getFullJavaName($class/@fullName, $class, $root, $config)" />
 
 		<!-- start class content -->
 		<xsl:text>&#32;{&#10;</xsl:text>
 
 		<!-- create static initializer -->
 		<!-- <xsl:if test="not($isInnerClass)"> -->
-			<xsl:text>static { System.loadLibrary("</xsl:text>
-			<xsl:value-of select="$buildFile/project/property[@name='lib.name']/@value"/>
-			<xsl:text>-xbig");}&#10;</xsl:text>
+		<xsl:text>static { System.loadLibrary("</xsl:text>
+		<xsl:value-of
+			select="$buildFile/project/property[@name='lib.name']/@value" />
+		<xsl:text>-xbig");}&#10;</xsl:text>
 		<!-- </xsl:if> -->
 
 		<!-- handle inner classes & structs -->
@@ -125,15 +134,19 @@
 		<xsl:for-each select="typedef">
 			<xsl:if test="contains(./@basetype, '&lt;')">
 				<xsl:variable name="templateBaseName"
-						select="normalize-space(substring-before(./@basetype, '&lt;'))"/>
+					select="normalize-space(substring-before(./@basetype, '&lt;'))" />
 				<xsl:variable name="fullTemplateBaseName"
-						select="xbig:getFullTypeName($templateBaseName, ., $root)"/>
-				<xsl:variable name="templateNode" select="$root//*[@fullName = $fullTemplateBaseName]"/>
+					select="xbig:getFullTypeName($templateBaseName, ., $root)" />
+				<xsl:variable name="templateNode"
+					select="$root//*[@fullName = $fullTemplateBaseName]" />
 				<xsl:variable name="generatedClass">
-					<xsl:call-template name="createClassFromTemplateTypedef">
-						<xsl:with-param name="template" select="$templateNode"/>
-						<xsl:with-param name="typedef" select="."/>
-						<xsl:with-param name="isInnerClass" select="true()"/>
+					<xsl:call-template
+						name="createClassFromTemplateTypedef">
+						<xsl:with-param name="template"
+							select="$templateNode" />
+						<xsl:with-param name="typedef" select="." />
+						<xsl:with-param name="isInnerClass"
+							select="true()" />
 					</xsl:call-template>
 				</xsl:variable>
 
@@ -142,7 +155,8 @@
 					<xsl:call-template name="javaClass">
 						<xsl:with-param name="config" select="$config" />
 						<xsl:with-param name="class" select="." />
-						<xsl:with-param name="buildFile" select="$buildFile" />
+						<xsl:with-param name="buildFile"
+							select="$buildFile" />
 					</xsl:call-template>
 				</xsl:for-each>
 			</xsl:if>
@@ -167,38 +181,15 @@
 		<!-- remove function that are equal to java -->
 		<xsl:variable name="inheritedMethodsForJava">
 			<xsl:call-template name="getValidMethodList">
-				<xsl:with-param name="functionNodeList" select="$inheritedMethods"/>
+				<xsl:with-param name="functionNodeList"
+					select="$inheritedMethods" />
 			</xsl:call-template>
 		</xsl:variable>
 
 		<!-- generate method impl -->
- 		<xsl:for-each select="$inheritedMethodsForJava/function">
-			<xsl:call-template name="javaAccessMethod">
-				<xsl:with-param name="config" select="$config" />
-				<xsl:with-param name="class" select="$class" />
-				<xsl:with-param name="method" select="." />
-			</xsl:call-template>
-
-			<xsl:text>&#10;&#10;</xsl:text>
-
-			<xsl:call-template name="javaNativeMethod">
-				<xsl:with-param name="config" select="$config" />
-				<xsl:with-param name="class" select="$class" />
-				<xsl:with-param name="method" select="." />
-			</xsl:call-template>
-
-			<xsl:text>&#10;&#10;</xsl:text>
-		</xsl:for-each>
- 
- 		<!-- generate public attributes getters and setters -->
- 		<xsl:for-each select="$inheritedMethods/attribute/variable">
-			<xsl:variable name="publicAttributeGettersAndSetters">
-				<xsl:call-template name="createFunctionsForPublicAttribute">
-					<xsl:with-param name="variable" select="."/>
-				</xsl:call-template>
-			</xsl:variable>
-
-			<xsl:for-each select="$publicAttributeGettersAndSetters/function">
+		<xsl:for-each select="$inheritedMethodsForJava/function">
+			<!-- test if abstract class and ctor -->
+			<xsl:if test="$isAbstract = false() or xbig:isCtor($class,.) = false()">
 				<xsl:call-template name="javaAccessMethod">
 					<xsl:with-param name="config" select="$config" />
 					<xsl:with-param name="class" select="$class" />
@@ -206,7 +197,35 @@
 				</xsl:call-template>
 
 				<xsl:text>&#10;&#10;</xsl:text>
-	
+
+				<xsl:call-template name="javaNativeMethod">
+					<xsl:with-param name="config" select="$config" />
+					<xsl:with-param name="class" select="$class" />
+					<xsl:with-param name="method" select="." />
+				</xsl:call-template>
+				<xsl:text>&#10;&#10;</xsl:text>
+			</xsl:if>
+		</xsl:for-each>
+
+		<!-- generate public attributes getters and setters -->
+		<xsl:for-each select="$inheritedMethods/attribute/variable">
+			<xsl:variable name="publicAttributeGettersAndSetters">
+				<xsl:call-template
+					name="createFunctionsForPublicAttribute">
+					<xsl:with-param name="variable" select="." />
+				</xsl:call-template>
+			</xsl:variable>
+
+			<xsl:for-each
+				select="$publicAttributeGettersAndSetters/function">
+				<xsl:call-template name="javaAccessMethod">
+					<xsl:with-param name="config" select="$config" />
+					<xsl:with-param name="class" select="$class" />
+					<xsl:with-param name="method" select="." />
+				</xsl:call-template>
+
+				<xsl:text>&#10;&#10;</xsl:text>
+
 				<xsl:call-template name="javaNativeMethod">
 					<xsl:with-param name="config" select="$config" />
 					<xsl:with-param name="class" select="$class" />

@@ -112,7 +112,8 @@
 					<xsl:value-of select="concat('&lt; ', $insideBracketResolved, ' &gt;')"/>
 				</xsl:when>
 				<xsl:otherwise>
-					<xsl:value-of select="''"/>
+					<!-- <xsl:value-of select="''"/> -->
+					<xsl:sequence select="''"/>
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
