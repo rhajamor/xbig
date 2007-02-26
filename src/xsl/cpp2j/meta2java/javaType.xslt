@@ -446,6 +446,7 @@
 		<xd:short>Recursive helper function for getFullJavaName(). For internal usage.
 				  It takes each part of a full name and adds interface stuff from config
 				  if a part is a class or struct. So we get the right java name for inner classes.
+		</xd:short>
 		<xd:param name="currentJavaFullName">Already generated java name. Will be expanded</xd:param>
 		<xd:param name="currentMetaFullName">
 			Meta name of already processed type. Needed for selection.
@@ -459,7 +460,6 @@
 		<xd:param name="interfaceSuffix">
 			from config file. Increases performance a little when passed.
 		</xd:param>
-		</xd:short>
 	</xd:doc>
 	<xsl:function name="xbig:getFullJavaNameHelper" as="xs:string">
 		<xsl:param name="currentJavaFullName" as="xs:string"/>
@@ -660,10 +660,6 @@
 		<xsl:param name="inputTreeRoot"/>
 		<xsl:param name="config"/>
 
-		<!-- get full meta / c++ name -->
-		<!-- 
-		<xsl:variable name="fullName" select="xbig:getFullTypeName($type, $currentNode, $inputTreeRoot)"/>
-		 -->
 		<xsl:variable name="fullName" select="$type"/>
 
 		<xsl:variable name="nsPrefix" select="$config/config/java/namespaces/packageprefix"/>
