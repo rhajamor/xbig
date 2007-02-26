@@ -25,10 +25,7 @@
 	elementFormDefault="qualified">
 	<xs:annotation>
 		<xs:documentation>
-			This schema defines the meta layer for the generation of
-			foreign function interfaces between programming languages.
-			The format is lanaguage independent and the XML instance is
-			generated from Doxygen XML output.
+			This schema defines the structure and content of the configuration file for XBiG builds.
 		</xs:documentation>
 	</xs:annotation>
 	<xs:element name="attributevalue">
