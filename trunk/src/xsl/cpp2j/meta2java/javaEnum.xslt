@@ -38,6 +38,15 @@
 		<xd:short>Generation of enumerations</xd:short>
 	</xd:doc>
 
+	<xd:doc type="template">
+		<xd:short>Generates a java enumeration with helper class.
+				Works for enums in namespaces and classes/structs.
+		</xd:short>
+		<xd:param name="enum">enum to process.</xd:param>
+		<xd:param name="buildFile">
+			ant build.xml file. Needed for project name in static initializer of helper class.
+		</xd:param>
+	</xd:doc>
 	<xsl:template name="javaEnum">
 		<xsl:param name="enum"/>
 		<xsl:param name="buildFile" />

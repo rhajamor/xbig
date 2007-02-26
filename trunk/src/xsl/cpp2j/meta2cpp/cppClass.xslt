@@ -47,6 +47,14 @@
 		<xd:short>Generation of jni functions for java classes.</xd:short>
 	</xd:doc>
 
+	<xd:doc type="template">
+		<xd:short>Creates path names of cpp files and calls templates to create files.
+		</xd:short>
+		<xd:param name="ns_prefix">Name prefix. Usually java package from config.</xd:param>
+		<xd:param name="include_dir">Directory for include files.</xd:param>
+		<xd:param name="lib_dir">Directory for source files.</xd:param>
+		<xd:param name="config">config file.</xd:param>
+	</xd:doc>
 	<xsl:template name="cppClass">
 		<xsl:param name="ns_prefix" />
 		<xsl:param name="include_dir" />

@@ -41,9 +41,17 @@
 	<xsl:import href="../../util/metaMethodName.xslt" />
 
 	<xd:doc type="stylesheet">
-		<xd:short>Generate mapping of a single original class</xd:short>
+		<xd:short>Generates native methods.</xd:short>
 	</xd:doc>
 
+	<xd:doc type="template">
+		<xd:short>Generates java native methods.
+				That means all modifiers, return type, method name and parameter list (again types and names).
+		</xd:short>
+		<xd:param name="config">config file.</xd:param>
+		<xd:param name="class">class which contains current method.</xd:param>
+		<xd:param name="method">method to be generated.</xd:param>
+	</xd:doc>
 	<xsl:template name="javaNativeMethod">
 		<xsl:param name="config" />
 		<xsl:param name="class" />

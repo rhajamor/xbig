@@ -40,7 +40,7 @@
 	</xd:doc>
 
 	<xd:doc type="function">
-		<xd:short>check if two methods have the same name and parameter types</xd:short>
+		<xd:short>Check if two methods have the same name and parameter types. For internal usage.</xd:short>
 		<xd:param name="meth1">
 			Node of the meta layer which contains the first function to compare.
 		</xd:param>
@@ -130,7 +130,9 @@
 	</xsl:function>
 
 	<xd:doc type="function">
-		<xd:short>check if two methods have the same constness, same name and parameter types</xd:short>
+		<xd:short>Check if two methods have the same constness, same name and parameter types.
+			To be called by other stylesheets.
+		</xd:short>
 		<xd:param name="meth1">
 			Node of the meta layer which contains the first function to compare.
 		</xd:param>

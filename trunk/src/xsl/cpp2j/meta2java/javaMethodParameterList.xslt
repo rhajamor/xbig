@@ -40,9 +40,22 @@
 	<xsl:import href="../../util/metaTypeInfo.xslt" />
 
 	<xd:doc type="stylesheet">
-		<xd:short>Generate mapping of a single original class</xd:short>
+		<xd:short>Iterate over parameters of a method.</xd:short>
 	</xd:doc>
 
+	<xd:doc type="template">
+		<xd:short>Generates parameter types and names for public and native methods.
+				The template parameters to control weather native method or not are optional.
+		</xd:short>
+		<xd:param name="config">config.xml file.</xd:param>
+		<xd:param name="class">class which contains current method.</xd:param>
+		<xd:param name="method">method to be processed.</xd:param>
+		<xd:param name="with_types">if set to the string 'true', types are generated.
+						If it has a different value, only names are generated</xd:param>
+		<xd:param name="writingNativeMethod">With this call a native method is generated.</xd:param>
+		<xd:param name="callingNativeMethod">With this call the body of a 
+											public method is generated.</xd:param>
+	</xd:doc>
 	<xsl:template name="javaMethodParameterList">
 		<xsl:param name="config" />
 		<xsl:param name="class" />

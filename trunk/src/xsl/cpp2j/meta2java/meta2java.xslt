@@ -45,10 +45,12 @@
 
 	<xd:doc type="stylesheet">
 		<xd:author>Frank Bielig</xd:author>
+		<xd:author>Christoph Nenning</xd:author>
 		<xd:copyright>OneStepAhead AG</xd:copyright>
+		<xd:copyright>netAllied GmbH</xd:copyright>
 		<xd:short>Transforms the meta layer to Java</xd:short>
 		<xd:detail>
-			This Stylesheet generates the Java API and the JNI functions
+			This Stylesheet generates the Java API
 			to access the existing C++ library.
 		</xd:detail>
 	</xd:doc>
@@ -56,9 +58,11 @@
 	<xsl:output method="text" name="textOutput" />
 
 	<!-- global Parameters -->
-
+	<xd:doc>config.xml file.</xd:doc>
 	<xsl:param name="config" />
+	<xd:doc>directory in which src files are generated.</xd:doc>
 	<xsl:param name="outdir" />
+	<xd:doc>build.xml file. Needed to obtain project name.</xd:doc>
 	<xsl:param name="buildFile" />
 
 	<!-- global variables -->

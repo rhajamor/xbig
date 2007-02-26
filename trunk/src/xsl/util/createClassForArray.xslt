@@ -43,8 +43,14 @@
 		</xd:short>
 	</xd:doc>
 
+	<xd:doc type="template">
+		<xd:short>see stylesheet.
+		</xd:short>
+		<xd:param name="typeName">Type which is needed as array.</xd:param>
+	</xd:doc>
 	<xsl:template name="createClassForArray">
 		<xsl:param name="typeName" />
+
 		<xsl:variable name="className" select="concat($typeName,'Array')"/>
 		<xsl:message>create array wrapper <xsl:value-of select="$className"/></xsl:message>
 

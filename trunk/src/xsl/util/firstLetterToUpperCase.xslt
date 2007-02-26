@@ -24,6 +24,7 @@
 	http://www.gnu.org/copyleft/lesser.txt.
 	
 	Author: Kai Klesatschke <kai.klesatschke@netallied.de>
+			Christoph Nenning
 	
 -->
 
@@ -36,10 +37,15 @@
 	xmlns:xbig="http://xbig.sourceforge.net/XBiG">
 
 	<xd:doc type="stylesheet">
-		<xd:short>Collection of helper templates/functions to handle paths.</xd:short>
+		<xd:short>Utility template to manipulate strings.</xd:short>
 	</xd:doc>
 	
 
+	<xd:doc type="template">
+		<xd:short>Takes a string and translates it's first letter to upper case.
+		</xd:short>
+		<xd:param name="name">string to be manipulated.</xd:param>
+	</xd:doc>
 	<xsl:template name="firstLetterToUpperCase">
 		<xsl:param name="name"/>
 
@@ -52,7 +58,8 @@
 		</xsl:variable>
 
 		<xsl:variable name="upperFirstLetter">
-			<xsl:value-of select="translate($firstLetter,'abcdefghijklmnopqrstuvwxyz', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ')"/>
+			<xsl:value-of select="translate($firstLetter,'abcdefghijklmnopqrstuvwxyz',
+																 'ABCDEFGHIJKLMNOPQRSTUVWXYZ')"/>
 		</xsl:variable>
 
 		<xsl:value-of select="concat($upperFirstLetter,$rest)"/>

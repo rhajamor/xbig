@@ -40,6 +40,14 @@
 		<xd:short>finds signature for single parameters.</xd:short>
 	</xd:doc>
 
+	<xd:doc type="template">
+		<xd:short>Takes signature from config for primitive types. For other types, like classes,
+				the typename is used. Not allowed characters like '::' or '&lt;' are masked with '_'.
+				Pass type and constness are also taken into account.
+		</xd:short>
+		<xd:param name="config">config file.</xd:param>
+		<xd:param name="param">parameter to be processed.</xd:param>
+	</xd:doc>
 	<xsl:template name="metaParameterSignature">
 		<xsl:param name="config" />
 		<xsl:param name="param" />

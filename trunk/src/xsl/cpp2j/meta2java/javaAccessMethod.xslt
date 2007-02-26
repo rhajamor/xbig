@@ -41,9 +41,18 @@
 	<xsl:import href="javaReturnMethodImpl.xslt" />
 
 	<xd:doc type="stylesheet">
-		<xd:short>Generate mapping of a single original class</xd:short>
+		<xd:short>Generation of public java methods.</xd:short>
 	</xd:doc>
 
+	<xd:doc type="template">
+		<xd:short>Generates public java methods.
+				Calls javaAccessMethodDeclaration and one of the implementation Templates:
+				javaConstructorImpl, javaVoidMethodImpl or javaReturnMethodImpl.
+		</xd:short>
+		<xd:param name="config">config file.</xd:param>
+		<xd:param name="class">class which contains current method.</xd:param>
+		<xd:param name="method">method to be generated.</xd:param>
+	</xd:doc>
 	<xsl:template name="javaAccessMethod">
 		<xsl:param name="config" />
 		<xsl:param name="class" />

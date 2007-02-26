@@ -43,6 +43,12 @@
 				  One to set it's value and one to get it.</xd:short>
 	</xd:doc>
 
+	<xd:doc type="template">
+		<xd:short>Generates functions to set and get values of variable elements. For const
+				attributes only a getter is generated.
+		</xd:short>
+		<xd:param name="variable">Meta element to which functions shall be created.</xd:param>
+	</xd:doc>
 	<xsl:template name="createFunctionsForPublicAttribute">
 		<xsl:param name="variable" />
 

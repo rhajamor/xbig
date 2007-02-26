@@ -49,6 +49,16 @@
 		</xd:short>
 	</xd:doc>
 
+	<xd:doc type="template">
+		<xd:short>Generates a java interface.
+				It does not look for inherited methods.
+		</xd:short>
+		<xd:param name="config">config file.</xd:param>
+		<xd:param name="class">class or struct to be processed.</xd:param>
+		<xd:param name="buildFile">
+			ant build.xml file. Needed for called templates
+		</xd:param>
+	</xd:doc>
 	<xsl:template name="javaInterface">
 		<xsl:param name="config" />
 		<xsl:param name="class" />

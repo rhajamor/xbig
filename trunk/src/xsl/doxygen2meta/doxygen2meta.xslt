@@ -56,6 +56,8 @@
 
 
 	<!-- global Parameters -->
+	<xd:doc>File in meta format which contains additional classes.
+			Per default, it contains the C++ STL</xd:doc>
 	<xsl:param name="externalTypes" />
 
 

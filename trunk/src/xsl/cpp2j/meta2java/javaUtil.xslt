@@ -48,10 +48,12 @@
 		<xd:short>
 			Takes a list of functions and returns a filtered list which
 			is valid for Java.
+		<xd:param name="functionNodeList">method list to be filtered.</xd:param>
 		</xd:short>
 	</xd:doc>
 	<xsl:template name="getValidMethodList">
 		<xsl:param name="functionNodeList" />
+
 		<xsl:for-each select="$functionNodeList/function">
 			<xsl:variable name="currentMethod" select="." />
 			<xsl:variable name="currentMethodPos" select="position()" />

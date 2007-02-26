@@ -38,9 +38,18 @@
 	<xsl:import href="javaMethodParameterList.xslt" />
 
 	<xd:doc type="stylesheet">
-		<xd:short>Generate mapping of a single original class</xd:short>
+		<xd:short>Generate body of constructors.</xd:short>
 	</xd:doc>
 
+	<xd:doc type="template">
+		<xd:short>Generates java constructors which can be found in meta.
+				Calls native method and stores InstancePointer in super class.
+				Handles parameters, too.
+		</xd:short>
+		<xd:param name="config">config file.</xd:param>
+		<xd:param name="class">class which contains current constructor.</xd:param>
+		<xd:param name="method">constructor to be generated.</xd:param>
+	</xd:doc>
 	<xsl:template name="javaConstructorImpl">
 		<xsl:param name="config" />
 		<xsl:param name="class" />

@@ -39,9 +39,12 @@
 	<xsl:import href="../../util/path.xslt" />
 
 	<xd:doc type="stylesheet">
-		<xd:short>Generation of types outside a namespace</xd:short>
+		<xd:short>Deprecated</xd:short>
 	</xd:doc>
 
+	<xd:doc type="template">
+		<xd:short>Deprecated</xd:short>
+	</xd:doc>
 	<xsl:template name="javaGlobals">
 		<xsl:param name="meta_ns_name" />
 		<xsl:param name="outdir" />

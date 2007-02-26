@@ -51,6 +51,16 @@
 		</xd:short>
 	</xd:doc>
 
+	<xd:doc type="template">
+		<xd:short>Generates a java class.
+				Can be called for classes or structs. Handles inner types as well as methods and attributes.
+		</xd:short>
+		<xd:param name="config">config file.</xd:param>
+		<xd:param name="class">class or struct to be generated.</xd:param>
+		<xd:param name="buildFile">
+			ant build.xml file. Needed for project name in static initializer
+		</xd:param>
+	</xd:doc>
 	<xsl:template name="javaClass">
 		<xsl:param name="config" />
 		<xsl:param name="class" />

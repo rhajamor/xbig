@@ -41,11 +41,17 @@
 		<xd:short>Iterats over all parameters of a method.</xd:short>
 	</xd:doc>
 
+	<xd:doc type="template">
+		<xd:short>Just iterates over all parameters and calls metaParameterSignature.
+		</xd:short>
+		<xd:param name="config">config file.</xd:param>
+		<xd:param name="method">method to be processed.</xd:param>
+	</xd:doc>
 	<xsl:template name="metaParameterListSignature">
 		<xsl:param name="config" />
 		<xsl:param name="method" />
 
-		<!-- iterate throw all parameters -->
+		<!-- iterate through all parameters -->
 		<xsl:for-each select="$method/parameters/parameter">
 
 			<!-- write signature of parameter type -->
