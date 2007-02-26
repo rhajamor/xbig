@@ -41,6 +41,15 @@
 		<xd:short>Generation of files for enum helper classes.</xd:short>
 	</xd:doc>
 
+	<xd:doc type="template">
+		<xd:short>Creates header and source file for a java enum helper class.
+		</xd:short>
+		<xd:param name="enum">meta enumeration to be processed.</xd:param>
+		<xd:param name="ns_prefix">prefix for class name. Contains java package.</xd:param>
+		<xd:param name="include_dir">Directory for include files.</xd:param>
+		<xd:param name="lib_dir">Directory for source files.</xd:param>
+		<xd:param name="config">config file.</xd:param>
+	</xd:doc>
 	<xsl:template name="cppEnum">
 		<xsl:param name="enum" />
 		<xsl:param name="ns_prefix" />
@@ -217,6 +226,11 @@
 	</xsl:template>
 
 
+	<xd:doc type="template">
+		<xd:short>Helper template to find out which files must be included by an enum source file.
+		</xd:short>
+		<xd:param name="enum">meta enumeration to be processed.</xd:param>
+	</xd:doc>
 	<xsl:template name="findIncludeFiles">
 		<xsl:param name="enum"/>
 

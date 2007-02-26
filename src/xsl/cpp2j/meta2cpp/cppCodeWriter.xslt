@@ -45,10 +45,18 @@
 		With helper functions.</xd:short>
 	</xd:doc>
 
+
+
 	<!-- ************************************************************ -->
 	<!-- xbig:cpp-param(config, param) -->
 	<!-- ************************************************************ -->
 
+	<xd:doc type="function">
+		<xd:short>Gets variable names from config.
+		</xd:short>
+		<xd:param name="config">config file.</xd:param>
+		<xd:param name="param">parameter to process.</xd:param>
+	</xd:doc>
 	<xsl:function name="xbig:cpp-param" as="xs:string">
 		<xsl:param name="config" />
 		<xsl:param name="param" as="xs:string" />
@@ -62,10 +70,20 @@
 
 	</xsl:function>
 
+
+
 	<!-- ************************************************************ -->
 	<!-- xbig:cpp-type(config, param) -->
 	<!-- ************************************************************ -->
 
+	<xd:doc type="function">
+		<xd:short>Gets C++ type to a meta type. Comparable whith templates javaType or jniType.
+		</xd:short>
+		<xd:param name="config">config file.</xd:param>
+		<xd:param name="param">parameter to process.</xd:param>
+		<xd:param name="class">class which contains this type.</xd:param>
+		<xd:param name="fullTypeName">Fully qualified type name.</xd:param>
+	</xd:doc>
 	<xsl:function name="xbig:cpp-type" as="xs:string">
 		<xsl:param name="config"/>
 		<xsl:param name="param"/>
@@ -178,10 +196,24 @@
 
 	</xsl:function>
 
+
+
 	<!-- ************************************************************ -->
 	<!-- xbig:jni-to-cpp(config, class, method, param) -->
 	<!-- ************************************************************ -->
 
+	<xd:doc type="function">
+		<xd:short>Parameter conversion. Casts e.g. jlong to pointers.
+		</xd:short>
+		<xd:param name="config">config file.</xd:param>
+		<xd:param name="class">class which contains this type.</xd:param>
+		<xd:param name="method">method which contains this type.</xd:param>
+		<xd:param name="param">parameter to process.</xd:param>
+		<xd:param name="fullTypeName">Fully qualified type name.</xd:param>
+		<xd:param name="paramPosition">
+			Number of parameter in parameter list. Needed for unnamed parameters.
+		</xd:param>
+	</xd:doc>
 	<xsl:function name="xbig:jni-to-cpp" as="xs:string">
 		<xsl:param name="config" />
 		<xsl:param name="class" />
@@ -189,17 +221,6 @@
 		<xsl:param name="param" />
 		<xsl:param name="fullTypeName"/>
 		<xsl:param name="paramPosition"/>
-
-		<!-- resolve typedefs -->
-		<!-- 
-		<xsl:variable name="resolvedType" select="xbig:resolveTypedef($param/type, $class, $root)"/>
-		 -->
-
-		<!-- for performance reasons -->
-		<!-- 
-		<xsl:variable name="fullTypeName"
-				select="xbig:getFullTypeName($resolvedType, $class, $root)"/>
-		 -->
 
 		<!-- shortcut to type conversion configurations -->
 		<xsl:variable name="type_info">
@@ -308,10 +329,22 @@
 
 	</xsl:function>
 
+
+
 	<!-- ************************************************************ -->
 	<!-- xbig:cpp-to-jni(config, class, method, param) -->
 	<!-- ************************************************************ -->
 
+	<xd:doc type="function">
+		<xd:short>Return type conversion. Casts e.g. pointers to jlong.
+		</xd:short>
+		<xd:param name="config">config file.</xd:param>
+		<xd:param name="class">class which contains this type.</xd:param>
+		<xd:param name="method">method which contains this type.</xd:param>
+		<xd:param name="param">parameter to process.</xd:param>
+		<xd:param name="name">Parameter name. Needed for empty names in meta.</xd:param>
+		<xd:param name="fullTypeName">Fully qualified type name.</xd:param>
+	</xd:doc>
 	<xsl:function name="xbig:cpp-to-jni" as="xs:string">
 		<xsl:param name="config"/>
 		<xsl:param name="class"/>
@@ -319,17 +352,6 @@
 		<xsl:param name="param"/>
 		<xsl:param name="name"/>
 		<xsl:param name="fullTypeName"/>
-
-		<!-- resolve typedefs -->
-		<!-- 
-		<xsl:variable name="resolvedType" select="xbig:resolveTypedef($param/type, $class, $root)"/>
-		 -->
-
-		<!-- for performance reasons -->
-		<!-- 
-		<xsl:variable name="fullTypeName"
-				select="xbig:getFullTypeName($resolvedType, $class, $root)"/>
-		 -->
 
 		<!-- shortcut to type conversion configurations -->
 		<xsl:variable name="type_info">
@@ -347,12 +369,6 @@
 
 		<!-- no conversion function available -->
 		<xsl:if test="not($type_info/type/cpp2jni)">
-
-			<!-- resolve typedefs for return type -->
-			<!-- 
-			<xsl:variable name="resolvedReturnType"
-					select="xbig:resolveTypedef($method/type, $class, $root)"/>
-			 -->
 
 			<xsl:choose>
 				<!-- if this type is a parametrized template -->
@@ -410,10 +426,19 @@
 
 	</xsl:function>
 
+
+
 	<!-- ************************************************************ -->
 	<!-- xbig:cpp-replace(var, from, to) -->
 	<!-- ************************************************************ -->
 
+	<xd:doc type="function">
+		<xd:short>Utility function to be used in this stylesheet.
+		</xd:short>
+		<xd:param name="var">Base string to search in.</xd:param>
+		<xd:param name="from">String to search for.</xd:param>
+		<xd:param name="to">String to replace.</xd:param>
+	</xd:doc>
 	<xsl:function name="xbig:cpp-replace" as="xs:string">
 		<xsl:param name="var" as="xs:string"/>
 		<xsl:param name="from" as="xs:string"/>
@@ -434,10 +459,20 @@
 
 	</xsl:function>
 
+
+
 	<!-- ************************************************************ -->
 	<!-- xbig:cpp-code(config, line, class, method) -->
 	<!-- ************************************************************ -->
 
+	<xd:doc type="function">
+		<xd:short>Takes a code template and replaces the fields.
+		</xd:short>
+		<xd:param name="config">config file.</xd:param>
+		<xd:param name="line" as="xs:string">code template.</xd:param>
+		<xd:param name="class">class which contains this method.</xd:param>
+		<xd:param name="method">method to be generated.</xd:param>
+	</xd:doc>
 	<xsl:function name="xbig:code" as="xs:string">
 		<xsl:param name="config"/>
 		<xsl:param name="line"/>
@@ -557,19 +592,6 @@
 			</xsl:choose>
 		</xsl:variable>
 
-		<!-- for performance reasons -->
-		<!-- 
-		<xsl:variable name="fullTypeName">
-			<xsl:choose>
-				<xsl:when test="not($method/type)">
-					<xsl:value-of select="''"/>
-				</xsl:when>
-				<xsl:otherwise>
-					<xsl:value-of select="xbig:getFullTypeName($resolvedType, $class, $root)"/>
-				</xsl:otherwise>
-			</xsl:choose>
-		</xsl:variable>
-		 -->
 		<xsl:variable name="fullTypeName" select="$resolvedType"/>
 
 		<!-- replace parameter list -->
@@ -587,11 +609,6 @@
 							<xsl:variable name="resolvedParameter" select="xbig:resolveTypedef(
 								./type, $class, $root)"/>
 
-							<!-- for performance reasons -->
-							<!-- 
-							<xsl:variable name="fullParameterTypeName"
-									select="xbig:getFullTypeName($resolvedParameter, $class, $root)"/>
-							 -->
 							<xsl:variable name="fullParameterTypeName" select="$resolvedParameter"/>
 
 							<!-- write parameter name -->

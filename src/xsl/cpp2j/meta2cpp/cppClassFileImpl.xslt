@@ -44,6 +44,17 @@
 		<xd:short>Generation of jni src files.</xd:short>
 	</xd:doc>
 
+	<xd:doc type="template">
+		<xd:short>Creates source file with implementation of JNI functions.
+		</xd:short>
+		<xd:param name="config">config file.</xd:param>
+		<xd:param name="class">meta class to be processed.</xd:param>
+		<xd:param name="class_prefix">
+			prefix for class name. Contains java package and '$' of inner classes.
+		</xd:param>
+		<xd:param name="header_filename">Needed for inclusion.</xd:param>
+		<xd:param name="helper_methods">generated meta function elements. E.g. destructors.</xd:param>
+	</xd:doc>
 	<xsl:template name="cppClassFileImpl">
 		<xsl:param name="config" />
 		<xsl:param name="class" />

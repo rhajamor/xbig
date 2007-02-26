@@ -39,6 +39,11 @@
 		<xd:short>Takes file header from config and puts it into current result document.</xd:short>
 	</xd:doc>
 
+	<xd:doc type="template">
+		<xd:short>Takes comment for header files from config.
+		</xd:short>
+		<xd:param name="config">config file.</xd:param>
+	</xd:doc>
 	<xsl:template name="cppFileHeader">
 		<xsl:param name="config" />
 

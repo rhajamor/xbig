@@ -40,6 +40,11 @@
 		<xd:short>Creation of meta elements for additional methods, like d-tors</xd:short>
 	</xd:doc>
 
+	<xd:doc type="template">
+		<xd:short>Creates meta function elements for destructors and getters / setters for public attributes.
+		</xd:short>
+		<xd:param name="config">config file.</xd:param>
+	</xd:doc>
 	<xsl:template name="cppCreateHelperMethods">
 		<xsl:param name="config" />
 

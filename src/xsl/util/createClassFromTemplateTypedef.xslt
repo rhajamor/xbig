@@ -313,11 +313,6 @@
 				<!-- use type used in template -->
 				<xsl:otherwise>
 
-					<!-- for performance reasons -->
-					<!-- 
-					<xsl:variable name="fullTypeName"
-							select="xbig:getFullTypeName($type, $template, $root)"/>
-					 -->
 					<xsl:variable name="fullTypeName"
 							select="xbig:resolveTypedef($type, $template, $root)"/>
 

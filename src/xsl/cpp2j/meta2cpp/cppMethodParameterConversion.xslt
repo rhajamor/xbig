@@ -41,9 +41,16 @@
 	<xsl:import href="../../util/metaTypeInfo.xslt" />
 
 	<xd:doc type="stylesheet">
-		<xd:short></xd:short>
+		<xd:short>Conversion of JNI parameters to C++ types.</xd:short>
 	</xd:doc>
 
+	<xd:doc type="template">
+		<xd:short>Generates a C++ variable for each parameter and assigns a value to it.
+		</xd:short>
+		<xd:param name="config">config file.</xd:param>
+		<xd:param name="class">meta class which contains method.</xd:param>
+		<xd:param name="method">meta function element to be processed.</xd:param>
+	</xd:doc>
 	<xsl:template name="cppMethodParameterConversion">
 		<xsl:param name="config"/>
 		<xsl:param name="class"/>
@@ -57,11 +64,6 @@
 			<xsl:variable name="resolvedParameter" select="xbig:resolveTypedef(
 				./type, $class, $root)"/>
 
-			<!-- for performance reasons -->
-			<!-- 
-			<xsl:variable name="fullTypeName"
-					select="xbig:getFullTypeName($resolvedParameter, $class, $root)"/>
-			 -->
 			<xsl:variable name="fullTypeName" select="$resolvedParameter"/>
 
 			<!-- if there is no param name in original lib -->

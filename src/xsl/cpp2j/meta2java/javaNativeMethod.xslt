@@ -129,11 +129,6 @@
 			</xsl:choose>
 		</xsl:variable>
 
-		<!-- for performance reasons -->
-		<!-- 
-		<xsl:variable name="fullTypeName"
-					select="xbig:getFullTypeName($resolvedType, $class, $root)"/>
-		 -->
 		<xsl:variable name="fullTypeName" select="$resolvedType"/>
 		
 

@@ -44,6 +44,16 @@
 		<xd:short>Generation of types inside a namespace</xd:short>
 	</xd:doc>
 
+	<xd:doc type="template">
+		<xd:short>Calls templates for types inside a namespace.
+		</xd:short>
+		<xd:param name="meta_ns_name">
+			java package prefix from config. For inner namespaces it contains also namespaces.
+		</xd:param>
+		<xd:param name="include_dir">Directory for include files.</xd:param>
+		<xd:param name="lib_dir">Directory for source files.</xd:param>
+		<xd:param name="config">config file.</xd:param>
+	</xd:doc>
 	<xsl:template name="cppNamespace">
 		<xsl:param name="meta_ns_name" />
 		<xsl:param name="include_dir" />

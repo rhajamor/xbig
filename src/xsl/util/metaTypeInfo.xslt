@@ -201,10 +201,6 @@
 		<xsl:param name="currentNode" />
 		<xsl:param name="inputTreeRoot" />
 
-		<!-- for performance reasons -->
-		<!-- 
-			<xsl:variable name="fullName" select="xbig:getFullTypeName($type, $currentNode, $inputTreeRoot)"/>
-		-->
 		<xsl:variable name="fullName" select="$type" />
 
 		<xsl:choose>
@@ -236,10 +232,6 @@
 		<xsl:param name="currentNode" />
 		<xsl:param name="inputTreeRoot" />
 
-		<!-- for performance reasons -->
-		<!-- 
-			<xsl:variable name="fullName" select="xbig:getFullTypeName($type, $currentNode, $inputTreeRoot)"/>
-		-->
 		<xsl:variable name="fullName" select="$type" />
 
 		<xsl:choose>
@@ -271,10 +263,6 @@
 		<xsl:param name="currentNode" />
 		<xsl:param name="inputTreeRoot" />
 
-		<!-- for performance reasons -->
-		<!-- 
-			<xsl:variable name="fullName" select="xbig:getFullTypeName($type, $currentNode, $inputTreeRoot)"/>
-		-->
 		<xsl:variable name="fullName" select="$type" />
 
 		<xsl:choose>
@@ -326,10 +314,6 @@
 		<xsl:param name="currentNode" />
 		<xsl:param name="inputTreeRoot" />
 
-		<!-- for performance reasons -->
-		<!-- 
-			<xsl:variable name="fullName" select="xbig:getFullTypeName($type, $currentNode, $inputTreeRoot)"/>
-		-->
 		<xsl:variable name="fullName" select="$type" />
 
 		<xsl:choose>
@@ -384,10 +368,6 @@
 		<xsl:param name="currentNode" />
 		<xsl:param name="inputTreeRoot" />
 
-		<!-- for performance reasons -->
-		<!-- 
-			<xsl:variable name="fullName" select="xbig:getFullTypeName($type, $currentNode, $inputTreeRoot)"/>
-		-->
 		<xsl:variable name="fullName" select="$type" />
 
 		<xsl:choose>
@@ -445,10 +425,6 @@
 		<xsl:param name="currentNode" />
 		<xsl:param name="inputTreeRoot" />
 
-		<!-- for performance reasons -->
-		<!-- 
-			<xsl:variable name="fullName" select="xbig:getFullTypeName($type, $currentNode, $inputTreeRoot)"/>
-		-->
 		<xsl:variable name="fullName" select="$type" />
 		<xsl:variable name="typedefNode"
 			select="$inputTreeRoot//typedef[@fullName = $fullName]" />
