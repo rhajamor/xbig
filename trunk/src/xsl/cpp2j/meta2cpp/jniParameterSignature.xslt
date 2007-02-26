@@ -41,16 +41,22 @@
 		<xd:short>finds signature for single parameters.</xd:short>
 	</xd:doc>
 
+	<xd:doc type="template">
+		<xd:short>Gets signature from config for primitive types. Uses name of other types.
+			If a typename contains special characters (e.g. '::' or '&lt;') it is masked with '_'.
+			Uses JNI character masking.
+		</xd:short>
+		<xd:param name="config">config file.</xd:param>
+		<xd:param name="meta_type">meta type to find signature to.</xd:param>
+		<xd:param name="escape">Whether JNI character masking should be used.</xd:param>
+		<xd:param name="class">meta class which contains method.</xd:param>
+	</xd:doc>
 	<xsl:template name="jniParameterSignature">
 		<xsl:param name="config" />
 		<xsl:param name="meta_type" />
 		<xsl:param name="escape" />
 		<xsl:param name="class" />
 
-		<!-- for performance reasons -->
-		<!-- 
-		<xsl:variable name="fullTypeName" select="xbig:getFullTypeName($meta_type, $class, $root)"/>
-		 -->
 		<xsl:variable name="fullTypeName" select="xbig:resolveTypedef($meta_type, $class, $root)"/>
 
 		<!-- map type to signature with mapping table from configuration -->
@@ -60,14 +66,6 @@
 					<xsl:value-of select="$config/config/cpp/jni/signatures/type
 								[@meta=$meta_type]/@signature" />
 				</xsl:when>
-				<!-- 
-				<xsl:when test="xbig:isClassOrStruct($fullTypeName, $class, $root)">
-					<xsl:value-of select="$config/config/cpp/jni/signatures/type[@meta='long']/@signature" />
-				</xsl:when>
-				<xsl:when test="xbig:isEnum($fullTypeName, $class, $root)">
-					<xsl:value-of select="$config/config/cpp/jni/signatures/type[@meta='int']/@signature" />
-				</xsl:when>
-				 -->
 				<xsl:otherwise>
 					<xsl:value-of select="replace(replace(replace(replace(replace(
 								$fullTypeName, ' ', '_'), '::', '_'), '&lt;', '_'), '&gt;', '_'), ',', '_')"/>

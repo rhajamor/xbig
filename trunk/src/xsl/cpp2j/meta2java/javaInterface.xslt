@@ -179,11 +179,6 @@
 						<xsl:variable name="resolvedType" select="xbig:resolveTypedef(
 												$typeWithoutNSprefix, $class, $root)"/>
 
-						<!-- for performance reasons -->
-						<!-- 
-						<xsl:variable name="usedType"
-									select="xbig:getFullTypeName($resolvedType, $class, $root)"/>
-						 -->
 						<xsl:variable name="usedType" select="$resolvedType"/>
 
 						<!-- find out how a parameter is passed in typedef -->

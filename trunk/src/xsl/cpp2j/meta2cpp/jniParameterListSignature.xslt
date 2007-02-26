@@ -38,9 +38,16 @@
 	<xsl:import href="jniParameterSignature.xslt" />
 
 	<xd:doc type="stylesheet">
-		<xd:short>Iterats over all parameters of a method.</xd:short>
+		<xd:short>Finds signatures for parameters.</xd:short>
 	</xd:doc>
 
+	<xd:doc type="template">
+		<xd:short>Iterates over parameters and calls jniParameterSignature.
+		</xd:short>
+		<xd:param name="config">config file.</xd:param>
+		<xd:param name="method">meta function element to be processed.</xd:param>
+		<xd:param name="class">meta class which contains method.</xd:param>
+	</xd:doc>
 	<xsl:template name="jniParameterListSignature">
 		<xsl:param name="config" />
 		<xsl:param name="method" />

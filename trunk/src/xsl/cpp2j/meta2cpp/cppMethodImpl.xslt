@@ -40,9 +40,19 @@
 	<xsl:import href="cppMethodParameterConversion.xslt" />
 
 	<xd:doc type="stylesheet">
-		<xd:short></xd:short>
+		<xd:short>Implementation of JNI functions.</xd:short>
 	</xd:doc>
 
+	<xd:doc type="template">
+		<xd:short>Generate method implementation. Selects a code template from config and calls CodeWriter.
+		</xd:short>
+		<xd:param name="config">config file.</xd:param>
+		<xd:param name="class_prefix">
+			prefix for class name. Contains java package and '$' of inner classes.
+		</xd:param>
+		<xd:param name="class">meta class which contains method.</xd:param>
+		<xd:param name="method">meta function element to be processed.</xd:param>
+	</xd:doc>
 	<xsl:template name="cppMethodImpl">
 		<xsl:param name="config" />
 		<xsl:param name="class_prefix" />

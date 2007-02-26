@@ -43,6 +43,17 @@
 		<xd:short>Generation of JNI function headers, with javah like comment.</xd:short>
 	</xd:doc>
 
+
+	<xd:doc type="template">
+		<xd:short>Creates JNI function declaration with comment.
+		</xd:short>
+		<xd:param name="config">config file.</xd:param>
+		<xd:param name="class_prefix">
+			prefix for class name. Contains java package and '$' of inner classes.
+		</xd:param>
+		<xd:param name="method">meta function element to be processed.</xd:param>
+		<xd:param name="class">meta class which contains method.</xd:param>
+	</xd:doc>
 	<xsl:template name="cppMethodDeclaration">
 		<xsl:param name="config" />
 		<xsl:param name="class_prefix" />
@@ -72,9 +83,14 @@
 
 
 	<xd:doc type="template">
-		<xd:short>
-			Generate method comments prior method declarations
+		<xd:short>Generate method comments prior method declarations.
 		</xd:short>
+		<xd:param name="config">config file.</xd:param>
+		<xd:param name="class_prefix">
+			prefix for class name. Contains java package and '$' of inner classes.
+		</xd:param>
+		<xd:param name="method">meta function element to be processed.</xd:param>
+		<xd:param name="class">meta class which contains method.</xd:param>
 	</xd:doc>
 	<xsl:template name="cppMethodDeclarationComment">
 		<xsl:param name="config" />
@@ -162,9 +178,14 @@
 
 
 	<xd:doc type="template">
-		<xd:short>
-			Generate method declarations.
+		<xd:short>Generate method declarations.
 		</xd:short>
+		<xd:param name="config">config file.</xd:param>
+		<xd:param name="class_prefix">
+			prefix for class name. Contains java package and '$' of inner classes.
+		</xd:param>
+		<xd:param name="method">meta function element to be processed.</xd:param>
+		<xd:param name="class">meta class which contains method.</xd:param>
 	</xd:doc>
 	<xsl:template name="cppRealMethodDeclaration">
 		<xsl:param name="config" />

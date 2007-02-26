@@ -42,6 +42,14 @@
 		<xd:short>Generate mapping of a single type</xd:short>
 	</xd:doc>
 
+	<xd:doc type="template">
+		<xd:short>Generates JNI type for a meta type.
+			That means basically jlong for classes and jint for enums.
+		</xd:short>
+		<xd:param name="config">config file.</xd:param>
+		<xd:param name="param">parameter or function to process.</xd:param>
+		<xd:param name="class">meta class which contains method.</xd:param>
+	</xd:doc>
 	<xsl:template name="jniType">
 		<xsl:param name="config" />
 		<xsl:param name="param" />
@@ -75,11 +83,6 @@
 			<!-- if no type info is found -> we are dealing with a class / enum / ... -->
 			<xsl:when test="not($type_info/type/@jni)">
 
-				<!-- for performance reasons -->
-				<!-- 
-				<xsl:variable name="fullTypeName"
-							select="xbig:getFullTypeName($resolvedType, $class, $root)"/>
-				 -->
 				<xsl:variable name="fullTypeName" select="$resolvedType"/>
 
 				<xsl:choose>

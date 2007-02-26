@@ -2,9 +2,7 @@
  *
  * Test file for the XSLT Bindings Generator (XBiG)
  *
- * It handles an inheritance tree with three levels,
- * an indirect abstract class (not implemented pure virtual method)
- * and a method that is overridden in more classes
+ * It handles inherited inner types
  *
  ******************************************************************/
 

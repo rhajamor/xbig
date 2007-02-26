@@ -38,9 +38,17 @@
 	<xsl:import href="jniParameterListSignature.xslt" />
 
 	<xd:doc type="stylesheet">
-		<xd:short></xd:short>
+		<xd:short>Javah like signature for methods</xd:short>
 	</xd:doc>
 
+	<xd:doc type="template">
+		<xd:short>Iterates over parameters and calls jniParameterSignature. Calls it for return type, too.
+			Used for comments.
+		</xd:short>
+		<xd:param name="config">config file.</xd:param>
+		<xd:param name="method">meta function element to be processed.</xd:param>
+		<xd:param name="class">meta class which contains method.</xd:param>
+	</xd:doc>
 	<xsl:template name="jniMethodSignature">
 		<xsl:param name="config" />
 		<xsl:param name="method" />
