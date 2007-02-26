@@ -42,8 +42,10 @@
 
 	<xd:doc type="stylesheet">
 		<xd:author>Frank Bielig</xd:author>
+		<xd:author>Christoph Nenning</xd:author>
 		<xd:copyright>OneStepAhead AG</xd:copyright>
-		<xd:short>Transforms the meta layer to C++</xd:short>
+		<xd:copyright>netAllied GmbH</xd:copyright>
+		<xd:short>Transforms the meta layer to C++ (JNI)</xd:short>
 		<xd:detail>
 			This Stylesheet generates the JNI functions to access the
 			existing C++ library.
@@ -53,9 +55,11 @@
 	<xsl:output method="text" name="textOutput" />
 
 	<!-- global Parameters -->
-
+	<xd:doc>config.xml file.</xd:doc>
 	<xsl:param name="config" />
+	<xd:doc>directory in which header files are generated.</xd:doc>
 	<xsl:param name="include_dir" />
+	<xd:doc>directory in which src files are generated.</xd:doc>
 	<xsl:param name="lib_dir" />
 
 	<!-- local variables -->

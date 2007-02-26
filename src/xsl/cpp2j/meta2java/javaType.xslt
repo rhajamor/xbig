@@ -42,9 +42,23 @@
 	<xsl:import href="../../exslt/str.split.template.xsl" />
 
 	<xd:doc type="stylesheet">
-		<xd:short>Generate mapping of a single type</xd:short>
+		<xd:short>Generate a single type.</xd:short>
 	</xd:doc>
 
+	<xd:doc type="template">
+		<xd:short>Generates java types.
+				Called for method parameters and return types. Can be used for public and native methods.
+		</xd:short>
+		<xd:param name="config">config file.</xd:param>
+		<xd:param name="param">
+			parameter or method element to be processed. Important are it's attributes.
+		</xd:param>
+		<xd:param name="class">class which contains current type.</xd:param>
+		<xd:param name="writingNativeMethod">
+			Contains string 'true' if a native method is generated. Otherwise it is not passed.
+		</xd:param>
+		<xd:param name="typeName">Already resolved and full qualified type name.</xd:param>
+	</xd:doc>
 	<xsl:template name="javaType">
 		<xsl:param name="config" />
 		<xsl:param name="param" />
@@ -285,6 +299,15 @@
 	</xsl:template>
 
 
+	<xd:doc type="template">
+		<xd:short>Helper template to generate pointer classes of primitive types.
+		</xd:short>
+		<xd:param name="config">config file.</xd:param>
+		<xd:param name="param">
+			parameter or method element to be processed. Important are it's attributes.
+		</xd:param>
+		<xd:param name="typeName">Already resolved and full qualified type name.</xd:param>
+	</xd:doc>
 	<xsl:template name="javaPointerClass">
 		<xsl:param name="config" />
 		<xsl:param name="param" />
@@ -331,10 +354,16 @@
 
 	<xd:doc type="function">
 		<xd:short>resolve the full java name of a type, including the package</xd:short>
+		<xd:param name="type">Already resolved and full qualified type name.</xd:param>
+		<xd:param name="currentNode">
+			Meta namespace, class or struct element that contains this type.
+		</xd:param>
+		<xd:param name="inputTreeRoot">Root of input tree. Usually selected with '/'.</xd:param>
+		<xd:param name="config">config file.</xd:param>
 	</xd:doc>
 	<xsl:function name="xbig:getFullJavaName" as="xs:string">
 		<xsl:param name="type" as="xs:string"/>
-		<xsl:param name="currentNode"/> <!-- must be a class, struct or namespace element -->
+		<xsl:param name="currentNode"/>
 		<xsl:param name="inputTreeRoot"/>
 		<xsl:param name="config"/>
 
@@ -422,6 +451,19 @@
 		<xd:short>Recursive helper function for getFullJavaName(). For internal usage.
 				  It takes each part of a full name and adds interface stuff from config
 				  if a part is a class or struct. So we get the right java name for inner classes.
+		<xd:param name="currentJavaFullName">Already generated java name. Will be expanded</xd:param>
+		<xd:param name="currentMetaFullName">
+			Meta name of already processed type. Needed for selection.
+		</xd:param>
+		<xd:param name="currentPosition">Number of token which shall be processed during this call</xd:param>
+		<xd:param name="fullNameTokens">Single parts of meta full name.</xd:param>
+		<xd:param name="inputTreeRoot">Root of input tree. Usually selected with '/'.</xd:param>
+		<xd:param name="interfacePrefix">
+			from config file. Increases performance a little when passed.
+		</xd:param>
+		<xd:param name="interfaceSuffix">
+			from config file. Increases performance a little when passed.
+		</xd:param>
 		</xd:short>
 	</xd:doc>
 	<xsl:function name="xbig:getFullJavaNameHelper" as="xs:string">
@@ -610,10 +652,16 @@
 	<xd:doc type="function">
 		<xd:short>resolve the full java name of a type, 
 					including the package but not of it's interface</xd:short>
+		<xd:param name="type">Already resolved and full qualified type name.</xd:param>
+		<xd:param name="currentNode">
+			Meta namespace, class or struct element that contains this type.
+		</xd:param>
+		<xd:param name="inputTreeRoot">Root of input tree. Usually selected with '/'.</xd:param>
+		<xd:param name="config">config file.</xd:param>
 	</xd:doc>
 	<xsl:function name="xbig:getFullJavaClassAndNotInterfaceName" as="xs:string">
 		<xsl:param name="type" as="xs:string"/>
-		<xsl:param name="currentNode"/> <!-- must be a class, struct or namespace element -->
+		<xsl:param name="currentNode"/>
 		<xsl:param name="inputTreeRoot"/>
 		<xsl:param name="config"/>
 

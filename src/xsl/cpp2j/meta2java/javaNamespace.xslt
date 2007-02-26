@@ -40,9 +40,19 @@
 	<xsl:import href="../../util/createClassFromTemplateTypedef.xslt" />
 
 	<xd:doc type="stylesheet">
-		<xd:short>Generation of types inside a namespace</xd:short>
+		<xd:short>Handling of meta namespace elements.</xd:short>
 	</xd:doc>
 
+	<xd:doc type="template">
+		<xd:short>Creates java package directories and calls templates for classes, enums, ... .
+		</xd:short>
+		<xd:param name="meta_ns_name">parent namespace in meta.xml.</xd:param>
+		<xd:param name="outdir">Directory in which java code is generated.</xd:param>
+		<xd:param name="config">config file.</xd:param>
+		<xd:param name="buildFile">
+			ant build.xml file. Needed for project name in static initializer. Passed to called templates.
+		</xd:param>
+	</xd:doc>
 	<xsl:template name="javaNamespace">
 		<xsl:param name="meta_ns_name" />
 		<xsl:param name="outdir" />

@@ -41,8 +41,13 @@
 		<xd:short>Changing of method names for meta.</xd:short>
 	</xd:doc>
 
-	<!-- method name prefix -->
-
+	<xd:doc type="template">
+		<xd:short>Change method names to avoid overloading. Needed e.g. for JNI.
+		</xd:short>
+		<xd:param name="config">config file.</xd:param>
+		<xd:param name="method">method to be processed.</xd:param>
+		<xd:param name="escape">if set to string 'true', special characters as '_' are masked.</xd:param>
+	</xd:doc>
 	<xsl:template name="metaMethodName">
 		<xsl:param name="config" />
 		<xsl:param name="method" />
@@ -122,6 +127,14 @@
 
 
 
+	<xd:doc type="template">
+		<xd:short>Generates a meta function element. If a method is overloaded with 'const'
+				(void a() vs void a() const) we change it's name (a_const() with default configt).
+				Return type, parameters and attributes must be copied.
+		</xd:short>
+		<xd:param name="config">config file.</xd:param>
+		<xd:param name="method">method to be processed.</xd:param>
+	</xd:doc>
 	<xsl:template name="createElementForConstOverloadedMethod">
 		<xsl:param name="config" />
 		<xsl:param name="method" />

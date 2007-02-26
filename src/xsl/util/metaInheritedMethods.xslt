@@ -42,15 +42,19 @@
 	<xd:doc type="stylesheet">
 		<xd:short>
 			this file contains some helper templates and functions to
-			deal with inheritance
+			deal with inheritance.
 		</xd:short>
 	</xd:doc>
 
 	<xd:doc type="template">
 		<xd:short>
-			find the inherited methods that must be implemented by java
-			classes
+			Find the inherited methods and attributes that must be implemented by java
+			classes. This template shall be called by javaClass. It calls other templates in this
+			stylesheet and handles method that are overloaded using 'const' (void a() vs void a() const).
+			It does not handle const parameters.
 		</xd:short>
+		<xd:param name="config">config file.</xd:param>
+		<xd:param name="class">class or struct which shall be expanded with it's inherited methods.</xd:param>
 	</xd:doc>
 	<!-- this template hadles const overloading -->
 	<xsl:template name="findRelevantInheritedMethods">
@@ -142,9 +146,11 @@
 
 	<xd:doc type="template">
 		<xd:short>
-			find the inherited methods and filter c-tors and overloaded
-			methods
+			Find the inherited methods and filter c-tors and overloaded
+			methods. For internal usage. Does main filter work.
 		</xd:short>
+		<xd:param name="config">config file.</xd:param>
+		<xd:param name="class">class or struct which shall be expanded with it's inherited methods.</xd:param>
 	</xd:doc>
 	<xsl:template
 		name="findRelevantInheritedMethodsWithoutTakingCareAboutConstOverloading">
@@ -341,9 +347,12 @@
 
 	<xd:doc type="template">
 		<xd:short>
-			find all inherited methods, including base class c-tors and
-			overridden methods
+			Find all inherited methods, including base class c-tors and
+			overridden methods. For internal usage. Is recursive.
 		</xd:short>
+		<xd:param name="config">config file.</xd:param>
+		<xd:param name="class">class or struct which shall be expanded with it's inherited methods.</xd:param>
+		<xd:param name="baseClassTypedef">optional parameter. Needed if base class is a template.</xd:param>
 	</xd:doc>
 	<xsl:template name="findAllInheritedMethods">
 		<xsl:param name="config" />
@@ -497,12 +506,12 @@
 
 	<xd:doc type="function">
 		<xd:short>
-			returns true if a class contains an inherited and
-			unimplemented abstract method
+			Returns true if a class contains at least one inherited and
+			unimplemented abstract method.
 		</xd:short>
+		<xd:param name="class">class or struct which shall be checked.</xd:param>
 	</xd:doc>
-	<xsl:function name="xbig:areThereUnimplementedAbstractMethods"
-		as="xs:boolean">
+	<xsl:function name="xbig:areThereUnimplementedAbstractMethods" as="xs:boolean">
 		<xsl:param name="class" />
 
 		<!-- find all inherited methods -->
@@ -596,9 +605,19 @@
 
 	</xsl:function>
 
+
+
+	<xd:doc type="function">
+		<xd:short>
+			As we filter a lot of methods with const parameters this template does some of the needed work.
+			It copys the passed function element and removes const from parameters that are passed by value.
+		</xd:short>
+		<xd:param name="functionNode">function element to be processed.</xd:param>
+	</xd:doc>
 	<xsl:template
 		name="copyFunctionAndRemoveConstFromByValuePassedParams">
 		<xsl:param name="functionNode" />
+
 		<xsl:element name="function">
 			<!-- copy all attributes -->
 			<xsl:for-each select="$functionNode/@*">
@@ -635,8 +654,17 @@
 		</xsl:element>
 	</xsl:template>
 
+
+	<xd:doc type="function">
+		<xd:short>
+			As we filter a lot of methods with const parameters this template does some of the needed work.
+			It copys the passed parameter element and sets const to false.
+		</xd:short>
+		<xd:param name="functionNode">function element to be processed.</xd:param>
+	</xd:doc>
 	<xsl:template name="copyParamAndSetConstFalse">
 		<xsl:param name="paramNode" />
+
 		<xsl:element name="parameter">
 			<!-- copy all attributes -->
 			<xsl:for-each select="$paramNode/@*">
@@ -656,6 +684,8 @@
 			</xsl:element>
 		</xsl:element>
 	</xsl:template>
+
+
 
 	<xd:doc type="function">
 		<xd:short>

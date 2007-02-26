@@ -36,9 +36,17 @@
 	xmlns:xd="http://www.pnp-software.com/XSLTdoc">
 
 	<xd:doc type="stylesheet">
-		<xd:short>Generate mapping of a single original class</xd:short>
+		<xd:short>Generates body of a public java method without return type.</xd:short>
 	</xd:doc>
 
+	<xd:doc type="template">
+		<xd:short>Creates native method name and passes parameters with conversions, 
+				like access of InstancePointer.
+		</xd:short>
+		<xd:param name="config">config file.</xd:param>
+		<xd:param name="class">class which contains current method.</xd:param>
+		<xd:param name="method">method to be implemented.</xd:param>
+	</xd:doc>
 	<xsl:template name="javaVoidMethodImpl">
 		<xsl:param name="config" />
 		<xsl:param name="class" />

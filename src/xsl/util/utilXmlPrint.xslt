@@ -34,6 +34,12 @@
 	xmlns:xdt="http://www.w3.org/2005/xpath-datatypes"
 	xmlns:xd="http://www.pnp-software.com/XSLTdoc">
 
+	<xd:doc type="stylesheet">
+		<xd:short>
+			Utility templates to print an XML tree.
+		</xd:short>
+	</xd:doc>
+
 	<xsl:template name="xmlWriteStartTag">
 		<xsl:text>&lt;</xsl:text>
 		<xsl:value-of select="name()" />

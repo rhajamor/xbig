@@ -44,6 +44,18 @@
 		<xd:short>Generation of the first few lines of a .java file</xd:short>
 	</xd:doc>
 
+	<xd:doc type="template">
+		<xd:short>Generates .java files.
+				Constructs file names for classes and interfaces. Decides if a java class is generated.
+		</xd:short>
+		<xd:param name="java_ns_dir">java package name with slashes.</xd:param>
+		<xd:param name="java_ns_name">java package name with dots.</xd:param>
+		<xd:param name="outdir">parent directory of java package.</xd:param>
+		<xd:param name="config">config file.</xd:param>
+		<xd:param name="buildFile">
+			ant build.xml file. Needed for project name in static initializer
+		</xd:param>
+	</xd:doc>
 	<xsl:template name="javaClassFileStub">
 		<xsl:param name="java_ns_dir" />
 		<xsl:param name="java_ns_name" />
@@ -149,6 +161,12 @@
 	</xsl:template>
 
 
+	<xd:doc type="template">
+		<xd:short>Writes package and imports to .java file.
+		</xd:short>
+		<xd:param name="java_ns_name">java package name with dots.</xd:param>
+		<xd:param name="config">config file.</xd:param>
+	</xd:doc>
 	<xsl:template name="javaFileFirstContent">
 		<xsl:param name="java_ns_name" />
 		<xsl:param name="config" />

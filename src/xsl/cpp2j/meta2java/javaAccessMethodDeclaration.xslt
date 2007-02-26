@@ -39,9 +39,17 @@
 	<xsl:import href="javaType.xslt" />
 
 	<xd:doc type="stylesheet">
-		<xd:short>Generate mapping of a single original class</xd:short>
+		<xd:short>Generation of public java method declarations.</xd:short>
 	</xd:doc>
 
+	<xd:doc type="template">
+		<xd:short>Generates public java method declarations.
+				That means return type, method name and parameter list (again types and names).
+		</xd:short>
+		<xd:param name="config">config file.</xd:param>
+		<xd:param name="class">class which contains current method.</xd:param>
+		<xd:param name="method">declaration to be generated.</xd:param>
+	</xd:doc>
 	<xsl:template name="javaAccessMethodDeclaration">
 		<xsl:param name="config" />
 		<xsl:param name="class" />

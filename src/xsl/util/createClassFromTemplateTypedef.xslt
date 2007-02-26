@@ -39,14 +39,22 @@
 	<xsl:import href="../exslt/str.split.template.xsl" />
 
 	<xd:doc type="stylesheet">
-		<xd:short>Creates a meta class element from a template and a typedef. 
-				  The global variable $root must be set</xd:short>
+		<xd:short>Templates to handle C++ Templates.</xd:short>
 	</xd:doc>
 
+	<xd:doc type="template">
+		<xd:short>Generates a meta class. As long as we do not know type parameters of a C++ template
+			We can only generate java interfaces. But when there is a typedef we know the types and are
+			able to generate a java class. Therefore we need a meta class first.
+		</xd:short>
+		<xd:param name="template">template which is used.</xd:param>
+		<xd:param name="typedef">typedef which uses a template.</xd:param>
+		<xd:param name="isInnerClass">Whether the generated class is an inner class or not.</xd:param>
+	</xd:doc>
 	<xsl:template name="createClassFromTemplateTypedef">
 		<xsl:param name="template" />
 		<xsl:param name="typedef" />
-		<xsl:param name="isInnerClass" />
+		<xsl:param name="isInnerClass" as="xs:boolean"/>
 
 		<!-- build list of type parameters -->
 		<xsl:variable name="resolvedTypeParas">
@@ -184,6 +192,15 @@
 	</xsl:template>
 
 
+	<xd:doc type="template">
+		<xd:short>Uses typeparameters of typedef to generate types of methods and attributes.
+			As passedBy can be changed by type parameters, those elements are alse created here.
+		</xd:short>
+		<xd:param name="type">type as in meta. Maybe something like 'T' or a real type like 'int'</xd:param>
+		<xd:param name="template">template which is used.</xd:param>
+		<xd:param name="typedef">typedef which uses a template.</xd:param>
+		<xd:param name="resolvedTypeParas">list of used type parameters. Must be fully qualified.</xd:param>
+	</xd:doc>
 	<xsl:template name="createTypeElementAndPassedByAttribute">
 		<xsl:param name="type"/>
 		<xsl:param name="template"/>
@@ -377,6 +394,12 @@
 	</xsl:template>
 
 
+	<xd:doc type="template">
+		<xd:short>Parses type parameters used in typedef and puts them in a list. Fully qualifies them.
+		</xd:short>
+		<xd:param name="template">template which is used.</xd:param>
+		<xd:param name="typedef">typedef which uses a template.</xd:param>
+	</xd:doc>
 	<xsl:template name="buildListOfTypeParameters">
 		<xsl:param name="template"/>
 		<xsl:param name="typedef"/>
@@ -445,6 +468,13 @@
 	</xsl:template>
 
 
+	<xd:doc type="template">
+		<xd:short>When we are dealing with a typedef for a typedef for a typedef ...
+				this templates finds the first one.
+		</xd:short>
+		<xd:param name="template">template which is used.</xd:param>
+		<xd:param name="typedef">typedef which uses a template.</xd:param>
+	</xd:doc>
 	<xsl:template name="findTypedefOrigin">
 		<xsl:param name="typedef"/>
 		<xsl:param name="template"/>
@@ -495,6 +525,15 @@
 
 
 
+	<xd:doc type="template">
+		<xd:short>Generates a meta variable element for the class generated in above templates.
+			Makes use of some above templates.
+		</xd:short>
+		<xd:param name="variable">variable of template which shall be generated for class.</xd:param>
+		<xd:param name="typedef">typedef which uses a template.</xd:param>
+		<xd:param name="template">template which is used.</xd:param>
+		<xd:param name="resolvedTypeParas">list of used type parameters. Must be fully qualified.</xd:param>
+	</xd:doc>
 	<xsl:template name="createVariableElement">
 		<xsl:param name="variable"/>
 		<xsl:param name="typedef"/>
@@ -526,6 +565,15 @@
 	</xsl:template>
 
 
+	<xd:doc type="template">
+		<xd:short>Generates a meta function element for the class generated in above templates.
+			Makes use of some above templates.
+		</xd:short>
+		<xd:param name="function">method of template which shall be generated for class.</xd:param>
+		<xd:param name="typedef">typedef which uses a template.</xd:param>
+		<xd:param name="template">template which is used.</xd:param>
+		<xd:param name="resolvedTypeParas">list of used type parameters. Must be fully qualified.</xd:param>
+	</xd:doc>
 	<xsl:template name="createFunctionElement">
 		<xsl:param name="function"/>
 		<xsl:param name="typedef"/>

@@ -39,6 +39,11 @@
 		<xd:short>Collection of helper templates/functions to handle paths.</xd:short>
 	</xd:doc>
 	
+	<xd:doc type="function">
+		<xd:short>Takes a string and creates a file URI.
+		</xd:short>
+		<xd:param name="path">string to be processed.</xd:param>
+	</xd:doc>
 	<xsl:function name="xbig:toFileURL" as="xs:string">
 		<xsl:param name="path" as="xs:string" />				
 
