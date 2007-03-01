@@ -129,7 +129,7 @@
 
 	<xd:doc type="template">
 		<xd:short>
-			Returns type found in config. Does care about PassedBy.
+			Returns type found in config. Does care about PassedBy and const.
 		</xd:short>
 		<xd:param name="root">Subtree of config.</xd:param>
 		<xd:param name="param">
@@ -166,11 +166,27 @@
 
 				<!-- when passed by value, the pass attribute is missing in config.xml -->
 				<xsl:when
-					test="not(@pass) and ($param/@passedBy eq 'value')">
+					test="not(@pass)
+					      and $param/@passedBy eq 'value'">
 					<xsl:copy-of select="." />
 				</xsl:when>
-
-				<xsl:when test="@pass eq $param/@passedBy">
+				
+				<!-- if pass is declared in config and const not and param is not const -->
+				<xsl:when test="@pass eq 'pointer'
+				                and $param/@passedBy eq 'pointer'">
+					<xsl:copy-of select="." />
+				</xsl:when>
+				
+				<!-- if pass is declared in config and const not and param is not const -->
+				<xsl:when test="@pass eq $param/@passedBy
+								and not(@const)
+				                and not(xbig:isTypeConst($param))">
+					<xsl:copy-of select="." />
+				</xsl:when>
+				
+				<!-- if pass and const is declared in config -->
+				<xsl:when test="@pass eq $param/@passedBy
+				                and @const eq xbig:isTypeConst($param)">
 					<xsl:copy-of select="." />
 				</xsl:when>
 
@@ -741,5 +757,19 @@
 			select="concat($templateBaseType, $templateBracket)" />
 	</xsl:function>
 
-
+	<xd:doc type="function">
+		<xd:short>Helper function to check if a param or return value is const. Return <b>true</b> if param const, otherwise false.</xd:short>
+		<xd:param name="param">The parameter to check.</xd:param>
+	</xd:doc>
+	<xsl:function name="xbig:isTypeConst">
+		<xsl:param name="param"/>
+		<xsl:choose>
+		<xsl:when test="$param/type/@const eq 'true'">
+			<xsl:sequence select="true()"/>
+		</xsl:when>
+		<xsl:otherwise>
+			<xsl:sequence select="false()"/>
+		</xsl:otherwise>
+		</xsl:choose>
+	</xsl:function>
 </xsl:stylesheet>

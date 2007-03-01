@@ -1,3 +1,5 @@
+#ifndef __t13_3_H__
+#define __t13_3_H__
 /******************************************************************
  *
  * Test file for the XSLT Bindings Generator (XBiG)
@@ -16,9 +18,8 @@
 #include <string>
 #include <iostream>
 
-
 template <class T>
-class MapIterator
+class EXPORT MapIterator
 {
 private:
 	typename T::iterator mCurrent;
@@ -72,6 +73,7 @@ public:
 class EXPORT A {
 public:
 	A() {std::cout << "t13_3 A::A(), Objects: " << ++objectCounter << "\n"; m = 0;}
+    A(int m) {std::cout << "t13_3 A::A(int m), Objects: " << ++objectCounter << "\n"; this->m = m;}
 	A(const A& a) {std::cout << "t13_3 A::A(const A& a), Objects: " << ++objectCounter << "\n"; m = a.m;}
 	~A() {std::cout << "t13_3 A::~A(), Objects: " << --objectCounter << "\n";}
 	void set(int i) {m = i;}
@@ -81,14 +83,15 @@ private:
 	static int objectCounter;
 };
 
+int A::objectCounter = 0;
 
 typedef std::map<std::string, A> AMap;
 typedef MapIterator<AMap> AMapIterator;
 
-class Tester {
+class EXPORT Tester {
 public:
 	void a(AMapIterator a) {a.peekNextKey();}
-	AMapIterator b() {return AMapIterator(m);}
+	AMapIterator getMapIterator() {return AMapIterator(m);}
 	AMapIterator c(AMapIterator a) {return a;}
 
 	void setMap(AMap a) {m = a;}
@@ -96,3 +99,4 @@ public:
 private:
 	AMap m;
 };
+#endif

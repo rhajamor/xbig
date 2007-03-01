@@ -69,7 +69,7 @@
 				<xsl:with-param name="class" select="$class" />
 			</xsl:call-template>
 		</xsl:variable>
-
+		
 		<xsl:for-each select="$methodList/function">
 			<xsl:variable name="currentMethod" select="." />
 			<xsl:variable name="currentMethodPos" select="position()" />
@@ -183,8 +183,8 @@
 					</xsl:otherwise>
 				</xsl:choose>
 			</xsl:for-each>
-		</xsl:variable>
-
+		</xsl:variable>		
+			
 		<!-- filter -->
 		<xsl:for-each
 			select="$allInheritedMethodsWithoutConstParams/function">
@@ -611,15 +611,15 @@
 	</xd:doc>
 	<xsl:template
 		name="copyFunctionAndRemoveConstFromByValuePassedParams">
-		<xsl:param name="functionNode" />
-
+		<xsl:param name="functionNode" />		
+		
 		<xsl:element name="function">
 			<!-- copy all attributes -->
 			<xsl:for-each select="$functionNode/@*">
 				<xsl:copy-of select="." />
 			</xsl:for-each>
 
-			<!-- copy all attributes except parameters -->
+			<!-- copy all children except parameters -->
 			<xsl:for-each select="$functionNode/*">
 				<xsl:if test="name() != 'parameters'">
 					<xsl:copy-of select="." />

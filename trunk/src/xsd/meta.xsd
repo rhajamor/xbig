@@ -20,8 +20,8 @@
 	Author: Kai Klesatschke <yavin@ogre4j.org>
 -->
 <xs:schema
-	xmlns="http://xbig.sourceforge.net/xmlns"
-	targetNamespace="http://xbig.sourceforge.net/xmlns"
+	xmlns="http://xbig.sourceforge.net/XBiG"
+	targetNamespace="http://xbig.sourceforge.net/XBiG"
 	xmlns:xs="http://www.w3.org/2001/XMLSchema"
 	elementFormDefault="qualified">
 	<xs:annotation>

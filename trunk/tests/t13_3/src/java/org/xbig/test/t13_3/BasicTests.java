@@ -58,7 +58,7 @@ public class BasicTests {
 		t.setMap(nativeMap);
 
 		// set and get Iterator with two calls
-		IAMapIterator mapIterator = t.b();
+		IAMapIterator mapIterator = t.getMapIterator();
 		t.a(mapIterator);
 		Assert.assertEquals(javaMap.get(keyVec.get(0).get()).get(), mapIterator.peekNextValue().get());
 		mapIterator.delete();
@@ -71,7 +71,7 @@ public class BasicTests {
 		mapIterator2.delete();
 
 		// test Iterator methods
-		mapIterator = t.b();
+		mapIterator = t.getMapIterator();
 		Assert.assertTrue(mapIterator.hasMoreElements());
 		for (int i=0; i<javaMap.size(); i++) {
 			String currentKey = keyVec.get(i).get();

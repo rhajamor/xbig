@@ -18,28 +18,37 @@ public:
 
 	// const data
 	const int a(float* b);
-	int const b(float* b);
-	int c(const float* b);
-	int a(float* b) const;
-
 	const int* a(float b);
-	int* c(const float b);
-	int* d(float const b);
+	const int a(const float* b);	
+	int a(float* b) const;	
 	int* a(float b) const;
-
-	const int* e(float* b);
-	int* g(const float* b);
+	int a(const float* b) const;
+	
+	int const b(float* b);
+	int const b(const float* b);
+	
+	/** c1 */
+	int c(const float* c1b);
+	/** c2 */
+	int* c(const float c2b);
+	/** c3 */
+	int c(float* c3b);
+	
+	int* d(float const b);
+	
+	const int* e(float* b);	
+	const int* e(const float* b);
 	int* e(float* b) const;
+	int* e(const float* b) const;
+	
+	int* g(const float* b);
+	
 
 	// overloading
-	const int a(const float* b);
-	int const b(const float* b);
-	int c(float* b);
-	int a(const float* b) const;
+	
 
-	const int* e(const float* b);
+
 	int* g(float* b);
-	int* e(const float* b) const;
 
 	// more than one const per line
 	const int* h(float* b) const;

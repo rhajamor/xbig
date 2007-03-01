@@ -578,6 +578,15 @@
 						reinterpret_cast&lt;jlong&gt;(&amp;#cpp_var#)
 					</cpp2jni>
 				</type>
+				<type meta="std::string" pass="reference" jni="jstring" cpp="std::string&amp;"
+						 returntype="std::string&amp;" const="true">
+					<jni2cpp>
+						org::xbig::jni::to_stdstring(#jni_env#, #jni_var#)
+					</jni2cpp>					
+					<cpp2jni>
+						org::xbig::jni::to_jstring(#jni_env#, #cpp_var#)
+					</cpp2jni>
+				</type>
 				<type meta="std::string" jni="jstring">
 					<jni2cpp>
 						org::xbig::jni::to_stdstring(#jni_env#, #jni_var#)

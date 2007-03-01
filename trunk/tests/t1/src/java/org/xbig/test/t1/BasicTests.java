@@ -18,15 +18,15 @@ public class BasicTests {
 		int i = 4;
 		long ui = 52544236L;
 		String s = "Bulldozer Frenzy";
-		StringPointer sPtr = new StringPointer(s);
+		//StringPointer sPtr = new StringPointer(s);
 
-		T1 t1 = new T1(i, ui, sPtr);
+		T1 t1 = new T1(i, ui, s);
 
 		Assert.assertEquals(i, t1.getInteger());
 		Assert.assertEquals(ui, t1.getUnsignedInteger());
-		Assert.assertEquals(s, t1.getString().get());
+		Assert.assertEquals(s, t1.getString());
 
 		t1.delete();
-		sPtr.delete();
+		//sPtr.delete();
 	}
 }

@@ -612,11 +612,19 @@
 							<xsl:variable name="fullParameterTypeName" select="$resolvedParameter"/>
 
 							<!-- write parameter name -->
-							<xsl:if test="@passedBy='reference' or ((
-										  xbig:isClassOrStruct($fullParameterTypeName, $class, $root) or
-										  xbig:isTemplateTypedef($fullParameterTypeName, $class, $root) or
-										  contains(type, '&lt;')
-										  ) and @passedBy != 'pointer')">
+							<xsl:if test="(@passedBy eq 'reference' and not(xbig:isTypeConst(.)))
+							              or 
+							              (
+							              	@passedBy ne 'pointer'
+							              	and
+							                (
+										      xbig:isClassOrStruct($fullParameterTypeName, $class, $root) 
+										      or
+										      xbig:isTemplateTypedef($fullParameterTypeName, $class, $root) 
+										      or
+										      contains(type, '&lt;')
+										     )
+										   )">
 								<xsl:value-of select="'*'" />
 							</xsl:if>
 							<!-- if there is no param name in original lib -->

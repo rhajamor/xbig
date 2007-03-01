@@ -23,38 +23,64 @@ public class BasicTests {
 
 		A a = new A();
 
+        // const int a(float& b);
 		i = a.a(fPtr);
 		Assert.assertEquals(fPtr.intValue(), i);
+        
+        // int a(float& b) const;
+        i = a.a_const(fPtr);
+        Assert.assertEquals(fPtr.intValue(), i);
+        
+        // int const b(float& b);
 		i = a.b(fPtr);
 		Assert.assertEquals(fPtr.intValue(), i);
-		i = a.c(fPtr);
+        
+        // int c(const float& b);
+		i = a.c(f);        
+		Assert.assertEquals((int)f, i);
+        
+        // int& d(float const b);
+		iPtr = a.d(f);
+		Assert.assertEquals((int)f, iPtr.intValue());
+        
+        // const int& e(float& b);
+		i = a.e(fPtr);
 		Assert.assertEquals(fPtr.intValue(), i);
-		i = a.a_const(fPtr);
+        
+        // int& e(float& b) const;
+        iPtr = a.e_const(fPtr);
+        Assert.assertEquals(fPtr.intValue(), iPtr.intValue());
+        
+        // int& g(const float& b);
+		iPtr = a.g(f);
+		Assert.assertEquals((int)f, iPtr.intValue());
+        
+        // int& g(const float& b) const;
+        iPtr = a.g_const(f);
+        Assert.assertEquals((int)f, iPtr.intValue());
+        
+        // const int& h(float& b) const;
+		i = a.h(fPtr);
 		Assert.assertEquals(fPtr.intValue(), i);
-		iPtr = a.d(fPtr.floatValue());
-		Assert.assertEquals(fPtr.intValue(), iPtr.intValue());
-		iPtr = a.e(fPtr);
-		Assert.assertEquals(fPtr.intValue(), iPtr.intValue());
-		iPtr = a.g(fPtr);
-		Assert.assertEquals(fPtr.intValue(), iPtr.intValue());
-		iPtr = a.e_const(fPtr);
-		Assert.assertEquals(fPtr.intValue(), iPtr.intValue());
-		iPtr = a.h(fPtr);
-		Assert.assertEquals(fPtr.intValue(), iPtr.intValue());
-		iPtr = a.g_const(fPtr);
-		Assert.assertEquals(fPtr.intValue(), iPtr.intValue());
-		iPtr = a.i(fPtr);
-		Assert.assertEquals(fPtr.intValue(), iPtr.intValue());
+		
+        // const int& i(const float& b) const;
+		i = a.i(f);
+		Assert.assertEquals((int)f, i);
 
 		a.delete();
 
 
 		B b = new B();
 
-		iPtr = b.a(f);
-		Assert.assertEquals((int)f, iPtr.intValue());
+        // const int& a(float b);
+		i = b.a(f);
+		Assert.assertEquals((int)f, i);
+        
+        // int& c(const float b);
 		iPtr = b.c(f);
 		Assert.assertEquals((int)f, iPtr.intValue());
+        
+        // int& a(float b) const;
 		iPtr = b.a_const(f);
 		Assert.assertEquals((int)f, iPtr.intValue());
 
