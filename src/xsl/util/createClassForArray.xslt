@@ -49,15 +49,17 @@
 		<xd:param name="typeName">Type which is needed as array.</xd:param>
 	</xd:doc>
 	<xsl:template name="createClassForArray">
-		<xsl:param name="typeName" />
-
+		<xsl:param name="typeName" />		
+		<xsl:param name="fullName" />
+		
 		<xsl:variable name="className" select="concat($typeName,'Array')"/>
+		<xsl:variable name="fullclassName" select="concat($fullName,'Array')"/>
 		<xsl:message>create array wrapper <xsl:value-of select="$className"/></xsl:message>
 
 		<!-- generate the class element -->		
 		<xsl:element name="class">
 			<xsl:attribute name="name" select="$className"/>
-			<xsl:attribute name="fullName" select="$className"/>
+			<xsl:attribute name="fullName" select="$fullclassName"/>
 			
 			<!-- ctor <className>(long size) -->
 			<xsl:element name="function">
@@ -66,11 +68,13 @@
                 <xsl:attribute name="static">false</xsl:attribute>
                 <xsl:attribute name="const">false</xsl:attribute>
                 <xsl:attribute name="passedBy">value</xsl:attribute>
+                <xsl:element name="definition"><xsl:value-of select="$className"/>::<xsl:value-of select="$className"/></xsl:element>
                 <xsl:element name="name"><xsl:value-of select="$className"/></xsl:element>
                 <xsl:element name="parameters">
-                	<xsl:element name="param">
+                	<xsl:element name="parameter">
+                		<xsl:attribute name="passedBy">value</xsl:attribute>
+	               		<xsl:element name="type">long</xsl:element>
                 		<xsl:element name="name">size</xsl:element>
-                		<xsl:element name="type">long</xsl:element>
                 	</xsl:element>
                 </xsl:element>
             </xsl:element>
@@ -82,12 +86,14 @@
                 <xsl:attribute name="static">false</xsl:attribute>
                 <xsl:attribute name="const">true</xsl:attribute>
                 <xsl:attribute name="passedBy">value</xsl:attribute>
-                <xsl:element name="name">get</xsl:element>
                 <xsl:element name="type"><xsl:value-of select="$typeName"/></xsl:element>
+                <xsl:element name="definition"><xsl:value-of select="$className"/>::get</xsl:element>                
+                <xsl:element name="name">get</xsl:element>
                 <xsl:element name="parameters">
-                	<xsl:element name="param">
-                		<xsl:element name="name">index</xsl:element>
+                	<xsl:element name="parameter">
+                		<xsl:attribute name="passedBy">value</xsl:attribute>
                 		<xsl:element name="type">long</xsl:element>
+                		<xsl:element name="name">index</xsl:element>                		
                 	</xsl:element>
                 </xsl:element>
             </xsl:element>
@@ -99,16 +105,19 @@
                 <xsl:attribute name="static">false</xsl:attribute>
                 <xsl:attribute name="const">false</xsl:attribute>
                 <xsl:attribute name="passedBy">value</xsl:attribute>
-                <xsl:element name="name">set</xsl:element>
                 <xsl:element name="type">void</xsl:element>
+                <xsl:element name="definition"><xsl:value-of select="$className"/>::set</xsl:element>
+                <xsl:element name="name">set</xsl:element>
                 <xsl:element name="parameters">
-                	<xsl:element name="param">
-                		<xsl:element name="name">index</xsl:element>
+                	<xsl:element name="parameter">
+                		<xsl:attribute name="passedBy">value</xsl:attribute>
                 		<xsl:element name="type">long</xsl:element>
+                		<xsl:element name="name">index</xsl:element>                		
                 	</xsl:element>
-                	<xsl:element name="param">
-                		<xsl:element name="name">value</xsl:element>
+                	<xsl:element name="parameter">
+                		<xsl:attribute name="passedBy">value</xsl:attribute>
                 		<xsl:element name="type"><xsl:value-of select="$typeName"/></xsl:element>
+                		<xsl:element name="name">value</xsl:element>                		
                 	</xsl:element>                	
                 </xsl:element>
             </xsl:element>

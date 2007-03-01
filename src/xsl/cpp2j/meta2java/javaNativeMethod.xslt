@@ -94,7 +94,7 @@
 		<!-- handle virtual modifiers -->
 		<xsl:choose>
 			<xsl:when test="$virtuality = 'non-virtual'">
-				<xsl:text>&#32;final</xsl:text>
+				<!-- <xsl:text>&#32;final</xsl:text> -->
 			</xsl:when>
 
 			<!-- this is not necessary because 
@@ -141,7 +141,8 @@
 				<xsl:text>long</xsl:text>
 			</xsl:when>
 
-			<xsl:when test="($method/@passedBy eq 'pointer') or ($method/@passedBy eq 'reference')">
+			<xsl:when test="($method/@passedBy eq 'pointer') or ($method/@passedBy eq 'reference'
+			            and not(xbig:isTypeConst($method)))">
 				<xsl:value-of select="'long'" />
 			</xsl:when>
 

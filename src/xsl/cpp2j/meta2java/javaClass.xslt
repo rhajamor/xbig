@@ -187,14 +187,14 @@
 				<xsl:with-param name="class" select="$class" />
 			</xsl:call-template>
 		</xsl:variable>
-
+		
 		<!-- remove function that are equal to java -->
 		<xsl:variable name="inheritedMethodsForJava">
 			<xsl:call-template name="getValidMethodList">
 				<xsl:with-param name="functionNodeList"
 					select="$inheritedMethods" />
 			</xsl:call-template>
-		</xsl:variable>
+		</xsl:variable>		
 
 		<!-- generate method impl -->
 		<xsl:for-each select="$inheritedMethodsForJava/function">

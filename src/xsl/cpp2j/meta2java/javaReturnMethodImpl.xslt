@@ -80,8 +80,8 @@
 		<xsl:text>&#32;return&#32;</xsl:text>
 
 		<!-- create Pointer object when necessary -->
-		<xsl:if test="($method/@passedBy='pointer' or $method/@passedBy='reference')
-						and ($type_info/type/@java or $resolvedType = 'void')">
+		<xsl:if test="($method/@passedBy='pointer' or ($method/@passedBy='reference' and not(xbig:isTypeConst($method))))
+					  and ($type_info/type/@java or $resolvedType = 'void')">
 			<xsl:text>new&#32;</xsl:text>
 			<xsl:variable name="fullTypeNameWithPointer">
 				<xsl:call-template name="javaPointerClass">
@@ -195,8 +195,8 @@
 		</xsl:call-template>
 
 		<!-- close Pointer and InstancePointer c-tor calls -->
-		<xsl:if test="($method/@passedBy='pointer' or $method/@passedBy='reference')
-						and $type_info/type/@java">
+		<xsl:if test="($method/@passedBy='pointer' or ($method/@passedBy='reference' and not(xbig:isTypeConst($method))))					  
+					  and $type_info/type/@java">
 			<xsl:text>))</xsl:text>
 		</xsl:if>
 		<xsl:if test="contains($resolvedType, '&lt;')"><!-- for returned parametrized templates -->

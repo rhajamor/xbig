@@ -150,13 +150,24 @@
 		<!-- class used for pointer pointer -->
 		<xsl:variable name="pointerPointerClass" select="'NativeObjectPointer'"/>
 
+		<!-- DEBUG MESSAGES -->
+		<!-- 
+		<xsl:if test="$param/name() ne 'function' and starts-with($param/name,'c')">
+			<xsl:message></xsl:message>
+			<xsl:message>==== <xsl:value-of select="$param/name"/> ====</xsl:message>
+			<xsl:message>Definition:           <xsl:value-of select="$param/definition"/></xsl:message>
+			<xsl:message>Pointer or Reference: <xsl:value-of select="$param/@passedBy='pointer' or $param/@passedBy='reference'"/></xsl:message>
+			<xsl:message>Const:                <xsl:value-of select="xbig:isTypeConst($param)"/></xsl:message>
+			<xsl:message>Native:               <xsl:value-of select="boolean($writingNativeMethod)"/></xsl:message>
+			<xsl:message>Primitive:            <xsl:value-of select="boolean($type_info/type/@java)"/></xsl:message>
+		</xsl:if>
+		 -->
 		<!-- choose type -->
 		<xsl:choose>
-
-			<!-- write pointer class -->
-			<xsl:when test="($param/@passedBy='pointer' or $param/@passedBy='reference')
+			<!-- write pointer class if the value is passed by pointer or reference and not const -->
+			<xsl:when test="($param/@passedBy='pointer' or ($param/@passedBy='reference' and not(xbig:isTypeConst($param))))
 							and ($writingNativeMethod ne 'true')
-							and $type_info/type/@java">
+							and $type_info/type/@java">	
 				<xsl:variable name="fullTypeNameWithPointer">
 					<xsl:call-template name="javaPointerClass">
 						<xsl:with-param name="config" select="$config" />

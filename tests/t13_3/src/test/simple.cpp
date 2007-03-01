@@ -1,16 +1,24 @@
-
 #include "t13_3.h"
 #include <iostream>
 
 int main(int argc, char* argv[]) 
-{/*
-   C a;
-   int b = a.a();
-   a.b(b);
+{
+    AMap map;    
+    map["eins"] = A(1);
+    map["zwei"] = A(2);
+    map["drei"] = A(3);
+    Tester tester;
+    tester.setMap(map);    
+    AMapIterator it = tester.getMapIterator();
+    
+    std::cout << "--------------------------------" << std::endl;
+    while(it.hasMoreElements())
+    {        
+        std::cout << it.peekNextKey() << ", " << it.peekNextValue().get() << std::endl;
+        it.getNext();
+    }
+    std::cout << "--------------------------------" << std::endl;
 
-   D s;
-   B obj = s.a();
-   s.b(obj);
-*/
-   std::cout << "done" << std::endl;
+    AMapIterator c = tester.c(it);
+    std::cout << "done" << std::endl;
 }

@@ -25,8 +25,7 @@ public:
 	int const b(const float& b);
 	
 	int c(const float& b);
-	int c(float& b);
-	int c(const float* b);
+	int c(float& b);	
 
 	int& d(float const b);
 
@@ -34,9 +33,13 @@ public:
 	int& g(float& b);
 	int& g(const float& b) const;
 
+	/** 1 */
 	const int& e(float& b);	
+	/** 2 */
 	int& e(float& b) const;
+	/** 3 */
 	const int& e(const float& b);
+	/** 4 */
 	int& e(const float& b) const;
 
 	// more than one const per line

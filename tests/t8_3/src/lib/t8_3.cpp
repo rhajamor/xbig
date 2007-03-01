@@ -12,12 +12,13 @@ A::A() {
 const int A::a(float& b) {
 	std::cout << "t8_3: A::a(float& b)" << std::endl;
 	std::cout << "b: " << b << std::endl;
+	b=10;
 	return (int)b;
 }
 
 int const A::b(float& b) {
 	std::cout << "t8_3: A::b(float& b)" << std::endl;
-	std::cout << "b: " << b << std::endl;
+	std::cout << "b: " << b << std::endl;	
 	return (int)b;
 }
 
@@ -39,9 +40,10 @@ const int& A::a(float b) {
 	z = (int)b;
 	return z;
 }
-
-int& A::c(const float b) {
-	std::cout << "t8_3: A::c(const float b)" << std::endl;
+*/
+/*
+int A::c(const float* b) {
+	std::cout << "t8_3: A::c(const float* b)" << std::endl;
 	std::cout << "b: " << b << std::endl;
 	z = (int)b;
 	return z;
