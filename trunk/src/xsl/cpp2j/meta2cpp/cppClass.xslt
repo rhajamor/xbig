@@ -164,7 +164,7 @@
 				</xsl:for-each>
 
 				<!-- check if we have to generate a class for a typedef -->
-				<xsl:for-each select="typedef">
+				<xsl:for-each select="typedef[@protection eq 'public']">
 					<xsl:if test="contains(./@basetype, '&lt;')">
 						<xsl:variable name="templateBaseName"
 								select="normalize-space(substring-before(./@basetype, '&lt;'))"/>

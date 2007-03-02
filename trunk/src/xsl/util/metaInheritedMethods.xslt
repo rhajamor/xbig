@@ -224,35 +224,39 @@
 									<!-- primitive types -->
 									<xsl:when
 										test="$config/config/java/types/type[@meta = $typeName]">
-										<xsl:value-of select="false()" />
+										<xsl:sequence select="false()" />
+									</xsl:when>
+									<xsl:when
+										test="$root//*[@fullName eq $fullTypeName]/@protection ne 'public'">
+										<xsl:sequence select="true()" />
 									</xsl:when>
 									<xsl:when
 										test="xbig:isEnum($fullTypeName, $class, $root)">
-										<xsl:value-of select="false()" />
+										<xsl:sequence select="false()" />
 									</xsl:when>
 									<xsl:when
 										test="xbig:isTypedef($fullTypeName, $class, $root)">
-										<xsl:value-of select="false()" />
+										<xsl:sequence select="false()" />
 									</xsl:when>
 									<xsl:when
 										test="xbig:isClassOrStruct($fullTypeName, $class, $root)">
-										<xsl:value-of select="false()" />
+										<xsl:sequence select="false()" />
 									</xsl:when>
 									<xsl:when
 										test="xbig:isTemplateTypedef($fullTypeName, $class, $root)">
-										<xsl:value-of select="false()" />
+										<xsl:sequence select="false()" />
 									</xsl:when>
 
 									<!-- template parameters -->
 									<xsl:when
 										test="$class/templateparameters/templateparameter
 																		[@templateDeclaration = $typeName]">
-										<xsl:value-of select="false()" />
+										<xsl:sequence select="false()" />
 									</xsl:when>
 
 									<!-- filter -->
 									<xsl:otherwise>
-										<xsl:value-of select="true()" />
+										<xsl:sequence select="true()" />
 									</xsl:otherwise>
 								</xsl:choose>
 							</xsl:element>

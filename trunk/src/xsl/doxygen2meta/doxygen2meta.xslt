@@ -779,201 +779,7 @@
 							<xsl:value-of select="../../compoundname"/>
 						</xsl:element>
 					</xsl:otherwise>
-				</xsl:choose>
-
-				<!-- 
-				<xsl:variable name="type"
-					select="replace(type,'std::string','String')" />
-				 -->
-				<!-- 
-				<xsl:variable name="type" select="type"/>
-				<xsl:choose>
-					<xsl:when
-						test="contains($type,'std::') or contains($type,',')">
-						<xsl:attribute name="basetype"
-							select="substring-before(type,'&lt;')" />
-						<xsl:variable name="basetype"
-							select="substring-before(type,'&lt;')" />
-						<xsl:if test="contains($basetype,'&#xA;')">
-							<xsl:attribute name="basetype"
-								select="normalize-space(substring-after($basetype,'&#xA;'))" />
-						</xsl:if>
-						<xsl:variable name="string1"
-							select="substring-after($type,'&lt; ')" />
-						<xsl:choose>
-						 -->
-							<!-- e.g. std::multimap< std::pair<size_t, size_t>, std::pair<size_t, size_t> > -->
-							<!-- 
-							<xsl:when
-								test="starts-with($string1,'std::')">
-								<xsl:variable name="type1"
-									select="substring-before($string1,', std::')" />
-								<xsl:element name="typedef">
-									<xsl:attribute name="basetype"
-										select="substring-before($type1,'&lt;')" />
-									<xsl:variable name="string1"
-										select="substring-after($type1,'&lt; ')" />
-									<xsl:call-template name="typeMap">
-										<xsl:with-param name="type"
-											select="normalize-space(substring-before($string1,','))" />
-									</xsl:call-template>
-									<xsl:variable name="string2"
-										select="substring-before($string1,' &gt;')" />
-									<xsl:call-template name="typeMap">
-										<xsl:with-param name="type"
-											select="normalize-space(substring-after($string2,','))" />
-									</xsl:call-template>
-								</xsl:element>
-								<xsl:variable name="type2"
-									select="substring-after($string1,'&gt;, ')" />
-								<xsl:element name="typedef">
-									<xsl:attribute name="basetype"
-										select="substring-before($type2,'&lt;')" />
-									<xsl:variable name="string1"
-										select="substring-after($type2,'&lt; ')" />
-									<xsl:call-template name="typeMap">
-										<xsl:with-param name="type"
-											select="normalize-space(substring-before($string1,','))" />
-									</xsl:call-template>
-									<xsl:variable name="string2"
-										select="substring-before($string1,' &gt;')" />
-									<xsl:call-template name="typeMap">
-										<xsl:with-param name="type"
-											select="normalize-space(substring-after($string2,','))" />
-									</xsl:call-template>
-								</xsl:element>
-							</xsl:when>
-							<xsl:when test="contains($string1,',')">
-								<xsl:variable name="string2"
-									select="substring-after(type,', ')" />
-								<xsl:call-template name="typeMap">
-									<xsl:with-param name="type"
-										select="substring-before($string1,',')" />
-									<xsl:with-param name="passedBy">
-										<xsl:choose>
-											<xsl:when
-												test="contains(substring-before($string1,','),'*')">
-												<xsl:value-of
-													select="'pointer'" />
-											</xsl:when>
-											<xsl:otherwise>
-												<xsl:value-of
-													select="'value'" />
-											</xsl:otherwise>
-										</xsl:choose>
-									</xsl:with-param>
-								</xsl:call-template>
-								<xsl:choose>
-								 -->
-									<!-- e.g. std::map<Vector3, size_t, vectorLess> -->
-									<!-- 
-									<xsl:when
-										test="contains($string2,',')">
-										<xsl:call-template
-											name="typeMap">
-											<xsl:with-param name="type"
-												select="normalize-space(substring-before($string2,','))" />
-										</xsl:call-template>
-									</xsl:when>
-									 -->
-									<!-- e.g. std::map<Vector3, size_t> -->
-									<!-- 
-									<xsl:otherwise>
-										<xsl:call-template
-											name="typeMap">
-											<xsl:with-param name="type"
-												select="substring-before($string2,' ')" />
-											<xsl:with-param
-												name="passedBy">
-												<xsl:choose>
-													<xsl:when
-														test="contains($string2,'*')">
-														<xsl:value-of
-															select="'pointer'" />
-													</xsl:when>
-													<xsl:otherwise>
-														<xsl:value-of
-															select="'value'" />
-													</xsl:otherwise>
-												</xsl:choose>
-											</xsl:with-param>
-										</xsl:call-template>
-									</xsl:otherwise>
-								</xsl:choose>
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:call-template name="typeMap">
-									<xsl:with-param name="type"
-										select="normalize-space(substring-before($string1,'&gt;'))" />
-									<xsl:with-param name="passedBy">
-										<xsl:choose>
-											<xsl:when
-												test="contains($string1,'*')">
-												<xsl:value-of
-													select="'pointer'" />
-											</xsl:when>
-											<xsl:otherwise>
-												<xsl:value-of
-													select="'value'" />
-											</xsl:otherwise>
-										</xsl:choose>
-									</xsl:with-param>
-								</xsl:call-template>
-							</xsl:otherwise>
-						</xsl:choose>
-					</xsl:when>
-					 -->
-					<!-- iterator, simple typedefs -->
-					<!-- 
-					<xsl:otherwise>
-						<xsl:attribute name="basetype" select="type" />
-						<xsl:variable name="basetype" select="type" />
-						<xsl:if test="contains($basetype,'&#xA;')">
-							<xsl:attribute name="basetype"
-								select="normalize-space(substring-after($basetype,'&#xA;'))" />
-						</xsl:if>
-						<xsl:choose>
-							<xsl:when
-								test="type/ref[@kindref='member']">
-								<xsl:choose>
-									<xsl:when
-										test="contains(type/ref[@kindref='member'],'::')">
-										<xsl:attribute name="type"
-											select="substring-after(type/ref[@kindref='member'],'::')" />
-									</xsl:when>
-									<xsl:otherwise>
-										<xsl:attribute name="type"
-											select="type/ref[@kindref='member']" />
-									</xsl:otherwise>
-								</xsl:choose>
-							</xsl:when>
-							<xsl:when
-								test="type/ref[@kindref='compound']">
-								<xsl:choose>
-									<xsl:when
-										test="count(type/ref[@kindref='compound'])=2">
-										<xsl:attribute name="type"
-											select="type/ref[@kindref='compound' and position()=2]" />
-									</xsl:when>
-									<xsl:otherwise>
-										<xsl:variable name="string1"
-											select="substring-after(type,'&lt;')" />
-										<xsl:attribute name="type"
-											select="normalize-space(substring-before($string1,'&gt;'))" />
-									</xsl:otherwise>
-									 -->
-									<!--
-										<xsl:otherwise>
-										<xsl:attribute name="type" select="type/ref[@kindref='compound']"/>
-										</xsl:otherwise>
-									-->
-									<!-- 
-								</xsl:choose>
-							</xsl:when>
-						</xsl:choose>
-					</xsl:otherwise>
-				</xsl:choose>
-				 -->
+				</xsl:choose>				
 
 				<!-- documentation -->
 				<xsl:call-template name="documentation" />
@@ -1789,12 +1595,7 @@
 		<!-- template attributes -->
 		<xsl:if test="templateparamlist">
 			<xsl:attribute name="template" select="'true'" />
-<!-- 
-			<xsl:attribute name="templateType"
-				select="templateparamlist/param/type" />
-			<xsl:attribute name="templateDeclaration"
-				select="templateparamlist/param/declname" />
- -->
+
 			<xsl:element name="templateparameters">
 				<xsl:for-each select="templateparamlist/param">
 					<xsl:element name="templateparameter">
@@ -1826,24 +1627,6 @@
 		<!-- getting the right name of inner classes -->
 		<xsl:variable name="name"
 			select="substring-after(compoundname,'::')" />
-		<!-- 
-		<xsl:if test="contains($name,'::')">
-			<xsl:attribute name="name"
-				select="substring-after($name,'::')" />
-			<xsl:variable name="name"
-				select="substring-after($name,'::')" />
-			<xsl:if test="contains($name,'::')">
-				<xsl:attribute name="name"
-					select="substring-after($name,'::')" />
-				<xsl:variable name="name"
-					select="substring-after($name,'::')" />
-				<xsl:if test="contains($name,'::')">
-					<xsl:attribute name="name"
-						select="substring-after($name,'::')" />
-				</xsl:if>
-			</xsl:if>
-		</xsl:if>
-		 -->
 
 		<!-- copy all includes into meta output -->
 		<xsl:copy-of copy-namespaces="no" select="includes" />
@@ -1864,7 +1647,7 @@
 			</xsl:choose>
 		</xsl:for-each>
 		<!-- typedefs -->
-		<xsl:for-each select="sectiondef[@kind='public-type']">
+		<xsl:for-each select="sectiondef[@kind='public-type' or @kind='protected-type']">
 			<xsl:choose>
 				<xsl:when test="memberdef[@kind='typedef']">
 					<xsl:call-template name="typedef" />

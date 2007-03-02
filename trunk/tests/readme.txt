@@ -81,6 +81,7 @@ t13: external types
 	t13_4: typedefs for STL wrapper
 	t13_5: pointer as type parameter
 	t13_6: const pointer as type parameter
+	t13_7: protected type as template parameter in public typedef
 
 t14: arrays
 	t14_1: arrays as parameters
