@@ -12,10 +12,12 @@
 	#define EXPORT
 #endif
 
-class EXPORT A {	
-public:
+class EXPORT A {
+
+protected:
 	typedef unsigned short ushort;
-	typedef unsigned int uint;	
+	typedef unsigned int uint;
+public:
 	typedef unsigned long ulong;
 	virtual ushort a() =0;
 	virtual uint b();

@@ -63,7 +63,7 @@
 				<xsl:with-param name="typedef" select="$typedef"/>
 			</xsl:call-template>
 		</xsl:variable>
-
+		
 		<!-- generate the class element -->
 		<xsl:element name="class">
 			<xsl:attribute name="name" select="$typedef/@name"/>
@@ -228,6 +228,7 @@
 
 					<!-- handle pointers as type parameters -->
 					<xsl:variable name="selectedTypePara" select="$resolvedTypeParas/para[number($pos)]"/>
+													
 					<xsl:variable name="changedPassedByType">
 						<xsl:choose>
 							<xsl:when test="contains($selectedTypePara, '*')">
@@ -239,7 +240,7 @@
 							</xsl:otherwise>
 						</xsl:choose>
 					</xsl:variable>
-
+										
 					<!-- return -->
 					<xsl:element name="type">
 						<xsl:choose>
@@ -274,7 +275,7 @@
 							<xsl:with-param name="typedef" select="$typedef"/>
 						</xsl:call-template>
 					</xsl:variable>
-
+					
 					<xsl:variable name="originNode" select="$root//*
 						[@fullName = normalize-space(substring-before($baseTypedef/*/@basetype, '&lt;'))]"/>
 
@@ -426,10 +427,10 @@
 						</xsl:otherwise>
 					</xsl:choose>
 				</xsl:variable>
-				
+												
 				<xsl:choose>
 					<!-- templates as type parameters -->
-					<xsl:when test="contains($normalizedToken, '&lt;')">
+					<xsl:when test="contains($normalizedToken, '&lt;')">						
 						<xsl:value-of select="concat('::', xbig:getFullTemplateName(
 									$normalizedToken, $typedef, $root))"/>
 					</xsl:when>
@@ -441,7 +442,7 @@
 
 					<xsl:otherwise>
 						<xsl:variable name="resolvedType" select="xbig:resolveTypedef(
-																$normalizedToken, $typedef, $root)"/>
+																$normalizedToken, $typedef, $root)"/>																					
 						<xsl:choose>
 							<!-- classes, ... -->
 							<xsl:when test="xbig:isClassOrStruct($resolvedType, $template, $root)">
@@ -450,6 +451,9 @@
 							<xsl:when test="xbig:isEnum($resolvedType, $template, $root)">
 									<xsl:value-of select="concat('::', $resolvedType)"/>
 							</xsl:when>
+							<xsl:when test="xbig:isTypedef($resolvedType, $template, $root)">
+									<xsl:value-of select="concat('::', $resolvedType)"/>
+							</xsl:when>					
 
 							<!-- unresolved type -->
 							<xsl:otherwise>

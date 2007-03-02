@@ -651,22 +651,15 @@
 
 		<xsl:variable name="fullName"
 			select="xbig:getFullTypeName($type, $currentNode, $inputTreeRoot)" />
-		<!-- 
-			<xsl:variable name="fullName" select="$type"/>
-		-->
-
+			
 		<xsl:choose>
 			<xsl:when
 				test="xbig:isTypedef($fullName, $currentNode, $inputTreeRoot)">
-				<xsl:variable name="typedefNode"
-					select="$inputTreeRoot//typedef[@fullName = $fullName]" />
-				<xsl:choose>
+				<xsl:variable name="typedefNode" select="$inputTreeRoot//typedef[@fullName eq $fullName]" />
 
+				<xsl:choose>
 					<!-- if this is a typedef for a template, there is a class -->
-					<xsl:when
-						test="contains($typedefNode/@basetype, '&lt;')">
-						<!-- <xsl:value-of select="xbig:getFullTypeName(
-							$typedefNode/@basetype, $typedefNode/.., $inputTreeRoot)"/> -->
+					<xsl:when test="contains($typedefNode/@basetype, '&lt;')">
 						<xsl:value-of select="$fullName" />
 					</xsl:when>
 
@@ -678,9 +671,6 @@
 				</xsl:choose>
 			</xsl:when>
 			<xsl:otherwise>
-				<!-- 
-					<xsl:value-of select="$type"/>
-				-->
 				<xsl:value-of select="$fullName" />
 			</xsl:otherwise>
 		</xsl:choose>
