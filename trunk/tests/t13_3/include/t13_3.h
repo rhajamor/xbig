@@ -83,8 +83,6 @@ private:
 	static int objectCounter;
 };
 
-int A::objectCounter = 0;
-
 typedef std::map<std::string, A> AMap;
 typedef MapIterator<AMap> AMapIterator;
 
