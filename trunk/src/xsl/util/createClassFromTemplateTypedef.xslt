@@ -71,8 +71,6 @@
 			</xsl:call-template>
 		</xsl:variable>
 		
-		<xsl:message>resolvedTypeParas:<xsl:value-of select="$resolvedTypeParas"/></xsl:message>
-
 		<!-- generate the class element -->
 		<xsl:element name="class">
 			<xsl:attribute name="name" select="$typedef/@name" />
