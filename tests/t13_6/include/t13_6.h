@@ -27,7 +27,7 @@ private:
 
 class EXPORT OuterClass {
 public:
-	typedef std::vector< const A * > AptrVector;
+	typedef std::vector< const A * > AptrVector;	
 };
 
 
