@@ -9,10 +9,10 @@ import org.junit.Test;
 import org.xbig.base.IntegerPointer;
 //import org.xbig.std.Imap;
 import org.xbig.n.IA;
-import org.xbig.n.IOuterClass.IAptrMap;
+import org.xbig.n.IOuterClass.IAptrVector;
 import org.xbig.n.ITester;
 import org.xbig.n.A;
-import org.xbig.n.OuterClass.AptrMap;
+import org.xbig.n.OuterClass.AptrVector;
 import org.xbig.n.Tester;
 /**
  * @author nenning
@@ -25,13 +25,6 @@ public class BasicTests {
 		Tester t = new Tester();
 
 		// create test data
-		Vector<IntegerPointer> keyVec = new Vector<IntegerPointer>();
-		keyVec.add(new IntegerPointer(0));
-		keyVec.add(new IntegerPointer(1));
-		keyVec.add(new IntegerPointer(2));
-		keyVec.add(new IntegerPointer(3));
-		keyVec.add(new IntegerPointer(4));
-
 		Vector<IA> valVec = new Vector<IA>();
 		valVec.add(new A());
 		valVec.add(new A());
@@ -43,40 +36,37 @@ public class BasicTests {
 			valVec.get(i).set(i);
 		}
 
-		// create native map
-		AptrMap nativeMap = new AptrMap();
+		// create native vector
+        AptrVector nativeVector = new AptrVector();
 
-		// copy test data to native map
-		for (int i=0; i<keyVec.size(); i++) {
-			nativeMap.insert(keyVec.get(i), valVec.get(i));
+		// copy test data to native vector
+		for (int i=0; i<valVec.size(); i++) {
+			nativeVector.push_back(valVec.get(i));
 		}
 
 		// set and get map with two calls
-		t.a(nativeMap);
-		IAptrMap map = t.b();
-		Assert.assertEquals(valVec.get(0).get(), map.get(keyVec.get(0)).get());
-		map.delete();
+		t.a(nativeVector);
+		IAptrVector vector = t.b();
+		Assert.assertEquals(valVec.get(0).get(), vector.at(0).get());
+		vector.delete();
 
 		// set and get Iterator with one call
-		IAptrMap map2 = t.c(nativeMap);
-		Assert.assertEquals(nativeMap.get(keyVec.get(0)).get(), map2.get(keyVec.get(0)).get());
-		map2.delete();
+		IAptrVector vector2 = t.c(nativeVector);
+		Assert.assertEquals(nativeVector.at(0).get(), vector2.at(0).get());
+		vector2.delete();
 
 		// test all values
-		for (int i=0; i<keyVec.size(); i++) {
-			Assert.assertEquals(valVec.get(i).get(), nativeMap.get(keyVec.get(i)).get());
+		for (int i=0; i<valVec.size(); i++) {
+			Assert.assertEquals(valVec.get(i).get(), nativeVector.at(i).get());
 		}
 
 		// delete native objects
-		nativeMap.delete();
+		nativeVector.delete();
 		while (!valVec.isEmpty()) {
 			valVec.get(0).delete();
 			valVec.remove(0);
 		}
-		while (!keyVec.isEmpty()) {
-			keyVec.get(0).delete();
-			keyVec.remove(0);
-		}
+
 		t.delete();
 	}
 }

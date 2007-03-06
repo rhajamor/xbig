@@ -6,6 +6,8 @@ package org.xbig.test.t13_5;
 import java.util.Vector;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.After;
+import org.junit.Before;
 import org.xbig.base.IntegerPointer;
 //import org.xbig.std.Imap;
 import org.xbig.n.IA;
@@ -19,64 +21,72 @@ import org.xbig.n.Tester;
  *
  */
 public class BasicTests {
+    
+    final int size = 5;
+    Tester t = null;
+    Vector<Integer> keyVec = null;
+    Vector<IA> valVec = null;
+    AptrMap nativeMap = null;
 	
+    @Before
+    public void setup(){
+        t = new Tester();
+        
+        // create test data
+        keyVec = new Vector<Integer>();
+        for (int i=0; i<size; i++){
+            keyVec.add(new Integer(i));
+        }
+
+        valVec = new Vector<IA>();        
+        for(int i=0; i<size; i++){
+            valVec.add(new A());
+            valVec.get(i).set(i);
+        }
+        
+        //      create native map
+        nativeMap = new AptrMap();
+
+        // copy test data to native map
+        for (int i=0; i<size; i++) {
+            nativeMap.insert(keyVec.get(i), valVec.get(i));
+        }
+    }
+    
+    @After
+    public void teardown(){
+        // delete native objects
+        nativeMap.delete();
+        
+        while (!valVec.isEmpty()) {
+            valVec.get(0).delete();
+            valVec.remove(0);
+        }
+
+        t.delete();
+    }
+    
 	@Test
-	public void useStdMapWithAPointerAsTypeParameter() {
-		Tester t = new Tester();
-
-		// create test data
-		Vector<IntegerPointer> keyVec = new Vector<IntegerPointer>();
-		keyVec.add(new IntegerPointer(0));
-		keyVec.add(new IntegerPointer(1));
-		keyVec.add(new IntegerPointer(2));
-		keyVec.add(new IntegerPointer(3));
-		keyVec.add(new IntegerPointer(4));
-
-		Vector<IA> valVec = new Vector<IA>();
-		valVec.add(new A());
-		valVec.add(new A());
-		valVec.add(new A());
-		valVec.add(new A());
-		valVec.add(new A());
-
-		for (int i=0; i<valVec.size(); ++i) {
-			valVec.get(i).set(i);
-		}
-
-		// create native map
-		AptrMap nativeMap = new AptrMap();
-
-		// copy test data to native map
-		for (int i=0; i<keyVec.size(); i++) {
-			nativeMap.insert(keyVec.get(i), valVec.get(i));
-		}
-
+	public void setAndGetMapWithTwoCalls() {
 		// set and get map with two calls
 		t.a(nativeMap);
 		IAptrMap map = t.b();
 		Assert.assertEquals(valVec.get(0).get(), map.get(keyVec.get(0)).get());
-		map.delete();
-
-		// set and get Iterator with one call
-		IAptrMap map2 = t.c(nativeMap);
-		Assert.assertEquals(nativeMap.get(keyVec.get(0)).get(), map2.get(keyVec.get(0)).get());
-		map2.delete();
-
-		// test all values
-		for (int i=0; i<keyVec.size(); i++) {
-			Assert.assertEquals(valVec.get(i).get(), nativeMap.get(keyVec.get(i)).get());
-		}
-
-		// delete native objects
-		nativeMap.delete();
-		while (!valVec.isEmpty()) {
-			valVec.get(0).delete();
-			valVec.remove(0);
-		}
-		while (!keyVec.isEmpty()) {
-			keyVec.get(0).delete();
-			keyVec.remove(0);
-		}
-		t.delete();
+		map.delete();			
 	}
+    
+    @Test
+    public void setAndGetMapWithOneCall(){
+        IAptrMap map2 = t.c(nativeMap);
+        Assert.assertEquals(nativeMap.get(keyVec.get(0)).get(), map2.get(keyVec.get(0)).get());
+        map2.delete();
+    }
+    
+    @Test
+    public void testAllValues()
+    {
+        for (int i=0; i<size; i++) {
+            Assert.assertEquals(valVec.get(i).get(), nativeMap.get(keyVec.get(i)).get());
+        }
+    }
 }
