@@ -52,13 +52,18 @@
 	</xd:doc>
 
 	<xd:doc type="template">
-		<xd:short>Generates a java class.
-				Can be called for classes or structs. Handles inner types as well as methods and attributes.
+		<xd:short>
+			Generates a java class. Can be called for classes or
+			structs. Handles inner types as well as methods and
+			attributes.
 		</xd:short>
 		<xd:param name="config">config file.</xd:param>
-		<xd:param name="class">class or struct to be generated.</xd:param>
+		<xd:param name="class">
+			class or struct to be generated.
+		</xd:param>
 		<xd:param name="buildFile">
-			ant build.xml file. Needed for project name in static initializer
+			ant build.xml file. Needed for project name in static
+			initializer
 		</xd:param>
 	</xd:doc>
 	<xsl:template name="javaClass">
@@ -82,7 +87,16 @@
 												  $class/@isInnerClass = 'true'" />
 
 		<!-- write class declaration -->
-		<xsl:text>public&#32;</xsl:text>
+		<xsl:choose>
+			<xsl:when test="$class/@protection ne ''">
+				<xsl:value-of select="$class/@protection" />
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:text>public</xsl:text>
+			</xsl:otherwise>
+		</xsl:choose>
+		<xsl:text>&#32;</xsl:text>
+
 		<xsl:if test="$isInnerClass">
 			<xsl:text>static&#32;</xsl:text>
 		</xsl:if>
@@ -187,19 +201,20 @@
 				<xsl:with-param name="class" select="$class" />
 			</xsl:call-template>
 		</xsl:variable>
-		
+
 		<!-- remove function that are equal to java -->
 		<xsl:variable name="inheritedMethodsForJava">
 			<xsl:call-template name="getValidMethodList">
 				<xsl:with-param name="functionNodeList"
 					select="$inheritedMethods" />
 			</xsl:call-template>
-		</xsl:variable>		
+		</xsl:variable>
 
 		<!-- generate method impl -->
 		<xsl:for-each select="$inheritedMethodsForJava/function">
 			<!-- test if abstract class and ctor -->
-			<xsl:if test="$isAbstract = false() or xbig:isCtor($class,.) = false()">
+			<xsl:if
+				test="$isAbstract = false() or xbig:isCtor($class,.) = false()">
 				<xsl:call-template name="javaAccessMethod">
 					<xsl:with-param name="config" select="$config" />
 					<xsl:with-param name="class" select="$class" />
