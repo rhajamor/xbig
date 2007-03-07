@@ -461,7 +461,7 @@
 		<xsl:for-each
 			select="root()//compounddef[@id=$refid and @kind='class' and @prot='public']">
 			<xsl:element name="class">
-
+				<xsl:attribute name="protection" select="@prot"/>
 				<xsl:call-template name="classAndStructBody">
 					<xsl:with-param name="refid" select="@id" />
 				</xsl:call-template>
