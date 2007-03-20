@@ -107,7 +107,7 @@ WARN_LOGFILE           =
 #---------------------------------------------------------------------------
 INPUT                  = $(SRCDIR)
 FILE_PATTERNS          = *.h
-RECURSIVE              = NO
+RECURSIVE              = YES
 EXCLUDE                = 
 EXCLUDE_SYMLINKS       = NO
 EXCLUDE_PATTERNS       = 
@@ -212,7 +212,7 @@ EXPAND_ONLY_PREDEF     = NO
 SEARCH_INCLUDES        = YES
 INCLUDE_PATH           = 
 INCLUDE_FILE_PATTERNS  = 
-PREDEFINED             =
+PREDEFINED             = DOXYGEN
 EXPAND_AS_DEFINED      = 
 SKIP_FUNCTION_MACROS   = YES
 #---------------------------------------------------------------------------

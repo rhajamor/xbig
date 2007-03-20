@@ -8,6 +8,7 @@
 JNIEXPORT jlong JNICALL Java_org_xbig_base_NativeObjectPointer__1getObject
   (JNIEnv *env, jobject that, jlong pInstance) 
 {
-	void **ptr = reinterpret_cast<void**>(pInstance);
+	long** ptr = reinterpret_cast<long**>(pInstance);
 	return reinterpret_cast<jlong>(*ptr);
 }  	
+
