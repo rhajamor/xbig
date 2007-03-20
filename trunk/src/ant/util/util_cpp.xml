@@ -47,9 +47,7 @@
 		<element name="moredefines" optional="true" />
 		<sequential>
 			<mkdir dir="@{dir}" />
-			<cc subsystem="console" objdir="@{dir}" debug="${cpp.debug}"
-				outtype="@{type}" name="${cpp.compiler}" exceptions="true"
-				rtti="true" optimize="speed" outfile="@{dir}/@{name}">
+			<cc subsystem="console" objdir="@{dir}" debug="${cpp.debug}" outtype="@{type}" name="${cpp.compiler}" exceptions="true" rtti="true" optimize="speed" outfile="@{dir}/@{name}">
 
 				<sources />
 				<moresources />
@@ -80,10 +78,8 @@
 		<element name="extraincludes" optional="true" />
 		<element name="extralibraries" optional="true" />
 		<sequential>
-			<echo
-				message="create @{type} library @{name} in @{outdir}/@{type} with sources in @{srcdir}" />
-			<cpp-compile name="@{name}" dir="@{outdir}/@{type}"
-				type="@{type}">
+			<echo message="create @{type} library @{name} in @{outdir}/@{type} with sources in @{srcdir}" />
+			<cpp-compile name="@{name}" dir="@{outdir}/@{type}" type="@{type}">
 				<sources>
 					<fileset dir="@{srcdir}">
 						<include name="*.cc" />
@@ -106,9 +102,7 @@
 		<attribute name="name" />
 		<element name="moreincludes" optional="true" />
 		<sequential>
-			<cpp-lib-compile name="@{name}"
-				outdir="${dir.cpp.build.config}" srcdir="${dir.cpp.src.lib}"
-				type="shared">
+			<cpp-lib-compile name="@{name}" outdir="${dir.cpp.build.config}" srcdir="${dir.cpp.src.lib}" type="shared">
 				<extraincludes>
 					<moreincludes />
 				</extraincludes>
@@ -119,9 +113,7 @@
 	<macrodef name="cpp-static-lib">
 		<attribute name="name" />
 		<sequential>
-			<cpp-lib-compile name="@{name}"
-				outdir="${dir.cpp.build.config}" srcdir="${dir.cpp.src.lib}"
-				type="static">
+			<cpp-lib-compile name="@{name}" outdir="${dir.cpp.build.config}" srcdir="${dir.cpp.src.lib}" type="static">
 			</cpp-lib-compile>
 		</sequential>
 	</macrodef>
@@ -133,18 +125,23 @@
 		<attribute name="type" />
 		<attribute name="libs" />
 		<element name="test-sources" />
+  	<element name="extraincludes" optional="true" />
+	  <element name="extralibraries" optional="true" />
 		<sequential>
-			<echo
-				message="create @{type} test program @{name} in @{outdir}/@{type}" />
-			<cpp-compile name="@{name}" dir="@{outdir}/@{type}"
-				type="executable">
+			<echo message="create @{type} test program @{name} in @{outdir}/@{type}" />
+			<cpp-compile name="@{name}" dir="@{outdir}/@{type}" type="executable">
 				<sources>
 					<test-sources />
 				</sources>
 				<libraries>
-					<libset dir="${dir.cpp.build.config}/@{type}"
-						libs="@{libs}" type="@{type}" />
+					<libset dir="${dir.cpp.build.config}/@{type}" libs="@{libs}" type="@{type}" />
 				</libraries>
+      	<moreincludes>
+					<extraincludes />
+	      </moreincludes>
+      	<morelibraries>
+				  <extralibraries />
+        </morelibraries>
 			</cpp-compile>
 		</sequential>
 	</macrodef>
@@ -152,19 +149,22 @@
 	<macrodef name="cpp-shared-test">
 		<attribute name="name" />
 		<attribute name="libs" />
+  	<element name="moreincludes" optional="true" />
+    <element name="morelibraries" optional="true" />
 		<sequential>
-			<cpp-test-compile name="@{name}"
-				outdir="${dir.cpp.build.config}" type="shared" libs="@{libs}">
+			<cpp-test-compile name="@{name}" outdir="${dir.cpp.build.config}" type="shared" libs="@{libs}">
 				<test-sources>
-					<fileset dir="${dir.cpp.src.test}"
-						includes="@{name}.cpp" />
-					<fileset dir="${dir.cpp.src.test}"
-						includes="@{name}.cc" />
-					<fileset dir="${dir.cpp.src.test}"
-						includes="@{name}.cxx" />
-					<fileset dir="${dir.cpp.src.test}"
-						includes="@{name}.c++" />
+					<fileset dir="${dir.cpp.src.test}" includes="@{name}.cpp" />
+					<fileset dir="${dir.cpp.src.test}" includes="@{name}.cc" />
+					<fileset dir="${dir.cpp.src.test}" includes="@{name}.cxx" />
+					<fileset dir="${dir.cpp.src.test}" includes="@{name}.c++" />
 				</test-sources>
+				<extraincludes>
+					<moreincludes />
+				</extraincludes>
+				<extralibraries>
+					<morelibraries />
+				</extralibraries>
 			</cpp-test-compile>
 		</sequential>
 	</macrodef>
@@ -173,24 +173,20 @@
 		<attribute name="name" />
 		<attribute name="libs" />
 		<sequential>
-			<cpp-test-compile name="@{name}"
-				outdir="${dir.cpp.build.config}" type="static" libs="@{libs}">
+			<cpp-test-compile name="@{name}" outdir="${dir.cpp.build.config}" type="static" libs="@{libs}">
 				<test-sources>
-					<fileset dir="${dir.cpp.src.test}"
-						includes="@{name}.cpp" />
-					<fileset dir="${dir.cpp.src.test}"
-						includes="@{name}.cc" />
-					<fileset dir="${dir.cpp.src.test}"
-						includes="@{name}.cxx" />
-					<fileset dir="${dir.cpp.src.test}"
-						includes="@{name}.c++" />
+					<fileset dir="${dir.cpp.src.test}" includes="@{name}.cpp" />
+					<fileset dir="${dir.cpp.src.test}" includes="@{name}.cc" />
+					<fileset dir="${dir.cpp.src.test}" includes="@{name}.cxx" />
+					<fileset dir="${dir.cpp.src.test}" includes="@{name}.c++" />
 				</test-sources>
 			</cpp-test-compile>
 		</sequential>
 	</macrodef>
 
 
-	<target name="init" depends="config.cpp.init"></target>
+	<target name="init" depends="config.cpp.init">
+	</target>
 
 
 	<target name="cpp-clean" depends="init">

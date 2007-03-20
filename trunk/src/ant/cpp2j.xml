@@ -160,8 +160,37 @@
 			message="create XML interface defintion into ${dir.doxygen.output.xml}" />
 		<doxygen srcdir="${dir.doxygen.input.cpp}"
 			tgtdir="${dir.doxygen.output.xml}" config="${path.doxygen.xml}" />
-	</target>
+		
+		<!-- try to elminiate XML errors -->
+  	<!--
+  	<replace dir="${dir.doxygen.output.xml}"
+	    value="???" >
+    	<include name="**/*.xml"/>
+	    <replacefilter 
+	      token="3&amp;)"
+        value="3&amp;amp;FBFBFB)" />	
+  	</replace>
+	  -->
+	  <echo message="fix &lt;copydoc&gt; problems" />
+  	<replaceregexp byline="false" flags="g" >
+      <regexp pattern='(copydoc link=".*)&amp;([^"]")'/>
+      <substitution expression="\1&amp;amp;\2"/>
+	    <fileset dir="${dir.doxygen.output.xml}" >
+       <include name="**/*.xml"/>
+	    </fileset>
+    </replaceregexp>
+	
+    <echo message="fix &lt;ulink&gt; problems" />
+    <replaceregexp byline="false" flags="g" >
+      <regexp pattern='&amp;([a-zA-Z0-9_]*=)'/>
+      <substitution expression="&amp;amp;\1"/>
+      <fileset dir="${dir.doxygen.output.xml}" >
+       <include name="**/*.xml"/>
+      </fileset>
+    </replaceregexp>
 
+	</target>
+		
 	<target name="doxygen-xml-clean" depends="init">
 		<delete dir="${dir.doxygen.output.xml}" />
 	</target>
