@@ -15,9 +15,10 @@ public class BasicTests {
 	@Test
 	public void accessAttributes() {
 		A a = new A();
+        Assert.assertEquals(0, a.geta());
 		a.seta(5);
 		int b = a.geta();
 		Assert.assertEquals(5, b);
-		a.delete();
+		a.delete();        
 	}
 }
