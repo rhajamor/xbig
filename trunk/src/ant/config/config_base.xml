@@ -36,13 +36,15 @@
 	<property name="dir.top" location="${basedir}" />
 	<property name="dir.prj.base" value="${dir.top}" />
 	<property name="dir.prj.src" value="${dir.prj.base}/src" />
+	<property name="dir.prj.doc" value="${dir.prj.base}/doc" />
+
 	<property name="dir.prj.src.ant" value="${dir.prj.src}/ant" />
-	<property name="dir.prj.src.ant.jar" value="${dir.prj.src.ant}/jar" />
-	
+	<property name="dir.prj.src.ant.jar" value="${dir.prj.src.ant}/jar" />	
 	<property name="dir.prj.src.c" value="${dir.prj.src}/c" />
 	<property name="dir.prj.src.doxygen" value="${dir.prj.src}/doxygen" />
 	<property name="dir.prj.src.java" value="${dir.prj.src}/java" />
 	<property name="dir.prj.src.xsl" value="${dir.prj.src}/xsl" />
+	<property name="dir.prj.src.xsltdoc" value="${dir.prj.src}/xsltdoc" />
 
 	<property name="dir.cur" value="." />
 	<property name="dir.cur.etc" value="${dir.cur}/etc" />
