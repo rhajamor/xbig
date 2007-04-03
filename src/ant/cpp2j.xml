@@ -401,7 +401,8 @@
 		<javac 
 			srcdir="${dir.cur.src.java}" 
 			destdir="${dir.cur.build.java.class}" 
-			classpath="${dir.prj.src.ant.jar}/junit-4.1.0.jar">
+			classpath="${dir.prj.src.ant.jar}/junit-4.1.0.jar"
+			debug="true" debuglevel="lines,vars,source" >
 		</javac>
 		<jar destfile="${dir.cur.build.java.jar}/${lib.xbig}-test.jar"
 			basedir="${dir.cur.build.java.class}" includes="**/test/**/*.class" />

@@ -1,31 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-	
-	This source file is part of XBiG
-		(XSLT Bindings Generator)
-	For the latest info, see http://sourceforge.net/projects/xbig
-	
-	Copyright (c) 2006 The XBiG Development Team
-	Also see acknowledgements in Readme.html
-	
-	This program is free software; you can redistribute it and/or modify it under
-	the terms of the GNU Lesser General Public License as published by the Free Software
-	Foundation; either version 2 of the License, or (at your option) any later
-	version.
-	
-	This program is distributed in the hope that it will be useful, but WITHOUT
-	ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-	FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
-	
-	You should have received a copy of the GNU Lesser General Public License along with
-	this program; if not, write to the Free Software Foundation, Inc., 59 Temple
-	Place - Suite 330, Boston, MA 02111-1307, USA, or go to
-	http://www.gnu.org/copyleft/lesser.txt.
-	
-	Author: Frank Bielig
-			Christoph Nenning
-	
+  
+  This source file is part of XBiG
+  (XSLT Bindings Generator)
+  For the latest info, see http://sourceforge.net/projects/xbig
+  
+  Copyright (c) 2006 The XBiG Development Team
+  Also see acknowledgements in Readme.html
+  
+  This program is free software; you can redistribute it and/or modify it under
+  the terms of the GNU Lesser General Public License as published by the Free Software
+  Foundation; either version 2 of the License, or (at your option) any later
+  version.
+  
+  This program is distributed in the hope that it will be useful, but WITHOUT
+  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+  FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
+  
+  You should have received a copy of the GNU Lesser General Public License along with
+  this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+  Place - Suite 330, Boston, MA 02111-1307, USA, or go to
+  http://www.gnu.org/copyleft/lesser.txt.
+  
+  Author: Frank Bielig
+          Christoph Nenning
+  
 -->
+
 <!DOCTYPE DaemonConfig [
   <!ENTITY cppFileHeader SYSTEM "etc/cpp_header.inc">
   <!ENTITY javaClassContent SYSTEM "etc/java_class_content.inc">
@@ -33,651 +34,669 @@
 
 <config>
 
-	<meta>
-		<signatures>
+  <meta>
+    <signatures>
 
-			<!-- mapping of basic types -->
+      <!-- mapping of basic types -->
 
-			<type meta="void" signature="v" />
-			<type meta="bool" signature="b" />
+      <type meta="void" signature="v" />
+      <type meta="bool" signature="b" />
 
-			<type meta="char" signature="c" />
-			<type meta="signed char" signature="b" />
-			<type meta="unsigned char" signature="B" />
+      <type meta="char" signature="c" />
+      <type meta="signed char" signature="b" />
+      <type meta="unsigned char" signature="B" />
 
-			<type meta="short" signature="h" />
-			<type meta="signed short" signature="h" />
-			<type meta="unsigned short" signature="H" />
+      <type meta="short" signature="h" />
+      <type meta="signed short" signature="h" />
+      <type meta="unsigned short" signature="H" />
 
-			<type meta="int" signature="i" />
-			<type meta="signed int" signature="i" />
-			<type meta="unsigned int" signature="I" />
+      <type meta="int" signature="i" />
+      <type meta="signed int" signature="i" />
+      <type meta="unsigned int" signature="I" />
 
-			<type meta="long" signature="l" />
-			<type meta="signed long" signature="l" />
-			<type meta="unsigned long" signature="L" />
+      <type meta="long" signature="l" />
+      <type meta="signed long" signature="l" />
+      <type meta="unsigned long" signature="L" />
 
-			<type meta="double" signature="D" />
-			<type meta="float" signature="F" />
+      <type meta="double" signature="D" />
+      <type meta="float" signature="F" />
 
-			<type meta="std::string" signature="s" />
-			<type meta="size_t" signature="i" />
+      <type meta="std::string" signature="s" />
+      <type meta="size_t" signature="i" />
 
-			<!-- mapping of non-const passing methods for parameters -->
+      <!-- mapping of non-const passing methods for parameters -->
 
-			<pass meta="reference" signature="r" />
-			<pass meta="pointer" signature="p" />
-			<pass meta="value" signature="v" />
-			<pass meta="array" signature="a" />
+      <pass meta="reference" signature="r" />
+      <pass meta="pointer" signature="p" />
+      <pass meta="value" signature="v" />
+      <pass meta="array" signature="a" />
 
-			<!-- mapping of constant passing methods for parameters -->
+      <!-- mapping of constant passing methods for parameters -->
 
-			<const-pass meta="reference" signature="R" />
-			<const-pass meta="pointer" signature="P" />
-			<const-pass meta="value" signature="V" />
-			<const-pass meta="array" signature="A" />
+      <const-pass meta="reference" signature="R" />
+      <const-pass meta="pointer" signature="P" />
+      <const-pass meta="value" signature="V" />
+      <const-pass meta="array" signature="A" />
 
-		</signatures>
+    </signatures>
 
-		<method>
-			<name>
-				<prefix>_</prefix>
-				<suffix></suffix>
-			</name>
-		</method>
+    <method>
+      <name>
+        <prefix>_</prefix>
+        <suffix></suffix>
+      </name>
+    </method>
 
-		<constructor>
-			<name>
-				<prefix>__create</prefix>
-				<suffix></suffix>
-			</name>
-		</constructor>
+    <constructor>
+      <name>
+        <prefix>__create</prefix>
+        <suffix></suffix>
+      </name>
+    </constructor>
 
-		<destructor>
-			<name>__delete</name>
-		</destructor>
+    <destructor>
+      <name>__delete</name>
+    </destructor>
 
-		<publicattribute>
-			<get>get</get>
-			<set>set</set>
-		</publicattribute>
+    <publicattribute>
+      <get>get</get>
+      <set>set</set>
+    </publicattribute>
 
-		<parameter>
-			<defaultName>a</defaultName>
-		</parameter>
+    <parameter>
+      <defaultName>a</defaultName>
+    </parameter>
 
-	</meta>
+  </meta>
 
-	<cpp>
-		<format>
-			<indent>&#10;&#32;&#32;</indent>
-		</format>
-		
-		<variables>
-			<jni>
-				<environment name="_jni_env_" />
-				<class name="_jni_class_" />
-				<object name="_jni_this_" />
-				<pointer name="_jni_pointer_" />
-				<attributevalue name="_jni_value_" />
-			</jni>
-			<cpp>
-				<result name="_cpp_result" />
-				<object name="_cpp_this" />
-				<prefix name="_cpp_" />
-				<suffix name="" />
-			</cpp>
-		</variables>
+  <cpp>
+    <format>
+      <indent>&#10;&#32;&#32;</indent>
+    </format>
 
-		<method>
-			<constructor>
-				#nl#// constructor of class #cpp_class#
-				#nl#
-				#nl#// parameter conversions
-				#cpp_conversions#
-				#nl#
-				#nl#// create new instance of class #cpp_class#
-				#nl##cpp_class#* #cpp_this# = new #cpp_class#(#cpp_params#);
-				#nl#
-				#nl#// return casted pointer
-				#nl#jlong #jni_pointer# =
-					reinterpret_cast&lt;jlong&gt;(#cpp_this#);
-				#nl#return #jni_pointer#;
-			</constructor>
+    <variables>
+      <jni>
+        <environment name="_jni_env_" />
+        <class name="_jni_class_" />
+        <object name="_jni_this_" />
+        <pointer name="_jni_pointer_" />
+        <attributevalue name="_jni_value_" />
+      </jni>
+      <cpp>
+        <result name="_cpp_result" />
+        <object name="_cpp_this" />
+        <prefix name="_cpp_" />
+        <suffix name="" />
+      </cpp>
+    </variables>
 
-			<destructor>
-				#nl#// destructor of class #cpp_class#
-				#nl#// cast pointer to C++ object
-				#nl##cpp_class#* #cpp_this# =
-					reinterpret_cast&lt;#cpp_class#*&gt;(#jni_pointer#);
-				#nl#// delete object if it exists
-				#nl#if(#cpp_this# != NULL) delete #cpp_this#;
-			</destructor>
+    <method>
+      <constructor>
+        #nl#// constructor of class #cpp_class# #nl# #nl#//
+        parameter conversions #cpp_conversions# #nl# #nl#//
+        create new instance of class #cpp_class#
+        #nl##cpp_class#* #cpp_this# = new
+        #cpp_class#(#cpp_params#); #nl# #nl#// return casted
+        pointer #nl#jlong #jni_pointer# =
+        reinterpret_cast&lt;jlong&gt;(#cpp_this#); #nl#return
+        #jni_pointer#;
+      </constructor>
 
-			<static>
-				<void>
-					#nl#// static method of class #cpp_class# without return value
-				    #nl#// parameter conversions
-					#cpp_conversions#
-					#nl#
-					#nl#// call library method
-					#nl##cpp_class#::#cpp_method#(#cpp_params#);
-				</void>
-				<return>
-					#nl#// static method of class #cpp_class# with return value				
-				    #nl#// parameter conversions
-					#cpp_conversions#
-					#nl#
-					#nl#// call library method
-					#nl##cpp_return_type# #cpp_return_var# = #optional_return_conversion#
-					   #cpp_class#::#cpp_method#(#cpp_params#)#optional_closing_bracket#;
-					#nl#return #cpp_return#;
-				</return>
-			</static>
+      <destructor>
+        #nl#// destructor of class #cpp_class# #nl#// cast
+        pointer to C++ object #nl##cpp_class#* #cpp_this# =
+        reinterpret_cast&lt;#cpp_class#*&gt;(#jni_pointer#);
+        #nl#// delete object if it exists #nl#if(#cpp_this# !=
+        NULL) delete #cpp_this#;
+      </destructor>
 
-			<normal>
-			    <void>
-			    	#nl#// parameter conversions
-					#cpp_conversions#
-					#nl#
-					#nl#// cast pointer to C++ object
-					#nl##cpp_class#* #cpp_this# =
-					reinterpret_cast&lt;#cpp_class#*&gt;(#jni_pointer#);
-					#nl#
-					#nl#// call library method
-					#nl##cpp_this#->#cpp_method#(#cpp_params#);
-				</void>
-			    <return>
-			    	#nl#// parameter conversions
-					#cpp_conversions#
-					#nl#
-					#nl#// cast pointer to C++ object
-					#nl##cpp_class#* #cpp_this# =
-					reinterpret_cast&lt;#cpp_class#*&gt;(#jni_pointer#);
-					#nl#
-					#nl#// call library method
-					#nl##cpp_return_type# #cpp_return_var# = #optional_return_conversion#
-					    #cpp_this#->#cpp_method#(#cpp_params#)
-					    #optional_closing_bracket#;
-					#nl#return #cpp_return#;
-				</return>				
-			</normal>
+      <static>
+        <void>
+          #nl#// static method of class #cpp_class# without
+          return value #nl#// parameter conversions
+          #cpp_conversions# #nl# #nl#// call library method
+          #nl##cpp_class#::#cpp_method#(#cpp_params#);
+        </void>
+        <return>
+          #nl#// static method of class #cpp_class# with
+          return value #nl#// parameter conversions
+          #cpp_conversions# #nl# #nl#// call library method
+          #nl##cpp_return_type# #cpp_return_var# =
+          #optional_return_conversion#
+          #cpp_class#::#cpp_method#(#cpp_params#)#optional_closing_bracket#;
+          #nl#return #cpp_return#;
+        </return>
+      </static>
 
-			<publicattribute>
-				<get>
-					<static>
-						#nl#// parameter conversions
-						#cpp_conversions#
-						#nl#
-						#nl#// call library method
-						#nl##cpp_return_type# #cpp_return_var# = #optional_return_conversion#
-						    #cpp_class#::#cpp_attribute##optional_closing_bracket#;
-						#nl#return #cpp_return#;
-					</static>
-					<nonstatic>
-						#nl#// parameter conversions
-						#cpp_conversions#
-						#nl#
-						#nl#// cast pointer to C++ object
-						#nl##cpp_class#* #cpp_this# =
-						reinterpret_cast&lt;#cpp_class#*&gt;(#jni_pointer#);
-						#nl#
-						#nl#// call library method
-						#nl##cpp_return_type# #cpp_return_var# = #optional_return_conversion#
-						    #cpp_this#->#cpp_attribute##optional_closing_bracket#;
-						#nl#return #cpp_return#;
-					</nonstatic>
-				</get>
-				<set>
-					<static>
-						#nl#// parameter conversions
-						#cpp_conversions#
-						#nl#
-						#nl#// call library method
-						#nl##cpp_class#::#cpp_attribute# = #cpp_params#;
-					</static>
-					<nonstatic>
-						#nl#// parameter conversions
-						#cpp_conversions#
-						#nl#
-						#nl#// cast pointer to C++ object
-						#nl##cpp_class#* #cpp_this# =
-						reinterpret_cast&lt;#cpp_class#*&gt;(#jni_pointer#);
-						#nl#
-						#nl#// call library method
-						#nl##cpp_this#->#cpp_attribute# = #cpp_params#;
-					</nonstatic>
-				</set>
-			</publicattribute>
+      <normal>
+        <void>
+          #nl#// parameter conversions #cpp_conversions# #nl#
+          #nl#// cast pointer to C++ object #nl##cpp_class#*
+          #cpp_this# =
+          reinterpret_cast&lt;#cpp_class#*&gt;(#jni_pointer#);
+          #nl# #nl#// call library method
+          #nl##cpp_this#->#cpp_method#(#cpp_params#);
+        </void>
+        <return>
+          #nl#// parameter conversions #cpp_conversions# #nl#
+          #nl#// cast pointer to C++ object #nl##cpp_class#*
+          #cpp_this# =
+          reinterpret_cast&lt;#cpp_class#*&gt;(#jni_pointer#);
+          #nl# #nl#// call library method
+          #nl##cpp_return_type# #cpp_return_var# =
+          #optional_return_conversion#
+          #cpp_this#->#cpp_method#(#cpp_params#)
+          #optional_closing_bracket#; #nl#return #cpp_return#;
+        </return>
+      </normal>
 
-		</method>
+      <publicattribute>
+        <get>
+          <static>
+            #nl#// parameter conversions #cpp_conversions#
+            #nl# #nl#// call library method
+            #nl##cpp_return_type# #cpp_return_var# =
+            #optional_return_conversion#
+            #cpp_class#::#cpp_attribute##optional_closing_bracket#;
+            #nl#return #cpp_return#;
+          </static>
+          <nonstatic>
+            #nl#// parameter conversions #cpp_conversions#
+            #nl# #nl#// cast pointer to C++ object
+            #nl##cpp_class#* #cpp_this# =
+            reinterpret_cast&lt;#cpp_class#*&gt;(#jni_pointer#);
+            #nl# #nl#// call library method
+            #nl##cpp_return_type# #cpp_return_var# =
+            #optional_return_conversion#
+            #cpp_this#->#cpp_attribute##optional_closing_bracket#;
+            #nl#return #cpp_return#;
+          </nonstatic>
+        </get>
+        <set>
+          <static>
+            #nl#// parameter conversions #cpp_conversions#
+            #nl# #nl#// call library method
+            #nl##cpp_class#::#cpp_attribute# = #cpp_params#;
+          </static>
+          <nonstatic>
+            #nl#// parameter conversions #cpp_conversions#
+            #nl# #nl#// cast pointer to C++ object
+            #nl##cpp_class#* #cpp_this# =
+            reinterpret_cast&lt;#cpp_class#*&gt;(#jni_pointer#);
+            #nl# #nl#// call library method
+            #nl##cpp_this#->#cpp_attribute# = #cpp_params#;
+          </nonstatic>
+        </set>
+      </publicattribute>
 
-		<jni>
-			<signatures>
+    </method>
 
-				<type meta="void" signature="V" />
-				<type meta="boolean" signature="Z" />
-				<type meta="bool" signature="Z" />
+    <jni>
+      <signatures>
 
-				<type meta="char" signature="C" />
-				<type meta="signed char" signature="C" />
-				<type meta="unsigned char" signature="C" />
+        <type meta="void" signature="V" />
+        <type meta="boolean" signature="Z" />
+        <type meta="bool" signature="Z" />
 
-				<type meta="short" signature="S" />
-				<type meta="signed short" signature="S" />
-				<type meta="unsigned short" signature="S" />
+        <type meta="char" signature="C" />
+        <type meta="signed char" signature="C" />
+        <type meta="unsigned char" signature="C" />
 
-				<type meta="int" signature="I" />
-				<type meta="signed int" signature="I" />
-				<type meta="unsigned int" signature="I" />
+        <type meta="short" signature="S" />
+        <type meta="signed short" signature="S" />
+        <type meta="unsigned short" signature="S" />
 
-				<type meta="long" signature="J" />
-				<type meta="signed long" signature="J" />
-				<type meta="unsigned long" signature="J" />
+        <type meta="int" signature="I" />
+        <type meta="signed int" signature="I" />
+        <type meta="unsigned int" signature="I" />
 
-				<type meta="double" signature="D" />
-				<type meta="float" signature="F" />
+        <type meta="long" signature="J" />
+        <type meta="signed long" signature="J" />
+        <type meta="unsigned long" signature="J" />
 
-				<type meta="object" signature="L" />
-				<type meta="std::string" signature="Ljava/lang/String;" />
-				<type meta="byte" signature="B" />
-				<type meta="array" signature="[" />
-				<type meta="size_t" signature="I" />
-			</signatures>
+        <type meta="double" signature="D" />
+        <type meta="float" signature="F" />
 
-			<types>
-				<type meta="void" jni="void" />
-				<type meta="void" pass="pointer" jni="jlong" cpp="void*">
-					<jni2cpp>
-						reinterpret_cast&lt;void*&gt;(#jni_var#)
-					</jni2cpp>					
-					<cpp2jni>
-						reinterpret_cast&lt;jlong&gt;(#cpp_var#)
-					</cpp2jni>
-				</type>
-				<type meta="void" pass="reference" jni="jlong" cpp="void*" returntype="void&amp;">
-					<jni2cpp>
-						reinterpret_cast&lt;void*&gt;(#jni_var#)
-					</jni2cpp>
-					<cpp2jni>
-						reinterpret_cast&lt;jlong&gt;(&amp;#cpp_var#)
-					</cpp2jni>
-				</type>
-				
-				<type meta="bool" pass="pointer" jni="jlong" cpp="bool*">
-					<jni2cpp>
-						reinterpret_cast&lt;bool*&gt;(#jni_var#)
-					</jni2cpp>					
-					<cpp2jni>
-						reinterpret_cast&lt;jlong&gt;(#cpp_var#)
-					</cpp2jni>
-				</type>
-				<type meta="bool" pass="reference" jni="jlong" cpp="bool*" returntype="bool&amp;">
-					<jni2cpp>
-						reinterpret_cast&lt;bool*&gt;(#jni_var#)
-					</jni2cpp>
-					<cpp2jni>
-						reinterpret_cast&lt;jlong&gt;(&amp;#cpp_var#)
-					</cpp2jni>
-				</type>
-				<type meta="bool" jni="jboolean" />
+        <type meta="object" signature="L" />
+        <type meta="std::string" signature="Ljava/lang/String;" />
+        <type meta="byte" signature="B" />
+        <type meta="array" signature="[" />
+        <type meta="size_t" signature="I" />
+      </signatures>
 
-				<type meta="char" pass="pointer" const="true"				
-					jni="jstring" cpp="char*" >
-					<jni2cpp>
-						org::xbig::jni::to_stdstring(#jni_env#, #jni_var#)
-					</jni2cpp>					
-					<cpp2jni>
-						org::xbig::jni::to_jstring(#jni_env#, #cpp_var#)
-					</cpp2jni>
-				</type>				
-				<type meta="char" jni="jchar" />				
+      <types>
+        <type meta="void" jni="void" />
+        <type meta="void" pass="pointer" jni="jlong"
+          cpp="void*">
+          <jni2cpp>
+            reinterpret_cast&lt;void*&gt;(#jni_var#)
+          </jni2cpp>
+          <cpp2jni>
+            reinterpret_cast&lt;jlong&gt;(#cpp_var#)
+          </cpp2jni>
+        </type>
+        <type meta="void" pass="reference" jni="jlong"
+          cpp="void*" returntype="void&amp;">
+          <jni2cpp>
+            reinterpret_cast&lt;void*&gt;(#jni_var#)
+          </jni2cpp>
+          <cpp2jni>
+            reinterpret_cast&lt;jlong&gt;(&amp;#cpp_var#)
+          </cpp2jni>
+        </type>
 
-				<type meta="signed char" pass="pointer" const="true"				
-					jni="jstring" cpp="std::string" >
-					<jni2cpp>
-						org::xbig::jni::to_stdstring(#jni_env#, #jni_var#)
-					</jni2cpp>					
-					<cpp2jni>
-						org::xbig::jni::to_jstring(#jni_env#, #cpp_var#)
-					</cpp2jni>
-				</type>
-				<type meta="signed char" jni="jbyte" />
+        <type meta="bool" pass="pointer" jni="jlong"
+          cpp="bool*">
+          <jni2cpp>
+            reinterpret_cast&lt;bool*&gt;(#jni_var#)
+          </jni2cpp>
+          <cpp2jni>
+            reinterpret_cast&lt;jlong&gt;(#cpp_var#)
+          </cpp2jni>
+        </type>
+        <type meta="bool" pass="reference" jni="jlong"
+          cpp="bool*" returntype="bool&amp;">
+          <jni2cpp>
+            reinterpret_cast&lt;bool*&gt;(#jni_var#)
+          </jni2cpp>
+          <cpp2jni>
+            reinterpret_cast&lt;jlong&gt;(&amp;#cpp_var#)
+          </cpp2jni>
+        </type>
+        <type meta="bool" jni="jboolean" />
 
-				<type meta="unsigned char" pass="pointer" const="true"				
-					jni="jstring" cpp="std::string" >
-					<jni2cpp>
-						org::xbig::jni::to_stdstring(#jni_env#, #jni_var#)
-					</jni2cpp>					
-					<cpp2jni>
-						org::xbig::jni::to_jstring(#jni_env#, #cpp_var#)
-					</cpp2jni>
-				</type>
-				<type meta="unsigned char" jni="jshort" />
+        <type meta="char" pass="pointer" const="true"
+          jni="jstring" cpp="char*">
+          <jni2cpp>
+            org::xbig::jni::to_stdstring(#jni_env#,
+            #jni_var#)
+          </jni2cpp>
+          <cpp2jni>
+            org::xbig::jni::to_jstring(#jni_env#, #cpp_var#)
+          </cpp2jni>
+        </type>
+        <type meta="char" jni="jchar" />
 
-				<type meta="short" pass="pointer" jni="jlong" cpp="short*">
-					<jni2cpp>
-						reinterpret_cast&lt;short*&gt;(#jni_var#)
-					</jni2cpp>					
-					<cpp2jni>
-						reinterpret_cast&lt;jlong&gt;(#cpp_var#)
-					</cpp2jni>
-				</type>
-				<type meta="short" pass="reference" jni="jlong" cpp="short*" returntype="short&amp;">
-					<jni2cpp>
-						reinterpret_cast&lt;short*&gt;(#jni_var#)
-					</jni2cpp>
-					<cpp2jni>
-						reinterpret_cast&lt;jlong&gt;(&amp;#cpp_var#)
-					</cpp2jni>
-				</type>
-				<type meta="short" jni="jshort" />
-				
-				<type meta="signed short" pass="pointer" jni="jlong" cpp="signed short*">
-					<jni2cpp>
-						reinterpret_cast&lt;signed short*&gt;(#jni_var#)
-					</jni2cpp>					
-					<cpp2jni>
-						reinterpret_cast&lt;jlong&gt;(#cpp_var#)
-					</cpp2jni>
-				</type>
-				<type meta="signed short" pass="reference" jni="jlong" cpp="signed short*" 
-						returntype="signed short&amp;">
-					<jni2cpp>
-						reinterpret_cast&lt;signed short*&gt;(#jni_var#)
-					</jni2cpp>
-					<cpp2jni>
-						reinterpret_cast&lt;jlong&gt;(&amp;#cpp_var#)
-					</cpp2jni>
-				</type>
-				<type meta="signed short" jni="jshort" />
-				
-				<type meta="unsigned short" pass="pointer" jni="jlong" cpp="unsigned short*">
-					<jni2cpp>
-						reinterpret_cast&lt;unsigned short*&gt;(#jni_var#)
-					</jni2cpp>					
-					<cpp2jni>
-						reinterpret_cast&lt;jlong&gt;(#cpp_var#)
-					</cpp2jni>
-				</type>			
-				<type meta="unsigned short" pass="reference" jni="jlong" cpp="unsigned short*" 
-						returntype="unsigned short&amp;">
-					<jni2cpp>
-						reinterpret_cast&lt;unsigned short*&gt;(#jni_var#)
-					</jni2cpp>
-					<cpp2jni>
-						reinterpret_cast&lt;jlong&gt;(&amp;#cpp_var#)
-					</cpp2jni>
-				</type>
-				<type meta="unsigned short" jni="jint" />
+        <type meta="signed char" pass="pointer" const="true"
+          jni="jstring" cpp="std::string">
+          <jni2cpp>
+            org::xbig::jni::to_stdstring(#jni_env#,
+            #jni_var#)
+          </jni2cpp>
+          <cpp2jni>
+            org::xbig::jni::to_jstring(#jni_env#, #cpp_var#)
+          </cpp2jni>
+        </type>
+        <type meta="signed char" jni="jbyte" />
 
-				<type meta="int" pass="pointer" jni="jlong" cpp="int*">
-					<jni2cpp>
-						reinterpret_cast&lt;int*&gt;(#jni_var#)
-					</jni2cpp>					
-					<cpp2jni>
-						reinterpret_cast&lt;jlong&gt;(#cpp_var#)
-					</cpp2jni>
-				</type>	
-				<type meta="int" pass="reference" jni="jlong" cpp="int*" returntype="int&amp;">
-					<jni2cpp>
-						reinterpret_cast&lt;int*&gt;(#jni_var#)
-					</jni2cpp>
-					<cpp2jni>
-						reinterpret_cast&lt;jlong&gt;(&amp;#cpp_var#)
-					</cpp2jni>
-				</type>
-				<type meta="int" jni="jint" />
-				
-				<type meta="signed int" pass="pointer" jni="jlong" cpp="signed int*">
-					<jni2cpp>
-						reinterpret_cast&lt;signed int*&gt;(#jni_var#)
-					</jni2cpp>					
-					<cpp2jni>
-						reinterpret_cast&lt;jlong&gt;(#cpp_var#)
-					</cpp2jni>
-				</type>	
-				<type meta="signed int" pass="reference" jni="jlong" cpp="signed int*" 
-						returntype="signed int&amp;">
-					<jni2cpp>
-						reinterpret_cast&lt;signed int*&gt;(#jni_var#)
-					</jni2cpp>
-					<cpp2jni>
-						reinterpret_cast&lt;jlong&gt;(&amp;#cpp_var#)
-					</cpp2jni>
-				</type>
-				<type meta="signed int" jni="jint" />
-				
-				<type meta="unsigned int" pass="pointer" jni="jlong" cpp="unsigned int*">
-					<jni2cpp>
-						reinterpret_cast&lt;unsigned int*&gt;(#jni_var#)
-					</jni2cpp>					
-					<cpp2jni>
-						reinterpret_cast&lt;jlong&gt;(#cpp_var#)
-					</cpp2jni>
-				</type>	
-				<type meta="unsigned int" pass="reference" jni="jlong" cpp="unsigned int*" 
-						returntype="unsigned int&amp;">
-					<jni2cpp>
-						reinterpret_cast&lt;unsigned int*&gt;(#jni_var#)
-					</jni2cpp>
-					<cpp2jni>
-						reinterpret_cast&lt;jlong&gt;(&amp;#cpp_var#)
-					</cpp2jni>
-				</type>
-				<type meta="unsigned int" jni="jlong" />
-				
-				<type meta="long" pass="pointer" jni="jlong" cpp="long*">
-					<jni2cpp>
-						reinterpret_cast&lt;long*&gt;(#jni_var#)
-					</jni2cpp>					
-					<cpp2jni>
-						reinterpret_cast&lt;jlong&gt;(#cpp_var#)
-					</cpp2jni>
-				</type>	
-				<type meta="long" pass="reference" jni="jlong" cpp="long*" 
-						returntype="long&amp;">
-					<jni2cpp>
-						reinterpret_cast&lt;long*&gt;(#jni_var#)
-					</jni2cpp>
-					<cpp2jni>
-						reinterpret_cast&lt;jlong&gt;(&amp;#cpp_var#)
-					</cpp2jni>
-				</type>
-				<type meta="long" jni="jlong" />
-				
-				<type meta="signed long" pass="pointer" jni="jlong" cpp="signed long*">
-					<jni2cpp>
-						reinterpret_cast&lt;signed long*&gt;(#jni_var#)
-					</jni2cpp>					
-					<cpp2jni>
-						reinterpret_cast&lt;jlong&gt;(#cpp_var#)
-					</cpp2jni>
-				</type>
-				<type meta="signed long" pass="reference" jni="jlong" cpp="signed long*" 
-						returntype="signed long&amp;">
-					<jni2cpp>
-						reinterpret_cast&lt;signed long*&gt;(#jni_var#)
-					</jni2cpp>
-					<cpp2jni>
-						reinterpret_cast&lt;jlong&gt;(&amp;#cpp_var#)
-					</cpp2jni>
-				</type>
-				<type meta="signed long" jni="jlong" />
-				
-				<type meta="unsigned long" pass="pointer" jni="jlong" cpp="unsgined long*">
-					<jni2cpp>
-						reinterpret_cast&lt;unsigned long*&gt;(#jni_var#)
-					</jni2cpp>					
-					<cpp2jni>
-						reinterpret_cast&lt;jlong&gt;(#cpp_var#)
-					</cpp2jni>
-				</type>
-				<type meta="unsigned long" pass="reference" jni="jlong" cpp="unsigned long*" 
-						returntype="unsigned long&amp;">
-					<jni2cpp>
-						reinterpret_cast&lt;unsigned long*&gt;(#jni_var#)
-					</jni2cpp>
-					<cpp2jni>
-						reinterpret_cast&lt;jlong&gt;(&amp;#cpp_var#)
-					</cpp2jni>
-				</type>
-				<type meta="unsigned long" jni="jlong" />
-				
-				<type meta="double" pass="pointer" jni="jlong" cpp="double*">
-					<jni2cpp>
-						reinterpret_cast&lt;double*&gt;(#jni_var#)
-					</jni2cpp>					
-					<cpp2jni>
-						reinterpret_cast&lt;jlong&gt;(#cpp_var#)
-					</cpp2jni>
-				</type>				
-				<type meta="double" pass="reference" jni="jlong" cpp="double*" 
-						returntype="double&amp;">
-					<jni2cpp>
-						reinterpret_cast&lt;double*&gt;(#jni_var#)
-					</jni2cpp>
-					<cpp2jni>
-						reinterpret_cast&lt;jlong&gt;(&amp;#cpp_var#)
-					</cpp2jni>
-				</type>
-				<type meta="double" jni="jdouble" />
-				
-				<type meta="float" pass="pointer" jni="jlong" cpp="float*">
-					<jni2cpp>
-						reinterpret_cast&lt;float*&gt;(#jni_var#)
-					</jni2cpp>					
-					<cpp2jni>
-						reinterpret_cast&lt;jlong&gt;(#cpp_var#)
-					</cpp2jni>
-				</type>				
-				<type meta="float" pass="reference" jni="jlong" cpp="float*" returntype="float&amp;">
-					<jni2cpp>
-						reinterpret_cast&lt;float*&gt;(#jni_var#)
-					</jni2cpp>
-					<cpp2jni>
-						reinterpret_cast&lt;jlong&gt;(&amp;#cpp_var#)
-					</cpp2jni>
-				</type>
-				<type meta="float" jni="jfloat" />				
+        <type meta="unsigned char" pass="pointer" const="true"
+          jni="jstring" cpp="std::string">
+          <jni2cpp>
+            org::xbig::jni::to_stdstring(#jni_env#,
+            #jni_var#)
+          </jni2cpp>
+          <cpp2jni>
+            org::xbig::jni::to_jstring(#jni_env#, #cpp_var#)
+          </cpp2jni>
+        </type>
+        <type meta="unsigned char" jni="jshort" />
 
-				<type meta="std::string" pass="pointer" jni="jlong" cpp="std::string*">
-					<jni2cpp>
-						reinterpret_cast&lt;std::string*&gt;(#jni_var#)
-					</jni2cpp>					
-					<cpp2jni>
-						reinterpret_cast&lt;jlong&gt;(#cpp_var#)
-					</cpp2jni>
-				</type>				
-				<type meta="std::string" pass="reference" jni="jlong" cpp="std::string*"
-						 returntype="std::string&amp;">
-					<jni2cpp>
-						reinterpret_cast&lt;std::string*&gt;(#jni_var#)
-					</jni2cpp>
-					<cpp2jni>
-						reinterpret_cast&lt;jlong&gt;(&amp;#cpp_var#)
-					</cpp2jni>
-				</type>
-				<type meta="std::string" pass="reference" jni="jstring" cpp="std::string&amp;"
-						 returntype="std::string&amp;" const="true">
-					<jni2cpp>
-						org::xbig::jni::to_stdstring(#jni_env#, #jni_var#)
-					</jni2cpp>					
-					<cpp2jni>
-						org::xbig::jni::to_jstring(#jni_env#, #cpp_var#)
-					</cpp2jni>
-				</type>
-				<type meta="std::string" jni="jstring">
-					<jni2cpp>
-						org::xbig::jni::to_stdstring(#jni_env#, #jni_var#)
-					</jni2cpp>
-					<cpp2jni>
-						org::xbig::jni::to_jstring(#jni_env#, #cpp_var#)
-					</cpp2jni>
-				</type>
+        <type meta="short" pass="pointer" jni="jlong"
+          cpp="short*">
+          <jni2cpp>
+            reinterpret_cast&lt;short*&gt;(#jni_var#)
+          </jni2cpp>
+          <cpp2jni>
+            reinterpret_cast&lt;jlong&gt;(#cpp_var#)
+          </cpp2jni>
+        </type>
+        <type meta="short" pass="reference" jni="jlong"
+          cpp="short*" returntype="short&amp;">
+          <jni2cpp>
+            reinterpret_cast&lt;short*&gt;(#jni_var#)
+          </jni2cpp>
+          <cpp2jni>
+            reinterpret_cast&lt;jlong&gt;(&amp;#cpp_var#)
+          </cpp2jni>
+        </type>
+        <type meta="short" jni="jshort" />
 
-				<type meta="size_t" pass="pointer" jni="jlong" cpp="size_t*">
-					<jni2cpp>
-						reinterpret_cast&lt;size_t*&gt;(#jni_var#)
-					</jni2cpp>					
-					<cpp2jni>
-						reinterpret_cast&lt;jlong&gt;(#cpp_var#)
-					</cpp2jni>
-				</type>	
-				<type meta="size_t" pass="reference" jni="jlong" cpp="size_t*" returntype="size_t&amp;">
-					<jni2cpp>
-						reinterpret_cast&lt;size_t*&gt;(#jni_var#)
-					</jni2cpp>
-					<cpp2jni>
-						reinterpret_cast&lt;jlong&gt;(&amp;#cpp_var#)
-					</cpp2jni>
-				</type>
-				<type meta="size_t" jni="jint" />
-			</types>
-		</jni>
+        <type meta="signed short" pass="pointer" jni="jlong"
+          cpp="signed short*">
+          <jni2cpp>
+            reinterpret_cast&lt;signed short*&gt;(#jni_var#)
+          </jni2cpp>
+          <cpp2jni>
+            reinterpret_cast&lt;jlong&gt;(#cpp_var#)
+          </cpp2jni>
+        </type>
+        <type meta="signed short" pass="reference" jni="jlong"
+          cpp="signed short*" returntype="signed short&amp;">
+          <jni2cpp>
+            reinterpret_cast&lt;signed short*&gt;(#jni_var#)
+          </jni2cpp>
+          <cpp2jni>
+            reinterpret_cast&lt;jlong&gt;(&amp;#cpp_var#)
+          </cpp2jni>
+        </type>
+        <type meta="signed short" jni="jshort" />
 
-		<format>
-			<file>
-				<header>
-					&cppFileHeader;
-				</header>
-			</file>
-		</format>
-	</cpp>
+        <type meta="unsigned short" pass="pointer" jni="jlong"
+          cpp="unsigned short*">
+          <jni2cpp>
+            reinterpret_cast&lt;unsigned
+            short*&gt;(#jni_var#)
+          </jni2cpp>
+          <cpp2jni>
+            reinterpret_cast&lt;jlong&gt;(#cpp_var#)
+          </cpp2jni>
+        </type>
+        <type meta="unsigned short" pass="reference" jni="jlong"
+          cpp="unsigned short*" returntype="unsigned short&amp;">
+          <jni2cpp>
+            reinterpret_cast&lt;unsigned
+            short*&gt;(#jni_var#)
+          </jni2cpp>
+          <cpp2jni>
+            reinterpret_cast&lt;jlong&gt;(&amp;#cpp_var#)
+          </cpp2jni>
+        </type>
+        <type meta="unsigned short" jni="jint" />
 
-	<java>
-		<types>
+        <type meta="int" pass="pointer" jni="jlong"
+          cpp="int*">
+          <jni2cpp>
+            reinterpret_cast&lt;int*&gt;(#jni_var#)
+          </jni2cpp>
+          <cpp2jni>
+            reinterpret_cast&lt;jlong&gt;(#cpp_var#)
+          </cpp2jni>
+        </type>
+        <type meta="int" pass="reference" jni="jlong" cpp="int*"
+          returntype="int&amp;">
+          <jni2cpp>
+            reinterpret_cast&lt;int*&gt;(#jni_var#)
+          </jni2cpp>
+          <cpp2jni>
+            reinterpret_cast&lt;jlong&gt;(&amp;#cpp_var#)
+          </cpp2jni>
+        </type>
+        <type meta="int" jni="jint" />
 
-			<type meta="void" java="void" genericParameter="void"/>
-			<type meta="bool" java="boolean" genericParameter="Boolean"/>
+        <type meta="signed int" pass="pointer" jni="jlong"
+          cpp="signed int*">
+          <jni2cpp>
+            reinterpret_cast&lt;signed int*&gt;(#jni_var#)
+          </jni2cpp>
+          <cpp2jni>
+            reinterpret_cast&lt;jlong&gt;(#cpp_var#)
+          </cpp2jni>
+        </type>
+        <type meta="signed int" pass="reference" jni="jlong"
+          cpp="signed int*" returntype="signed int&amp;">
+          <jni2cpp>
+            reinterpret_cast&lt;signed int*&gt;(#jni_var#)
+          </jni2cpp>
+          <cpp2jni>
+            reinterpret_cast&lt;jlong&gt;(&amp;#cpp_var#)
+          </cpp2jni>
+        </type>
+        <type meta="signed int" jni="jint" />
 
-			<type meta="char" java="char" genericParameter="Byte"/>
-			<type meta="signed char" java="byte" genericParameter="Byte"/>
-			<type meta="unsigned char" java="short" genericParameter="Short"/>
+        <type meta="unsigned int" pass="pointer" jni="jlong"
+          cpp="unsigned int*">
+          <jni2cpp>
+            reinterpret_cast&lt;unsigned int*&gt;(#jni_var#)
+          </jni2cpp>
+          <cpp2jni>
+            reinterpret_cast&lt;jlong&gt;(#cpp_var#)
+          </cpp2jni>
+        </type>
+        <type meta="unsigned int" pass="reference" jni="jlong"
+          cpp="unsigned int*" returntype="unsigned int&amp;">
+          <jni2cpp>
+            reinterpret_cast&lt;unsigned int*&gt;(#jni_var#)
+          </jni2cpp>
+          <cpp2jni>
+            reinterpret_cast&lt;jlong&gt;(&amp;#cpp_var#)
+          </cpp2jni>
+        </type>
+        <type meta="unsigned int" jni="jlong" />
 
-			<type meta="short" java="short" genericParameter="Short"/>
-			<type meta="signed short" java="short" genericParameter="Short"/>
-			<type meta="unsigned short" java="int" genericParameter="Integer"/>
+        <type meta="long" pass="pointer" jni="jlong"
+          cpp="long*">
+          <jni2cpp>
+            reinterpret_cast&lt;long*&gt;(#jni_var#)
+          </jni2cpp>
+          <cpp2jni>
+            reinterpret_cast&lt;jlong&gt;(#cpp_var#)
+          </cpp2jni>
+        </type>
+        <type meta="long" pass="reference" jni="jlong"
+          cpp="long*" returntype="long&amp;">
+          <jni2cpp>
+            reinterpret_cast&lt;long*&gt;(#jni_var#)
+          </jni2cpp>
+          <cpp2jni>
+            reinterpret_cast&lt;jlong&gt;(&amp;#cpp_var#)
+          </cpp2jni>
+        </type>
+        <type meta="long" jni="jlong" />
 
-			<type meta="int" java="int" genericParameter="Integer"/>
-			<type meta="signed int" java="int" genericParameter="Integer"/>
-			<type meta="unsigned int" java="long" genericParameter="Long"/>
+        <type meta="signed long" pass="pointer" jni="jlong"
+          cpp="signed long*">
+          <jni2cpp>
+            reinterpret_cast&lt;signed long*&gt;(#jni_var#)
+          </jni2cpp>
+          <cpp2jni>
+            reinterpret_cast&lt;jlong&gt;(#cpp_var#)
+          </cpp2jni>
+        </type>
+        <type meta="signed long" pass="reference" jni="jlong"
+          cpp="signed long*" returntype="signed long&amp;">
+          <jni2cpp>
+            reinterpret_cast&lt;signed long*&gt;(#jni_var#)
+          </jni2cpp>
+          <cpp2jni>
+            reinterpret_cast&lt;jlong&gt;(&amp;#cpp_var#)
+          </cpp2jni>
+        </type>
+        <type meta="signed long" jni="jlong" />
 
-			<type meta="long" java="long" genericParameter="Long"/>
-			<type meta="signed long" java="long" genericParameter="Long"/>
-			<type meta="unsigned long" java="long" genericParameter="BigInteger"/>
+        <type meta="unsigned long" pass="pointer" jni="jlong"
+          cpp="unsgined long*">
+          <jni2cpp>
+            reinterpret_cast&lt;unsigned
+            long*&gt;(#jni_var#)
+          </jni2cpp>
+          <cpp2jni>
+            reinterpret_cast&lt;jlong&gt;(#cpp_var#)
+          </cpp2jni>
+        </type>
+        <type meta="unsigned long" pass="reference" jni="jlong"
+          cpp="unsigned long*" returntype="unsigned long&amp;">
+          <jni2cpp>
+            reinterpret_cast&lt;unsigned
+            long*&gt;(#jni_var#)
+          </jni2cpp>
+          <cpp2jni>
+            reinterpret_cast&lt;jlong&gt;(&amp;#cpp_var#)
+          </cpp2jni>
+        </type>
+        <type meta="unsigned long" jni="jlong" />
 
-			<type meta="double" java="double" genericParameter="Double"/>
-			<type meta="float" java="float" genericParameter="Float"/>
+        <type meta="double" pass="pointer" jni="jlong"
+          cpp="double*">
+          <jni2cpp>
+            reinterpret_cast&lt;double*&gt;(#jni_var#)
+          </jni2cpp>
+          <cpp2jni>
+            reinterpret_cast&lt;jlong&gt;(#cpp_var#)
+          </cpp2jni>
+        </type>
+        <type meta="double" pass="reference" jni="jlong"
+          cpp="double*" returntype="double&amp;">
+          <jni2cpp>
+            reinterpret_cast&lt;double*&gt;(#jni_var#)
+          </jni2cpp>
+          <cpp2jni>
+            reinterpret_cast&lt;jlong&gt;(&amp;#cpp_var#)
+          </cpp2jni>
+        </type>
+        <type meta="double" jni="jdouble" />
 
-			<type meta="std::string" java="String" genericParameter="String"/>
-			<type meta="size_t" java="int" genericParameter="Integer"/>
+        <type meta="float" pass="pointer" jni="jlong"
+          cpp="float*">
+          <jni2cpp>
+            reinterpret_cast&lt;float*&gt;(#jni_var#)
+          </jni2cpp>
+          <cpp2jni>
+            reinterpret_cast&lt;jlong&gt;(#cpp_var#)
+          </cpp2jni>
+        </type>
+        <type meta="float" pass="reference" jni="jlong"
+          cpp="float*" returntype="float&amp;">
+          <jni2cpp>
+            reinterpret_cast&lt;float*&gt;(#jni_var#)
+          </jni2cpp>
+          <cpp2jni>
+            reinterpret_cast&lt;jlong&gt;(&amp;#cpp_var#)
+          </cpp2jni>
+        </type>
+        <type meta="float" jni="jfloat" />
 
-		</types>
+        <type meta="std::string" pass="pointer" jni="jlong"
+          cpp="std::string*">
+          <jni2cpp>
+            reinterpret_cast&lt;std::string*&gt;(#jni_var#)
+          </jni2cpp>
+          <cpp2jni>
+            reinterpret_cast&lt;jlong&gt;(#cpp_var#)
+          </cpp2jni>
+        </type>
+        <type meta="std::string" pass="reference" jni="jlong"
+          cpp="std::string*" returntype="std::string&amp;">
+          <jni2cpp>
+            reinterpret_cast&lt;std::string*&gt;(#jni_var#)
+          </jni2cpp>
+          <cpp2jni>
+            reinterpret_cast&lt;jlong&gt;(&amp;#cpp_var#)
+          </cpp2jni>
+        </type>
+        <type meta="std::string" pass="reference" jni="jstring"
+          cpp="std::string&amp;" returntype="std::string&amp;"
+          const="true">
+          <jni2cpp>
+            org::xbig::jni::to_stdstring(#jni_env#,
+            #jni_var#)
+          </jni2cpp>
+          <cpp2jni>
+            org::xbig::jni::to_jstring(#jni_env#, #cpp_var#)
+          </cpp2jni>
+        </type>
+        <type meta="std::string" jni="jstring">
+          <jni2cpp>
+            org::xbig::jni::to_stdstring(#jni_env#,
+            #jni_var#)
+          </jni2cpp>
+          <cpp2jni>
+            org::xbig::jni::to_jstring(#jni_env#, #cpp_var#)
+          </cpp2jni>
+        </type>
 
-		<namespaces>
-			<packageprefix>org.xbig</packageprefix>
-		</namespaces>
+        <type meta="size_t" pass="pointer" jni="jlong"
+          cpp="size_t*">
+          <jni2cpp>
+            reinterpret_cast&lt;size_t*&gt;(#jni_var#)
+          </jni2cpp>
+          <cpp2jni>
+            reinterpret_cast&lt;jlong&gt;(#cpp_var#)
+          </cpp2jni>
+        </type>
+        <type meta="size_t" pass="reference" jni="jlong"
+          cpp="size_t*" returntype="size_t&amp;">
+          <jni2cpp>
+            reinterpret_cast&lt;size_t*&gt;(#jni_var#)
+          </jni2cpp>
+          <cpp2jni>
+            reinterpret_cast&lt;jlong&gt;(&amp;#cpp_var#)
+          </cpp2jni>
+        </type>
+        <type meta="size_t" jni="jint" />
+      </types>
+    </jni>
+
+    <format>
+      <file>
+        <header>
+          &cppFileHeader;
+        </header>
+      </file>
+    </format>
+  </cpp>
+
+  <java>
+    <types>
+
+      <type meta="void" java="void" genericParameter="void" />
+      <type meta="bool" java="boolean" genericParameter="Boolean" />
+
+      <type meta="char" java="char" genericParameter="Byte" />
+      <type meta="signed char" java="byte"
+        genericParameter="Byte" />
+      <type meta="unsigned char" java="short"
+        genericParameter="Short" />
+
+      <type meta="short" java="short" genericParameter="Short" />
+      <type meta="signed short" java="short"
+        genericParameter="Short" />
+      <type meta="unsigned short" java="int"
+        genericParameter="Integer" />
+
+      <type meta="int" java="int" genericParameter="Integer" />
+      <type meta="signed int" java="int"
+        genericParameter="Integer" />
+      <type meta="unsigned int" java="long"
+        genericParameter="Long" />
+
+      <type meta="long" java="long" genericParameter="Long" />
+      <type meta="signed long" java="long"
+        genericParameter="Long" />
+      <type meta="unsigned long" java="long"
+        genericParameter="BigInteger" />
+
+      <type meta="double" java="double" genericParameter="Double" />
+      <type meta="float" java="float" genericParameter="Float" />
+
+      <type meta="std::string" java="String"
+        genericParameter="String" />
+      <type meta="size_t" java="int" genericParameter="Integer" />
+
+    </types>
+
+    <namespaces>
+      <packageprefix>org.xbig</packageprefix>
+    </namespaces>
 
 
-		<class>
-			<pointer>org.xbig.base.InstancePointer</pointer>
-			<inherits>org.xbig.base.NativeObject</inherits>
-			<content>
-				&javaClassContent;
-			</content>
-		</class>
+    <class>
+      <pointer>org.xbig.base.InstancePointer</pointer>
+      <inherits>org.xbig.base.NativeObject</inherits>
+      <content>
+        &javaClassContent;
+      </content>
+    </class>
 
-		<interface>
-			<prefix>I</prefix>
-			<suffix></suffix>
-		</interface>
+    <interface>
+      <prefix>I</prefix>
+      <suffix></suffix>
+    </interface>
 
-		<constoverloading>
-			<prefix></prefix>
-			<suffix>_const</suffix>
-		</constoverloading>
-		
+    <constoverloading>
+      <prefix></prefix>
+      <suffix>_const</suffix>
+    </constoverloading>
 
-	</java>
+
+  </java>
 </config>
