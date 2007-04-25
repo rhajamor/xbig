@@ -4,6 +4,6 @@
 #include <iostream>
 
 A::A()
-	: a(0)
+	//: a(0)
 {
 }
