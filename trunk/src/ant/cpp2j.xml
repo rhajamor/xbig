@@ -347,8 +347,12 @@
 			<extraincludes>
 				<includepath path="${dir.prj.src.c}/include" />
 				<includepath path="${dir.cur.build.cpp.include}" />
+				<!--
+				Specifing the directories that contains the system header files
+				in the compiling command line is not necessary.				
 				<includepath path="${dir.java.include}" />
 				<includepath path="${dir.java.include.os}" />
+				-->
 			</extraincludes>
 			<extralibraries>
 				<libset libs="${lib.name}" dir="${dir.cpp.build.config}/shared"/>
