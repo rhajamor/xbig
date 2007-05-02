@@ -40,12 +40,8 @@
 	<target name="all" depends="init">
 		<cpp-shared-lib name="cpp2j-base">
 			<moreincludes>
-				<!--
-				Specifing the directories that contains the system header files
-				in the compiling command line is not necessary.
 				<includepath path="${dir.java.include}" />
 				<includepath path="${dir.java.include.os}" />
-				-->
 			</moreincludes>
 		</cpp-shared-lib>
 	</target>
