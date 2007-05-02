@@ -280,6 +280,11 @@
 						</xsl:choose>
 					</xsl:when>
 
+					<!-- if type is not found and a native method is generated -> use long -->
+					<xsl:when test="$writingNativeMethod eq 'true'">
+						<xsl:value-of select="'long'"/>
+					</xsl:when>
+
 					<xsl:otherwise>
 						<xsl:variable name="fullJavaName" select="xbig:getFullJavaName(
 									$fullTypeName, $class, $root, $config)"/>

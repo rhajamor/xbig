@@ -169,6 +169,7 @@
 					<xsl:with-param name="param" select="$method" />
 					<xsl:with-param name="class" select="$class" />
 					<xsl:with-param name="typeName" select="$method/type" />
+					<xsl:with-param name="writingNativeMethod" select="'true'" />
 				</xsl:call-template>
 			</xsl:otherwise>
 		</xsl:choose>

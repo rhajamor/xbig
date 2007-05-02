@@ -107,8 +107,9 @@
 						<xsl:value-of select="'jlong'"/>
 					</xsl:when>
 
+					<!-- use 'long' as default type -->
 					<xsl:otherwise>
-						<xsl:value-of select="$resolvedType"/>
+						<xsl:value-of select="'jlong'"/>
 					</xsl:otherwise>
 				</xsl:choose>
 			</xsl:when>
