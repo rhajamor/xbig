@@ -21,7 +21,7 @@ public #classname#(org.xbig.base.InstancePointer p, boolean remote) {
 
 public void delete() {
 	if (this.remote)
-       throw new RuntimeException("can't dispose object not created by native library");
+       throw new RuntimeException("can't dispose object created by native library");
 
     __delete(object.pointer);
     this.deleted = true;
