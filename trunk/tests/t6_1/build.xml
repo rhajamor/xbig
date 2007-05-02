@@ -54,12 +54,8 @@
 			<extraincludes>
 				<includepath path="${dir.cur}/src/java/org/xbig/test/t6_1/" />
 				<includepath path="${dir.cur.build.cpp.include}" />
-				<!--
-				Specifing the directories that contains the system header files
-				in the compiling command line is not necessary.	
 				<includepath path="${dir.java.include}" />
 				<includepath path="${dir.java.include.os}" />
-				-->
 			</extraincludes>
 			<extralibraries>
 				<libset libs="t6_1" dir="${dir.cpp.build.config}/shared"/>
