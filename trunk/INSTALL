@@ -36,7 +36,12 @@ properties to match your platform:
 -----------
 Open the file /src/ant/config/config_doxygen.xml and set the property
 path.doxygen.bin to "installdir/doxygen/bin/doxygen.exe"
-	
+
+2.3 Environment variables
+--------------------------
+- JAVA_HOME must point to the location of your JDK, that is needed to find jni.h
+- PATH must contain javac, your C++ compiler and doxygen (if you don't use the above settings)
+
 3 Run a test
 ------------
 If you have installed all necessary dependencies and configured XBiG
