@@ -36,7 +36,7 @@
 
 	<import file="config_base.xml" />
 
-	<property name="path.doxygen.bin" value="/usr/bin/doxygen" />
+	<property name="path.doxygen.bin" value="doxygen" />
 	<property name="file.doxygen.xml" value="xml.doxygen" />
 	<property name="file.doxygen.xml.output.index" value="index.xml" />
 	<property name="file.doxygen.xml.output.all" value="all.xml" />
