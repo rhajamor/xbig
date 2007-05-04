@@ -8,6 +8,11 @@
 A::A() {
 }
 
+bool
+A::getBool(bool v) {
+  return v;
+}
+
 char
 A::getChar(char v) {
   return v;	
@@ -28,13 +33,48 @@ A::getShort(short v) {
   return v;	
 }
 
+short int 
+A::getShortInt(short int v) {
+  return v;	
+}
+
+signed short 
+A::getSignedShort(signed short v) {
+  return v;	
+}
+
+signed short int 
+A::getSignedShortInt(signed short int v) {
+  return v;	
+}
+
 unsigned short 
 A::getUnsignedShort(unsigned short v) {
   return v;	
 }
 
+unsigned short int 
+A::getUnsignedShortInt(unsigned short int v) {
+  return v;	
+}
+
 int 
 A::getInt(int v) {
+  return v;	
+}
+
+signed 
+A::getSigned(signed v) {
+  return v;	
+}
+
+signed int
+A::getSignedInt(signed int v) {
+  return v;	
+}
+
+unsigned
+A::getUnsigned(unsigned v) {
   return v;	
 }
 
@@ -48,10 +88,45 @@ A::getLong(long v) {
   return v;	
 }
 
+long int
+A::getLongInt(long int v) {
+  return v;	
+}
+
+signed long 
+A::getSignedLong(signed long v) {
+  return v;	
+}
+
+signed long int
+A::getSignedLongInt(signed long int v) {
+  return v;	
+}
+
 unsigned long 
 A::getUnsignedLong(unsigned long v) {
   return v;	
 }
+
+unsigned long int 
+A::getUnsignedLongInt(unsigned long int v) {
+  return v;	
+}
+
+long long 
+A::getLongLong(long long v) {
+  return v;	
+}
+
+signed long long 
+A::getSignedLongLong(signed long long v) {
+  return v;	
+}
+/*
+unsigned long long 
+A::getUnsignedLongLong(unsigned long long v) {
+  return v;	
+}*/
 
 float 
 A::getFloat(float v) {
@@ -62,7 +137,10 @@ double
 A::getDouble(double v) {
   return v;	
 }
-   
+
+
+/*
+Move B to t2_9
 //-----------------------------------------------------------------------------   
    
 //-----------------------------------------------------------------------------
@@ -113,6 +191,6 @@ B::getUnsigned(unsigned int v) {
 unsigned long
 B::getUnsigned(unsigned long v) {
   return v;	
-}
+}*/
 
 
