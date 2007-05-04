@@ -114,9 +114,20 @@
 				</xsl:choose>
 			</xsl:when>
 
-			<!-- print first type found in result list -->
+			<!-- type configured -->
 			<xsl:otherwise>
-				<xsl:value-of select="$type_info/type/@jni" />
+				<xsl:choose>
+					<!-- see bug 1712709 -->
+					<xsl:when test="$param/@passedBy = 'reference' and xbig:isTypeConst($param)">
+						<xsl:value-of select=
+							"$config/config/cpp/jni/types/type[@meta=$resolvedType][not(@pass)]/@jni" />
+					</xsl:when>
+
+					<!-- print first type found in result list -->
+					<xsl:otherwise>
+						<xsl:value-of select="$type_info/type/@jni" />
+					</xsl:otherwise>
+				</xsl:choose>
 			</xsl:otherwise>
 		</xsl:choose>
 
