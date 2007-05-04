@@ -179,7 +179,12 @@
 		<!-- write import -->
 		<xsl:text>&#10;</xsl:text>
 		<xsl:text>import org.xbig.base.*;&#10;</xsl:text>
-		<xsl:text>import std.*;&#10;</xsl:text>
+
+		<!-- STL wrapper can be left away
+		<xsl:text>import&#32;</xsl:text>
+		<xsl:value-of select="$config/config/java/namespaces/packageprefix"/>
+		<xsl:text>.std.*;&#10;</xsl:text>
+		 -->
 		<xsl:text>import </xsl:text>
 		<xsl:value-of select="$config/config/java/namespaces/packageprefix"/>
 		<xsl:text>.*;&#10;</xsl:text>

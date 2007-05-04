@@ -162,6 +162,7 @@
 
 		<!-- find exact type info-->
 		<xsl:for-each select="$type_infos/types/type">
+
 			<xsl:choose>
 
 				<!-- when passed by value, the pass attribute is missing in config.xml -->
@@ -187,6 +188,12 @@
 				<!-- if pass and const is declared in config -->
 				<xsl:when test="@pass eq $param/@passedBy
 				                and @const eq xbig:isTypeConst($param)">
+					<xsl:copy-of select="." />
+				</xsl:when>
+
+				<!-- if pass is declared in config and passby is const (see bug 1712709) -->
+				<xsl:when test="@pass eq $param/@passedBy
+				                and xbig:isTypeConst($param)">
 					<xsl:copy-of select="." />
 				</xsl:when>
 
@@ -558,15 +565,14 @@
 
 			<!-- if found, return node -->
 			<xsl:when test="$currentNode/*[@name = $type]">
-				<xsl:value-of select="$currentNode/@fullName" />
+				<xsl:sequence select="$currentNode/@fullName" />
 			</xsl:when>
 
 			<!-- special case: a typedef for a template -> generated meta class -> not in input tree -->
 			<xsl:when test="$currentNode/typeparameters">
 				<!-- TODO check if this could be made more general -->
 				<xsl:variable name="originalTypedefNode"
-					select="$inputTreeRoot//*
-												[@fullName = $currentNode/@originalTypedefFullName]" />
+					select="$inputTreeRoot//*[@fullName = $currentNode/@originalTypedefFullName]" />
 				<xsl:choose>
 					<!-- if found, return node -->
 					<xsl:when
@@ -605,8 +611,9 @@
 
 				<!-- check if type was found in a base class -->
 				<xsl:choose>
+					<!-- count($baseClassResults/*) = 1 is necessary, see bug 1711313 -->
 					<xsl:when
-						test="$baseClassResults/*[text() != '']">
+						test="$baseClassResults/*[text() != ''] and count($baseClassResults/*) = 1">
 						<xsl:value-of
 							select="$baseClassResults/*[text() != '']" />
 					</xsl:when>

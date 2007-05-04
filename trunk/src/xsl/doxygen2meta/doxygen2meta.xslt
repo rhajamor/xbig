@@ -135,7 +135,12 @@
 				<!-- <xsl:for-each select="doxygen/compounddef[@kind='typedef']"> -->
 				<!-- check doxygen version -->
 				<xsl:choose>
-					<xsl:when test="/doxygen/@version='1.5.1-p1'">
+					<xsl:when test="/doxygen/@version='1.5.1-p1'
+									or 
+									(number(substring(/doxygen/@version, 3, 1)) = 5 and
+									 number(substring(/doxygen/@version, 5, 1)) >= 2)
+									or
+									number(substring(/doxygen/@version, 3, 1)) >= 6">
 						<xsl:for-each
 								select="doxygen/compounddef[@kind='file']/sectiondef[@kind='typedef']">
 							<xsl:call-template name="typedef" />
@@ -163,7 +168,12 @@
 				<!-- <xsl:for-each select="doxygen/compounddef[@kind='enum']"> -->
 				<!-- check doxygen version -->
 				<xsl:choose>
-					<xsl:when test="/doxygen/@version='1.5.1-p1'">
+					<xsl:when test="/doxygen/@version='1.5.1-p1'
+									or 
+									(number(substring(/doxygen/@version, 3, 1)) = 5 and
+									 number(substring(/doxygen/@version, 5, 1)) >= 2)
+									or
+									number(substring(/doxygen/@version, 3, 1)) >= 6">
 						<xsl:for-each select="doxygen/compounddef[@kind='file']/
 								sectiondef[@kind='enum']/memberdef[@kind='enum']">
 							<xsl:call-template name="enumeration" />
@@ -300,7 +310,12 @@
 			<!-- <xsl:for-each select="doxygen/compounddef[@kind='typedef']"> -->
 			<!-- check doxygen version -->
 			<xsl:choose>
-				<xsl:when test="/doxygen/@version='1.5.1-p1'">
+				<xsl:when test="/doxygen/@version='1.5.1-p1'
+								or 
+								(number(substring(/doxygen/@version, 3, 1)) = 5 and
+								 number(substring(/doxygen/@version, 5, 1)) >= 2)
+								or
+								number(substring(/doxygen/@version, 3, 1)) >= 6">
 					<xsl:for-each
 							select="sectiondef[@kind='typedef']">
 						<xsl:call-template name="typedef" />
@@ -328,7 +343,12 @@
 			<!-- <xsl:for-each select="doxygen/compounddef[@kind='enum']"> -->
 			<!-- check doxygen version -->
 			<xsl:choose>
-				<xsl:when test="/doxygen/@version='1.5.1-p1'">
+				<xsl:when test="/doxygen/@version='1.5.1-p1'
+								or 
+								(number(substring(/doxygen/@version, 3, 1)) = 5 and
+								 number(substring(/doxygen/@version, 5, 1)) >= 2)
+								or
+								number(substring(/doxygen/@version, 3, 1)) >= 6">
 					<xsl:for-each select="sectiondef[@kind='enum']/memberdef[@kind='enum']">
 						<xsl:call-template name="enumeration" />
 					</xsl:for-each>
