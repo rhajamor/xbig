@@ -47,17 +47,29 @@
       <type meta="unsigned char" signature="B" />
 
       <type meta="short" signature="h" />
+			<type meta="short int" signature="h" />
       <type meta="signed short" signature="h" />
+			<type meta="signed short int" signature="h" />
       <type meta="unsigned short" signature="H" />
+			<type meta="unsigned short int" signature="H" />
 
       <type meta="int" signature="i" />
+			<type meta="signed" signature="i" />
       <type meta="signed int" signature="i" />
+			<type meta="unsigned" signature="I" />
       <type meta="unsigned int" signature="I" />
 
       <type meta="long" signature="l" />
+			<type meta="long int" signature="l" />
       <type meta="signed long" signature="l" />
+			<type meta="signed long int" signature="l" />
       <type meta="unsigned long" signature="L" />
+			<type meta="unsigned long int" signature="L" />
 
+			<type meta="long long" signature="o" />
+			<type meta="signed long long" signature="o" />
+			<type meta="unsigned long long" signature="O" />
+			
       <type meta="double" signature="D" />
       <type meta="float" signature="F" />
 
@@ -243,17 +255,29 @@
         <type meta="unsigned char" signature="C" />
 
         <type meta="short" signature="S" />
+				<type meta="short int" signature="S" />
         <type meta="signed short" signature="S" />
+				<type meta="signed short int" signature="S" />
         <type meta="unsigned short" signature="S" />
+				<type meta="unsigned short int" signature="S" />
 
         <type meta="int" signature="I" />
+				<type meta="signed" signature="I" />
         <type meta="signed int" signature="I" />
+				<type meta="unsigned" signature="I" />
         <type meta="unsigned int" signature="I" />
 
         <type meta="long" signature="J" />
+				<type meta="long int" signature="J" />
         <type meta="signed long" signature="J" />
+				<type meta="signed long int" signature="J" />
         <type meta="unsigned long" signature="J" />
+				<type meta="unsigned long int" signature="J" />
 
+				<type meta="long long" signature="J" />
+				<type meta="signed long long" signature="J" />
+				<type meta="unsigned long long" signature="L" />
+				
         <type meta="double" signature="D" />
         <type meta="float" signature="F" />
 
@@ -361,6 +385,26 @@
         </type>
         <type meta="short" jni="jshort" />
 
+				<type meta="short int" pass="pointer" jni="jlong"
+							cpp="short int*">
+					<jni2cpp>
+						reinterpret_cast&lt;short int*&gt;(#jni_var#)
+					</jni2cpp>
+					<cpp2jni>
+						reinterpret_cast&lt;jlong&gt;(#cpp_var#)
+					</cpp2jni>
+				</type>
+				<type meta="short int" pass="reference" jni="jlong"
+							cpp="short int*" returntype="short int&amp;">
+					<jni2cpp>
+						reinterpret_cast&lt;short int*&gt;(#jni_var#)
+					</jni2cpp>
+					<cpp2jni>
+						reinterpret_cast&lt;jlong&gt;(&amp;#cpp_var#)
+					</cpp2jni>
+				</type>
+				<type meta="short int" jni="jshort" />
+				
         <type meta="signed short" pass="pointer" jni="jlong"
           cpp="signed short*">
           <jni2cpp>
@@ -380,6 +424,26 @@
           </cpp2jni>
         </type>
         <type meta="signed short" jni="jshort" />
+
+				<type meta="signed short int" pass="pointer" jni="jlong"
+							cpp="signed short int*">
+					<jni2cpp>
+						reinterpret_cast&lt;signed short int*&gt;(#jni_var#)
+					</jni2cpp>
+					<cpp2jni>
+						reinterpret_cast&lt;jlong&gt;(#cpp_var#)
+					</cpp2jni>
+				</type>
+				<type meta="signed short int" pass="reference" jni="jlong"
+							cpp="signed short int*" returntype="signed short int&amp;">
+					<jni2cpp>
+						reinterpret_cast&lt;signed short int*&gt;(#jni_var#)
+					</jni2cpp>
+					<cpp2jni>
+						reinterpret_cast&lt;jlong&gt;(&amp;#cpp_var#)
+					</cpp2jni>
+				</type>
+				<type meta="signed short int" jni="jshort" />
 
         <type meta="unsigned short" pass="pointer" jni="jlong"
           cpp="unsigned short*">
@@ -403,6 +467,26 @@
         </type>
         <type meta="unsigned short" jni="jint" />
 
+				<type meta="unsigned short int" pass="pointer" jni="jlong"
+							cpp="unsigned short int*">
+					<jni2cpp>
+						reinterpret_cast&lt;unsigned short int*&gt;(#jni_var#)
+					</jni2cpp>
+					<cpp2jni>
+						reinterpret_cast&lt;jlong&gt;(#cpp_var#)
+					</cpp2jni>
+				</type>
+				<type meta="unsigned short int" pass="reference" jni="jlong"
+							cpp="unsigned short int*" returntype="unsigned short int&amp;">
+					<jni2cpp>
+						reinterpret_cast&lt;unsigned short int*&gt;(#jni_var#)
+					</jni2cpp>
+					<cpp2jni>
+						reinterpret_cast&lt;jlong&gt;(&amp;#cpp_var#)
+					</cpp2jni>
+				</type>
+				<type meta="unsigned short int" jni="jint" />
+
         <type meta="int" pass="pointer" jni="jlong"
           cpp="int*">
           <jni2cpp>
@@ -423,6 +507,26 @@
         </type>
         <type meta="int" jni="jint" />
 
+				<type meta="signed" pass="pointer" jni="jlong"
+							cpp="signed*">
+					<jni2cpp>
+						reinterpret_cast&lt;signed*&gt;(#jni_var#)
+					</jni2cpp>
+					<cpp2jni>
+						reinterpret_cast&lt;jlong&gt;(#cpp_var#)
+					</cpp2jni>
+				</type>
+				<type meta="signed" pass="reference" jni="jlong"
+							cpp="signed*" returntype="signed&amp;">
+					<jni2cpp>
+						reinterpret_cast&lt;signed*&gt;(#jni_var#)
+					</jni2cpp>
+					<cpp2jni>
+						reinterpret_cast&lt;jlong&gt;(&amp;#cpp_var#)
+					</cpp2jni>
+				</type>
+				<type meta="signed" jni="jint" />
+				
         <type meta="signed int" pass="pointer" jni="jlong"
           cpp="signed int*">
           <jni2cpp>
@@ -442,6 +546,26 @@
           </cpp2jni>
         </type>
         <type meta="signed int" jni="jint" />
+
+				<type meta="unsigned" pass="pointer" jni="jlong"
+							cpp="unsigned*">
+					<jni2cpp>
+						reinterpret_cast&lt;unsigned*&gt;(#jni_var#)
+					</jni2cpp>
+					<cpp2jni>
+						reinterpret_cast&lt;jlong&gt;(#cpp_var#)
+					</cpp2jni>
+				</type>
+				<type meta="unsigned" pass="reference" jni="jlong"
+							cpp="unsigned*" returntype="unsigned&amp;">
+					<jni2cpp>
+						reinterpret_cast&lt;unsigned*&gt;(#jni_var#)
+					</jni2cpp>
+					<cpp2jni>
+						reinterpret_cast&lt;jlong&gt;(&amp;#cpp_var#)
+					</cpp2jni>
+				</type>
+				<type meta="unsigned" jni="jlong" />
 
         <type meta="unsigned int" pass="pointer" jni="jlong"
           cpp="unsigned int*">
@@ -483,6 +607,26 @@
         </type>
         <type meta="long" jni="jlong" />
 
+				<type meta="long int" pass="pointer" jni="jlong"
+							cpp="long int*">
+					<jni2cpp>
+						reinterpret_cast&lt;long int*&gt;(#jni_var#)
+					</jni2cpp>
+					<cpp2jni>
+						reinterpret_cast&lt;jlong&gt;(#cpp_var#)
+					</cpp2jni>
+				</type>
+				<type meta="long int" pass="reference" jni="jlong"
+							cpp="long int*" returntype="long int&amp;">
+					<jni2cpp>
+						reinterpret_cast&lt;long int*&gt;(#jni_var#)
+					</jni2cpp>
+					<cpp2jni>
+						reinterpret_cast&lt;jlong&gt;(&amp;#cpp_var#)
+					</cpp2jni>
+				</type>
+				<type meta="long int" jni="jlong" />
+
         <type meta="signed long" pass="pointer" jni="jlong"
           cpp="signed long*">
           <jni2cpp>
@@ -502,6 +646,26 @@
           </cpp2jni>
         </type>
         <type meta="signed long" jni="jlong" />
+
+				<type meta="signed long int" pass="pointer" jni="jlong"
+							cpp="signed long int*">
+					<jni2cpp>
+						reinterpret_cast&lt;signed long int*&gt;(#jni_var#)
+					</jni2cpp>
+					<cpp2jni>
+						reinterpret_cast&lt;jlong&gt;(#cpp_var#)
+					</cpp2jni>
+				</type>
+				<type meta="signed long int" pass="reference" jni="jlong"
+							cpp="signed long int*" returntype="signed long int&amp;">
+					<jni2cpp>
+						reinterpret_cast&lt;signed long int*&gt;(#jni_var#)
+					</jni2cpp>
+					<cpp2jni>
+						reinterpret_cast&lt;jlong&gt;(&amp;#cpp_var#)
+					</cpp2jni>
+				</type>
+				<type meta="signed long int" jni="jlong" />
 
         <type meta="unsigned long" pass="pointer" jni="jlong"
           cpp="unsgined long*">
@@ -524,6 +688,86 @@
           </cpp2jni>
         </type>
         <type meta="unsigned long" jni="jlong" />
+
+				<type meta="unsigned long int" pass="pointer" jni="jlong"
+							cpp="unsgined long int*">
+					<jni2cpp>
+						reinterpret_cast&lt;unsigned long int*&gt;(#jni_var#)
+					</jni2cpp>
+					<cpp2jni>
+						reinterpret_cast&lt;jlong&gt;(#cpp_var#)
+					</cpp2jni>
+				</type>
+				<type meta="unsigned long int" pass="reference" jni="jlong"
+							cpp="unsigned long int*" returntype="unsigned long int&amp;">
+					<jni2cpp>
+						reinterpret_cast&lt;unsigned long int*&gt;(#jni_var#)
+					</jni2cpp>
+					<cpp2jni>
+						reinterpret_cast&lt;jlong&gt;(&amp;#cpp_var#)
+					</cpp2jni>
+				</type>
+				<type meta="unsigned long int" jni="jlong" />
+
+				<type meta="long long" pass="pointer" jni="jlong"
+							cpp="long long*">
+					<jni2cpp>
+						reinterpret_cast&lt;long long*&gt;(#jni_var#)
+					</jni2cpp>
+					<cpp2jni>
+						reinterpret_cast&lt;jlong&gt;(#cpp_var#)
+					</cpp2jni>
+				</type>
+				<type meta="long long" pass="reference" jni="jlong"
+							cpp="long long*" returntype="long long&amp;">
+					<jni2cpp>
+						reinterpret_cast&lt;long long*&gt;(#jni_var#)
+					</jni2cpp>
+					<cpp2jni>
+						reinterpret_cast&lt;jlong&gt;(&amp;#cpp_var#)
+					</cpp2jni>
+				</type>
+				<type meta="long long" jni="jlong" />
+
+				<type meta="signed long long" pass="pointer" jni="jlong"
+							cpp="signed long long*">
+					<jni2cpp>
+						reinterpret_cast&lt;signed long long*&gt;(#jni_var#)
+					</jni2cpp>
+					<cpp2jni>
+						reinterpret_cast&lt;jlong&gt;(#cpp_var#)
+					</cpp2jni>
+				</type>
+				<type meta="signed long long" pass="reference" jni="jlong"
+							cpp="signed long long*" returntype="signed long long&amp;">
+					<jni2cpp>
+						reinterpret_cast&lt;signed long long*&gt;(#jni_var#)
+					</jni2cpp>
+					<cpp2jni>
+						reinterpret_cast&lt;jlong&gt;(&amp;#cpp_var#)
+					</cpp2jni>
+				</type>
+				<type meta="signed long long" jni="jlong" />
+
+				<type meta="unsigned long long" pass="pointer" jni="jlong"
+							cpp="unsigned long long*">
+					<jni2cpp>
+						reinterpret_cast&lt;unsigned long long*&gt;(#jni_var#)
+					</jni2cpp>
+					<cpp2jni>
+						reinterpret_cast&lt;jlong&gt;(#cpp_var#)
+					</cpp2jni>
+				</type>
+				<type meta="unsigned long long" pass="reference" jni="jlong"
+							cpp="unsigned long long*" returntype="unsigned long long&amp;">
+					<jni2cpp>
+						reinterpret_cast&lt;unsigned long long*&gt;(#jni_var#)
+					</jni2cpp>
+					<cpp2jni>
+						reinterpret_cast&lt;jlong&gt;(&amp;#cpp_var#)
+					</cpp2jni>
+				</type>
+				<type meta="unsigned long long" jni="jlong" />
 
         <type meta="double" pass="pointer" jni="jlong"
           cpp="double*">
@@ -641,35 +885,38 @@
       <type meta="void" java="void" genericParameter="void" />
       <type meta="bool" java="boolean" genericParameter="Boolean" />
 
-      <type meta="char" java="char" genericParameter="Byte" />
-      <type meta="signed char" java="byte"
-        genericParameter="Byte" />
-      <type meta="unsigned char" java="short"
-        genericParameter="Short" />
+      <type meta="char" java="short" genericParameter="Short" />
+      <type meta="signed char" java="byte" genericParameter="Byte" />
+      <type meta="unsigned char" java="short" genericParameter="Short" />
 
       <type meta="short" java="short" genericParameter="Short" />
-      <type meta="signed short" java="short"
-        genericParameter="Short" />
-      <type meta="unsigned short" java="int"
-        genericParameter="Integer" />
+			<type meta="short int" java="short" genericParameter="Short" />
+      <type meta="signed short" java="short" genericParameter="Short" />
+			<type meta="signed short int" java="short" genericParameter="Short" />
+      <type meta="unsigned short" java="int" genericParameter="Integer" />
+			<type meta="unsigned short int" java="int" genericParameter="Integer" />
 
       <type meta="int" java="int" genericParameter="Integer" />
-      <type meta="signed int" java="int"
-        genericParameter="Integer" />
-      <type meta="unsigned int" java="long"
-        genericParameter="Long" />
+			<type meta="signed" java="int" genericParameter="Integer" />
+      <type meta="signed int" java="int" genericParameter="Integer" />
+			<type meta="unsigned" java="long" genericParameter="Long" />
+      <type meta="unsigned int" java="long" genericParameter="Long" />
 
       <type meta="long" java="long" genericParameter="Long" />
-      <type meta="signed long" java="long"
-        genericParameter="Long" />
-      <type meta="unsigned long" java="long"
-        genericParameter="BigInteger" />
+			<type meta="long int" java="long" genericParameter="Long" />
+      <type meta="signed long" java="long" genericParameter="Long" />
+			<type meta="signed long int" java="long" genericParameter="Long" />
+			<type meta="unsigned long" java="long" genericParameter="Long" />
+			<type meta="unsigned long int" java="long" genericParameter="Long" />
+			
+			<type meta="long long" java="long" genericParameter="Long" />
+			<type meta="signed long long" java="long" genericParameter="Long" />
+			<type meta="unsigned long long" java="BigInteger" genericParameter="BigInteger" />
 
       <type meta="double" java="double" genericParameter="Double" />
       <type meta="float" java="float" genericParameter="Float" />
 
-      <type meta="std::string" java="String"
-        genericParameter="String" />
+      <type meta="std::string" java="String" genericParameter="String" />
       <type meta="size_t" java="int" genericParameter="Integer" />
 
     </types>
