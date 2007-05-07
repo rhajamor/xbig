@@ -3,8 +3,8 @@
 
 1.1 Java
 ----------
-XBiG makes use of the new features like generics introduced with JavaVM
-1.5. Therefor you will need JRE5 or higher. Get the latest version from
+XBiG makes use of new features like generics introduced with JavaVM
+1.5. Therefore you will need JDK5 or higher. Get the latest version from
 http://java.sun.com/javase/downloads/ and follow the installation
 instruction for your platform.
 
@@ -27,29 +27,33 @@ installation instructions for your platform.
 
 2.1 CPP Compiler
 ----------------
-Open the file /src/ant/config/config_cpp.xml and set the following
+Open the file XBiG/src/ant/config/config_cpp.xml and set the following
 properties to match your platform:
     cpp.compiler = msvc|g++
     cpp.platform = win32|linux
+see http://ant-contrib.sourceforge.net/cc.html for more supported compilers.
 
 2.2 Doxygen
 -----------
-Open the file /src/ant/config/config_doxygen.xml and set the property
-path.doxygen.bin to "installdir/doxygen/bin/doxygen.exe"
+Open the file XBiG/src/ant/config/config_doxygen.xml and set the property
+path.doxygen.bin to "installdir/doxygen/bin/doxygen.exe". You can set that 
+property to "doxygen" and add it to your PATH environment variable.
 
 2.3 Environment variables
 --------------------------
-- JAVA_HOME must point to the location of your JDK, that is needed to find jni.h
-- PATH must contain javac, your C++ compiler and doxygen (if you don't use the above settings)
+- JAVA_HOME must point to the location of your JDK, that is needed to find jni.h.
+- PATH must contain javac, your C++ compiler and (maybe) doxygen (see above).
 
 3 Run a test
 ------------
 If you have installed all necessary dependencies and configured XBiG
-then your are ready to run one or all of the tests in the test suite.
-Change into the directory /test/t2_1 and run ant with the the parameter
-"-lib ../../src/ant/jar/" to point to the libraries needed.
+then you are ready to run one or all of the tests in the test suite.
+Change into the directory XBiG/tests/t1 and run ant with the parameter
+"-lib ../../src/ant/jar/" to point to the libraries needed (on *NIX use the run.sh script).
+To run all tests use XBiG/tests/build for your OS.
 
 The build of a test includes the following steps:
+0. Build XBiG base library (only t1)
 1. Build of the source library (C++)
 2. Generation of the meta layer with doxygen and XSLT
 3. Generation of the Java and C++ code for the JNI bindings
@@ -61,7 +65,7 @@ build was successful you are ready to create a project for the
 library you want to generate bindings. Ohterwise something went
 wrong and you have to check your environment and configuration.
 
-4 Setup a own project
+4 Setup an own project
 ---------------------
 more to come...
 
