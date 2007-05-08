@@ -38,5 +38,6 @@
 #include "jni_native_object_pointer.h"
 #include "jni_short_pointer.h"
 #include "jni_string_pointer.h"
+#include "jni_unsigned_longlong.h"
 
 #endif
