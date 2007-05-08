@@ -276,7 +276,7 @@
 
 				<type meta="long long" signature="J" />
 				<type meta="signed long long" signature="J" />
-				<type meta="unsigned long long" signature="L" />
+				<type meta="unsigned long long" signature="Lorg/xbig/base/ULongLong;" />
 				
         <type meta="double" signature="D" />
         <type meta="float" signature="F" />
@@ -767,7 +767,14 @@
 						reinterpret_cast&lt;jlong&gt;(&amp;#cpp_var#)
 					</cpp2jni>
 				</type>
-				<type meta="unsigned long long" jni="jlong" />
+				<type meta="unsigned long long" jni="jobject">
+					<jni2cpp>
+						org::xbig::jni::getShiftedULongLongValue(#jni_env#, #jni_var#)+9223372036854775808ULL
+					</jni2cpp>
+					<cpp2jni>
+						#cpp_var#-9223372036854775808ULL
+					</cpp2jni>
+				</type>
 
         <type meta="double" pass="pointer" jni="jlong"
           cpp="double*">
@@ -911,10 +918,10 @@
 			
 			<type meta="long long" java="long" genericParameter="Long" />
 			<type meta="signed long long" java="long" genericParameter="Long" />
-			<type meta="unsigned long long" java="BigInteger" genericParameter="BigInteger" />
+			<type meta="unsigned long long" java="ULongLong" genericParameter="ULongLong" />
 
       <type meta="double" java="double" genericParameter="Double" />
-      <type meta="float" java="float" genericParameter="Float" />
+			<type meta="float" java="float" genericParameter="Float" />
 
       <type meta="std::string" java="String" genericParameter="String" />
       <type meta="size_t" java="int" genericParameter="Integer" />
