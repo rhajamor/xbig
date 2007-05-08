@@ -210,11 +210,19 @@
 
 		<!-- write return type -->
 		<xsl:text>&#32;</xsl:text>
-		<xsl:call-template name="jniType">
-			<xsl:with-param name="config" select="$config" />
-			<xsl:with-param name="param" select="$method" />
-			<xsl:with-param name="class" select="$class" />
-		</xsl:call-template>
+		<xsl:choose>
+			<xsl:when test="$return_type = 'unsigned long long'">
+				<!-- if the returen type is 'unsigned long long', then jlong is used instead of joject -->
+				<xsl:text>jlong</xsl:text>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:call-template name="jniType">
+					<xsl:with-param name="config" select="$config" />
+					<xsl:with-param name="param" select="$method" />
+					<xsl:with-param name="class" select="$class" />				
+				</xsl:call-template>
+			</xsl:otherwise>
+		</xsl:choose>
 
 		<!-- write call method keyword -->
 		<xsl:text>&#32;JNICALL</xsl:text>
