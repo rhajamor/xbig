@@ -164,6 +164,13 @@
 			<xsl:text>.toEnum(</xsl:text>
 		</xsl:if>
 
+		<!-- create a ULongLong object for "unsigned long long" -->
+		<xsl:if test="$resolvedType = 'unsigned long long'">
+			<xsl:text>new&#32;</xsl:text>
+			<xsl:value-of select="$type_info/type/@genericParameter"/>
+			<xsl:text>(</xsl:text>
+		</xsl:if>
+
 		<!-- write native method name -->
 		<xsl:call-template name="metaMethodName">
 			<xsl:with-param name="config" select="$config" />
@@ -193,6 +200,11 @@
 			<xsl:with-param name="method" select="$method" />
 			<xsl:with-param name="callingNativeMethod" select="'true'" />
 		</xsl:call-template>
+
+		<!-- create a ULongLong object for "unsigned long long" -->
+		<xsl:if test="$resolvedType = 'unsigned long long'">
+			<xsl:text>)</xsl:text>
+		</xsl:if>
 
 		<!-- close Pointer and InstancePointer c-tor calls -->
 		<xsl:if test="($method/@passedBy='pointer' or ($method/@passedBy='reference' and not(xbig:isTypeConst($method))))					  
