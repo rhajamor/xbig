@@ -163,6 +163,10 @@
 				<xsl:value-of select="'int'" />
 			</xsl:when>
 
+			<xsl:when test="$fullTypeName = 'unsigned long long'">
+				<xsl:value-of select="'long'" />
+			</xsl:when>
+
 			<xsl:otherwise>
 				<xsl:call-template name="javaType">
 					<xsl:with-param name="config" select="$config" />
