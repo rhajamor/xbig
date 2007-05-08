@@ -38,7 +38,7 @@ public:
         unsigned long int getUnsignedLongInt(unsigned long int v);
         long long getLongLong(long long v);
         signed long long getSignedLongLong(signed long long v);
-        //unsigned long long getUnsignedLongLong(unsigned long long v);
+        unsigned long long getUnsignedLongLong(unsigned long long v);
         float getFloat(float v);
         double getDouble(double v);
 };
