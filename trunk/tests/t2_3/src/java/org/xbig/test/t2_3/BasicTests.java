@@ -3,11 +3,11 @@
  */
 package org.xbig.test.t2_3;
 
-
-import java.math.BigInteger;
 import org.junit.Assert;
 import org.junit.Test;
 import org.xbig.A;
+import org.xbig.base.ULongLong;
+
 /**
  * @author nenning
  * 
@@ -64,10 +64,10 @@ public class BasicTests {
 
         long longLongValue = -9223372036854775808L;
         long signedLongLongValue = 9223372036854775807L;
-        //BigInteger unsignedLongLongValue = new BigInteger("18446744073709551615");
+        ULongLong unsignedLongLongValue = new ULongLong("18446744073709551615");
         Assert.assertEquals(a.getLongLong(longLongValue), longLongValue);
         Assert.assertEquals(a.getSignedLongLong(signedLongLongValue), signedLongLongValue);
-        //Assert.assertEquals(a.getUnsignedLongLong(unsignedLongLongValue), unsignedLongLongValue);
+        Assert.assertEquals(a.getUnsignedLongLong(unsignedLongLongValue).equals(unsignedLongLongValue), true);
 
         float floatValue = 123.234f;
         double doubleValue = 12314.563456;

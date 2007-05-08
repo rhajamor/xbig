@@ -122,11 +122,11 @@ signed long long
 A::getSignedLongLong(signed long long v) {
   return v;	
 }
-/*
+
 unsigned long long 
 A::getUnsignedLongLong(unsigned long long v) {
   return v;	
-}*/
+}
 
 float 
 A::getFloat(float v) {
