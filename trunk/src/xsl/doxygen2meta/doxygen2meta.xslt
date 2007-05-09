@@ -56,8 +56,10 @@
 
 
 	<!-- global Parameters -->
-	<xd:doc>File in meta format which contains additional classes.
-			Per default, it contains the C++ STL</xd:doc>
+	<xd:doc>
+		File in meta format which contains additional classes. Per
+		default, it contains the C++ STL
+	</xd:doc>
 	<xsl:param name="externalTypes" />
 
 
@@ -93,7 +95,8 @@
 					select="doxygen/compounddef[@kind='namespace']">
 					<!-- because doxygen has a flat structure -->
 					<xsl:choose>
-						<xsl:when test="not(root()//compounddef
+						<xsl:when
+							test="not(root()//compounddef
 									[@kind='namespace']/innernamespace/@refid = @id)">
 							<xsl:call-template name="namespace" />
 						</xsl:when>
@@ -105,11 +108,13 @@
 					select="doxygen/compounddef[@kind='class']">
 					<!-- because doxygen has a flat structure -->
 					<xsl:choose>
-						<xsl:when test="not(root()//compounddef
+						<xsl:when
+							test="not(root()//compounddef
 									[@kind='class' or @kind='struct' or @kind='namespace']
 									/innerclass/@refid = @id)">
 							<xsl:call-template name="class">
-								<xsl:with-param name="refid" select="@id" />
+								<xsl:with-param name="refid"
+									select="@id" />
 							</xsl:call-template>
 						</xsl:when>
 					</xsl:choose>
@@ -120,7 +125,8 @@
 					select="doxygen/compounddef[@kind='struct']">
 					<!-- because doxygen has a flat structure -->
 					<xsl:choose>
-						<xsl:when test="not(root()//compounddef
+						<xsl:when
+							test="not(root()//compounddef
 									[@kind='class' or @kind='struct' or @kind='namespace']
 									/innerclass/@refid = @id)">
 							<xsl:call-template name="struct">
@@ -135,14 +141,15 @@
 				<!-- <xsl:for-each select="doxygen/compounddef[@kind='typedef']"> -->
 				<!-- check doxygen version -->
 				<xsl:choose>
-					<xsl:when test="/doxygen/@version='1.5.1-p1'
+					<xsl:when
+						test="/doxygen/@version='1.5.1-p1'
 									or 
 									(number(substring(/doxygen/@version, 3, 1)) = 5 and
 									 number(substring(/doxygen/@version, 5, 1)) >= 2)
 									or
 									number(substring(/doxygen/@version, 3, 1)) >= 6">
 						<xsl:for-each
-								select="doxygen/compounddef[@kind='file']/sectiondef[@kind='typedef']">
+							select="doxygen/compounddef[@kind='file']/sectiondef[@kind='typedef']">
 							<xsl:call-template name="typedef" />
 						</xsl:for-each>
 					</xsl:when>
@@ -153,7 +160,8 @@
 								<!-- if there are more than one entries in all.xml -->
 								<xsl:when test="last() > 1">
 									<xsl:if test="position() = 1">
-										<xsl:call-template name="typedef" />
+										<xsl:call-template
+											name="typedef" />
 									</xsl:if>
 								</xsl:when>
 								<xsl:otherwise>
@@ -168,29 +176,34 @@
 				<!-- <xsl:for-each select="doxygen/compounddef[@kind='enum']"> -->
 				<!-- check doxygen version -->
 				<xsl:choose>
-					<xsl:when test="/doxygen/@version='1.5.1-p1'
+					<xsl:when
+						test="/doxygen/@version='1.5.1-p1'
 									or 
 									(number(substring(/doxygen/@version, 3, 1)) = 5 and
 									 number(substring(/doxygen/@version, 5, 1)) >= 2)
 									or
 									number(substring(/doxygen/@version, 3, 1)) >= 6">
-						<xsl:for-each select="doxygen/compounddef[@kind='file']/
+						<xsl:for-each
+							select="doxygen/compounddef[@kind='file']/
 								sectiondef[@kind='enum']/memberdef[@kind='enum']">
 							<xsl:call-template name="enumeration" />
 						</xsl:for-each>
 					</xsl:when>
 					<xsl:otherwise>
-						<xsl:for-each select="doxygen/compounddef[@kind='file']/
+						<xsl:for-each
+							select="doxygen/compounddef[@kind='file']/
 								sectiondef[@kind='']/memberdef[@kind='enum']">
 							<xsl:choose>
 								<!-- if there are more than one entries in all.xml -->
 								<xsl:when test="last() > 1">
 									<xsl:if test="position() = 1">
-										<xsl:call-template name="enumeration" />
+										<xsl:call-template
+											name="enumeration" />
 									</xsl:if>
 								</xsl:when>
 								<xsl:otherwise>
-									<xsl:call-template name="enumeration" />
+									<xsl:call-template
+										name="enumeration" />
 								</xsl:otherwise>
 							</xsl:choose>
 						</xsl:for-each>
@@ -206,8 +219,8 @@
 					</xsl:if>
 				</xsl:for-each>
 
-    			<!-- variables in the global namespace -->
-		    	<!-- create unique list of variables because of a bug in doxygen -->
+				<!-- variables in the global namespace -->
+				<!-- create unique list of variables because of a bug in doxygen -->
 				<xsl:variable name="unique-variable-list"
 					select="doxygen/compounddef[@kind='file']/sectiondef[@kind='']/memberdef[@kind='variable']/definition[not(.=following::definition)]/.." />
 				<xsl:for-each select="$unique-variable-list">
@@ -215,8 +228,9 @@
 				</xsl:for-each>
 
 				<!-- external types, like C++ STL -->
-				<xsl:for-each select="$externalTypes/external/types/*">
-					<xsl:copy-of select="."/>
+				<xsl:for-each
+					select="$externalTypes/external/types/*">
+					<xsl:copy-of select="." />
 				</xsl:for-each>
 
 			</xsl:element>
@@ -310,20 +324,20 @@
 			<!-- <xsl:for-each select="doxygen/compounddef[@kind='typedef']"> -->
 			<!-- check doxygen version -->
 			<xsl:choose>
-				<xsl:when test="/doxygen/@version='1.5.1-p1'
+				<xsl:when
+					test="/doxygen/@version='1.5.1-p1'
 								or 
 								(number(substring(/doxygen/@version, 3, 1)) = 5 and
 								 number(substring(/doxygen/@version, 5, 1)) >= 2)
 								or
 								number(substring(/doxygen/@version, 3, 1)) >= 6">
 					<xsl:for-each
-							select="sectiondef[@kind='typedef']">
+						select="sectiondef[@kind='typedef']">
 						<xsl:call-template name="typedef" />
 					</xsl:for-each>
 				</xsl:when>
 				<xsl:otherwise>
-					<xsl:for-each
-						select="sectiondef[@kind='']">
+					<xsl:for-each select="sectiondef[@kind='']">
 						<xsl:choose>
 							<!-- if there are more than one entries in all.xml -->
 							<xsl:when test="last() > 1">
@@ -343,23 +357,27 @@
 			<!-- <xsl:for-each select="doxygen/compounddef[@kind='enum']"> -->
 			<!-- check doxygen version -->
 			<xsl:choose>
-				<xsl:when test="/doxygen/@version='1.5.1-p1'
+				<xsl:when
+					test="/doxygen/@version='1.5.1-p1'
 								or 
 								(number(substring(/doxygen/@version, 3, 1)) = 5 and
 								 number(substring(/doxygen/@version, 5, 1)) >= 2)
 								or
 								number(substring(/doxygen/@version, 3, 1)) >= 6">
-					<xsl:for-each select="sectiondef[@kind='enum']/memberdef[@kind='enum']">
+					<xsl:for-each
+						select="sectiondef[@kind='enum']/memberdef[@kind='enum']">
 						<xsl:call-template name="enumeration" />
 					</xsl:for-each>
 				</xsl:when>
 				<xsl:otherwise>
-					<xsl:for-each select="sectiondef[@kind='']/memberdef[@kind='enum']">
+					<xsl:for-each
+						select="sectiondef[@kind='']/memberdef[@kind='enum']">
 						<xsl:choose>
 							<!-- if there are more than one entries in all.xml -->
 							<xsl:when test="last() > 1">
 								<xsl:if test="position() = 1">
-									<xsl:call-template name="enumeration" />
+									<xsl:call-template
+										name="enumeration" />
 								</xsl:if>
 							</xsl:when>
 							<xsl:otherwise>
@@ -481,7 +499,7 @@
 		<xsl:for-each
 			select="root()//compounddef[@id=$refid and @kind='class' and @prot='public']">
 			<xsl:element name="class">
-				<xsl:attribute name="protection" select="@prot"/>
+				<xsl:attribute name="protection" select="@prot" />
 				<xsl:call-template name="classAndStructBody">
 					<xsl:with-param name="refid" select="@id" />
 				</xsl:call-template>
@@ -784,22 +802,25 @@
 					</xsl:choose>
 				</xsl:attribute>
 				<xsl:attribute name="protection" select="@prot" />
-				<xsl:attribute name="basetype" select="normalize-space(./type)" />
+				<xsl:attribute name="basetype"
+					select="normalize-space(./type)" />
 
 				<!-- copy all includes into meta output -->
 				<xsl:choose>
-					<xsl:when test="../../@kind = 'class' or ../../@kind = 'struct'">
-						<xsl:copy-of copy-namespaces="no" select="../../includes"/>
+					<xsl:when
+						test="../../@kind = 'class' or ../../@kind = 'struct'">
+						<xsl:copy-of copy-namespaces="no"
+							select="../../includes" />
 					</xsl:when>
 
 					<!-- inside a file -->
 					<xsl:otherwise>
 						<xsl:element name="includes">
-							<xsl:attribute name="local" select="'yes'"/>
-							<xsl:value-of select="../../compoundname"/>
+							<xsl:attribute name="local" select="'yes'" />
+							<xsl:value-of select="../../compoundname" />
 						</xsl:element>
 					</xsl:otherwise>
-				</xsl:choose>				
+				</xsl:choose>
 
 				<!-- documentation -->
 				<xsl:call-template name="documentation" />
@@ -994,111 +1015,106 @@
 		<xsl:for-each select="memberdef">
 			<!-- test if function belongs to actual class (the location test could be deleted)  -->
 			<!-- 
-			<xsl:if
+				<xsl:if
 				test="ends-with(location/@file,../../includes) and starts-with(@id,../../@id)">
-			 -->
-				<xsl:choose>
-					<!-- destructor - do nothing -->
-					<xsl:when test="starts-with(name,'~')" />
-					<xsl:otherwise>
-						<xsl:element name="function">
-							<xsl:attribute name="virt" select="@virt" />
-							<xsl:attribute name="visibility"
-								select="@prot" />
-							<xsl:attribute name="static">
-								<xsl:choose>
-									<xsl:when test="@static='yes'">
-										<xsl:value-of select="'true'" />
-									</xsl:when>
-									<xsl:when test="@static='no'">
-										<xsl:value-of select="'false'" />
-									</xsl:when>
-								</xsl:choose>
-							</xsl:attribute>
-							<xsl:attribute name="const">
-								<xsl:choose>
-									<xsl:when test="@const='yes'">
-										<xsl:value-of select="'true'" />
-									</xsl:when>
-									<xsl:when test="@const='no'">
-										<xsl:value-of select="'false'" />
-									</xsl:when>
-								</xsl:choose>
-							</xsl:attribute>
-							<!-- template attributes -->
-							<xsl:if test="templateparamlist">
-								<xsl:variable name="refid"
-									select="../../@id" />
-								<xsl:attribute name="template"
-									select="'true'" />
-								<xsl:attribute name="templateType"
-									select="templateparamlist/param/type" />
-								<xsl:attribute
-									name="templateDeclaration"
-									select="templateparamlist/param/declname" />
-								<xsl:for-each
-									select="inheritancegraph/node">
-									<xsl:if test="link/@refid=$refid">
-										<xsl:variable name="childnode"
-											select="childnode/@refid" />
-										<xsl:for-each
-											select="../node">
-											<xsl:if
-												test="@id=$childnode">
-												<xsl:attribute
-													name="templateName">
-													<xsl:variable
-														name="string" select="substring-before(label,' &gt;')" />
-													<xsl:value-of
-														select="substring-after($string,'&lt; ')" />
-												</xsl:attribute>
-											</xsl:if>
-										</xsl:for-each>
-									</xsl:if>
-								</xsl:for-each>
-							</xsl:if>
-							<!-- type of the function -->
-							<xsl:if test="type and type!='virtual'">
-								<xsl:call-template name="type" />
-							</xsl:if>
-							<xsl:element name="definition">
-								<xsl:value-of select="definition" />
-							</xsl:element>
-							<!-- name of the function -->
-							<xsl:element name="name">
-								<!-- <xsl:choose>
-									<xsl:when
-									test="contains(name,'::')">
-									<xsl:value-of
-									select="substring-after(name,'::')" />
-									</xsl:when>
-									<xsl:otherwise> -->
-								<xsl:value-of select="name" />
-								<!-- </xsl:otherwise>
-									</xsl:choose> -->
-							</xsl:element>
-							<!-- parameter of the function -->
-							<xsl:if
-								test="(param/type!='' or param/declname!='') and not(param/type='void')">
-								<xsl:element name="parameters">
-									<xsl:for-each select="param">
-										<xsl:element name="parameter">
-											<xsl:call-template
-												name="type" />
-										</xsl:element>
+			-->
+			<xsl:choose>
+				<!-- destructor - do nothing -->
+				<xsl:when test="starts-with(name,'~')" />
+				<xsl:otherwise>
+					<xsl:element name="function">
+						<xsl:attribute name="virt" select="@virt" />
+						<xsl:attribute name="visibility" select="@prot" />
+						<xsl:attribute name="static">
+							<xsl:choose>
+								<xsl:when test="@static='yes'">
+									<xsl:value-of select="'true'" />
+								</xsl:when>
+								<xsl:when test="@static='no'">
+									<xsl:value-of select="'false'" />
+								</xsl:when>
+							</xsl:choose>
+						</xsl:attribute>
+						<xsl:attribute name="const">
+							<xsl:choose>
+								<xsl:when test="@const='yes'">
+									<xsl:value-of select="'true'" />
+								</xsl:when>
+								<xsl:when test="@const='no'">
+									<xsl:value-of select="'false'" />
+								</xsl:when>
+							</xsl:choose>
+						</xsl:attribute>
+						<!-- template attributes -->
+						<xsl:if test="templateparamlist">
+							<xsl:variable name="refid"
+								select="../../@id" />
+							<xsl:attribute name="template"
+								select="'true'" />
+							<xsl:attribute name="templateType"
+								select="templateparamlist/param/type" />
+							<xsl:attribute name="templateDeclaration"
+								select="templateparamlist/param/declname" />
+							<xsl:for-each
+								select="inheritancegraph/node">
+								<xsl:if test="link/@refid=$refid">
+									<xsl:variable name="childnode"
+										select="childnode/@refid" />
+									<xsl:for-each select="../node">
+										<xsl:if test="@id=$childnode">
+											<xsl:attribute
+												name="templateName">
+												<xsl:variable
+													name="string" select="substring-before(label,' &gt;')" />
+												<xsl:value-of
+													select="substring-after($string,'&lt; ')" />
+											</xsl:attribute>
+										</xsl:if>
 									</xsl:for-each>
-								</xsl:element>
-							</xsl:if>
-
-							<!-- documentation -->
-							<xsl:call-template name="documentation" />
-
+								</xsl:if>
+							</xsl:for-each>
+						</xsl:if>
+						<!-- type of the function -->
+						<xsl:if test="type and type!='virtual'">
+							<xsl:call-template name="type" />
+						</xsl:if>
+						<xsl:element name="definition">
+							<xsl:value-of select="definition" />
 						</xsl:element>
-					</xsl:otherwise>
-				</xsl:choose>
+						<!-- name of the function -->
+						<xsl:element name="name">
+							<!-- <xsl:choose>
+								<xsl:when
+								test="contains(name,'::')">
+								<xsl:value-of
+								select="substring-after(name,'::')" />
+								</xsl:when>
+								<xsl:otherwise> -->
+							<xsl:value-of select="name" />
+							<!-- </xsl:otherwise>
+								</xsl:choose> -->
+						</xsl:element>
+						<!-- parameter of the function -->
+						<xsl:if
+							test="(param/type!='' or param/declname!='') and not(param/type='void')">
+							<xsl:element name="parameters">
+								<xsl:for-each select="param">
+									<xsl:element name="parameter">
+										<xsl:call-template name="type" />
+									</xsl:element>
+								</xsl:for-each>
+							</xsl:element>
+						</xsl:if>
+
+						<!-- documentation -->
+						<xsl:call-template name="documentation" />
+
+					</xsl:element>
+				</xsl:otherwise>
+			</xsl:choose>
 			<!-- 
-			</xsl:if>
-			 -->
+				</xsl:if>
+			-->
 		</xsl:for-each>
 	</xsl:template>
 	<!-- ##################### TYPE - calls typeMap ##################### -->
@@ -1132,38 +1148,39 @@
 			<xsl:when test="contains(type,'&amp;')">
 				<xsl:attribute name="passedBy" select="'reference'" />
 				<xsl:call-template name="typeMap">
-					<xsl:with-param name="type" select="substring-before(type,' &amp;')"/>
+					<xsl:with-param name="type"
+						select="substring-before(type,' &amp;')" />
 				</xsl:call-template>
 				<!-- 
-				<xsl:choose>
-				 -->
-					<!-- current class is a template -->
-					<!-- 
+					<xsl:choose>
+				-->
+				<!-- current class is a template -->
+				<!-- 
 					<xsl:when
 						test="../../templateparamlist or ../../../templateparamlist">
-						<xsl:call-template name="typeMap">
-							<xsl:with-param name="type"
+					<xsl:call-template name="typeMap">
+					<xsl:with-param name="type"
 								select="substring-before(type,' &amp;')" />
-						</xsl:call-template>
+					</xsl:call-template>
 					</xsl:when>
 					<xsl:when test="type/ref">
-						<xsl:call-template name="typeMap">
-							 -->
-							<!-- don't put the select instruction into the "with-param" element,will cause multiple select of type/ref -->
-							<!-- 
+					<xsl:call-template name="typeMap">
+				-->
+				<!-- don't put the select instruction into the "with-param" element,will cause multiple select of type/ref -->
+				<!-- 
 							<xsl:with-param name="type">
-								<xsl:value-of select="type/ref" />
-							</xsl:with-param>
-						</xsl:call-template>
+					<xsl:value-of select="type/ref" />
+					</xsl:with-param>
+					</xsl:call-template>
 					</xsl:when>
 					<xsl:otherwise>
-						<xsl:call-template name="typeMap">
-							<xsl:with-param name="type"
+					<xsl:call-template name="typeMap">
+					<xsl:with-param name="type"
 								select="substring-before(type,' &amp;')" />
-						</xsl:call-template>
+					</xsl:call-template>
 					</xsl:otherwise>
-				</xsl:choose>
-				 -->
+					</xsl:choose>
+				-->
 			</xsl:when>
 			<!-- passed by pointer -->
 			<xsl:when test="contains(type,'*')">
@@ -1172,46 +1189,46 @@
 					<xsl:with-param name="type" select="type" />
 				</xsl:call-template>
 				<!-- 
-				<xsl:variable name="type"
+					<xsl:variable name="type"
 					select="substring-before(type,' *')" />
-				 -->
+				-->
 				<!-- 
-				<xsl:choose>
-					 -->
-					<!-- current class is a template -->
-					<!-- 
+					<xsl:choose>
+				-->
+				<!-- current class is a template -->
+				<!-- 
 					<xsl:when
 						test="../../templateparamlist or ../../../templateparamlist">
-						<xsl:call-template name="typeMap">
-							 -->
-							<!-- 
-							<xsl:with-param name="type"
-								select="substring-before(type,' *')" />
-							 -->
-							<!-- 
+					<xsl:call-template name="typeMap">
+				-->
+				<!-- 
+					<xsl:with-param name="type"
+					select="substring-before(type,' *')" />
+				-->
+				<!-- 
 							<xsl:with-param name="type" select="type" />
-						</xsl:call-template>
+					</xsl:call-template>
 					</xsl:when>
 					<xsl:when test="type/ref">
-						<xsl:call-template name="typeMap">
-							<xsl:with-param name="type">
-								<xsl:value-of select="type/ref" />
-							</xsl:with-param>
-						</xsl:call-template>
+					<xsl:call-template name="typeMap">
+					<xsl:with-param name="type">
+					<xsl:value-of select="type/ref" />
+					</xsl:with-param>
+					</xsl:call-template>
 					</xsl:when>
 					<xsl:otherwise>
-						<xsl:call-template name="typeMap">
-							 -->
-							<!-- 
-							<xsl:with-param name="type"
-								select="substring-before(type,' *')" />
-							 -->
-							<!-- 
+					<xsl:call-template name="typeMap">
+				-->
+				<!-- 
+					<xsl:with-param name="type"
+					select="substring-before(type,' *')" />
+				-->
+				<!-- 
 							<xsl:with-param name="type" select="type" />
-						</xsl:call-template>
+					</xsl:call-template>
 					</xsl:otherwise>
-				</xsl:choose>
-				 -->
+					</xsl:choose>
+				-->
 			</xsl:when>
 			<!-- passed by value -->
 			<xsl:otherwise>
@@ -1290,6 +1307,18 @@
 		<xsl:if test="type!=''">
 			<xsl:element name="type">
 
+				<!-- find out if first child of $type is a text node (for bug 1714365) -->
+				<xsl:variable name="isFirstChildTextNode">
+					<xsl:choose>
+						<xsl:when test="type/child::node()[position()=1] = type/child::text()[position()=1]">
+							<xsl:sequence select="true()"/>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:sequence select="false()"/>
+						</xsl:otherwise>
+					</xsl:choose>
+				</xsl:variable>
+
 				<!-- check for const, take care of const pointer or const data
 					(const int* vs int* const) -->
 				<xsl:choose>
@@ -1308,7 +1337,9 @@
 						</xsl:if>
 					</xsl:when>
 					<xsl:otherwise>
-						<xsl:if test="contains(type,'const')">
+						<!-- see Ogre::AlignedAllocator::address(const_reference), t37, bug 1714365 -->
+						<xsl:if
+							test="$isFirstChildTextNode = true() and starts-with(type, 'const')">
 							<xsl:attribute name="const" select="'true'" />
 						</xsl:if>
 					</xsl:otherwise>
@@ -1321,14 +1352,18 @@
 					<xsl:attribute name="passedBy" select="$passedBy" />
 				</xsl:if>
 
-				<!-- remove const prefix or postfix -->
+				<!-- remove const prefix or postfix, take care of bug 1714365 -->
 				<xsl:variable name="non_const_type">
 					<xsl:choose>
-						<xsl:when test="starts-with($type, 'const')">
-							<xsl:value-of
-								select="replace($type, '[ \t]*^const[ \t]', '')" />
+						<xsl:when test="$isFirstChildTextNode = true() and count(type/node()) > 1 and starts-with($type, 'const')">
+							<!-- <xsl:value-of
+								select="replace($type/child::text()[1], '[ \t]*^const[ \t]', '')" /> -->
+							<xsl:value-of select="type/node()[position() != 1]"/>
 						</xsl:when>
-						<xsl:when test="contains($type,'const')">
+						<xsl:when test="$isFirstChildTextNode = true() and starts-with($type, 'const')">
+							<xsl:value-of select="replace($type, '[ \t]*^const[ \t]', '')"/>
+						</xsl:when>
+						<xsl:when test="type/child::text()[contains(.,'const')]">
 							<xsl:value-of
 								select="substring-before($type, 'const')" />
 						</xsl:when>
@@ -1340,48 +1375,59 @@
 
 				<!-- remove parameter passing modifiers -->
 				<!-- 
-				<xsl:variable name="stripped_type" select="replace($non_const_type, '[\*&amp;\[].*$', '')"/>
-				 -->
-				<xsl:variable name="typeWithoutRef" select="replace($non_const_type, '[&amp;\[].*$', '')"/>
+					<xsl:variable name="stripped_type" select="replace($non_const_type, '[\*&amp;\[].*$', '')"/>
+				-->
+				<xsl:variable name="typeWithoutRef"
+					select="replace($non_const_type, '[&amp;\[].*$', '')" />
 
-				<xsl:variable name="pointerPointerToken" select="'#POINTER_POINTER_TOKEN#'"/>
+				<xsl:variable name="pointerPointerToken"
+					select="'#POINTER_POINTER_TOKEN#'" />
 				<xsl:variable name="stripped_type">
 					<xsl:choose>
-						<xsl:when test="contains($typeWithoutRef, '*')">
+						<xsl:when
+							test="contains($typeWithoutRef, '*')">
 							<xsl:choose>
 								<!-- recognize pointer pointer -->
-								<xsl:when test="contains(substring-after($typeWithoutRef, '*'), '*')">
+								<xsl:when
+									test="contains(substring-after($typeWithoutRef, '*'), '*')">
 									<!-- keep some '*' to recognize pointer pointer -->
 									<!-- 
-									<xsl:value-of select="concat(substring-before($typeWithoutRef, '*'),
-																 substring-after($typeWithoutRef, '*'))"/>
-									 -->
-									
-									<xsl:value-of select="concat(substring-before($typeWithoutRef, '*'),
-															$pointerPointerToken)"/>
+										<xsl:value-of select="concat(substring-before($typeWithoutRef, '*'),
+										substring-after($typeWithoutRef, '*'))"/>
+									-->
+
+									<xsl:value-of
+										select="concat(substring-before($typeWithoutRef, '*'),
+															$pointerPointerToken)" />
 								</xsl:when>
 								<xsl:otherwise>
-									<xsl:value-of select="substring-before($typeWithoutRef, '*')"/>
+									<xsl:value-of
+										select="substring-before($typeWithoutRef, '*')" />
 								</xsl:otherwise>
 							</xsl:choose>
 						</xsl:when>
 						<xsl:otherwise>
-							<xsl:value-of select="$typeWithoutRef"/>
+							<xsl:value-of select="$typeWithoutRef" />
 						</xsl:otherwise>
 					</xsl:choose>
 				</xsl:variable>
 
-				<xsl:if test="contains($stripped_type, $pointerPointerToken)">
-					<xsl:attribute name="pointerPointer" select="'true'"/>
+				<xsl:if
+					test="contains($stripped_type, $pointerPointerToken)">
+					<xsl:attribute name="pointerPointer"
+						select="'true'" />
 				</xsl:if>
 
 				<xsl:choose>
-					<xsl:when test="contains($stripped_type, $pointerPointerToken)">
-						<xsl:value-of select="normalize-space(substring-before($stripped_type,
+					<xsl:when
+						test="contains($stripped_type, $pointerPointerToken)">
+						<xsl:value-of
+							select="normalize-space(substring-before($stripped_type,
 												$pointerPointerToken))" />
 					</xsl:when>
 					<xsl:otherwise>
-						<xsl:value-of select="normalize-space($stripped_type)" />
+						<xsl:value-of
+							select="normalize-space($stripped_type)" />
 					</xsl:otherwise>
 				</xsl:choose>
 			</xsl:element>
@@ -1619,8 +1665,10 @@
 			<xsl:element name="templateparameters">
 				<xsl:for-each select="templateparamlist/param">
 					<xsl:element name="templateparameter">
-						<xsl:attribute name="templateType" select="type" />
-						<xsl:attribute name="templateDeclaration" select="declname" />
+						<xsl:attribute name="templateType"
+							select="type" />
+						<xsl:attribute name="templateDeclaration"
+							select="declname" />
 					</xsl:element>
 				</xsl:for-each>
 			</xsl:element>
@@ -1642,7 +1690,7 @@
 				</xsl:if>
 			</xsl:for-each>
 
-		</xsl:if> <!-- template -->
+		</xsl:if><!-- template -->
 
 		<!-- getting the right name of inner classes -->
 		<xsl:variable name="name"
@@ -1667,7 +1715,8 @@
 			</xsl:choose>
 		</xsl:for-each>
 		<!-- typedefs -->
-		<xsl:for-each select="sectiondef[@kind='public-type' or @kind='protected-type']">
+		<xsl:for-each
+			select="sectiondef[@kind='public-type' or @kind='protected-type']">
 			<xsl:choose>
 				<xsl:when test="memberdef[@kind='typedef']">
 					<xsl:call-template name="typedef" />
