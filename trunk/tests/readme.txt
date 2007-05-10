@@ -12,7 +12,8 @@ t2: classes
 	t2_6: class with inner class
 	t2_7: static members
 	t2_8: pointers to objects and std::string
-
+	t2_9: method overloading
+	
 t3: structs
 	t3_1: empty struct
 	t3_2: struct with public attribute
