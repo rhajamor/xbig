@@ -172,4 +172,126 @@
 		</xsl:choose>
 	</xsl:function>
 
+	<xd:doc type="function">
+		<xd:short>Check if two c++ methods is mapped into a same java method. For internal usage.</xd:short>
+		<xd:param name="meth1">
+			Node of the meta layer which contains the first function to compare.
+		</xd:param>
+		<xd:param name="meth2">
+			Node of the meta layer which contains the second function to compare.
+		</xd:param>
+		<xd:param name="referencePointerAreEqual">
+			If true function parameters passed by reference or pointer will be equal.
+		</xd:param>		
+	</xd:doc>
+	<xsl:function name="xbig:areTheseMethodsEqualInJava" as="xs:boolean">
+		<xsl:param name="meth1"/>
+		<xsl:param name="meth2"/>
+		<xsl:param name="referencePointerAreEqual"/>
+		<xsl:choose>
+
+			<!-- test if both methods have the same name -->
+			<xsl:when test="$meth1/name = $meth2/name">
+				<xsl:choose>
+
+					<!-- test if both methods have the same number of parameters -->
+					<xsl:when test="count($meth1/parameters) = count($meth2/parameters)">
+						<xsl:variable name="parameterEquality">
+							<xsl:for-each select="$meth1/parameters/parameter">
+								<xsl:element name="para">
+									<xsl:variable name="forLoopPosition" select="position()"/>
+									
+									<!-- find out the corresponding java type for the first method -->
+									<xsl:variable name="type1">
+										<xsl:choose>
+											<xsl:when test="$config/config/java/types/type[@meta = $meth1/parameters/parameter[$forLoopPosition]/type]">
+												<xsl:value-of select="$config/config/java/types/type[@meta = $meth1/parameters/parameter[$forLoopPosition]/type]/@genericParameter"/>
+											</xsl:when>
+											<xsl:otherwise>
+												<xsl:value-of select="./type"/>
+											</xsl:otherwise>
+										</xsl:choose>
+									</xsl:variable>
+									<!--<xsl:message>==== DEBUG INFO ====</xsl:message>
+									<xsl:message>==== 3.1. old_type1=<xsl:value-of select="./type"/> ====</xsl:message>
+									<xsl:message>====      new_type1=<xsl:value-of select="$type1"/> ====</xsl:message>
+									<xsl:message>==== DEBUG INFO ====</xsl:message>-->												
+									
+										
+									<!-- find out the corresponding java type for the second method -->
+									<xsl:variable name="type2">
+										<xsl:choose>
+											<xsl:when test="$config/config/java/types/type[@meta = $meth2/parameters/parameter[$forLoopPosition]/type]">
+												<xsl:value-of select="$config/config/java/types/type[@meta = $meth2/parameters/parameter[$forLoopPosition]/type]/@genericParameter"/>
+											</xsl:when>
+											<xsl:otherwise>
+												<xsl:value-of select="$meth2/parameters/parameter[$forLoopPosition]/type"/>
+											</xsl:otherwise>
+										</xsl:choose>
+									</xsl:variable>										
+									<!--<xsl:message>==== DEBUG INFO ====</xsl:message>
+									<xsl:message>==== 3.2. old_type2=<xsl:value-of select="$meth2/parameters/parameter[$forLoopPosition]/type"/> ====</xsl:message>
+									<xsl:message>====      new_type2=<xsl:value-of select="$type2"/> ====</xsl:message>
+									<xsl:message>==== DEBUG INFO ====</xsl:message>-->
+
+									<xsl:choose>
+
+										<!-- test if each parameter is mapped into a same type and is passed by the same way for both methods -->
+										<!-- compare the parameters one by one -->
+										<xsl:when test="$type1 = $type2 and ./@passedBy = $meth2/parameters/parameter[$forLoopPosition]/@passedBy">
+											<xsl:value-of select="true()"/>
+										</xsl:when>
+										<xsl:when test="$referencePointerAreEqual=true()">
+											<xsl:choose>
+
+												<!-- if $referencePointerAreEqual is true, references and pointer should be handled equally -->
+												<xsl:when test="$type1 = $type2 and
+															(
+																./@passedBy = 'reference' and $meth2/parameters/parameter[$forLoopPosition]/@passedBy='pointer'
+																or
+																./@passedBy = 'pointer' and $meth2/parameters/parameter[$forLoopPosition]/@passedBy='reference'
+															)">
+													<xsl:value-of select="true()"/>
+												</xsl:when>
+												<xsl:otherwise>
+													<xsl:value-of select="false()"/>
+												</xsl:otherwise>
+											</xsl:choose>
+										</xsl:when>
+
+										<!-- parameter type or passed by is different -->
+										<xsl:otherwise>
+											<xsl:value-of select="false()"/>
+										</xsl:otherwise>
+									</xsl:choose>
+								</xsl:element>
+							</xsl:for-each>
+						</xsl:variable>
+
+						<!-- calc one result of all parameters -->
+						<xsl:choose>
+							<xsl:when test="not($parameterEquality) or $parameterEquality/* = false()">
+								<xsl:value-of select="false()"/>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:value-of select="true()"/>
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:when>
+
+					<!-- if the number of parameters is different -->
+					<xsl:otherwise>
+						<xsl:value-of select="false()"/>
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:when>
+
+			<!-- if the name is different -->
+			<xsl:otherwise>
+				<xsl:value-of select="false()"/>
+			</xsl:otherwise>
+		</xsl:choose>
+
+	</xsl:function>
+
 </xsl:stylesheet>

@@ -350,7 +350,46 @@
 
 								<!-- other method with same name but other parameters -->
 								<xsl:otherwise>
-									<xsl:copy-of select="." />
+									<!-- check if several c++ methods will be mapped into a same java method -->
+									<xsl:variable name="equalInJava">
+										<xsl:for-each select="$methodsForJava/function">
+											<!-- check if two c++ method will be mapped into a same java method -->
+											<!--<xsl:message>==== DEBUG INFO ====</xsl:message>
+											<xsl:message>==== 3. position()=<xsl:value-of select="position()"/> ====</xsl:message>
+											<xsl:message>====    $currentMethodPos=<xsl:value-of select="$currentMethodPos"/> ====</xsl:message>
+											<xsl:message>==== DEBUG INFO ====</xsl:message>-->
+											<xsl:if test="../function[name = $currentMethod/name]">
+												<xsl:if test="position() &lt; $currentMethodPos">
+													<xsl:element name="check">
+														<xsl:choose>
+															<xsl:when test="xbig:areTheseMethodsEqualInJava($currentMethod, .,false())">
+																<!--<xsl:message>==== DEBUG INFO ====</xsl:message>
+																<xsl:message>==== 4. Functions are equal in Java ====</xsl:message>
+																<xsl:message>==== DEBUG INFO ====</xsl:message>-->
+																<xsl:value-of select="true()" />
+															</xsl:when>	
+															<xsl:otherwise>
+																<xsl:value-of select="false()" />
+															</xsl:otherwise>
+														</xsl:choose>
+													</xsl:element>
+												</xsl:if>
+											</xsl:if>
+										</xsl:for-each>
+									</xsl:variable>	
+									
+
+									<xsl:choose>
+										<xsl:when test="$equalInJava/* = true()">
+											<xsl:call-template name="createElementForSameInJavaMethod">
+												<xsl:with-param name="config" select="$config" />
+												<xsl:with-param name="method" select="." />
+											</xsl:call-template>
+										</xsl:when>
+										<xsl:otherwise>
+											<xsl:copy-of select="." />
+										</xsl:otherwise>
+									</xsl:choose>													
 								</xsl:otherwise>
 							</xsl:choose>
 						</xsl:when>
