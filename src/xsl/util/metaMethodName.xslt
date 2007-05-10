@@ -109,9 +109,24 @@
 			</xsl:choose>
 		</xsl:variable>
 
+		<!--<xsl:message>==== DEBUG INFO ====</xsl:message>
+		<xsl:message>==== 0. <xsl:value-of select="$method/name/@signature" /> ====</xsl:message>
+		<xsl:message>==== DEBUG INFO ====</xsl:message>-->
+
 		<!-- compose full method name -->
-		<xsl:variable name="full_method_name"
-			select="concat($method_name, $method_params, $const_suffix)" />
+		<xsl:variable name="full_method_name">
+			<xsl:choose>
+				<xsl:when test="$method/name/@signatureAdded">
+					<!--<xsl:message>==== DEBUG INFO ====</xsl:message>
+					<xsl:message>==== 1. Already has signature ====</xsl:message>
+					<xsl:message>==== DEBUG INFO ====</xsl:message>-->
+					<xsl:value-of select="concat($method_name, $const_suffix)" />
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="concat($method_name, $method_params, $const_suffix)" />
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>	
 
 		<xsl:choose>
 			<xsl:when test="$escape eq 'true'">
@@ -129,7 +144,7 @@
 
 	<xd:doc type="template">
 		<xd:short>Generates a meta function element. If a method is overloaded with 'const'
-				(void a() vs void a() const) we change it's name (a_const() with default configt).
+				(void a() vs void a() const) we change it's name (a_const() with default config).
 				Return type, parameters and attributes must be copied.
 		</xd:short>
 		<xd:param name="config">config file.</xd:param>
@@ -172,6 +187,85 @@
 				<xsl:value-of select="$config/config/java/constoverloading/prefix" />
 				<xsl:value-of select="$method/name" />
 				<xsl:value-of select="$config/config/java/constoverloading/suffix" />
+			</xsl:element>
+
+			<xsl:element name="parameters">
+				<xsl:copy-of select="$method/parameters/*" />
+			</xsl:element>
+
+		</xsl:element>
+
+	</xsl:template>
+
+
+	<xd:doc type="template">
+		<xd:short>Change method names to avoid duplicate function definition. Needed e.g. for Java.
+		</xd:short>
+		<xd:param name="config">config file.</xd:param>
+		<xd:param name="method">method to be processed.</xd:param>
+	</xd:doc>
+	<xsl:template name="createElementForSameInJavaMethod">
+		<xsl:param name="config" />
+		<xsl:param name="method" />
+
+		<!-- shortcut to meta configuration -->
+		<xsl:variable name="meta_config" select="$config/config/meta" />
+
+		<!-- write meta signature if parameters available -->
+		<xsl:variable name="method_params">
+			<xsl:if test="count($method/parameters/parameter) > 0 and
+						  (not($method/@public_attribute_setter) or 
+						  $method/@public_attribute_setter ne 'true')">
+
+				<!-- write parameter seperation -->
+				<xsl:text>__</xsl:text>
+
+				<!-- generate parameter signature list  -->
+				<xsl:call-template name="metaParameterListSignature">
+					<xsl:with-param name="config" select="$config" />
+					<xsl:with-param name="method" select="$method" />
+				</xsl:call-template>
+			</xsl:if>
+		</xsl:variable>
+
+		<!-- compose full method name -->
+		<xsl:variable name="full_method_name"
+			select="concat($method/name, $method_params)" />
+
+		<xsl:element name="function">
+			<xsl:attribute name="virt">
+				<xsl:value-of select="$method/@virt" />
+			</xsl:attribute>
+			<xsl:attribute name="visibility">
+				<xsl:value-of select="$method/@visibility" />
+			</xsl:attribute>
+			<xsl:attribute name="static">
+				<xsl:value-of select="$method/@static" />
+			</xsl:attribute>
+			<xsl:attribute name="const">
+				<xsl:value-of select="$method/@const" />
+			</xsl:attribute>
+			<xsl:attribute name="passedBy">
+				<xsl:value-of select="$method/@passedBy" />
+			</xsl:attribute>
+
+			<xsl:element name="type">
+				<xsl:attribute name="const">
+					<xsl:value-of select="$method/type/@const" />
+				</xsl:attribute>
+				<xsl:attribute name="constPointer">
+					<xsl:value-of select="$method/type/@constPointer" />
+				</xsl:attribute>
+				<xsl:value-of select="$method/type" />
+			</xsl:element>
+			<xsl:element name="definition">
+				<xsl:value-of select="$method/definition" />
+			</xsl:element>
+			<xsl:element name="name">
+				<xsl:attribute name="signatureAdded">
+					<xsl:value-of select="true()" />
+				</xsl:attribute>				
+				<xsl:value-of select="$full_method_name" />
 			</xsl:element>
 
 			<xsl:element name="parameters">
