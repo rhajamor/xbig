@@ -3,7 +3,7 @@
 <!--
 	
 	This source file is part of XBiG
-		(XSLT Bindings Generator)
+	(XSLT Bindings Generator)
 	For the latest info, see http://sourceforge.net/projects/xbig
 	
 	Copyright (c) 2006 The XBiG Development Team
@@ -44,14 +44,22 @@
 	<xsl:import href="../../util/createClassFromTemplateTypedef.xslt" />
 
 	<xd:doc type="stylesheet">
-		<xd:short>Generation of jni functions for java classes.</xd:short>
+		<xd:short>
+			Generation of jni functions for java classes.
+		</xd:short>
 	</xd:doc>
 
 	<xd:doc type="template">
-		<xd:short>Creates path names of cpp files and calls templates to create files.
+		<xd:short>
+			Creates path names of cpp files and calls templates to
+			create files.
 		</xd:short>
-		<xd:param name="ns_prefix">Name prefix. Usually java package from config.</xd:param>
-		<xd:param name="include_dir">Directory for include files.</xd:param>
+		<xd:param name="ns_prefix">
+			Name prefix. Usually java package from config.
+		</xd:param>
+		<xd:param name="include_dir">
+			Directory for include files.
+		</xd:param>
 		<xd:param name="lib_dir">Directory for source files.</xd:param>
 		<xd:param name="config">config file.</xd:param>
 	</xd:doc>
@@ -61,59 +69,69 @@
 		<xsl:param name="lib_dir" />
 		<xsl:param name="config" />
 
-		<xsl:message>Generating C code for class <xsl:value-of select="./@fullName"/></xsl:message>
-		<!-- we cannot create JNI functions for templates -->
-		<xsl:if test="not(./@template)">
+		<!-- do not generate content if type is on ignore list -->
+		<xsl:if
+			test="not($ignore_list/ignore_list/item[. = @fullName])">
 
-			<!-- find out if we create an inner class -->
-			<xsl:variable name="isInnerClass" select="../name() eq 'class' or ../name() eq 'struct' or
-													  @isInnerClass = 'true'"/>
 
-			<!-- compose filename of current class without suffix -->
-			<!-- the 00024 is for the $ of inner classes -->
-			<xsl:variable name="class_prefix">
-				<xsl:choose>
-					<xsl:when test="$isInnerClass">
-						<xsl:value-of select="concat($ns_prefix, '_', '00024', replace(@name, '_', '_1'))"/>
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:value-of select="concat($ns_prefix, '_', replace(@name, '_', '_1'))"/>
-					</xsl:otherwise>
-				</xsl:choose>
-			</xsl:variable>
+			<xsl:message>Generating C code for class <xsl:value-of select="./@fullName" /></xsl:message>
+			<!-- we cannot create JNI functions for templates -->
+			<xsl:if test="not(./@template)">
 
-			<!-- compose filename of current class without suffix -->
-			<xsl:variable name="main_filename"
-				select="concat('class_', $class_prefix)" />
+				<!-- find out if we create an inner class -->
+				<xsl:variable name="isInnerClass"
+					select="../name() eq 'class' or ../name() eq 'struct' or
+													  @isInnerClass = 'true'" />
 
-			<!-- compose basic header filename of current class -->
-			<xsl:variable name="basic_header_filename"
-				select="concat($main_filename,'.h')" />
+				<!-- compose filename of current class without suffix -->
+				<!-- the 00024 is for the $ of inner classes -->
+				<xsl:variable name="class_prefix">
+					<xsl:choose>
+						<xsl:when test="$isInnerClass">
+							<xsl:value-of
+								select="concat($ns_prefix, '_', '00024', replace(@name, '_', '_1'))" />
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:value-of
+								select="concat($ns_prefix, '_', replace(@name, '_', '_1'))" />
+						</xsl:otherwise>
+					</xsl:choose>
+				</xsl:variable>
 
-			<!-- compose full header filename of current class -->
-			<xsl:variable name="header_filename"
-				select="concat($include_dir, '/', $basic_header_filename)" />
+				<!-- compose filename of current class without suffix -->
+				<xsl:variable name="main_filename"
+					select="concat('class_', $class_prefix)" />
 
-			<!-- compose implementation filename of current class -->
-			<xsl:variable name="impl_filename"
-				select="concat($lib_dir, '/', $main_filename,'.cpp')" />
+				<!-- compose basic header filename of current class -->
+				<xsl:variable name="basic_header_filename"
+					select="concat($main_filename,'.h')" />
 
-			<!-- check if this class is abstract -->
-<!--
-			<xsl:if test="not(xbig:areThereUnimplementedAbstractMethods(.))">
- -->
+				<!-- compose full header filename of current class -->
+				<xsl:variable name="header_filename"
+					select="concat($include_dir, '/', $basic_header_filename)" />
+
+				<!-- compose implementation filename of current class -->
+				<xsl:variable name="impl_filename"
+					select="concat($lib_dir, '/', $main_filename,'.cpp')" />
+
+				<!-- check if this class is abstract -->
+				<!--
+					<xsl:if test="not(xbig:areThereUnimplementedAbstractMethods(.))">
+				-->
 				<!-- generate description for helper methods -->
 				<xsl:variable name="helper_methods">
 					<xsl:for-each select=".">
-						<xsl:call-template name="cppCreateHelperMethods">
-							<xsl:with-param name="config" select="$config" />
+						<xsl:call-template
+							name="cppCreateHelperMethods">
+							<xsl:with-param name="config"
+								select="$config" />
 						</xsl:call-template>
 					</xsl:for-each>
 				</xsl:variable>
 
 				<!-- open header file -->
-				<xsl:result-document href="{xbig:toFileURL($header_filename)}"
-					format="textOutput">
+				<xsl:result-document
+					href="{xbig:toFileURL($header_filename)}" format="textOutput">
 
 					<!-- write header file -->
 					<xsl:call-template name="cppClassFileHeader">
@@ -128,8 +146,8 @@
 				</xsl:result-document>
 
 				<!-- open implementation file -->
-				<xsl:result-document href="{xbig:toFileURL($impl_filename)}"
-					format="textOutput">
+				<xsl:result-document
+					href="{xbig:toFileURL($impl_filename)}" format="textOutput">
 
 					<!-- write file header with copyright information -->
 					<xsl:call-template name="cppClassFileImpl">
@@ -148,65 +166,88 @@
 				<!-- inner classes & structs -->
 				<xsl:for-each select="class">
 					<xsl:call-template name="cppClass">
-						<xsl:with-param name="ns_prefix" select="$class_prefix" />
-						<xsl:with-param name="include_dir" select="$include_dir" />
-						<xsl:with-param name="lib_dir" select="$lib_dir" />
+						<xsl:with-param name="ns_prefix"
+							select="$class_prefix" />
+						<xsl:with-param name="include_dir"
+							select="$include_dir" />
+						<xsl:with-param name="lib_dir"
+							select="$lib_dir" />
 						<xsl:with-param name="config" select="$config" />
 					</xsl:call-template>
 				</xsl:for-each>
 				<xsl:for-each select="struct">
 					<xsl:call-template name="cppClass">
-						<xsl:with-param name="ns_prefix" select="$class_prefix" />
-						<xsl:with-param name="include_dir" select="$include_dir" />
-						<xsl:with-param name="lib_dir" select="$lib_dir" />
+						<xsl:with-param name="ns_prefix"
+							select="$class_prefix" />
+						<xsl:with-param name="include_dir"
+							select="$include_dir" />
+						<xsl:with-param name="lib_dir"
+							select="$lib_dir" />
 						<xsl:with-param name="config" select="$config" />
 					</xsl:call-template>
 				</xsl:for-each>
 
 				<!-- check if we have to generate a class for a typedef -->
-				<xsl:for-each select="typedef[@protection eq 'public']">
+				<xsl:for-each
+					select="typedef[@protection eq 'public']">
 					<xsl:if test="contains(./@basetype, '&lt;')">
 						<xsl:variable name="templateBaseName"
-								select="normalize-space(substring-before(./@basetype, '&lt;'))"/>
+							select="normalize-space(substring-before(./@basetype, '&lt;'))" />
 						<xsl:variable name="fullTemplateBaseName"
-								select="xbig:getFullTypeName($templateBaseName, ., $root)"/>
-						<xsl:variable name="templateNode" select="$root//*[@fullName = $fullTemplateBaseName]"/>
+							select="xbig:getFullTypeName($templateBaseName, ., $root)" />
+						<xsl:variable name="templateNode"
+							select="$root//*[@fullName = $fullTemplateBaseName]" />
 						<xsl:variable name="generatedClass">
-							<xsl:call-template name="createClassFromTemplateTypedef">
-								<xsl:with-param name="template" select="$templateNode"/>
-								<xsl:with-param name="typedef" select="."/>
-								<xsl:with-param name="isInnerClass" select="true()"/>
+							<xsl:call-template
+								name="createClassFromTemplateTypedef">
+								<xsl:with-param name="template"
+									select="$templateNode" />
+								<xsl:with-param name="typedef"
+									select="." />
+								<xsl:with-param name="isInnerClass"
+									select="true()" />
 							</xsl:call-template>
 						</xsl:variable>
-		
+
 						<!-- generate the class -->
 						<xsl:for-each select="$generatedClass/*">
 							<xsl:call-template name="cppClass">
-								<xsl:with-param name="ns_prefix" select="$class_prefix" />
-								<xsl:with-param name="include_dir" select="$include_dir" />
-								<xsl:with-param name="lib_dir" select="$lib_dir" />
-								<xsl:with-param name="config" select="$config" />
+								<xsl:with-param name="ns_prefix"
+									select="$class_prefix" />
+								<xsl:with-param name="include_dir"
+									select="$include_dir" />
+								<xsl:with-param name="lib_dir"
+									select="$lib_dir" />
+								<xsl:with-param name="config"
+									select="$config" />
 							</xsl:call-template>
 						</xsl:for-each>
 					</xsl:if>
 				</xsl:for-each>
 
-			<!-- end of abstract class check -->
-<!-- 
-			</xsl:if>
- -->
-			<!-- inner enums -->
-			<xsl:for-each select="enumeration">
-				<xsl:call-template name="cppEnum">
-					<xsl:with-param name="enum" select="." />
-					<xsl:with-param name="ns_prefix" select="$class_prefix" />
-					<xsl:with-param name="include_dir" select="$include_dir" />
-					<xsl:with-param name="lib_dir" select="$lib_dir" />
-					<xsl:with-param name="config" select="$config" />
-				</xsl:call-template>
-			</xsl:for-each>
+				<!-- end of abstract class check -->
+				<!-- 
+					</xsl:if>
+				-->
+				<!-- inner enums -->
+				<xsl:for-each select="enumeration">
+					<xsl:call-template name="cppEnum">
+						<xsl:with-param name="enum" select="." />
+						<xsl:with-param name="ns_prefix"
+							select="$class_prefix" />
+						<xsl:with-param name="include_dir"
+							select="$include_dir" />
+						<xsl:with-param name="lib_dir"
+							select="$lib_dir" />
+						<xsl:with-param name="config" select="$config" />
+					</xsl:call-template>
+				</xsl:for-each>
 
-		</xsl:if> <!-- template -->
+			</xsl:if>
+			<!-- template -->
+
+			<!-- ignore list -->
+		</xsl:if>
 
 	</xsl:template>
 </xsl:stylesheet>
