@@ -130,194 +130,226 @@
 		<xsl:text>-xbig");}&#10;</xsl:text>
 		<!-- </xsl:if> -->
 
-		<!-- handle inner classes & structs -->
-		<xsl:for-each select="class">
-			<xsl:call-template name="javaClass">
-				<xsl:with-param name="config" select="$config" />
-				<xsl:with-param name="class" select="." />
-				<xsl:with-param name="buildFile" select="$buildFile" />
-			</xsl:call-template>
-		</xsl:for-each>
-		<xsl:for-each select="struct">
-			<xsl:call-template name="javaClass">
-				<xsl:with-param name="config" select="$config" />
-				<xsl:with-param name="class" select="." />
-				<xsl:with-param name="buildFile" select="$buildFile" />
-			</xsl:call-template>
-		</xsl:for-each>
-
-		<!-- create enums -->
-		<xsl:for-each select="enumeration">
-			<xsl:call-template name="javaEnum">
-				<xsl:with-param name="enum" select="." />
-				<xsl:with-param name="buildFile" select="$buildFile" />
-			</xsl:call-template>
-		</xsl:for-each>
-
-		<!-- check if we have to generate a class for a typedef -->
-		<xsl:for-each select="typedef">
-			<xsl:if test="contains(./@basetype, '&lt;')">
-				<xsl:variable name="templateBaseName"
-					select="normalize-space(substring-before(./@basetype, '&lt;'))" />
-				<xsl:variable name="fullTemplateBaseName"
-					select="xbig:getFullTypeName($templateBaseName, ., $root)" />
-				<xsl:variable name="templateNode"
-					select="$root//*[@fullName = $fullTemplateBaseName]" />
-				<xsl:variable name="generatedClass">
-					<xsl:call-template
-						name="createClassFromTemplateTypedef">
-						<xsl:with-param name="template"
-							select="$templateNode" />
-						<xsl:with-param name="typedef" select="." />
-						<xsl:with-param name="isInnerClass"
-							select="true()" />
-					</xsl:call-template>
-				</xsl:variable>
-
-				<!-- generate the class -->
-				<xsl:for-each select="$generatedClass/*">
-					<xsl:call-template name="javaClass">
-						<xsl:with-param name="config" select="$config" />
-						<xsl:with-param name="class" select="." />
-						<xsl:with-param name="buildFile"
-							select="$buildFile" />
-					</xsl:call-template>
-				</xsl:for-each>
-			</xsl:if>
-		</xsl:for-each>
-
-		<!-- if additional class content defined in configuration -->
-		<xsl:if test="$class_config/content">
-			<xsl:text>&#32;</xsl:text>
-			<xsl:value-of
-				select="replace($class_config/content,'#classname#', $class_name)" />
-		</xsl:if>
+		<!-- do not generate content if type is on ignore list -->
+		<xsl:if
+			test="not($ignore_list/ignore_list/item[. = $class/@fullName])">
 
 
-		<!-- get methods, with inherited -->
-		<xsl:variable name="inheritedMethods">
-			<xsl:call-template name="findRelevantInheritedMethods">
-				<xsl:with-param name="config" select="$config" />
-				<xsl:with-param name="class" select="$class" />
-			</xsl:call-template>
-		</xsl:variable>
-
-		<!-- remove function that are equal to java -->
-		<xsl:variable name="inheritedMethodsForJava">
-			<xsl:call-template name="getValidMethodList">
-				<xsl:with-param name="functionNodeList"
-					select="$inheritedMethods" />
-			</xsl:call-template>
-		</xsl:variable>
-
-		<!-- generate method impl -->
-		<xsl:for-each select="$inheritedMethodsForJava/function">
-			<!-- test if abstract class and ctor -->
-			<xsl:if
-				test="$isAbstract = false() or xbig:isCtor($class,.) = false()">
-				
-				<xsl:variable name="currentMethod" select="."/>
-	 			<xsl:variable name="currentMethodPos" select="position()"/>
-
-				<!-- change method name if const overloading is used -->
-				<xsl:variable name="methodContainer">
-					<xsl:choose>
-						<xsl:when test="(count(../function[name = $currentMethod/name]) > 1)">
-							<!-- check if several c++ methods will be mapped into a same java method -->
-							<xsl:variable name="equalInJava">
-								<xsl:for-each select="$inheritedMethodsForJava/function">
-									<!-- check if two c++ method will be mapped into a same java method -->
-									<!--<xsl:message>==== DEBUG INFO ====</xsl:message>
-									<xsl:message>==== 3. position()=<xsl:value-of select="position()"/> ====</xsl:message>
-									<xsl:message>====    $currentMethodPos=<xsl:value-of select="$currentMethodPos"/> ====</xsl:message>
-									<xsl:message>==== DEBUG INFO ====</xsl:message>-->
-									<xsl:if test="../function[name = $currentMethod/name]">
-										<xsl:if test="position() &lt; $currentMethodPos">
-											<xsl:element name="check">
-												<xsl:choose>
-													<xsl:when test="xbig:areTheseMethodsEqualInJava($currentMethod, .,false())">
-														<!--<xsl:message>==== DEBUG INFO ====</xsl:message>
-														<xsl:message>==== 4. Functions are equal in Java ====</xsl:message>
-														<xsl:message>==== DEBUG INFO ====</xsl:message>-->
-														<xsl:value-of select="true()" />
-													</xsl:when>	
-													<xsl:otherwise>
-														<xsl:value-of select="false()" />
-													</xsl:otherwise>
-												</xsl:choose>
-											</xsl:element>
-										</xsl:if>
-									</xsl:if>
-								</xsl:for-each>
-							</xsl:variable>	
-									
-
-							<xsl:choose>
-								<xsl:when test="$equalInJava/* = true()">
-									<xsl:call-template name="createElementForSameInJavaMethod">
-										<xsl:with-param name="config" select="$config" />
-										<xsl:with-param name="method" select="." />
-									</xsl:call-template>
-								</xsl:when>
-								<xsl:otherwise>
-									<xsl:copy-of select="." />
-								</xsl:otherwise>
-							</xsl:choose>													
-						</xsl:when>
-
-						<!-- no overloading for this method -->
-						<xsl:otherwise>
-							<xsl:copy-of select="." />
-						</xsl:otherwise>
-					</xsl:choose>
-				</xsl:variable>
-
-				<xsl:call-template name="javaAccessMethod">
+			<!-- handle inner classes & structs -->
+			<xsl:for-each select="class">
+				<xsl:call-template name="javaClass">
 					<xsl:with-param name="config" select="$config" />
-					<xsl:with-param name="class" select="$class" />
-					<xsl:with-param name="method" select="$methodContainer/function" />
+					<xsl:with-param name="class" select="." />
+					<xsl:with-param name="buildFile"
+						select="$buildFile" />
 				</xsl:call-template>
-
-				<xsl:text>&#10;&#10;</xsl:text>
-
-				<xsl:call-template name="javaNativeMethod">
+			</xsl:for-each>
+			<xsl:for-each select="struct">
+				<xsl:call-template name="javaClass">
 					<xsl:with-param name="config" select="$config" />
-					<xsl:with-param name="class" select="$class" />
-					<xsl:with-param name="method" select="." />
+					<xsl:with-param name="class" select="." />
+					<xsl:with-param name="buildFile"
+						select="$buildFile" />
 				</xsl:call-template>
-				<xsl:text>&#10;&#10;</xsl:text>
-			</xsl:if>
-		</xsl:for-each>
+			</xsl:for-each>
 
-		<!-- generate public attributes getters and setters -->
-		<xsl:for-each select="$inheritedMethods/attribute/variable">
-			<xsl:variable name="publicAttributeGettersAndSetters">
+			<!-- create enums -->
+			<xsl:for-each select="enumeration">
+				<xsl:call-template name="javaEnum">
+					<xsl:with-param name="enum" select="." />
+					<xsl:with-param name="buildFile"
+						select="$buildFile" />
+				</xsl:call-template>
+			</xsl:for-each>
+
+			<!-- check if we have to generate a class for a typedef -->
+			<xsl:for-each select="typedef">
+				<xsl:if test="contains(./@basetype, '&lt;')">
+					<xsl:variable name="templateBaseName"
+						select="normalize-space(substring-before(./@basetype, '&lt;'))" />
+					<xsl:variable name="fullTemplateBaseName"
+						select="xbig:getFullTypeName($templateBaseName, ., $root)" />
+					<xsl:variable name="templateNode"
+						select="$root//*[@fullName = $fullTemplateBaseName]" />
+					<xsl:variable name="generatedClass">
+						<xsl:call-template
+							name="createClassFromTemplateTypedef">
+							<xsl:with-param name="template"
+								select="$templateNode" />
+							<xsl:with-param name="typedef" select="." />
+							<xsl:with-param name="isInnerClass"
+								select="true()" />
+						</xsl:call-template>
+					</xsl:variable>
+
+					<!-- generate the class -->
+					<xsl:for-each select="$generatedClass/*">
+						<xsl:call-template name="javaClass">
+							<xsl:with-param name="config"
+								select="$config" />
+							<xsl:with-param name="class" select="." />
+							<xsl:with-param name="buildFile"
+								select="$buildFile" />
+						</xsl:call-template>
+					</xsl:for-each>
+				</xsl:if>
+			</xsl:for-each>
+
+			<!-- if additional class content defined in configuration -->
+			<xsl:if test="$class_config/content">
+				<xsl:text>&#32;</xsl:text>
+				<xsl:value-of
+					select="replace($class_config/content,'#classname#', $class_name)" />
+			</xsl:if>
+
+
+			<!-- get methods, with inherited -->
+			<xsl:variable name="inheritedMethods">
 				<xsl:call-template
-					name="createFunctionsForPublicAttribute">
-					<xsl:with-param name="variable" select="." />
+					name="findRelevantInheritedMethods">
+					<xsl:with-param name="config" select="$config" />
+					<xsl:with-param name="class" select="$class" />
 				</xsl:call-template>
 			</xsl:variable>
 
-			<xsl:for-each
-				select="$publicAttributeGettersAndSetters/function">
-				<xsl:call-template name="javaAccessMethod">
-					<xsl:with-param name="config" select="$config" />
-					<xsl:with-param name="class" select="$class" />
-					<xsl:with-param name="method" select="." />
+			<!-- remove function that are equal to java -->
+			<xsl:variable name="inheritedMethodsForJava">
+				<xsl:call-template name="getValidMethodList">
+					<xsl:with-param name="functionNodeList"
+						select="$inheritedMethods" />
 				</xsl:call-template>
+			</xsl:variable>
 
-				<xsl:text>&#10;&#10;</xsl:text>
+			<!-- generate method impl -->
+			<xsl:for-each select="$inheritedMethodsForJava/function">
+				<!-- test if abstract class and ctor -->
+				<xsl:if
+					test="$isAbstract = false() or xbig:isCtor($class,.) = false()">
 
-				<xsl:call-template name="javaNativeMethod">
-					<xsl:with-param name="config" select="$config" />
-					<xsl:with-param name="class" select="$class" />
-					<xsl:with-param name="method" select="." />
-				</xsl:call-template>
+					<xsl:variable name="currentMethod" select="." />
+					<xsl:variable name="currentMethodPos"
+						select="position()" />
 
-				<xsl:text>&#10;&#10;</xsl:text>
+					<!-- change method name if const overloading is used -->
+					<xsl:variable name="methodContainer">
+						<xsl:choose>
+							<xsl:when
+								test="(count(../function[name = $currentMethod/name]) > 1)">
+								<!-- check if several c++ methods will be mapped into a same java method -->
+								<xsl:variable name="equalInJava">
+									<xsl:for-each
+										select="$inheritedMethodsForJava/function">
+										<!-- check if two c++ method will be mapped into a same java method -->
+										<!--<xsl:message>==== DEBUG INFO ====</xsl:message>
+											<xsl:message>==== 3. position()=<xsl:value-of select="position()"/> ====</xsl:message>
+											<xsl:message>====    $currentMethodPos=<xsl:value-of select="$currentMethodPos"/> ====</xsl:message>
+											<xsl:message>==== DEBUG INFO ====</xsl:message>-->
+										<xsl:if
+											test="../function[name = $currentMethod/name]">
+											<xsl:if
+												test="position() &lt; $currentMethodPos">
+												<xsl:element
+													name="check">
+													<xsl:choose>
+														<xsl:when
+															test="xbig:areTheseMethodsEqualInJava($currentMethod, .,false())">
+															<!--<xsl:message>==== DEBUG INFO ====</xsl:message>
+																<xsl:message>==== 4. Functions are equal in Java ====</xsl:message>
+																<xsl:message>==== DEBUG INFO ====</xsl:message>-->
+															<xsl:value-of
+																select="true()" />
+														</xsl:when>
+														<xsl:otherwise>
+															<xsl:value-of
+																select="false()" />
+														</xsl:otherwise>
+													</xsl:choose>
+												</xsl:element>
+											</xsl:if>
+										</xsl:if>
+									</xsl:for-each>
+								</xsl:variable>
+
+
+								<xsl:choose>
+									<xsl:when
+										test="$equalInJava/* = true()">
+										<xsl:call-template
+											name="createElementForSameInJavaMethod">
+											<xsl:with-param
+												name="config" select="$config" />
+											<xsl:with-param
+												name="method" select="." />
+										</xsl:call-template>
+									</xsl:when>
+									<xsl:otherwise>
+										<xsl:copy-of select="." />
+									</xsl:otherwise>
+								</xsl:choose>
+							</xsl:when>
+
+							<!-- no overloading for this method -->
+							<xsl:otherwise>
+								<xsl:copy-of select="." />
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:variable>
+
+					<xsl:call-template name="javaAccessMethod">
+						<xsl:with-param name="config" select="$config" />
+						<xsl:with-param name="class" select="$class" />
+						<xsl:with-param name="method"
+							select="$methodContainer/function" />
+					</xsl:call-template>
+
+					<xsl:text>&#10;&#10;</xsl:text>
+
+					<xsl:call-template name="javaNativeMethod">
+						<xsl:with-param name="config" select="$config" />
+						<xsl:with-param name="class" select="$class" />
+						<xsl:with-param name="method" select="." />
+					</xsl:call-template>
+					<xsl:text>&#10;&#10;</xsl:text>
+				</xsl:if>
 			</xsl:for-each>
-		</xsl:for-each>
 
+			<!-- generate public attributes getters and setters -->
+			<xsl:for-each
+				select="$inheritedMethods/attribute/variable">
+				<xsl:variable name="publicAttributeGettersAndSetters">
+					<xsl:call-template
+						name="createFunctionsForPublicAttribute">
+						<xsl:with-param name="variable" select="." />
+					</xsl:call-template>
+				</xsl:variable>
+
+				<xsl:for-each
+					select="$publicAttributeGettersAndSetters/function">
+					<xsl:call-template name="javaAccessMethod">
+						<xsl:with-param name="config" select="$config" />
+						<xsl:with-param name="class" select="$class" />
+						<xsl:with-param name="method" select="." />
+					</xsl:call-template>
+
+					<xsl:text>&#10;&#10;</xsl:text>
+
+					<xsl:call-template name="javaNativeMethod">
+						<xsl:with-param name="config" select="$config" />
+						<xsl:with-param name="class" select="$class" />
+						<xsl:with-param name="method" select="." />
+					</xsl:call-template>
+
+					<xsl:text>&#10;&#10;</xsl:text>
+				</xsl:for-each>
+			</xsl:for-each>
+
+		</xsl:if>
+
+		<!-- generate comment for ignored -->
+		<xsl:if
+			test="$ignore_list/ignore_list/item[. = $class/@fullName]">
+			<xsl:text>// this type is ignored&#10;</xsl:text>
+		</xsl:if>
 
 		<!-- close class declaration  -->
 		<xsl:text>};&#10;</xsl:text>

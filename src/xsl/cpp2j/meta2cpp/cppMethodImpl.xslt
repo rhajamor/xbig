@@ -121,7 +121,7 @@
 
 				<!-- handle static method without return parameter -->
 				<xsl:when
-					test="($method/type eq 'void') and ($static eq 'true') ">
+					test="($method/type eq 'void') and ($static eq 'true') and not($method/@passedBy = 'pointer')">
 					<xsl:copy-of
 						select="$config/config/cpp/method/static/void" />
 				</xsl:when>
@@ -134,13 +134,13 @@
 				</xsl:when>
 
 				<!-- handle normal method without return parameter-->
-				<xsl:when test="($method/type eq 'void')">
+				<xsl:when test="($method/type eq 'void') and not($method/@passedBy = 'pointer')">
 					<xsl:copy-of
 						select="$config/config/cpp/method/normal/void" />
 				</xsl:when>
 
 				<!-- handle normal method with return parameter-->
-				<xsl:when test="($method/type ne 'void')">
+				<xsl:when test="($method/type ne 'void') or ($method/type eq 'void' and $method/@passedBy = 'pointer')">
 					<xsl:copy-of
 						select="$config/config/cpp/method/normal/return" />
 				</xsl:when>

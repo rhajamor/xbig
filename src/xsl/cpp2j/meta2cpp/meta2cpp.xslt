@@ -61,6 +61,11 @@
 	<xsl:param name="include_dir" />
 	<xd:doc>directory in which src files are generated.</xd:doc>
 	<xsl:param name="lib_dir" />
+	<xd:doc>
+		ignore_list.xml file. Contains full names of types that are
+		known to cause compile errors and that are not needed in java.
+	</xd:doc>
+	<xsl:param name="ignore_list" />
 
 	<!-- local variables -->
 

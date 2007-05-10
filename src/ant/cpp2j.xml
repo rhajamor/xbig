@@ -280,6 +280,7 @@
 				<arg value="outdir=${dir.cur.build.java}" />
 				<arg value="+config=${path.config.project}" />
 				<arg value="+buildFile=${dir.cur}/build.xml" />
+				<arg value="+ignore_list=${dir.cpp2j.config}/ignore_list.xml" />
 			</params>
 		</saxon>
 		<!-- jalopy caused problems:
@@ -328,6 +329,7 @@
 				<arg value="include_dir=${dir.cur.build.cpp.include}" />
 				<arg value="lib_dir=${dir.cur.build.cpp.src.lib}" />
 				<arg value="+config=${path.config.project}" />
+				<arg value="+ignore_list=${dir.cpp2j.config}/ignore_list.xml" />
 			</params>
 		</saxon>
 	</target>

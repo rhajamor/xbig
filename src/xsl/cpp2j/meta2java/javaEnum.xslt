@@ -3,7 +3,7 @@
 <!--
 	
 	This source file is part of XBiG
-		(XSLT Bindings Generator)
+	(XSLT Bindings Generator)
 	For the latest info, see http://sourceforge.net/projects/xbig
 	
 	Copyright (c) 2006 The XBiG Development Team
@@ -39,108 +39,132 @@
 	</xd:doc>
 
 	<xd:doc type="template">
-		<xd:short>Generates a java enumeration with helper class.
-				Works for enums in namespaces and classes/structs.
+		<xd:short>
+			Generates a java enumeration with helper class. Works for
+			enums in namespaces and classes/structs.
 		</xd:short>
 		<xd:param name="enum">enum to process.</xd:param>
 		<xd:param name="buildFile">
-			ant build.xml file. Needed for project name in static initializer of helper class.
+			ant build.xml file. Needed for project name in static
+			initializer of helper class.
 		</xd:param>
 	</xd:doc>
 	<xsl:template name="javaEnum">
-		<xsl:param name="enum"/>
+		<xsl:param name="enum" />
 		<xsl:param name="buildFile" />
 
-		<xsl:variable name="helperClassName" select="concat($enum/@name, 'Helper')"/>
+		<xsl:variable name="helperClassName"
+			select="concat($enum/@name, 'Helper')" />
 
 		<!-- avoid code destruction through jalopy -->
 		<!-- <xsl:text>&#10;//J-&#10;</xsl:text> -->
 
-		<xsl:text>public enum </xsl:text>
-		<xsl:value-of select="$enum/@name"/>
-		<xsl:text> {&#10;</xsl:text>
+		<xsl:text>public enum&#32;</xsl:text>
+		<xsl:value-of select="$enum/@name" />
+		<xsl:text>{&#10;</xsl:text>
 
-		<xsl:for-each select="$enum/enum">
-			<xsl:value-of select="@name"/>
-			<xsl:variable name="name" select="@name"/>
-			<xsl:text> (</xsl:text>
+		<!-- do not generate content if type is on ignore list -->
+		<xsl:if
+			test="not($ignore_list/ignore_list/item[. = $enum/@fullName])">
 
-			<xsl:value-of select="$helperClassName" />
-			<xsl:text>.</xsl:text>
+			<xsl:for-each select="$enum/enum">
+				<xsl:value-of select="@name" />
+				<xsl:variable name="name" select="@name" />
+				<xsl:text>(</xsl:text>
 
-			<xsl:text>ENUM_VALUES[</xsl:text>
-			<xsl:value-of select="position() - 1"/>
-			<xsl:text>])</xsl:text>
-			<xsl:if test="position()!=last()">
-				<xsl:text>,&#10;</xsl:text>
-			</xsl:if>
-		</xsl:for-each>
-
-		<xsl:text>;&#10;&#10;</xsl:text>
-		<xsl:text>public int value;&#10;</xsl:text>
-		<xsl:value-of select="$enum/@name"/>
-		<xsl:text>(int i) {&#10;</xsl:text>
-		<xsl:text>this.value = i;&#10;</xsl:text>
-		<xsl:text>}&#10;</xsl:text>
-
-		<!-- enum mapping, switch case -->
-		<xsl:text>public static final </xsl:text>
-		<xsl:value-of select="$enum/@name"/>
-		<xsl:text> toEnum(int retval) {&#10;</xsl:text>
-		<xsl:text>if (retval == </xsl:text>
-		<xsl:value-of select="$enum/enum[position()=1]/@name"/>
-		<xsl:text>.value)&#10;</xsl:text>
-		<xsl:text>return </xsl:text>
-		<xsl:value-of select="$enum/@name"/>
-		<xsl:text>.</xsl:text>
-		<xsl:value-of select="$enum/enum[position()=1]/@name"/>
-		<xsl:text>;&#10;</xsl:text>
-
-		<xsl:for-each select="$enum/enum">
-			<xsl:if test="position()!=1">
-				<xsl:text>else if (retval == </xsl:text>
-				<xsl:value-of select="@name"/>
-				<xsl:text>.value)&#10;</xsl:text>
-				<xsl:text>return </xsl:text>
-				<xsl:value-of select="../@name"/>
+				<xsl:value-of select="$helperClassName" />
 				<xsl:text>.</xsl:text>
-				<xsl:value-of select="@name"/>
-				<xsl:text>;&#10;</xsl:text>
+
+				<xsl:text>ENUM_VALUES[</xsl:text>
+				<xsl:value-of select="position() - 1" />
+				<xsl:text>])</xsl:text>
+				<xsl:if test="position()!=last()">
+					<xsl:text>,&#10;</xsl:text>
+				</xsl:if>
+			</xsl:for-each>
+
+			<xsl:text>;&#10;&#10;</xsl:text>
+			<xsl:text>public int value;&#10;</xsl:text>
+			<xsl:value-of select="$enum/@name" />
+			<xsl:text>(int i) {&#10;</xsl:text>
+			<xsl:text>this.value = i;&#10;</xsl:text>
+			<xsl:text>}&#10;</xsl:text>
+
+			<!-- enum mapping, switch case -->
+			<xsl:text>public static final&#32;</xsl:text>
+			<xsl:value-of select="$enum/@name" />
+			<xsl:text>&#32;toEnum(int retval) {&#10;</xsl:text>
+			<xsl:text>if (retval ==</xsl:text>
+			<xsl:value-of select="$enum/enum[position()=1]/@name" />
+			<xsl:text>.value)&#10;</xsl:text>
+			<xsl:text>return&#32;</xsl:text>
+			<xsl:value-of select="$enum/@name" />
+			<xsl:text>.</xsl:text>
+			<xsl:value-of select="$enum/enum[position()=1]/@name" />
+			<xsl:text>;&#10;</xsl:text>
+
+			<xsl:for-each select="$enum/enum">
+				<xsl:if test="position()!=1">
+					<xsl:text>else if (retval ==</xsl:text>
+					<xsl:value-of select="@name" />
+					<xsl:text>.value)&#10;</xsl:text>
+					<xsl:text>return&#32;</xsl:text>
+					<xsl:value-of select="../@name" />
+					<xsl:text>.</xsl:text>
+					<xsl:value-of select="@name" />
+					<xsl:text>;&#10;</xsl:text>
+				</xsl:if>
+			</xsl:for-each>
+
+			<xsl:text>
+				throw new RuntimeException("wrong number in jni call for an enum");&#10;
+			</xsl:text>
+			<xsl:text>}&#10;</xsl:text>
+			<xsl:text>}&#10;</xsl:text>
+
+			<!-- reenable jalopy code formatting -->
+			<!-- <xsl:text>&#10;//J+&#10;</xsl:text> -->
+
+
+			<!-- create helper class to get correct native values -->
+
+			<!-- find out if we create an inner class -->
+			<xsl:variable name="isInnerClass"
+				select="../name() eq 'class' or ../name() eq 'struct'" />
+
+			<xsl:text>&#10;</xsl:text>
+			<xsl:if test="$isInnerClass">
+				<xsl:text>static&#32;</xsl:text>
 			</xsl:if>
-		</xsl:for-each>
+			<xsl:text>class&#32;</xsl:text>
+			<xsl:value-of select="$helperClassName" />
+			<xsl:text>{&#10;</xsl:text>
 
-		<xsl:text>throw new RuntimeException("wrong number in jni call for an enum");&#10;</xsl:text>
-		<xsl:text>}&#10;</xsl:text>
-		<xsl:text>}&#10;</xsl:text>
+			<!-- create static initializer -->
+			<xsl:if test="not($isInnerClass)">
+				<xsl:text>static { System.loadLibrary("</xsl:text>
+				<xsl:value-of
+					select="$buildFile/project/property[@name='lib.name']/@value" />
+				<xsl:text>-xbig");}&#10;</xsl:text>
+			</xsl:if>
 
-		<!-- reenable jalopy code formatting -->
-		<!-- <xsl:text>&#10;//J+&#10;</xsl:text> -->
+			<!-- class content, an array containing the values and a native method to obtain them -->
+			<xsl:text>
+				public static final int[] ENUM_VALUES =
+				getEnumValues();&#10;
+			</xsl:text>
+			<xsl:text>
+				private static native int[] getEnumValues();&#10;
+			</xsl:text>
+			<xsl:text>&#10;</xsl:text>
 
-
-		<!-- create helper class to get correct native values -->
-
-		<!-- find out if we create an inner class -->
-		<xsl:variable name="isInnerClass" select="../name() eq 'class' or ../name() eq 'struct'"/>
-
-		<xsl:text>&#10;</xsl:text>
-		<xsl:if test="$isInnerClass">
-			<xsl:text>static </xsl:text>
-		</xsl:if>
-		<xsl:text>class </xsl:text>
-		<xsl:value-of select="$helperClassName"/>
-		<xsl:text> {&#10;</xsl:text>
-
-		<!-- create static initializer -->
-		<xsl:if test="not($isInnerClass)">
-			<xsl:text>static { System.loadLibrary("</xsl:text>
-			<xsl:value-of select="$buildFile/project/property[@name='lib.name']/@value"/>
-			<xsl:text>-xbig");}&#10;</xsl:text>
 		</xsl:if>
 
-		<!-- class content, an array containing the values and a native method to obtain them -->
-		<xsl:text>public static final int[] ENUM_VALUES = getEnumValues();&#10;</xsl:text>
-		<xsl:text>private static native int[] getEnumValues();&#10;</xsl:text>
-		<xsl:text>&#10;</xsl:text>
+		<!-- generate comment for ignored -->
+		<xsl:if
+			test="$ignore_list/ignore_list/item[. = $enum/@fullName]">
+			<xsl:text>// this type is ignored&#10;</xsl:text>
+		</xsl:if>
 
 		<!-- close class declaration  -->
 		<xsl:text>};&#10;&#10;</xsl:text>

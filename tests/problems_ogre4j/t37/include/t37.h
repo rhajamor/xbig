@@ -10,7 +10,7 @@
  * during the generation of ogre4j
  *
  * Problems:
- * - 'const' as part of typename (bug 1714365)
+ * - 'const' as part of typename (bug 1714365) (change ignore_list.xml to test this)
  * - template typedef inside template inside template (bug 1714372)
  ******************************************************************/
 
@@ -22,16 +22,17 @@
 
 
 #include <iostream>
- 
+#include <stdlib.h>
+
 
 namespace Ogre {
 
 	class EXPORT AlignedMemory
 	{
 	public:
-        static void* allocate(size_t size, size_t alignment);
-        static void* allocate(size_t size);
-        static void deallocate(void* p);
+        static void* allocate(size_t size, size_t alignment) {return malloc(size);}
+        static void* allocate(size_t size) {return malloc(size);}
+        static void deallocate(void* p) {free(p);}
 	};
 
     template <typename T, unsigned Alignment = 0>
