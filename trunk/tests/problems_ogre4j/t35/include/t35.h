@@ -78,24 +78,54 @@ namespace Ogre {
 	//public:
 		typedef std::map<String, Animation*> AnimationList;
 
+		typedef std::map<String, const Animation> ConstAnimationList;
+		typedef std::map<String, const Animation*> ConstAnimationPointerList;
+
 	public:
 		typedef MapIterator<AnimationList> AnimationIterator;
 		virtual const String & getTypeName (void) const =0;
+
+		typedef MapIterator<ConstAnimationList> ConstAnimationIterator;
+		typedef MapIterator<ConstAnimationPointerList> ConstAnimationPointerIterator;
 	};
 
 	class DefaultSceneManager : public SceneManager {
 	public:
-		DefaultSceneManager() {str = "Bulldozer"; ai = new AnimationIterator(m);}
-		DefaultSceneManager(const DefaultSceneManager& dsm) {str = "Bulldozer"; ai = new AnimationIterator(m);}
-		~DefaultSceneManager() {delete ai;}
+
+		DefaultSceneManager() {
+			str = "Bulldozer";
+			ai = new AnimationIterator(m);
+			cai = new ConstAnimationIterator(mcal);
+			capi = new ConstAnimationPointerIterator(mcapl);
+		}
+
+		DefaultSceneManager(const DefaultSceneManager& dsm) {
+			str = "Bulldozer";
+			ai = new AnimationIterator(m);
+			cai = new ConstAnimationIterator(mcal);
+			capi = new ConstAnimationPointerIterator(mcapl);
+		}
+
+		virtual ~DefaultSceneManager() {
+			delete ai;
+			delete cai;
+			delete capi;
+		}
+
 		AnimationIterator getAnimationIterator() {return *ai;}
 		const String & getTypeName (void) const {return str;}
+
+		ConstAnimationIterator getConstAnimationIterator() {return *cai;}
+		ConstAnimationPointerIterator getConstAnimationPointerIterator() {return *capi;}
 
 	private:
 		AnimationList m;
 		AnimationIterator* ai;
 		String str;
+
+		ConstAnimationList mcal;
+		ConstAnimationPointerList mcapl;
+		ConstAnimationIterator* cai;
+		ConstAnimationPointerIterator* capi;
 	};
 }
-
-//Ogre::DefaultSceneManager Ogre::SceneManager::dsm;
