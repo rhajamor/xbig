@@ -85,12 +85,17 @@ namespace Ogre {
 
 	class DefaultSceneManager : public SceneManager {
 	public:
-		DefaultSceneManager() {str = "Bulldozer";}
-		AnimationIterator getAnimationIterator() {AnimationIterator a(m); return a;}
+		DefaultSceneManager() {str = "Bulldozer"; ai = new AnimationIterator(m);}
+		DefaultSceneManager(const DefaultSceneManager& dsm) {str = "Bulldozer"; ai = new AnimationIterator(m);}
+		~DefaultSceneManager() {delete ai;}
+		AnimationIterator getAnimationIterator() {return *ai;}
 		const String & getTypeName (void) const {return str;}
 
 	private:
 		AnimationList m;
+		AnimationIterator* ai;
 		String str;
 	};
 }
+
+//Ogre::DefaultSceneManager Ogre::SceneManager::dsm;

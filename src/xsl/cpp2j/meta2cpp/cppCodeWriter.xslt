@@ -137,7 +137,7 @@
 				<!-- see bug 1712709 -->
 				<xsl:when
 					test="$param/@passedBy = 'reference' and xbig:isTypeConst($param)">
-					<xsl:value-of select="$param/type" />
+					<xsl:value-of select="$fullTypeName" />
 				</xsl:when>
 
 				<!-- references need different conversion and return types -->

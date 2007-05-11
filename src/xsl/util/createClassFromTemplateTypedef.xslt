@@ -224,7 +224,7 @@
 		<xd:short>
 			Uses typeparameters of typedef to generate types of methods
 			and attributes. As passedBy can be changed by type
-			parameters, those elements are alse created here.
+			parameters, those elements are also created here.
 		</xd:short>
 		<xd:param name="type">
 			type as in meta. Maybe something like 'T' or a real type
@@ -264,8 +264,8 @@
 						</xsl:for-each>
 					</xsl:variable>
 
-					<!-- TODO pointer pointer stuff, also implicit: T* foo() with T: A* -->
-					
+					<!-- TODO pointer pointer stuff -->
+
 					<!-- handle pointers as type parameters -->
 					<xsl:variable name="selectedTypePara"
 						select="$resolvedTypeParas/para[number($pos)]" />
@@ -286,8 +286,22 @@
 						</xsl:choose>
 					</xsl:element>
 					<xsl:element name="passedBy">
-						<xsl:value-of
-							select="$selectedTypePara/@passedBy" />
+						<xsl:choose>
+							<!-- implicit pointer pointer: T* foo() with T: A* -> A** foo() -->
+							<xsl:when
+								test="($selectedTypePara/@passedBy = 'pointer')
+										and ($type/../@passedBy = 'pointer')">
+								<xsl:attribute name="pointerPointer" select="'true'"/>
+								<xsl:value-of
+									select="'pointer'" />
+							</xsl:when>
+
+							<!-- no implicit pointer pointer -->
+							<xsl:otherwise>
+								<xsl:value-of
+									select="$selectedTypePara/@passedBy" />
+							</xsl:otherwise>
+						</xsl:choose>
 					</xsl:element>
 				</xsl:when>
 
@@ -336,12 +350,57 @@
 					<!-- return changed passed by -->
 					<xsl:element name="passedBy">
 						<xsl:choose>
+							<!-- passedBy changed through template member only, method uses value -->
 							<xsl:when
-								test="$infoNode/@changePassedBy and
-											$infoNode/@changePassedBy = 'true'">
+								test="($infoNode/@changePassedBy and $infoNode/@changePassedBy = 'true') and 
+									($resolvedTypeParas/*[position() = $infoNode/@typeParaPos]/@passedBy = 'value') and
+									($type/../@passedBy = 'value')">
 								<xsl:value-of
 									select="$infoNode/@newPassedBy" />
 							</xsl:when>
+
+							<!-- passedBy changed through type parameter only, method uses value -->
+							<xsl:when
+								test="(not($infoNode/@changePassedBy) or $infoNode/@changePassedBy = 'false') and 
+									(not($resolvedTypeParas/*[position() = $infoNode/@typeParaPos]/@passedBy = 'value')) and
+									($type/../@passedBy = 'value')">
+								<xsl:value-of
+									select="$resolvedTypeParas/*[position() = $infoNode/@typeParaPos]/@passedBy" />
+							</xsl:when>
+
+							<!-- passedBy changed through template member and type parameter, method uses value -->
+							<xsl:when
+								test="($infoNode/@changePassedBy and $infoNode/@changePassedBy = 'true') and 
+									(not($resolvedTypeParas/*[position() = $infoNode/@typeParaPos]/@passedBy = 'value')) and
+									($type/../@passedBy = 'value')">
+								<xsl:attribute name="pointerPointer" select="'true'"/>
+								<xsl:value-of
+									select="'pointer'" />
+							</xsl:when>
+
+							<!-- passedBy changed through template member only, method uses pointer -->
+							<xsl:when
+								test="($infoNode/@changePassedBy and $infoNode/@changePassedBy = 'true') and 
+									($resolvedTypeParas/*[position() = $infoNode/@typeParaPos]/@passedBy = 'value') and
+									($type/../@passedBy = 'pointer')">
+								<!-- we assume that new passedBy is always pointer -->
+								<xsl:attribute name="pointerPointer" select="'true'"/>
+								<xsl:value-of
+									select="'pointer'" />
+							</xsl:when>
+
+							<!-- passedBy changed through type parameter only, method uses pointer -->
+							<xsl:when
+								test="(not($infoNode/@changePassedBy) or $infoNode/@changePassedBy = 'false') and 
+									(not($resolvedTypeParas/*[position() = $infoNode/@typeParaPos]/@passedBy = 'value')) and
+									($type/../@passedBy = 'pointer')">
+								<!-- we assume that new passedBy is always pointer -->
+								<xsl:attribute name="pointerPointer" select="'true'"/>
+								<xsl:value-of
+									select="'pointer'" />
+							</xsl:when>
+
+							<!-- passedBy not changed -->
 							<xsl:otherwise>
 								<xsl:value-of
 									select="$type/../@passedBy" />
@@ -418,10 +477,18 @@
 			<!-- for primitive types as template parameters, needed in javaAccessMethodDeclaration.xslt -->
 			<xsl:attribute name="originalType" select="$type" />
 
+			<!-- if we have implicit pointer pointer -->
+			<xsl:if test="$typeAndPassedBy/passedBy/@pointerPointer and
+							$typeAndPassedBy/passedBy/@pointerPointer = 'true'">
+				<xsl:attribute name="pointerPointer" select="'true'" />
+			</xsl:if>
+
+			<!-- copy all attributes -->
 			<xsl:for-each select="$typeAndPassedBy/type/@*">
 				<xsl:copy-of select="." />
 			</xsl:for-each>
 
+			<!-- copy type value -->
 			<xsl:value-of select="$typeAndPassedBy/type" />
 		</xsl:element>
 	</xsl:template>
