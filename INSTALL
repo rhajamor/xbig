@@ -19,8 +19,9 @@ installation instructions for your platform.
 XBiG uses the source code documentation tool Doxygen to analyse the 
 source library. Doxygen has already support for several languages and
 creates an XML notation of the library interfaces. Get the latest
-version from http://www.stack.nl/~dimitri/doxygen/ and follow the
-installation instructions for your platform.
+version (make sure you have at least __version 1.5.2__!) from 
+http://www.stack.nl/~dimitri/doxygen/ and follow the installation 
+instructions for your platform.
 
 2 Configuration
 -----------------
