@@ -123,8 +123,8 @@
 					<xsl:for-each select=".">
 						<xsl:call-template
 							name="cppCreateHelperMethods">
-							<xsl:with-param name="config"
-								select="$config" />
+							<xsl:with-param name="config" select="$config" />
+							<xsl:with-param name="class" select="." />
 						</xsl:call-template>
 					</xsl:for-each>
 				</xsl:variable>

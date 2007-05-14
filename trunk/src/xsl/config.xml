@@ -118,6 +118,10 @@
     <parameter>
       <defaultName>a</defaultName>
     </parameter>
+		
+    <globalmember>
+			<classNameForGlobalMember>GlobalUtility</classNameForGlobalMember>
+		</globalmember>
 
   </meta>
 

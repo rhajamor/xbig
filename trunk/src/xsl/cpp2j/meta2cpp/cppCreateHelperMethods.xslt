@@ -44,46 +44,51 @@
 		<xd:short>Creates meta function elements for destructors and getters / setters for public attributes.
 		</xd:short>
 		<xd:param name="config">config file.</xd:param>
+		<xd:param name="class">meta class to be processed.</xd:param>
 	</xd:doc>
 	<xsl:template name="cppCreateHelperMethods">
 		<xsl:param name="config" />
+		<xsl:param name="class" />
+		
+		<!-- if we call a global method, the destructor is unnecessary -->
+		<xsl:if test="not($class/@name = $config/config/meta/globalmember/classNameForGlobalMember)">
+			<!-- compose destructor name -->
+			<xsl:variable name="destructor_name"
+				select="$config/config/meta/destructor/name/text()" />
 
-		<!-- compose destructor name -->
-		<xsl:variable name="destructor_name"
-			select="$config/config/meta/destructor/name/text()" />
+			<xsl:element name="function">
 
-		<xsl:element name="function">
-
-			<!-- d-tor -->
-			<xsl:attribute name="destructor">
-				<xsl:text>true</xsl:text>
-			</xsl:attribute>
-			<xsl:attribute name="virt">
-				<xsl:text>virtual</xsl:text>
-			</xsl:attribute>
-			<xsl:attribute name="visibility">
-				<xsl:text>public</xsl:text>
-			</xsl:attribute>
-			<xsl:attribute name="static">
-				<xsl:text>false</xsl:text>
-			</xsl:attribute>
-			<xsl:attribute name="const">
-				<xsl:text>false</xsl:text>
-			</xsl:attribute>
-			<xsl:attribute name="passedBy">
-				<xsl:text>value</xsl:text>
-			</xsl:attribute>
-			<xsl:element name="type">
-				<xsl:text>void</xsl:text>
+				<!-- d-tor -->
+				<xsl:attribute name="destructor">
+					<xsl:text>true</xsl:text>
+				</xsl:attribute>
+				<xsl:attribute name="virt">
+					<xsl:text>virtual</xsl:text>
+				</xsl:attribute>
+				<xsl:attribute name="visibility">
+					<xsl:text>public</xsl:text>
+				</xsl:attribute>
+				<xsl:attribute name="static">
+					<xsl:text>false</xsl:text>
+				</xsl:attribute>
+				<xsl:attribute name="const">
+					<xsl:text>false</xsl:text>
+				</xsl:attribute>
+				<xsl:attribute name="passedBy">
+					<xsl:text>value</xsl:text>
+				</xsl:attribute>
+				<xsl:element name="type">
+					<xsl:text>void</xsl:text>
+				</xsl:element>
+				<xsl:element name="name">
+					<xsl:value-of select="$destructor_name" />
+				</xsl:element>
+				<xsl:element name="definition">
+					<xsl:value-of
+						select="concat(@fullName, '::', $destructor_name)" />
+				</xsl:element>
 			</xsl:element>
-			<xsl:element name="name">
-				<xsl:value-of select="$destructor_name" />
-			</xsl:element>
-			<xsl:element name="definition">
-				<xsl:value-of
-					select="concat(@fullName, '::', $destructor_name)" />
-			</xsl:element>
-		</xsl:element>
+		</xsl:if>
 
 		<!-- create getters and setters for public attributes -->
 		<xsl:for-each select="variable">

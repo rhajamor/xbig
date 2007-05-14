@@ -646,15 +646,33 @@
 		<!-- replace class name -->
 		<xsl:variable name="line1">
 			<xsl:choose>
-				<!-- if we call a const method -->
-				<xsl:when test="$method/@const = 'true'">
-					<xsl:value-of
-						select="xbig:cpp-replace($line0, '#cpp_class#', concat(
-								'const ', $class/@fullName))" />
+				<!-- if we call a global method -->
+				<xsl:when test="$class/@name = $config/config/meta/globalmember/classNameForGlobalMember">
+					<xsl:choose>
+						<!-- if we call a const method -->
+						<xsl:when test="$method/@const = 'true'">
+							<xsl:value-of
+								select="xbig:cpp-replace($line0, '#cpp_class#', 'const ')" />
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:value-of
+								select="xbig:cpp-replace($line0, '#cpp_class#', '')" />
+						</xsl:otherwise>
+					</xsl:choose>
 				</xsl:when>
 				<xsl:otherwise>
-					<xsl:value-of
-						select="xbig:cpp-replace($line0, '#cpp_class#', $class/@fullName)" />
+					<xsl:choose>
+						<!-- if we call a const method -->
+						<xsl:when test="$method/@const = 'true'">
+							<xsl:value-of
+								select="xbig:cpp-replace($line0, '#cpp_class#', concat(
+										'const ', $class/@fullName))" />
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:value-of
+								select="xbig:cpp-replace($line0, '#cpp_class#', $class/@fullName)" />
+						</xsl:otherwise>
+					</xsl:choose>
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>

@@ -244,6 +244,7 @@
 			target="${path.meta.xml}" style="${path.xslt.doxygen2meta}">
 			<params>
 				<arg value="+externalTypes=${path.externalTypes}" />
+				<arg value="+config=${path.config.project}" />
 			</params>
 		</saxon>
 	</target>

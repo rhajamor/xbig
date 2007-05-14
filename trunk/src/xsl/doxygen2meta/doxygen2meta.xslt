@@ -61,7 +61,8 @@
 		default, it contains the C++ STL
 	</xd:doc>
 	<xsl:param name="externalTypes" />
-
+	<xd:doc>config.xml file.</xd:doc>
+	<xsl:param name="config" />
 
 	<!-- ############################## MAIN - calls namespace ############################## -->
 	<xd:doc>
@@ -212,12 +213,12 @@
 
 				<!-- global functions -->
 				<!-- <xsl:for-each select="doxygen/compounddef[@kind='func']"> -->
-				<xsl:for-each
+				<!--<xsl:for-each
 					select="doxygen/compounddef[@kind='file']/sectiondef[@kind='func']">
 					<xsl:if test="not(memberdef/templateparamlist)">
 						<xsl:call-template name="function" />
 					</xsl:if>
-				</xsl:for-each>
+				</xsl:for-each>-->
 
 				<!-- variables in the global namespace -->
 				<!-- create unique list of variables because of a bug in doxygen -->
@@ -227,6 +228,29 @@
 					<xsl:call-template name="variable" />
 				</xsl:for-each>
 
+				<!-- global functions -->
+				<xsl:if test="count(doxygen/compounddef[@kind='file']/
+								sectiondef[@kind='func']/memberdef[@kind='function']) > 0">
+					<xsl:element name="class">
+						<xsl:attribute name="protection" select="'public'" />
+						<xsl:attribute name="name" select="$config/config/meta/globalmember/classNameForGlobalMember" />
+						<xsl:attribute name="fullName" select="$config/config/meta/globalmember/classNameForGlobalMember" />
+						
+						<xsl:for-each select="doxygen/compounddef[@kind='file']">
+							<xsl:element name="includes">
+								<xsl:attribute name="local" select="no" />
+								<xsl:value-of select="./compoundname" />
+							</xsl:element>
+						</xsl:for-each>
+						
+						<xsl:for-each select="doxygen/compounddef[@kind='file']/sectiondef[@kind='func']">
+							<xsl:call-template name="function">
+								<xsl:with-param name="ifGlobal" select="true()" />
+							</xsl:call-template>
+						</xsl:for-each>
+					</xsl:element>
+				</xsl:if>
+				
 				<!-- external types, like C++ STL -->
 				<xsl:for-each
 					select="$externalTypes/external/types/*">
@@ -1019,14 +1043,19 @@
 			for itself.
 			<br />
 		</xd:detail>
+		<xd:param name="ifGlobal" select="false()">
+			A boolean value to identify if it's a global function.
+		</xd:param>
 	</xd:doc>
 	<xsl:template name="function">
+		<xsl:param name="ifGlobal" />
 		<xsl:for-each select="memberdef">
 			<!-- test if function belongs to actual class (the location test could be deleted)  -->
 			<!-- 
 				<xsl:if
 				test="ends-with(location/@file,../../includes) and starts-with(@id,../../@id)">
 			-->
+			
 			<xsl:choose>
 				<!-- destructor - do nothing -->
 				<xsl:when test="starts-with(name,'~')" />
@@ -1036,7 +1065,7 @@
 						<xsl:attribute name="visibility" select="@prot" />
 						<xsl:attribute name="static">
 							<xsl:choose>
-								<xsl:when test="@static='yes'">
+								<xsl:when test="@static='yes' or $ifGlobal">
 									<xsl:value-of select="'true'" />
 								</xsl:when>
 								<xsl:when test="@static='no'">
@@ -1088,7 +1117,14 @@
 							<xsl:call-template name="type" />
 						</xsl:if>
 						<xsl:element name="definition">
-							<xsl:value-of select="definition" />
+							<xsl:choose>
+								<xsl:when test="$ifGlobal">
+									<xsl:value-of select="concat('static ', definition)" />
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:value-of select="definition" />
+								</xsl:otherwise>
+							</xsl:choose>
 						</xsl:element>
 						<!-- name of the function -->
 						<xsl:element name="name">
