@@ -28,8 +28,8 @@
 -->
 
 <!DOCTYPE DaemonConfig [
-  <!ENTITY cppFileHeader SYSTEM "etc/cpp_header.inc">
-  <!ENTITY javaClassContent SYSTEM "etc/java_class_content.inc">
+  <!ENTITY cppFileHeader SYSTEM "cpp2j/etc/cpp_header.inc">
+	<!ENTITY javaClassContent SYSTEM "cpp2j/etc/java_class_content.inc">
 ]>
 
 <config>

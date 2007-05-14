@@ -118,7 +118,7 @@
 		value="${dir.cur.build.cpp}/meta2cpp.log" />
 
 	<property name="path.config.project"
-		value="${dir.cpp2j.config}/${file.config.project}" />
+		value="${dir.prj.src.xsl}/${file.config.project}" />
 
 	<property name="path.externalTypes"
 		value="${dir.cpp2j.config}/${file.externalTypes}" />
