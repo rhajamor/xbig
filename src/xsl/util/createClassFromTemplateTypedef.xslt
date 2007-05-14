@@ -70,7 +70,7 @@
 				<xsl:with-param name="typedef" select="$typedef" />
 			</xsl:call-template>
 		</xsl:variable>
-		
+
 		<!-- generate the class element -->
 		<xsl:element name="class">
 			<xsl:attribute name="name" select="$typedef/@name" />
@@ -335,8 +335,12 @@
 							name="buildListOfTypeParameters">
 							<xsl:with-param name="template"
 								select="$originNode" />
+							<!-- This way, the typedef's parent is not found
 							<xsl:with-param name="typedef"
 								select="$baseTypedef/*" />
+							 -->
+							<xsl:with-param name="typedef"
+								select="//typedef[@fullName = $baseTypedef/*[1]/@fullName]" />
 						</xsl:call-template>
 					</xsl:variable>
 
@@ -544,6 +548,10 @@
 					<xsl:variable name="normalizedToken"
 						select="normalize-space(xbig:removeTypeModifiers(.))" />
 
+					<!-- resolve typedef -->
+					<xsl:variable name="resolvedType"
+						select="xbig:resolveTypedef($normalizedToken, $typedef/.., $root)" />
+
 					<xsl:choose>
 						<!-- templates as type parameters -->
 						<xsl:when
@@ -555,13 +563,11 @@
 
 						<!-- primitive types -->
 						<xsl:when
-							test="$config/config/meta/signatures/type[@meta = $normalizedToken]">
-							<xsl:value-of select="$normalizedToken" />
+							test="$config/config/meta/signatures/type[@meta = $resolvedType]">
+							<xsl:value-of select="$resolvedType" />
 						</xsl:when>
 
 						<xsl:otherwise>
-							<xsl:variable name="resolvedType"
-								select="xbig:resolveTypedef($normalizedToken, $typedef, $root)" />
 							<xsl:choose>
 								<!-- classes, ... -->
 								<xsl:when
