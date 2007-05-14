@@ -813,6 +813,15 @@
 							select="../../includes" />
 					</xsl:when>
 
+					<!-- typedef inside a namespace -->
+					<xsl:when
+						test="../../@kind = 'namespace'">
+						<xsl:element name="includes">
+							<xsl:attribute name="local" select="'yes'" />
+							<xsl:value-of select="tokenize(location/@file, '/')[last()]" />
+						</xsl:element>
+					</xsl:when>
+
 					<!-- inside a file -->
 					<xsl:otherwise>
 						<xsl:element name="includes">

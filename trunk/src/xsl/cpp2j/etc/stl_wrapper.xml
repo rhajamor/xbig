@@ -1100,6 +1100,7 @@
 
 		<additionalInfo>
 			<info name="key_type" typeParaPos="1"/>
+			<info name="mapped_type" typeParaPos="2"/>
 		</additionalInfo>
 
 		<includes local="no">map</includes>
