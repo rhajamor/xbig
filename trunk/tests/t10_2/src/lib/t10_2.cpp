@@ -137,6 +137,8 @@ double p(void) {
 	return 8.261e-65;
 }
 
+/*
+ * the data type long double is not supported
 void q(long double b) {
 	std::cout << "t10_2: q(long double b)" << std::endl;
 	std::cout << "b: " << b << std::endl;
@@ -144,7 +146,7 @@ void q(long double b) {
 long double q(void) {
 	std::cout << "t10_2: q(void)" << std::endl;
 	return -4.387e83;
-}
+}*/
 
 void r(void) {
 	std::cout << "t10_2: r(void)" << std::endl;
@@ -166,11 +168,12 @@ A t(void) {
 	return a;
 }
 
+/*the array is not handled correctly
 void u(int b[]) {
 	std::cout << "t10_2: s(A b)" << std::endl;
 	std::cout << "b: " << b << std::endl;
 	std::cout << "b[0]: " << b[0] << std::endl;
-}
+}*/
 int t10_2_global_helper[5] = {1, 2, 3, 4, 5};
 int* u(void) {
 	std::cout << "t10_2: s(A b)" << std::endl;

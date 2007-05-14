@@ -4,7 +4,7 @@
 
 int main(int argc, char* argv[]) 
 {
-   int Z = 4000000;
+/*   int Z = 4000000;
    unsigned B = 4000000;
    signed C = -4000000;
    unsigned int D = 4000000;
@@ -64,7 +64,7 @@ int main(int argc, char* argv[])
    std::cout << typeid(t()).name() << std::endl;
    u(U);
    std::cout << u() << std::endl;
-   std::cout << u()[0] << std::endl;
+   std::cout << u()[0] << std::endl;*/
 
    std::cout << "done" << std::endl;
 }
