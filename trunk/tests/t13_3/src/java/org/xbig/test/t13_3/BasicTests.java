@@ -50,7 +50,7 @@ public class BasicTests {
 		for (int i=0; i<javaMap.size(); i++) {
 			String currentKey = (String)javaMap.keySet().toArray()[i];
 			StringPointer nativeKey = new StringPointer(currentKey);
-			nativeMap.insert(nativeKey, javaMap.get(currentKey));
+			nativeMap.insert(nativeKey.get(), javaMap.get(currentKey));
 			nativeKey.delete();
 		}
 
