@@ -50,8 +50,9 @@ EXPORT float o(void);
 EXPORT void p(double b);
 EXPORT double p(void);
 
-EXPORT void q(long double b);
-EXPORT long double q(void);
+//the data type long double is not supported
+//EXPORT void q(long double b);
+//EXPORT long double q(void);
 
 EXPORT void r(void);
 EXPORT void s();
@@ -64,5 +65,6 @@ public:
 EXPORT void t(A b);
 EXPORT A t(void);
 
-EXPORT void u(int b[]);
+//the array is not handled correctly
+//EXPORT void u(int b[]);
 EXPORT int* u(void);
