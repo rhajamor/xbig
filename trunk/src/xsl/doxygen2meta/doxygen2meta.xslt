@@ -1522,6 +1522,8 @@
 	<!-- cursor on doxygen/compounddef/sectiondef -->
 	<xsl:template name="variable">
 		<xsl:param name="ifGlobal" select="false()"/>
+
+		<!-- see bug 1719159 -->
 		<xsl:for-each select="memberdef[@kind='variable'][not(starts-with(name, '@'))]">
 			<xsl:element name="variable">
 				<!--
