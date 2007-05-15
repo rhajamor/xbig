@@ -648,15 +648,25 @@
 			<xsl:choose>
 				<!-- if we call a global method -->
 				<xsl:when test="$class/@name = $config/config/meta/globalmember/classNameForGlobalMember">
+					<xsl:variable name="namespace">
+						<xsl:choose>
+							<xsl:when test="$class/@name != $class/@fullName">
+								<xsl:value-of select="substring($class/@fullName, 1, string-length($class/@fullName) - string-length($class/@name) - 2)" />
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:value-of select="''" />
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:variable>
 					<xsl:choose>
 						<!-- if we call a const method -->
 						<xsl:when test="$method/@const = 'true'">
 							<xsl:value-of
-								select="xbig:cpp-replace($line0, '#cpp_class#', 'const ')" />
+								select="xbig:cpp-replace($line0, '#cpp_class#', concat('const ', $namespace))" />
 						</xsl:when>
 						<xsl:otherwise>
 							<xsl:value-of
-								select="xbig:cpp-replace($line0, '#cpp_class#', '')" />
+								select="xbig:cpp-replace($line0, '#cpp_class#', $namespace)" />
 						</xsl:otherwise>
 					</xsl:choose>
 				</xsl:when>

@@ -222,33 +222,18 @@
 
 				<!-- variables in the global namespace -->
 				<!-- create unique list of variables because of a bug in doxygen -->
-				<xsl:variable name="unique-variable-list"
+				<!--<xsl:variable name="unique-variable-list"
 					select="doxygen/compounddef[@kind='file']/sectiondef[@kind='']/memberdef[@kind='variable']/definition[not(.=following::definition)]/.." />
 				<xsl:for-each select="$unique-variable-list">
 					<xsl:call-template name="variable" />
-				</xsl:for-each>
+				</xsl:for-each>-->
 
-				<!-- global functions -->
+				<!-- global functions and variables with no namespace-->
 				<xsl:if test="count(doxygen/compounddef[@kind='file']/
-								sectiondef[@kind='func']/memberdef[@kind='function']) > 0">
-					<xsl:element name="class">
-						<xsl:attribute name="protection" select="'public'" />
-						<xsl:attribute name="name" select="$config/config/meta/globalmember/classNameForGlobalMember" />
-						<xsl:attribute name="fullName" select="$config/config/meta/globalmember/classNameForGlobalMember" />
-						
-						<xsl:for-each select="doxygen/compounddef[@kind='file']">
-							<xsl:element name="includes">
-								<xsl:attribute name="local" select="no" />
-								<xsl:value-of select="./compoundname" />
-							</xsl:element>
-						</xsl:for-each>
-						
-						<xsl:for-each select="doxygen/compounddef[@kind='file']/sectiondef[@kind='func']">
-							<xsl:call-template name="function">
-								<xsl:with-param name="ifGlobal" select="true()" />
-							</xsl:call-template>
-						</xsl:for-each>
-					</xsl:element>
+								sectiondef[@kind='func']/memberdef[@kind='function']) > 0
+								or count(doxygen/compounddef[@kind='file']/
+								sectiondef[@kind='var']/memberdef[@kind='variable']) > 0">
+					<xsl:call-template name="globalUtility" />
 				</xsl:if>
 				
 				<!-- external types, like C++ STL -->
@@ -414,19 +399,27 @@
 
 			<!-- global variables in the namespace -->
 			<!-- create unique list of variables because of a bug in doxygen -->
-			<xsl:variable name="unique-variable-list"
+			<!--<xsl:variable name="unique-variable-list"
 				select="sectiondef[@kind='']/memberdef[@kind='variable']/definition[not(.=following::definition)]/.." />
 			<xsl:for-each select="$unique-variable-list">
 				<xsl:call-template name="variable" />
-			</xsl:for-each>
+			</xsl:for-each>-->
 
 			<!-- global functions -->
-			<xsl:for-each select="sectiondef[@kind='func']">
+			<!--<xsl:for-each select="sectiondef[@kind='func']">
 				<xsl:if test="not(memberdef/templateparamlist)">
 					<xsl:call-template name="function" />
 				</xsl:if>
-			</xsl:for-each>
+			</xsl:for-each>-->
 
+			<!-- global variables in the namespace -->
+			<xsl:if test="count(./sectiondef[@kind='func']/memberdef[@kind='function']) > 0
+							or count(./sectiondef[@kind='var']/memberdef[@kind='variable']) > 0">
+				<xsl:call-template name="globalUtility">
+					<xsl:with-param name="namespace" select="compoundname" />
+				</xsl:call-template>
+			</xsl:if>			
+			
 			<!-- documentation -->
 			<xsl:call-template name="documentation" />
 
@@ -1048,7 +1041,7 @@
 		</xd:param>
 	</xd:doc>
 	<xsl:template name="function">
-		<xsl:param name="ifGlobal" />
+		<xsl:param name="ifGlobal" select="false()"/>
 		<xsl:for-each select="memberdef">
 			<!-- test if function belongs to actual class (the location test could be deleted)  -->
 			<!-- 
@@ -1522,9 +1515,13 @@
 			type of function, parameter or variable
 		</xd:param>
 		<xd:param name="passedBy">reference, pointer or value</xd:param>
+		<xd:param name="ifGlobal" select="false()">
+			A boolean value to identify if it's a global function.
+		</xd:param>
 	</xd:doc>
 	<!-- cursor on doxygen/compounddef/sectiondef -->
 	<xsl:template name="variable">
+		<xsl:param name="ifGlobal" select="false()"/>
 		<xsl:for-each select="memberdef[@kind='variable'][not(starts-with(name, '@'))]">
 			<xsl:element name="variable">
 				<!--
@@ -1542,7 +1539,7 @@
 				<xsl:attribute name="visibility" select="@prot" />
 				<xsl:attribute name="static">
 					<xsl:choose>
-						<xsl:when test="@static='yes'">
+						<xsl:when test="@static='yes' or $ifGlobal">
 							<xsl:value-of select="'true'" />
 						</xsl:when>
 						<xsl:when test="@static='no'">
@@ -1570,7 +1567,14 @@
 					</xsl:element>
 				</xsl:if>
 				<xsl:element name="definition">
-					<xsl:value-of select="definition" />
+					<xsl:choose>
+						<xsl:when test="$ifGlobal">
+							<xsl:value-of select="concat('static ', definition)" />
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:value-of select="definition" />
+						</xsl:otherwise>
+					</xsl:choose>	
 				</xsl:element>
 				<xsl:element name="name">
 					<xsl:value-of select="name" />
@@ -1816,7 +1820,80 @@
 		<xsl:call-template name="documentation" />
 	</xsl:template>
 
-
+	<xd:doc>
+		<xd:short>
+			Generates elements for global functions and variable.
+		</xd:short>
+		<xd:detail>
+			In every namespace, a class whose name is specified by 
+			$config/config/meta/globalmember/classNameForGlobalMember 
+			will be created to contain the global functions and variables
+			within this namespace.
+		</xd:detail>
+		<xd:param name="namespace">
+			specify the namespace
+		</xd:param>		
+	</xd:doc>	
+	<xsl:template name="globalUtility">
+		<xsl:param name="namespace" select="''"/>
+		<xsl:element name="class">
+			<xsl:attribute name="protection" select="'public'" />
+			<xsl:attribute name="name" select="$config/config/meta/globalmember/classNameForGlobalMember" />
+			<xsl:attribute name="fullName">
+				<xsl:choose>
+					<xsl:when test="$namespace=''">
+						<xsl:value-of select="$config/config/meta/globalmember/classNameForGlobalMember" />
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="concat($namespace, '::', $config/config/meta/globalmember/classNameForGlobalMember)" />
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:attribute>
+						
+			<!-- header files-->
+			<xsl:for-each select="/doxygen/compounddef[@kind='file']">
+				<xsl:element name="includes">
+					<xsl:attribute name="local" select="no" />
+					<xsl:value-of select="./compoundname" />
+				</xsl:element>
+			</xsl:for-each>
+			
+			<xsl:variable name="root">
+				<xsl:choose>
+					<xsl:when test="$namespace=''">
+						<xsl:copy-of select="doxygen/compounddef[@kind='file']" />
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:copy-of select="." />
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:variable>	
+			
+			<!--<xsl:message>####### DEBUG #######</xsl:message>
+			<xsl:message>####### root=<xsl:copy-of select="$root" /> #######</xsl:message>
+			<xsl:message>####### no.=<xsl:value-of select="count($root/compounddef/sectiondef[@kind='var']/memberdef[@kind='variable'])" /> #######</xsl:message>
+			<xsl:message>####### DEBUG #######</xsl:message>-->
+			<!-- global functions-->
+			<xsl:if test="count($root/compounddef/sectiondef[@kind='func']/memberdef[@kind='function']) > 0">
+				<xsl:for-each select="$root/compounddef/sectiondef[@kind='func']">
+					<xsl:call-template name="function">
+						<xsl:with-param name="ifGlobal" select="true()" />
+					</xsl:call-template>
+				</xsl:for-each>
+			</xsl:if>
+						
+			<!-- global variables-->
+			<xsl:if test="count($root/compounddef/sectiondef[@kind='var']/memberdef[@kind='variable']) > 0">			
+				<xsl:for-each select="$root/compounddef/sectiondef[@kind='var']">
+					<xsl:call-template name="variable">
+						<xsl:with-param name="ifGlobal" select="true()" />
+					</xsl:call-template>
+				</xsl:for-each>
+			</xsl:if>
+						
+		</xsl:element>
+		
+	</xsl:template>
 
 </xsl:stylesheet>
 <!--
