@@ -5,8 +5,7 @@ package org.xbig.test.t36;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.xbig.base.VoidPointer;
-import org.xbig.SceneQuery;
+import org.xbig.Ogre.*;
 /**
  * @author nenning
  *
@@ -15,10 +14,13 @@ public class BasicTests {
 	
 	@Test
 	public void test() {
-		VoidPointer vp;
-		SceneQuery.WorldFragment wf = new SceneQuery.WorldFragment();
-		vp = wf.getgeometry();
-		wf.setgeometry(vp);
-		wf.delete();
+        AxisAlignedBoxSceneQuery aabsq = new AxisAlignedBoxSceneQuery();
+        AxisAlignedBox aab = new AxisAlignedBox();
+        aabsq.setBox(aab);
+        IRegionSceneQuery rsq = aabsq;
+        ISceneQuery sq = aabsq;
+        ISceneQueryListener sql = aabsq;
+        aab.delete();
+        aabsq.delete();
 	}
 }

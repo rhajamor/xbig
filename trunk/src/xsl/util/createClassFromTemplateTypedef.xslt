@@ -346,7 +346,8 @@
 
 					<!-- return used type parameter -->
 					<xsl:element name="type">
-						<xsl:attribute name="const" select="$resolvedTypeParas/*[position() = $infoNode/@typeParaPos]/type/@const"/>
+						<xsl:attribute name="const" select="if($infoNode/@addConst) then 'true' else
+								$resolvedTypeParas/*[position() = $infoNode/@typeParaPos]/type/@const"/>
 						<xsl:value-of
 							select="$resolvedTypeParas/*[position() = $infoNode/@typeParaPos]/type" />
 					</xsl:element>

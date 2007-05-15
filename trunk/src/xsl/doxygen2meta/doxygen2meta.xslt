@@ -1409,9 +1409,18 @@
 							<xsl:value-of select="replace($type, '[ \t]*^const[ \t]', '')"/>
 						</xsl:when>
 						<xsl:when test="type/child::text()[contains(.,'const')]">
-							<xsl:value-of
-								select="substring-before($type, 'const')" />
+							<xsl:choose>
+								<!-- bug 1719121 -->
+								<xsl:when test="type/child::text()[contains(.,'::const')]">
+									<xsl:value-of select="$type" />
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:value-of
+										select="substring-before($type, 'const')" />
+								</xsl:otherwise>
+							</xsl:choose>
 						</xsl:when>
+
 						<xsl:otherwise>
 							<xsl:value-of select="$type" />
 						</xsl:otherwise>
@@ -1516,7 +1525,7 @@
 	</xd:doc>
 	<!-- cursor on doxygen/compounddef/sectiondef -->
 	<xsl:template name="variable">
-		<xsl:for-each select="memberdef[@kind='variable']">
+		<xsl:for-each select="memberdef[@kind='variable'][not(starts-with(name, '@'))]">
 			<xsl:element name="variable">
 				<!--
 					<xsl:attribute name="static">
