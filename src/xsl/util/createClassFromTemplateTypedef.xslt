@@ -244,6 +244,21 @@
 		<xsl:param name="typedef" />
 		<xsl:param name="resolvedTypeParas" />
 
+
+		<!-- DEBUG OUTPUT -->
+		<!-- 
+		<xsl:message>createTypeElementAndPassedByAttribute</xsl:message>
+		<xsl:message>  $type: <xsl:value-of select="$type" /></xsl:message>
+		<xsl:message>  $template/@name: <xsl:value-of select="$template/@name" /></xsl:message>
+		<xsl:message>  $template/../@name: <xsl:value-of select="$template/../@name" /></xsl:message>
+		<xsl:message>  $typedef/@name: <xsl:value-of select="$typedef/@name" /></xsl:message>
+		<xsl:message>  $typedef/../@name: <xsl:value-of select="$typedef/../@name" /></xsl:message>
+		<xsl:for-each select="$resolvedTypeParas/*">
+			<xsl:message>    type para <xsl:value-of select="position()" />: <xsl:value-of select="." /></xsl:message>
+		</xsl:for-each>
+		 -->
+
+
 		<!-- find out values -->
 		<xsl:variable name="typeAndPassedBy">
 			<xsl:choose>
@@ -320,9 +335,14 @@
 						</xsl:call-template>
 					</xsl:variable>
 
+					<xsl:variable name="originNodeName" select="
+						if (starts-with($baseTypedef/*/@basetype, '::'))
+						then substring-after($baseTypedef/*/@basetype, '::')
+						else $baseTypedef/*/@basetype"/>
+
 					<xsl:variable name="originNode"
 						select="$root//*
-						[@fullName = normalize-space(substring-before($baseTypedef/*/@basetype, '&lt;'))]" />
+						[@fullName = normalize-space(substring-before($originNodeName, '&lt;'))]" />
 
 					<!-- TODO inner classes stuff -->
 					<xsl:variable name="infoNode"
@@ -343,6 +363,20 @@
 								select="//typedef[@fullName = $baseTypedef/*[1]/@fullName]" />
 						</xsl:call-template>
 					</xsl:variable>
+
+
+					<!-- DEBUG OUTPUT -->
+					<!-- 
+					<xsl:message>  resolve typename stuff used in OGRE IteratorWrappers</xsl:message>
+					<xsl:message>    $type: <xsl:value-of select="$type" /></xsl:message>
+					<xsl:message>    baseTypedef: <xsl:value-of select="$baseTypedef/*/@name" /></xsl:message>
+					<xsl:message>    infoNode/@name: <xsl:value-of select="$infoNode/@name" /></xsl:message>
+					<xsl:message>    infoNode/@typeParaPos: <xsl:value-of select="$infoNode/@typeParaPos" /></xsl:message>
+					<xsl:for-each select="$resolvedTypeParas/*">
+						<xsl:message>      type para <xsl:value-of select="position()" />: <xsl:value-of select="." /></xsl:message>
+					</xsl:for-each>
+					 -->
+
 
 					<!-- return used type parameter -->
 					<xsl:element name="type">

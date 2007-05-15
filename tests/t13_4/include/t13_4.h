@@ -20,6 +20,7 @@
 #include <queue>
 #include <stack>
 #include <set>
+#include <hash_map>
 //#include <bitset>
 
 
@@ -39,4 +40,5 @@ typedef std::set<std::string>            StringSet;
 typedef std::multiset<std::string>       StringMultiset;
 typedef std::multimap<std::string, A>    AMultimap;
 typedef std::pair<std::string, A>   	 APair;
+typedef std::hash_map<std::string, A>    AHashMap;
 //typedef std::bitset<unsigned int>        IntBitset;
