@@ -10,7 +10,7 @@
  * during the generation of ogre4j
  *
  * Problem:
- * 
+ * Ogre::MapIterator with std::multimap
  ******************************************************************/
 
 #ifdef WIN32
