@@ -44,11 +44,15 @@ EXPORT unsigned char m(void);
 EXPORT void n(signed char b);
 EXPORT signed char n(void);
 
-EXPORT void o(float b);
-EXPORT float o(void);
-
-EXPORT void p(double b);
-EXPORT double p(void);
+namespace l1 {
+	EXPORT void o(float b);
+	EXPORT float o(void);
+	
+	namespace l2 {
+		EXPORT void p(double b);
+		EXPORT double p(void);
+	}
+}
 
 //the data type long double is not supported
 //EXPORT void q(long double b);

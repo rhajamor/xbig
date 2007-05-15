@@ -77,13 +77,13 @@ public class BasicTests {
 		Assert.assertEquals((GlobalUtility.n()==-128), true);
 		
 		float floatValue=123.456f;
-		GlobalUtility.o(floatValue);
-		Assert.assertEquals((GlobalUtility.o()==7.3f), true);
+		org.xbig.l1.GlobalUtility.o(floatValue);
+		Assert.assertEquals((org.xbig.l1.GlobalUtility.o()==7.3f), true);
 
 		double doubleValue=12345.6789d;
-		GlobalUtility.p(doubleValue);
-		doubleValue=GlobalUtility.p();
-		Assert.assertEquals((GlobalUtility.p()==8.261e-65), true);
+		org.xbig.l1.l2.GlobalUtility.p(doubleValue);
+		doubleValue=org.xbig.l1.l2.GlobalUtility.p();
+		Assert.assertEquals((org.xbig.l1.l2.GlobalUtility.p()==8.261e-65), true);
 
 		GlobalUtility.r();
 		GlobalUtility.s();

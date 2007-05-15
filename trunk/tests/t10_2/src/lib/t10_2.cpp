@@ -119,22 +119,26 @@ signed char n(void) {
 	return -128;
 }
 
-void o(float b) {
-	std::cout << "t10_2: o(float b)" << std::endl;
-	std::cout << "b: " << b << std::endl;
-}
-float o(void) {
-	std::cout << "t10_2: o(void)" << std::endl;
-	return 7.3;
-}
+namespace l1 {
+	void o(float b) {
+		std::cout << "t10_2: o(float b)" << std::endl;
+		std::cout << "b: " << b << std::endl;
+	}
+	float o(void) {
+		std::cout << "t10_2: o(void)" << std::endl;
+		return 7.3;
+	}
 
-void p(double b) {
-	std::cout << "t10_2: p(double b)" << std::endl;
-	std::cout << "b: " << b << std::endl;
-}
-double p(void) {
-	std::cout << "t10_2: p(void)" << std::endl;
-	return 8.261e-65;
+	namespace l2 {
+		void p(double b) {
+			std::cout << "t10_2: p(double b)" << std::endl;
+			std::cout << "b: " << b << std::endl;
+		}
+		double p(void) {
+			std::cout << "t10_2: p(void)" << std::endl;
+			return 8.261e-65;
+		}
+	}
 }
 
 /*
