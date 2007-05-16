@@ -354,6 +354,9 @@
 
 		<additionalInfo>
 			<info name="size_type" typeParaPos="1"/>
+			<info name="value_type" typeParaPos="1"/>
+			<info name="pointer" typeParaPos="1" changePassedBy="true" newPassedBy="pointer"/>
+			<info name="const_pointer" typeParaPos="1" changePassedBy="true" newPassedBy="pointer" addConst="true"/>
 		</additionalInfo>
 
 		<includes local="no">list</includes>
