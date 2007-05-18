@@ -1044,7 +1044,8 @@
 	</xd:doc>
 	<xsl:template name="function">
 		<xsl:param name="ifGlobal" select="false()"/>
-		<xsl:for-each select="memberdef">
+		<!-- ignore template functions (bug 1666887) -->
+		<xsl:for-each select="memberdef[not(./templateparamlist)]">
 			<!-- test if function belongs to actual class (the location test could be deleted)  -->
 			<!-- 
 				<xsl:if
@@ -1426,8 +1427,14 @@
 				<!-- 
 					<xsl:variable name="stripped_type" select="replace($non_const_type, '[\*&amp;\[].*$', '')"/>
 				-->
+
+				<!-- see bug 1666898 -->
+				<xsl:variable name="typeWithoutInline" select="
+					if (contains($non_const_type, '__inline')) 
+					then substring-after($non_const_type, '__inline') else $non_const_type" />
+
 				<xsl:variable name="typeWithoutRef"
-					select="replace($non_const_type, '[&amp;\[].*$', '')" />
+					select="replace($typeWithoutInline, '[&amp;\[].*$', '')" />
 
 				<xsl:variable name="pointerPointerToken"
 					select="'#POINTER_POINTER_TOKEN#'" />
