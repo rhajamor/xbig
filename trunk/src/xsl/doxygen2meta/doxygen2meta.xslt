@@ -693,7 +693,8 @@
 		<xsl:choose>
 
 			<!-- global or inside namespace -->
-			<xsl:when test="@kind='enum'">
+			<!-- see bug 1721154 -->
+			<xsl:when test="@kind='enum' and not(starts-with(name, '@'))">
 				<xsl:element name="enumeration">
 					<xsl:attribute name="name" select="name" />
 					<xsl:attribute name="fullName">
@@ -724,8 +725,9 @@
 			</xsl:when>
 
 			<!-- inside class -->
+			<!-- see bug 1721154 -->
 			<xsl:otherwise>
-				<xsl:for-each select="memberdef[@kind='enum']">
+				<xsl:for-each select="memberdef[@kind='enum' and not(starts-with(name, '@'))]">
 					<!-- test if enum belongs to actual class -->
 					<xsl:if test="starts-with(@id,../../@id)">
 						<xsl:element name="enumeration">
