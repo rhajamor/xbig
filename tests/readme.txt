@@ -63,6 +63,7 @@ t9: enums
 	t9_2: global enum with initializer
 	t9_3: enum inside namespaces
 	t9_4: enums as return types
+	t9_5: unnamed enums
 
 t10: global functions
 	t10_1: single global function
