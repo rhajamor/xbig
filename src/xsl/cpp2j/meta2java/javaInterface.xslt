@@ -83,7 +83,16 @@
 		</xsl:variable>
 
 		<!-- write class declaration -->
-		<xsl:text>public&#32;</xsl:text>
+		<!-- 
+		<xsl:choose>
+			<xsl:when test="$class/@protection ne ''">
+				<xsl:value-of select="$class/@protection" />
+			</xsl:when>
+			<xsl:otherwise> -->
+				<xsl:text>public</xsl:text><!-- 
+			</xsl:otherwise>
+		</xsl:choose> -->
+		<xsl:text>&#32;</xsl:text>
 		<xsl:if test="$isInnerClass">
 			<xsl:text>static&#32;</xsl:text>
 		</xsl:if>

@@ -506,15 +506,23 @@
 		<xsl:param name="refid" />
 
 		<!-- structs -->
+		<!-- 
 		<xsl:for-each
 			select="root()//compounddef[@id=$refid and @kind='struct' and @prot='public']">
+		 -->
+		<xsl:for-each
+			select="root()//compounddef[@id=$refid and @kind='struct']">
 			<!-- select="root()//compounddef[@id=$refid and @kind='struct' and @prot='public']/sectiondef[@kind='public-attrib']"> -->
 			<xsl:call-template name="struct" />
 		</xsl:for-each>
 
 		<!-- classes -->
+		<!-- 
 		<xsl:for-each
 			select="root()//compounddef[@id=$refid and @kind='class' and @prot='public']">
+		 -->
+		<xsl:for-each
+			select="root()//compounddef[@id=$refid and @kind='class']">
 			<xsl:element name="class">
 				<xsl:attribute name="protection" select="@prot" />
 				<xsl:call-template name="classAndStructBody">
@@ -696,6 +704,8 @@
 			<!-- see bug 1721154 -->
 			<xsl:when test="@kind='enum' and not(starts-with(name, '@'))">
 				<xsl:element name="enumeration">
+					<xsl:attribute name="protection" select="if (not(@prot)) 
+														then 'public' else @prot" />
 					<xsl:attribute name="name" select="name" />
 					<xsl:attribute name="fullName">
 						<xsl:choose>
@@ -731,6 +741,8 @@
 					<!-- test if enum belongs to actual class -->
 					<xsl:if test="starts-with(@id,../../@id)">
 						<xsl:element name="enumeration">
+							<xsl:attribute name="protection" select="if (not(@prot)) 
+																		then 'public' else @prot" />
 							<xsl:attribute name="name" select="name" />
 							<xsl:attribute name="fullName"
 								select="concat(../../compoundname, '::', name)" />
@@ -940,6 +952,7 @@
 		<xsl:param name="refid" />
 
 		<xsl:element name="struct">
+			<xsl:attribute name="protection" select="@prot" />
 
 			<xsl:call-template name="classAndStructBody">
 				<xsl:with-param name="refid" select="@id" />

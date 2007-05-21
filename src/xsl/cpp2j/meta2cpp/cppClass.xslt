@@ -164,7 +164,7 @@
 				</xsl:result-document>
 
 				<!-- inner classes & structs -->
-				<xsl:for-each select="class">
+				<xsl:for-each select="class[@protection = 'public']">
 					<xsl:call-template name="cppClass">
 						<xsl:with-param name="ns_prefix"
 							select="$class_prefix" />
@@ -175,7 +175,7 @@
 						<xsl:with-param name="config" select="$config" />
 					</xsl:call-template>
 				</xsl:for-each>
-				<xsl:for-each select="struct">
+				<xsl:for-each select="struct[@protection = 'public']">
 					<xsl:call-template name="cppClass">
 						<xsl:with-param name="ns_prefix"
 							select="$class_prefix" />
@@ -230,7 +230,7 @@
 					</xsl:if>
 				-->
 				<!-- inner enums -->
-				<xsl:for-each select="enumeration">
+				<xsl:for-each select="enumeration[@protection = 'public']">
 					<xsl:call-template name="cppEnum">
 						<xsl:with-param name="enum" select="." />
 						<xsl:with-param name="ns_prefix"

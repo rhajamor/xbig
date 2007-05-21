@@ -153,13 +153,42 @@
 		<!-- generate method impl -->
 		<xsl:for-each select="$inheritedMethodsForJava/function">			
 			<xsl:if test="$isAbstract = false() or xbig:isCtor($class,.) = false()">
-				<xsl:call-template name="cppMethodImpl">
-					<xsl:with-param name="config" select="$config" />
-					<xsl:with-param name="class_prefix"
-						select="$class_prefix" />
-					<xsl:with-param name="class" select="$class" />
-					<xsl:with-param name="method" select="." />
-				</xsl:call-template>
+
+				<!-- check if there is at least one parameter a protected type, see bug 1666886 -->
+				<!-- use '$root' to select root, otherwise saxon will not find it 
+					 (in case of generated meta classes) -->
+				<xsl:variable name="protectedParameters">
+					<xsl:for-each select="parameters/parameter">
+						<xsl:element name="para">
+							<xsl:variable name="fullParaTypeName" select="xbig:getFullTypeName(
+								./type, $class, $root)"/>
+							<xsl:value-of select="
+								if (($root//*[@fullName = $fullParaTypeName]/@protection = 'public')
+								or (not($root//*[@fullName = $fullParaTypeName]))
+								or xbig:isTypedef($fullParaTypeName, $class, $root))
+								then false() else true()"/>
+						</xsl:element>
+					</xsl:for-each>
+				</xsl:variable>
+
+				<xsl:variable name="fullReturnTypeName" select="if (type != '') then
+					xbig:getFullTypeName(type, $class, $root) else 'void'"/>
+				<xsl:variable name="protectedReturnVal" select="
+								if (($root//*[@fullName = $fullReturnTypeName]/@protection = 'public') 
+								or (not($root//*[@fullName = $fullReturnTypeName]))
+								or xbig:isTypedef($fullReturnTypeName, $class, $root))
+								then false() else true()"/>
+
+				<xsl:if test="(not($protectedParameters/* = true()))
+								and ($protectedReturnVal = false())">
+					<xsl:call-template name="cppMethodImpl">
+						<xsl:with-param name="config" select="$config" />
+						<xsl:with-param name="class_prefix"
+							select="$class_prefix" />
+						<xsl:with-param name="class" select="$class" />
+						<xsl:with-param name="method" select="." />
+					</xsl:call-template>
+				</xsl:if>
 			</xsl:if>
 		</xsl:for-each>
 
