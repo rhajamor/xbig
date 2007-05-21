@@ -223,7 +223,7 @@
 								<xsl:choose>
 									<!-- primitive types -->
 									<xsl:when
-										test="$config/config/java/types/type[@meta = $typeName]">
+										test="$config/config/java/types/type[@meta = $fullTypeName]">
 										<xsl:sequence select="false()" />
 									</xsl:when>
 									<xsl:when
@@ -251,6 +251,7 @@
 									<xsl:when
 										test="$class/templateparameters/templateparameter
 																		[@templateDeclaration = $typeName]">
+										<!-- TODO check if $fullTypeName must be used here -->
 										<xsl:sequence select="false()" />
 									</xsl:when>
 
