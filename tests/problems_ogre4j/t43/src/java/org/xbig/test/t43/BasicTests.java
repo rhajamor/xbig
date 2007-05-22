@@ -15,7 +15,6 @@ public class BasicTests {
 	@Test
 	public void test() {
         BillboardChain bc = new BillboardChain("", 0, 0, false, false, false);
-        //BillboardChain bc = new BillboardChain();
 //        BillboardChain.Element e = new BillboardChain.Element();
 //        bc.addChainElement(0, e);
         bc.setMaxChainElements(0);
