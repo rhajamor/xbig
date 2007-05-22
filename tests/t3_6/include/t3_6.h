@@ -22,4 +22,5 @@ public:
 	};
 
 	int a(float b);
+	int b(struct B b);
 };

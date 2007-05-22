@@ -13,6 +13,11 @@ int A::a(float b) {
 	return (int)b;
 }
 
+int A::b(struct B b) {
+	std::cout << "t3_6: A::b(struct B b)" << std::endl;
+	return 10;
+}
+
 float A::B::x(int y) {
 	std::cout << "t3_6: A::B::x(float y)" << std::endl;
 	std::cout << "y: " << y << std::endl;

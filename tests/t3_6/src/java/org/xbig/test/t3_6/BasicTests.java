@@ -15,9 +15,12 @@ public class BasicTests {
 	@Test
 	public void useOuterClass() {
 		A a = new A();
+		A.B ab = new A.B();
 		int b = a.a((float)7.3);
 		Assert.assertEquals(7, b);
+		Assert.assertEquals(a.b(ab), 10);
 		a.delete();
+		ab.delete();
 	}
 
 	@Test

@@ -61,7 +61,7 @@ struct EXPORT B {
 namespace n {
 	class EXPORT Tester {
 	public:
-		bool isN(Vocals1 a);
+		bool isN(enum Vocals1 a);
 		bool isA(A::Vocals2 a);
 		bool isB(B::Vocals3 a);
 		bool isObject(::Vocals1 a);

@@ -1445,9 +1445,19 @@
 				<xsl:variable name="typeWithoutInline" select="
 					if (contains($non_const_type, '__inline')) 
 					then substring-after($non_const_type, '__inline') else $non_const_type" />
+				
+				<!-- remove keyword struct -->
+				<xsl:variable name="typeWithoutStruct" select="
+					if (contains($typeWithoutInline, 'struct ')) 
+					then substring-after($typeWithoutInline, 'struct ') else $typeWithoutInline" />
 
+				<!-- remove keyword enum -->
+				<xsl:variable name="typeWithoutEnum" select="
+					if (contains($typeWithoutStruct, 'enum ')) 
+					then substring-after($typeWithoutStruct, 'enum ') else $typeWithoutStruct" />
+				
 				<xsl:variable name="typeWithoutRef"
-					select="replace($typeWithoutInline, '[&amp;\[].*$', '')" />
+					select="replace($typeWithoutEnum, '[&amp;\[].*$', '')" />
 
 				<xsl:variable name="pointerPointerToken"
 					select="'#POINTER_POINTER_TOKEN#'" />
