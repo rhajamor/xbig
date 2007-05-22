@@ -63,7 +63,6 @@
 		<xsl:param name="config" />
 		<xsl:param name="buildFile" />
 		
-		<xsl:message>Generating Java code for class <xsl:value-of select="./@fullName"/></xsl:message>
 		<!-- test if we handle a class or an enum -->
 		<xsl:choose>
 			<xsl:when test="./name() = 'enumeration'">

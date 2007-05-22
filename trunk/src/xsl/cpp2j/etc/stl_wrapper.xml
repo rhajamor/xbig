@@ -1418,4 +1418,133 @@
 			<name>second</name>
         </variable>
 	</class>
+
+	<class name="type_info" fullName="std::type_info">
+		<includes local="no">typeinfo</includes>
+		<function virt="non-virtual" visibility="public" static="false" const="true"
+					passedBy="value">
+			<name>before</name>
+			<type>bool</type>
+			<definition>bool std::type_info::before</definition>
+			<parameters>
+				<parameter passedBy="reference">
+					<type const="true">type_info</type>
+					<name>rhs</name>
+				</parameter>
+			</parameters>
+		</function>
+		<function virt="non-virtual" visibility="public" static="false" const="true"
+					passedBy="pointer">
+			<name>name</name>
+			<type const="true">char</type>
+			<definition>const char * std::type_info::name</definition>
+		</function>
+	</class>
+
+	<class name="ostream" fullName="std::ostream">
+		<includes local="no">iostream</includes>
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="value">
+			<name>bad</name>
+			<type>bool</type>
+			<definition>bool std::ostream::bad</definition>
+		</function>
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="value">
+			<name>clear</name>
+			<type>void</type>
+			<definition>void std::ostream::clear</definition>
+		</function>
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="value">
+			<name>eof</name>
+			<type>bool</type>
+			<definition>bool std::ostream::eof</definition>
+		</function>
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="value">
+			<name>fail</name>
+			<type>bool</type>
+			<definition>bool std::ostream::fail</definition>
+		</function>
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="value">
+			<name>fill</name>
+			<type>char</type>
+			<definition>char std::ostream::fill</definition>
+		</function>
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="value">
+			<name>fill</name>
+			<type>char</type>
+			<definition>char std::ostream::fill</definition>
+			<parameters>
+				<parameter passedBy="value">
+					<type>char</type>
+					<name>ch</name>
+				</parameter>
+			</parameters>
+		</function>
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="reference">
+			<name>flush</name>
+			<type>ostream</type>
+			<definition>ostream &amp; std::ostream::flush</definition>
+		</function>
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="value">
+			<name>good</name>
+			<type>bool</type>
+			<definition>bool std::ostream::good</definition>
+		</function>
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="reference">
+			<name>put</name>
+			<type>ostream</type>
+			<definition>ostream &amp; std::ostream::put</definition>
+			<parameters>
+				<parameter passedBy="value">
+					<type>char</type>
+					<name>ch</name>
+				</parameter>
+			</parameters>
+		</function>
+		<function virt="non-virtual" visibility="public" static="true" const="false"
+					passedBy="value">
+			<name>sync_with_stdio</name>
+			<type>bool</type>
+			<definition>bool std::ostream::sync_with_stdio</definition>
+		</function>
+		<function virt="non-virtual" visibility="public" static="true" const="false"
+					passedBy="value">
+			<name>sync_with_stdio</name>
+			<type>bool</type>
+			<definition>bool std::ostream::sync_with_stdio</definition>
+			<parameters>
+				<parameter passedBy="value">
+					<type>bool</type>
+					<name>sync</name>
+				</parameter>
+			</parameters>
+		</function>
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="value">
+			<name>width</name>
+			<type>int</type>
+			<definition>int std::ostream::width</definition>
+		</function>
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="value">
+			<name>width</name>
+			<type>int</type>
+			<definition>int std::ostream::width</definition>
+			<parameters>
+				<parameter passedBy="value">
+					<type>int</type>
+					<name>w</name>
+				</parameter>
+			</parameters>
+		</function>
+	</class>
+
 </namespace>

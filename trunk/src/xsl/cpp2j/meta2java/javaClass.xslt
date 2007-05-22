@@ -71,6 +71,8 @@
 		<xsl:param name="class" />
 		<xsl:param name="buildFile" />
 
+		<xsl:message>Generating Java code for class <xsl:value-of select="$class/@fullName"/></xsl:message>
+
 		<xsl:variable name="isAbstract"
 			select="xbig:areThereUnimplementedAbstractMethods($class)" />
 
@@ -136,7 +138,8 @@
 
 
 			<!-- handle inner classes & structs -->
-			<xsl:for-each select="class">
+			<!-- ignore inner templates, see bug 1723249 -->
+			<xsl:for-each select="class[not(./@template)]">
 				<xsl:call-template name="javaClass">
 					<xsl:with-param name="config" select="$config" />
 					<xsl:with-param name="class" select="." />
@@ -144,7 +147,7 @@
 						select="$buildFile" />
 				</xsl:call-template>
 			</xsl:for-each>
-			<xsl:for-each select="struct">
+			<xsl:for-each select="struct[not(./@template)]">
 				<xsl:call-template name="javaClass">
 					<xsl:with-param name="config" select="$config" />
 					<xsl:with-param name="class" select="." />

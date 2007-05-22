@@ -68,6 +68,8 @@
 		<xsl:param name="class" />
 		<xsl:param name="buildFile" />
 
+		<xsl:message>Generating Java interface for class <xsl:value-of select="$class/@fullName"/></xsl:message>
+
 		<!-- shortcut for class name -->
 		<xsl:variable name="class_name" select="$class/@name" />
 

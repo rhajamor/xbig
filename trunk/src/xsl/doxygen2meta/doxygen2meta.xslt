@@ -1754,7 +1754,7 @@
 					</xsl:element>
 				</xsl:for-each>
 			</xsl:element>
-
+<!-- 
 			<xsl:for-each select="inheritancegraph/node">
 				<xsl:if test="link/@refid=$refid">
 					<xsl:variable name="childnode"
@@ -1771,7 +1771,7 @@
 					</xsl:for-each>
 				</xsl:if>
 			</xsl:for-each>
-
+ -->
 		</xsl:if><!-- template -->
 
 		<!-- getting the right name of inner classes -->

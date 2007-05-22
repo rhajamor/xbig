@@ -69,7 +69,6 @@ namespace Ogre {
 		};
 	public:
 		typedef std::vector<Element> ElementList;
-		//BillboardChain() {}
 		BillboardChain(const String& name, size_t maxElements = 20, size_t numberOfChains = 1, 
 			bool useTextureCoords = true, bool useColours = true, bool dynamic = true){}
 		virtual ~BillboardChain(){}
