@@ -74,6 +74,13 @@ public class BasicTests {
         Assert.assertEquals(a.getFloat(floatValue), floatValue);
         Assert.assertEquals(a.getDouble(doubleValue), doubleValue);
         
+        String stringValue = "12345";
+        Assert.assertEquals(a.getString(stringValue), stringValue);
+
+        int size_tValue = 12345;
+        char wchar_tValue = '上';
+        Assert.assertEquals(a.getWchar_t(wchar_tValue), wchar_tValue);
+        
 		a.delete();
 	}
     

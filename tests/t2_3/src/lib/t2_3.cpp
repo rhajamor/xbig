@@ -138,6 +138,20 @@ A::getDouble(double v) {
   return v;	
 }
 
+std::string
+A::getString(std::string v) {
+  return v;	
+}
+
+size_t
+A::getSize_t(size_t v) {
+  return v;	
+}
+
+wchar_t
+A::getWchar_t(wchar_t v) {
+  return v;	
+}
 
 /*
 Move B to t2_9

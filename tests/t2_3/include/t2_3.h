@@ -5,6 +5,7 @@
  * It handles a class with a method
  *
  ******************************************************************/
+#include <string>
 
 #ifdef WIN32
 	#define EXPORT __declspec(dllexport)
@@ -41,6 +42,9 @@ public:
         unsigned long long getUnsignedLongLong(unsigned long long v);
         float getFloat(float v);
         double getDouble(double v);
+        std::string getString(std::string v);
+        size_t getSize_t(size_t v);
+        wchar_t getWchar_t(wchar_t v);
 };
 
 /*
