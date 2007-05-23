@@ -338,8 +338,8 @@
         <type meta="char" pass="pointer" const="true"
           jni="jstring" cpp="char*">
           <jni2cpp>
-            org::xbig::jni::to_stdstring(#jni_env#,
-            #jni_var#)
+            (char*)org::xbig::jni::to_stdstring(#jni_env#,
+            #jni_var#).c_str()
           </jni2cpp>
           <cpp2jni>
             org::xbig::jni::to_jstring(#jni_env#, #cpp_var#)

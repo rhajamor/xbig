@@ -141,7 +141,7 @@
 				<xsl:text>long</xsl:text>
 			</xsl:when>
 
-			<xsl:when test="($method/@passedBy eq 'pointer') or ($method/@passedBy eq 'reference'
+			<xsl:when test="($method/@passedBy='pointer' and not($resolvedType='char')) or ($method/@passedBy eq 'reference'
 			            and not(xbig:isTypeConst($method)))">
 				<xsl:value-of select="'long'" />
 			</xsl:when>

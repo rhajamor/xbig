@@ -80,7 +80,7 @@
 		<xsl:text>&#32;return&#32;</xsl:text>
 
 		<!-- create Pointer object when necessary -->
-		<xsl:if test="($method/@passedBy='pointer' or ($method/@passedBy='reference' and not(xbig:isTypeConst($method))))
+		<xsl:if test="(($method/@passedBy='pointer' and not($resolvedType='char')) or ($method/@passedBy='reference' and not(xbig:isTypeConst($method))))
 					  and ($type_info/type/@java or $resolvedType = 'void')">
 			<xsl:text>new&#32;</xsl:text>
 			<xsl:variable name="fullTypeNameWithPointer">
@@ -207,7 +207,7 @@
 		</xsl:if>
 
 		<!-- close Pointer and InstancePointer c-tor calls -->
-		<xsl:if test="($method/@passedBy='pointer' or ($method/@passedBy='reference' and not(xbig:isTypeConst($method))))					  
+		<xsl:if test="(($method/@passedBy='pointer' and not($resolvedType='char')) or ($method/@passedBy='reference' and not(xbig:isTypeConst($method))))					  
 					  and $type_info/type/@java">
 			<xsl:text>))</xsl:text>
 		</xsl:if>

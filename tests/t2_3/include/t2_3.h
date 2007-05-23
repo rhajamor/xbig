@@ -43,6 +43,8 @@ public:
         float getFloat(float v);
         double getDouble(double v);
         std::string getString(std::string v);
+        char* getCharStar(char * v);
+        const char * getConstCharStar(const char* v);
         size_t getSize_t(size_t v);
         wchar_t getWchar_t(wchar_t v);
 };
