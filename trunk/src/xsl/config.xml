@@ -75,6 +75,7 @@
 
       <type meta="std::string" signature="s" />
       <type meta="size_t" signature="i" />
+			<type meta="wchar_t" signature="H" />
 
       <!-- mapping of non-const passing methods for parameters -->
 
@@ -290,6 +291,7 @@
         <type meta="byte" signature="B" />
         <type meta="array" signature="[" />
         <type meta="size_t" signature="I" />
+				<type meta="wchar_t" signature="S" />
       </signatures>
 
       <types>
@@ -878,6 +880,26 @@
           </cpp2jni>
         </type>
         <type meta="size_t" jni="jint" />
+				
+				<type meta="wchar_t" pass="pointer" jni="jlong"
+							cpp="wchar_t*">
+					<jni2cpp>
+						reinterpret_cast&lt;wchar_t*&gt;(#jni_var#)
+					</jni2cpp>
+					<cpp2jni>
+						reinterpret_cast&lt;jlong&gt;(#cpp_var#)
+					</cpp2jni>
+				</type>
+				<type meta="wchar_t" pass="reference" jni="jlong"
+							cpp="wchar_t*" returntype="wchar_t&amp;">
+					<jni2cpp>
+						reinterpret_cast&lt;wchar_t*&gt;(#jni_var#)
+					</jni2cpp>
+					<cpp2jni>
+						reinterpret_cast&lt;jlong&gt;(&amp;#cpp_var#)
+					</cpp2jni>
+				</type>
+				<type meta="wchar_t" jni="jchar" />
       </types>
     </jni>
 
@@ -929,6 +951,7 @@
 
       <type meta="std::string" java="String" genericParameter="String" />
       <type meta="size_t" java="int" genericParameter="Integer" />
+			<type meta="wchar_t" java="char" genericParameter="Character" />
 
     </types>
 
