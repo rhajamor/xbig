@@ -143,6 +143,16 @@ A::getString(std::string v) {
   return v;	
 }
 
+char*
+A::getCharStar(char * v) {
+  return v;
+}
+
+const char *
+A::getConstCharStar(const char* v) {
+  return v;
+}
+
 size_t
 A::getSize_t(size_t v) {
   return v;	

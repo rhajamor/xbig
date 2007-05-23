@@ -165,7 +165,7 @@
 		<!-- choose type -->
 		<xsl:choose>
 			<!-- write pointer class if the value is passed by pointer or reference and not const -->
-			<xsl:when test="($param/@passedBy='pointer' or ($param/@passedBy='reference' and not(xbig:isTypeConst($param))))
+			<xsl:when test="(($param/@passedBy='pointer' and not($resolvedType='char')) or ($param/@passedBy='reference' and not(xbig:isTypeConst($param))))
 							and ($writingNativeMethod ne 'true')
 							and $type_info/type/@java">	
 				<xsl:variable name="fullTypeNameWithPointer">
@@ -303,7 +303,15 @@
 
 			<!-- types in config (usually primitive types) -->
 			<xsl:otherwise>
-				<xsl:value-of select="$type_info/type/@java" />
+				<xsl:choose>
+					<!-- mapp char* to String -->
+					<xsl:when test="$param/@passedBy='pointer' and $resolvedType='char'">
+						<xsl:value-of select="'String'"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="$type_info/type/@java" />
+					</xsl:otherwise>
+				</xsl:choose>
 			</xsl:otherwise>
 		</xsl:choose>
 

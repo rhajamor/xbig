@@ -75,7 +75,11 @@ public class BasicTests {
         Assert.assertEquals(a.getDouble(doubleValue), doubleValue);
         
         String stringValue = "12345";
+        String charStarValue = "23456";
+        String constCharStarValue = "34567";
         Assert.assertEquals(a.getString(stringValue), stringValue);
+        Assert.assertEquals(a.getCharStar(charStarValue), charStarValue);
+        Assert.assertEquals(a.getConstCharStar(constCharStarValue), constCharStarValue);
 
         int size_tValue = 12345;
         char wchar_tValue = '上';
