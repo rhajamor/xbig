@@ -82,7 +82,7 @@ public class BasicTests {
         Assert.assertEquals(a.getConstCharStar(constCharStarValue), constCharStarValue);
 
         int size_tValue = 12345;
-        char wchar_tValue = '上';
+        char wchar_tValue = 'a';
         Assert.assertEquals(a.getWchar_t(wchar_tValue), wchar_tValue);
         
 		a.delete();
