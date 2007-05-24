@@ -11,14 +11,20 @@
  * overloaded method with std list and vector
  ******************************************************************/
 
+#ifdef WIN32
+	#define EXPORT __declspec(dllexport)
+#else
+	#define EXPORT
+#endif
+
 
 #include <vector>
 #include <list>
 
-class Ray {};
-class Plane {};
+class EXPORT Ray {};
+class EXPORT Plane {};
 
-class Math {
+class EXPORT Math {
 public:
 	static std::pair< bool, float > intersects (const Ray &ray, const std::vector< Plane > &planeList, bool normalIsOutside);
 	static std::pair< bool, float > intersects (const Ray &ray, const std::list< Plane > &planeList, bool normalIsOutside);

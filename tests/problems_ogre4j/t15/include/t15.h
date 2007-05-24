@@ -11,10 +11,16 @@
  * object array as parameter
  ******************************************************************/
 
+#ifdef WIN32
+	#define EXPORT __declspec(dllexport)
+#else
+	#define EXPORT
+#endif
 
-class Vector3 {};
 
-class Matrix3 {
+class EXPORT Vector3 {};
+
+class EXPORT Matrix3 {
 public:
 	void EigenSolveSymmetric (float afEigenvalue[3], Vector3 akEigenvector[3]) const;
 };

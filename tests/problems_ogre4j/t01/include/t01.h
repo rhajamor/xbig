@@ -11,17 +11,23 @@
  * c functions for inherited methods are not generated
  ******************************************************************/
 
+#ifdef WIN32
+	#define EXPORT __declspec(dllexport)
+#else
+	#define EXPORT
+#endif
+
 
 #include <vector>
 #include <string>
 
 typedef std::vector<std::string> StringVector;
 
-class ShadowCaster {};
+class EXPORT ShadowCaster {};
 
-class AnimableObject {
+class EXPORT AnimableObject {
 public:
 	const StringVector& getAnimableValueNames(void) const;
 };
 
-class MoveableObject : public ShadowCaster, public AnimableObject {};
+class EXPORT MoveableObject : public ShadowCaster, public AnimableObject {};

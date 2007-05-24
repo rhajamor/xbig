@@ -11,12 +11,18 @@
  * template function in template class
  ******************************************************************/
 
+#ifdef WIN32
+	#define EXPORT __declspec(dllexport)
+#else
+	#define EXPORT
+#endif
+
 
 
 #include <iostream>
 
 template <class TContainer, class TContainerValueType, typename TCompValueType>
-class RadixSort {
+class EXPORT RadixSort {
 public:
 	template <class TFunction>
 	void sort ( TContainer & container, TFunction func) {

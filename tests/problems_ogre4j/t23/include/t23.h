@@ -11,8 +11,14 @@
  * some C++ operator methods are needed in java
  ******************************************************************/
 
+#ifdef WIN32
+	#define EXPORT __declspec(dllexport)
+#else
+	#define EXPORT
+#endif
 
-class Vector {
+
+class EXPORT Vector {
 public:
 	Vector operator+(const Vector& rkVector) const;
 

@@ -11,6 +11,7 @@
  *
  * Problem:
  * "Duplicate field" Error of javac
+ * see bugs bug 1711313 and 1724323. See t46, too.
  ******************************************************************/
 
 #ifdef WIN32

@@ -216,9 +216,6 @@
 			Root of input tree. Usually selected with '/'.
 		</xd:param>
 	</xd:doc>
-	<xd:doc type="function">
-		<xd:short>check if a type is an enum</xd:short>
-	</xd:doc>
 	<xsl:function name="xbig:isEnum" as="xs:boolean">
 		<xsl:param name="type" />
 		<xsl:param name="currentNode" />
@@ -565,7 +562,7 @@
 
 			<!-- if found, return node -->
 			<xsl:when test="$currentNode/*[@name = $type]">
-				<xsl:sequence select="$currentNode/@fullName" />
+				<xsl:value-of select="$currentNode/@fullName" />
 			</xsl:when>
 
 			<!-- special case: a typedef for a template -> generated meta class -> not in input tree -->
@@ -611,11 +608,20 @@
 
 				<!-- check if type was found in a base class -->
 				<xsl:choose>
-					<!-- count($baseClassResults/*) = 1 is necessary, see bug 1711313 -->
+					<!-- see bugs 1711313 and 1724323 -->
+					<!-- if type was found in 1 base class -->
 					<xsl:when
-						test="$baseClassResults/*[text() != ''] and count($baseClassResults/*) = 1">
+						test="$baseClassResults/*[text() != ''] and 
+							count($baseClassResults/*[text() != '']) = 1">
 						<xsl:value-of
 							select="$baseClassResults/*[text() != '']" />
+					</xsl:when>
+
+					<!-- if type was found in more than one base classes -->
+					<!-- TODO check if the results differ and choose the right one -->
+					<xsl:when test="count($baseClassResults/*[text() != '']) > 1">
+						<xsl:value-of
+							select="$baseClassResults/*[1]" />
 					</xsl:when>
 
 					<!-- else check the parent node -->

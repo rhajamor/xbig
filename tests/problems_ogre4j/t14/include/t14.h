@@ -11,9 +11,15 @@
  * not working get function for list wrapper
  ******************************************************************/
 
+#ifdef WIN32
+	#define EXPORT __declspec(dllexport)
+#else
+	#define EXPORT
+#endif
+
 
 #include <vector>
 
-class RenderSystem {};
+class EXPORT RenderSystem {};
 
 typedef std::vector<RenderSystem*> RenderSystemList;

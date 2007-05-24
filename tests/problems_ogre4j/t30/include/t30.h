@@ -11,15 +11,21 @@
  * template typedef returning ptr
  ******************************************************************/
 
+#ifdef WIN32
+	#define EXPORT __declspec(dllexport)
+#else
+	#define EXPORT
+#endif
+
 
 #include <map>
 #include <string>
 #include <iostream>
 
-class AnimationState {};
+class EXPORT AnimationState {};
 
 template <class T>
-class MapIterator
+class EXPORT MapIterator
 {
 public:
 	typedef typename T::mapped_type MappedType;

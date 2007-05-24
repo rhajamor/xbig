@@ -11,20 +11,26 @@
  * template typedef returning ptr (2)
  ******************************************************************/
 
+#ifdef WIN32
+	#define EXPORT __declspec(dllexport)
+#else
+	#define EXPORT
+#endif
+
 
 #include <vector>
 #include <iostream>
 
 template <class T>
-class VectorIterator
+class EXPORT VectorIterator
 {
 public:
 	typename T::pointer peekNextPtr(void);
 };
 
-class CompositorInstance {};
+class EXPORT CompositorInstance {};
 
-class CompositorChain {
+class EXPORT CompositorChain {
 public:
 	typedef std::vector<CompositorInstance*> Instances;
 	typedef VectorIterator<Instances> InstanceIterator;

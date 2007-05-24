@@ -11,8 +11,14 @@
  * overloaded method, parameter by ptr and value
  ******************************************************************/
 
+#ifdef WIN32
+	#define EXPORT __declspec(dllexport)
+#else
+	#define EXPORT
+#endif
 
-class Vector2 {
+
+class EXPORT Vector2 {
 public:
 	Vector2 (const float scaler);
 	Vector2 (float *const r);

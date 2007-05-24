@@ -11,14 +11,20 @@
  * std list in struct
  ******************************************************************/
 
+#ifdef WIN32
+	#define EXPORT __declspec(dllexport)
+#else
+	#define EXPORT
+#endif
+
 
 #include <list>
 
-class Plane {};
+class EXPORT Plane {};
 
-class SceneQuery {
+class EXPORT SceneQuery {
 public:
-	struct WorldFragment {
+	struct EXPORT WorldFragment {
 		WorldFragment() {planes = (std::list< Plane >*)1;}
 		std::list< Plane >* planes;
 	};

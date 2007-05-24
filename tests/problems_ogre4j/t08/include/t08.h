@@ -11,32 +11,38 @@
  * invalid C function names for typedefs
  ******************************************************************/
 
+#ifdef WIN32
+	#define EXPORT __declspec(dllexport)
+#else
+	#define EXPORT
+#endif
+
 
 #include <map>
 #include <vector>
 #include <string>
 
 template <class T>
-class ConstMapIterator{};
+class EXPORT ConstMapIterator{};
 
 template <typename T>
-class Singleton {};
+class EXPORT Singleton {};
 
-class NumericAnimationTrack {};
-class RenderSystem {};
+class EXPORT NumericAnimationTrack {};
+class EXPORT RenderSystem {};
 
 typedef std::string _StringBase;
 typedef _StringBase String;
 typedef std::vector<RenderSystem*> RenderSystemList;
 
-class Animation {
+class EXPORT Animation {
 public:
 	typedef std::map<unsigned short, NumericAnimationTrack*> NumericTrackList;
 	typedef ConstMapIterator<NumericTrackList> NumericTrackIterator;
 
 };
 
-class Root : public Singleton<Root> {
+class EXPORT Root : public Singleton<Root> {
 
 	friend class RenderSystem;
 
