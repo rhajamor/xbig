@@ -1798,8 +1798,11 @@
 			<xsl:with-param name="refid" select="$refid" />
 		</xsl:call-template>
 		<!-- enumerations -->
+		<!-- see bug 1724320
 		<xsl:for-each select="sectiondef[@kind='public-type']">
+		 -->
 			<!-- or @kind='protected-type'-->
+		<xsl:for-each select="sectiondef">
 			<xsl:choose>
 				<xsl:when test="memberdef[@kind='enum']">
 					<xsl:call-template name="enumeration" />
@@ -1807,8 +1810,11 @@
 			</xsl:choose>
 		</xsl:for-each>
 		<!-- typedefs -->
+		<!-- 
 		<xsl:for-each
 			select="sectiondef[@kind='public-type' or @kind='protected-type']">
+		 -->
+		<xsl:for-each select="sectiondef">
 			<xsl:choose>
 				<xsl:when test="memberdef[@kind='typedef']">
 					<xsl:call-template name="typedef" />

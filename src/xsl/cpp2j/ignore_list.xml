@@ -1,3 +1,17 @@
 <ignore_list>
+	<!-- bug 1714372, feature request 1716375 -->
 	<item>Ogre::AlignedAllocator</item>
+
+	<!-- bug 1723312 -->
+	<item>Ogre::CompositorScriptCompiler::TokenActionMap</item>
+	<item>Ogre::MaterialSerializer::AttribParserList</item>
+
+	<!-- bug 1724332 -->
+	<item>Ogre::ExceptionFactory</item>
+
+	<!-- bug 1724335 -->
+	<item>Ogre::Profiler::ProfileHistoryMap</item>
+
+	<!-- bug 1666890 -->
+	<item>Ogre::CompositorInstance::TargetOperation::RenderQueueBitSet</item>
 </ignore_list>
