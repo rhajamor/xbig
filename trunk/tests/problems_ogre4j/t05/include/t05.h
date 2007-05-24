@@ -11,12 +11,18 @@
  * inheritance from an inner class
  ******************************************************************/
 
+#ifdef WIN32
+	#define EXPORT __declspec(dllexport)
+#else
+	#define EXPORT
+#endif
 
-class Node {
+
+class EXPORT Node {
 public:
-	class Listener {};
+	class EXPORT Listener {};
 };
 
-class BillboardChain {};
+class EXPORT BillboardChain {};
 
-class RibbonTrail : public BillboardChain, public Node::Listener {};
+class EXPORT RibbonTrail : public BillboardChain, public Node::Listener {};

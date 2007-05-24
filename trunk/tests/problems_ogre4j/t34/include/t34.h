@@ -11,10 +11,16 @@
  * void ptr
  ******************************************************************/
 
+#ifdef WIN32
+	#define EXPORT __declspec(dllexport)
+#else
+	#define EXPORT
+#endif
 
-class SceneQuery {
+
+class EXPORT SceneQuery {
 public:
-	struct WorldFragment {
+	struct EXPORT WorldFragment {
 		WorldFragment() {geometry = (void*)1;}
 		void* geometry;
 	};

@@ -11,10 +11,16 @@
  * original code uses same parameter name as generator
  ******************************************************************/
 
+#ifdef WIN32
+	#define EXPORT __declspec(dllexport)
+#else
+	#define EXPORT
+#endif
 
-class OverlayElement {};
 
-class OverlayManager {
+class EXPORT OverlayElement {};
+
+class EXPORT OverlayManager {
 public:
 	void destroyOverlayElement(OverlayElement* pInstance, bool isTemplate = false);
 };

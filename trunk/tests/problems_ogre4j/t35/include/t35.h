@@ -11,6 +11,12 @@
  * inherited type with pointer as parameter
  ******************************************************************/
 
+#ifdef WIN32
+	#define EXPORT __declspec(dllexport)
+#else
+	#define EXPORT
+#endif
+
 
 #include <map>
 #include <string>
@@ -18,7 +24,7 @@
 
 namespace Ogre {
 	template <class T>
-	class MapIterator
+	class EXPORT MapIterator
 	{
 	private:
 		typename T::iterator mCurrent;
@@ -70,10 +76,10 @@ namespace Ogre {
 
 	typedef std::string String;
 
-	class Animation {
+	class EXPORT Animation {
 	};
 
-	class SceneManager {
+	class EXPORT SceneManager {
 	protected:
 	//public:
 		typedef std::map<String, Animation*> AnimationList;
@@ -89,7 +95,7 @@ namespace Ogre {
 		typedef MapIterator<ConstAnimationPointerList> ConstAnimationPointerIterator;
 	};
 
-	class DefaultSceneManager : public SceneManager {
+	class EXPORT DefaultSceneManager : public SceneManager {
 	public:
 
 		DefaultSceneManager() {

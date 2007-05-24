@@ -11,11 +11,17 @@
  * no handling of static methods in templates
  ******************************************************************/
 
+#ifdef WIN32
+	#define EXPORT __declspec(dllexport)
+#else
+	#define EXPORT
+#endif
+
 
 #include <assert.h>
 
 template <typename T>
-class Singleton {
+class EXPORT Singleton {
 protected:
 	static T* ms_Singleton;
 
@@ -26,7 +32,7 @@ public:
 	static T* getSingletonPtr( void ) { return ms_Singleton; }
 };
 
-class Root : public Singleton<Root> {};
+class EXPORT Root : public Singleton<Root> {};
 
 template <typename T>
 T* Singleton<T>::ms_Singleton = 0;

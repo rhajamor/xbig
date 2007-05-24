@@ -11,6 +11,12 @@
  * simple type as type parameter
  ******************************************************************/
 
+#ifdef WIN32
+	#define EXPORT __declspec(dllexport)
+#else
+	#define EXPORT
+#endif
+
 
 #include <map>
 #include <string>

@@ -11,19 +11,25 @@
  * it is not possible to get XxxIterator
  ******************************************************************/
 
+#ifdef WIN32
+	#define EXPORT __declspec(dllexport)
+#else
+	#define EXPORT
+#endif
+
 
 #include <map>
 #include <string>
 
 
 template <class T>
-class MapIterator {};
+class EXPORT MapIterator {};
 
 typedef std::string _StringBase;
 typedef _StringBase String;
 
 
-class ConfigFile {
+class EXPORT ConfigFile {
 public:
 	typedef std::multimap<String, String> SettingsMultiMap;
 	typedef std::map<String, SettingsMultiMap*> SettingsBySection;

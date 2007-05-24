@@ -11,10 +11,16 @@
  * template_function
  ******************************************************************/
 
+#ifdef WIN32
+	#define EXPORT __declspec(dllexport)
+#else
+	#define EXPORT
+#endif
+
 
 #include <iostream>
 
-class Bitwise {
+class EXPORT Bitwise {
 public:
 	template<typename SrcT, typename DestT>
 	static DestT convertBitPattern ( SrcT srcValue, SrcT srcBitMask, DestT destBitMask) ;

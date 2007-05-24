@@ -10,19 +10,24 @@
  * Problem:
  * default constructors needed
  ******************************************************************/
+#ifdef WIN32
+	#define EXPORT __declspec(dllexport)
+#else
+	#define EXPORT
+#endif
 
 
-class ShadowRenderable {
+class EXPORT ShadowRenderable {
 public:
 	ShadowRenderable();
 };
 
-class HardwareIndexBufferSharedPtr {};
-class VertexData {};
+class EXPORT HardwareIndexBufferSharedPtr {};
+class EXPORT VertexData {};
 
-class ManualObject {
+class EXPORT ManualObject {
 public:
-	class ManualObjectSectionShadowRenderable : public ShadowRenderable {
+	class EXPORT ManualObjectSectionShadowRenderable : public ShadowRenderable {
 	public:
 			ManualObjectSectionShadowRenderable (ManualObject *parent, HardwareIndexBufferSharedPtr *indexBuffer, const VertexData* vertexData, bool createSeparateLightCap, bool isLightCap=false);
 	};

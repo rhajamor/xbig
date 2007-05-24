@@ -11,9 +11,15 @@
  * typedef for type parameter member
  ******************************************************************/
 
+#ifdef WIN32
+	#define EXPORT __declspec(dllexport)
+#else
+	#define EXPORT
+#endif
+
 
 template <class TContainer, class TContainerValueType, typename TCompValueType>
-class RadixSort {
+class EXPORT RadixSort {
 public:
 	typedef typename TContainer::iterator ContainerIter;
 };

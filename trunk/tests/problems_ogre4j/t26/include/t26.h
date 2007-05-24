@@ -11,6 +11,12 @@
  * struct defined during typedef
  ******************************************************************/
 
+#ifdef WIN32
+	#define EXPORT __declspec(dllexport)
+#else
+	#define EXPORT
+#endif
+
 
 #include <string>
 #include <vector>
@@ -27,7 +33,7 @@ typedef struct _ConfigOption
 	bool immutable;
 } ConfigOption;
 
-class Tester {
+class EXPORT Tester {
 public:
 	void a(ConfigOption co) {}
 };

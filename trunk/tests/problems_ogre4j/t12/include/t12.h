@@ -11,8 +11,14 @@
  * no createInstance implementation for certain constructors
  ******************************************************************/
 
+#ifdef WIN32
+	#define EXPORT __declspec(dllexport)
+#else
+	#define EXPORT
+#endif
 
-class ColourValue {
+
+class EXPORT ColourValue {
 public:
 	ColourValue (float red=1.0f, float green=1.0f, float blue=1.0f, float alpha=1.0f);
 };

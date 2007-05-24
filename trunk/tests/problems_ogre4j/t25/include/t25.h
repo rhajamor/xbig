@@ -11,12 +11,18 @@
  * struct contains inner struct of a class as field
  ******************************************************************/
 
+#ifdef WIN32
+	#define EXPORT __declspec(dllexport)
+#else
+	#define EXPORT
+#endif
 
-class SceneQuery {
+
+class EXPORT SceneQuery {
 public:
-	struct WorldFragment {};
+	struct EXPORT WorldFragment {};
 };
 
-struct RaySceneQueryResultEntry {
+struct EXPORT RaySceneQueryResultEntry {
 	SceneQuery::WorldFragment* worldFragment;
 };

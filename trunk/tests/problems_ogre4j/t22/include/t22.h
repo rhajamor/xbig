@@ -11,18 +11,24 @@
  * pure virtual method
  ******************************************************************/
 
+#ifdef WIN32
+	#define EXPORT __declspec(dllexport)
+#else
+	#define EXPORT
+#endif
+
 
 #include <string>
 
 typedef std::string _StringBase;
 typedef _StringBase String;
 
-class RenderSystem {
+class EXPORT RenderSystem {
 public:
 	virtual const String& getName  	(   	void   	  	 )   	 const =0;
 };
 
-class RenderSystemA : public RenderSystem {
+class EXPORT RenderSystemA : public RenderSystem {
 public:
 	virtual const String& getName  	(   	void   	  	 )   	 const;
 };

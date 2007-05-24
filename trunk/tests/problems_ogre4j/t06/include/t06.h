@@ -11,15 +11,21 @@
  * inner struct with template field and typedef as type parameter
  ******************************************************************/
 
+#ifdef WIN32
+	#define EXPORT __declspec(dllexport)
+#else
+	#define EXPORT
+#endif
+
 
 typedef float Real;
 
 template <typename T>
-class Controller {};
+class EXPORT Controller {};
 
-class TextureUnitState {
+class EXPORT TextureUnitState {
 public:
-	struct TextureEffect {
+	struct EXPORT TextureEffect {
 		TextureEffect() {controller = (Controller<Real>*)1;}
 		Controller<Real>* controller;
 	};

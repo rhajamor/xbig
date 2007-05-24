@@ -11,10 +11,16 @@
  * overloaded method, once with ptr the other time with reference
  ******************************************************************/
 
+#ifdef WIN32
+	#define EXPORT __declspec(dllexport)
+#else
+	#define EXPORT
+#endif
+
 
 #include <string>
 
-class TextureUnitState {
+class EXPORT TextureUnitState {
 public:
 	void setCubicTextureName (const std::string &name, bool forUVW=false);
 	void setCubicTextureName (const std::string *const names, bool forUVW=false);

@@ -11,6 +11,12 @@
  * typedef for a struct from an external lib
  ******************************************************************/
 
+#ifdef WIN32
+	#define EXPORT __declspec(dllexport)
+#else
+	#define EXPORT
+#endif
+
 
 // This struct comes from an external lib
 //struct zzip_file {};

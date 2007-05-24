@@ -11,10 +11,16 @@
  * class with getter and setter for public fields
  ******************************************************************/
 
+#ifdef WIN32
+	#define EXPORT __declspec(dllexport)
+#else
+	#define EXPORT
+#endif
 
-class Radian {};
 
-class Particle {
+class EXPORT Radian {};
+
+class EXPORT Particle {
 public:
 	void setRotation (const Radian &rad);
 	const Radian & getRotation (void) const;

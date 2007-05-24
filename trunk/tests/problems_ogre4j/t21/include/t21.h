@@ -11,10 +11,16 @@
  * public method requires protected type as parameter
  ******************************************************************/
 
+#ifdef WIN32
+	#define EXPORT __declspec(dllexport)
+#else
+	#define EXPORT
+#endif
+
 
 #include <string>
 
-class ResourceGroupManager {
+class EXPORT ResourceGroupManager {
 protected:
 	struct ResourceGroup {};
 

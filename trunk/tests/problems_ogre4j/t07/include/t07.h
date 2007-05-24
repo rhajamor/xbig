@@ -11,12 +11,18 @@
  * inner typedef for std vector
  ******************************************************************/
 
+#ifdef WIN32
+	#define EXPORT __declspec(dllexport)
+#else
+	#define EXPORT
+#endif
+
 
 #include <vector>
 
-class IndexData{};
+class EXPORT IndexData{};
 
-class ProgressiveMesh {
+class EXPORT ProgressiveMesh {
 public:
 	typedef std::vector<IndexData*> LODFaceList;
 };

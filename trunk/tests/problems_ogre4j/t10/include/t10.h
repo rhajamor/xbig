@@ -11,12 +11,18 @@
  * jlong is not always a pointer
  ******************************************************************/
 
+#ifdef WIN32
+	#define EXPORT __declspec(dllexport)
+#else
+	#define EXPORT
+#endif
+
 
 #include <map>
 #include <string>
 
-class RenderWindow {};
-class SceneManager {};
+class EXPORT RenderWindow {};
+class EXPORT SceneManager {};
 
 typedef std::string _StringBase;
 typedef _StringBase String;
@@ -25,12 +31,12 @@ typedef std::map<String, String> NameValuePairList;
 typedef unsigned short uint16;
 typedef uint16 SceneTypeMask;
 
-class StringUtil {
+class EXPORT StringUtil {
 public:
 	static const String BLANK;
 };
 
-class Root {
+class EXPORT Root {
 public:
 	RenderWindow* createRenderWindow  	(   	const String &   	 name,
 		unsigned int  	width,

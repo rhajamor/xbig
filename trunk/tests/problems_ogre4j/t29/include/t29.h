@@ -11,15 +11,21 @@
  * template typedef for inner type
  ******************************************************************/
 
+#ifdef WIN32
+	#define EXPORT __declspec(dllexport)
+#else
+	#define EXPORT
+#endif
+
 
 #include <vector>
 
-class CompositorInstance {};
+class EXPORT CompositorInstance {};
 
 template <class T>
-class VectorIterator {};
+class EXPORT VectorIterator {};
 
-class CompositorChain {
+class EXPORT CompositorChain {
 public:
 	typedef std::vector<CompositorInstance*> Instances;
 	typedef VectorIterator<Instances> InstanceIterator;
