@@ -59,7 +59,8 @@
 		<!-- avoid code destruction through jalopy -->
 		<!-- <xsl:text>&#10;//J-&#10;</xsl:text> -->
 
-		<xsl:text>public enum&#32;</xsl:text>
+		<xsl:value-of select="$enum/@protection" />
+		<xsl:text>&#32;enum&#32;</xsl:text>
 		<xsl:value-of select="$enum/@name" />
 		<xsl:text>{&#10;</xsl:text>
 
