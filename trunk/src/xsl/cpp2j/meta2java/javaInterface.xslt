@@ -170,7 +170,9 @@
 				<xsl:value-of select="$baseClassJavaName" />
 
 				<!-- if this class is a typedef for a template, we have to use type parameters -->
-				<xsl:if test="$class/typeparameters">
+				<!-- generate no type parameters if type is on ignore_list -->
+				<xsl:if test="$class/typeparameters and
+								not($ignore_list/ignore_list/item[. = $class/@fullName])">
 					<xsl:value-of select="'&lt; '" />
 					<xsl:for-each
 						select="$class/typeparameters/typepara">

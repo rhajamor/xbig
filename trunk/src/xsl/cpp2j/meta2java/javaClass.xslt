@@ -352,6 +352,7 @@
 		<xsl:if
 			test="$ignore_list/ignore_list/item[. = $class/@fullName]">
 			<xsl:text>// this type is ignored&#10;</xsl:text>
+			<xsl:text>&#10;public&#32;void&#32;delete()&#32;{}&#10;</xsl:text>
 		</xsl:if>
 
 		<!-- close class declaration  -->
