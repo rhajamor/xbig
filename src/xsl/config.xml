@@ -74,6 +74,7 @@
       <type meta="float" signature="F" />
 
       <type meta="std::string" signature="s" />
+      <type meta="std::wstring" signature="ws" />
       <type meta="size_t" signature="i" />
 			<type meta="wchar_t" signature="H" />
 
@@ -288,6 +289,7 @@
 
         <type meta="object" signature="L" />
         <type meta="std::string" signature="Ljava/lang/String;" />
+        <type meta="std::wstring" signature="Ljava/lang/String;" />
         <type meta="byte" signature="B" />
         <type meta="array" signature="[" />
         <type meta="size_t" signature="I" />
@@ -342,6 +344,15 @@
           </jni2cpp>
           <cpp2jni>
             org::xbig::jni::to_jstring(#jni_env#, #cpp_var#)
+          </cpp2jni>
+        </type>
+        <type meta="char" pass="reference" jni="jlong"
+          cpp="char*" returntype="char&amp;">
+          <jni2cpp>
+            reinterpret_cast&lt;char*&gt;(#jni_var#)
+          </jni2cpp>
+          <cpp2jni>
+            reinterpret_cast&lt;jlong&gt;(&amp;#cpp_var#)
           </cpp2jni>
         </type>
         <type meta="char" jni="jchar" />
@@ -860,6 +871,45 @@
           </cpp2jni>
         </type>
 
+        <type meta="std::wstring" pass="pointer" jni="jlong"
+          cpp="std::wstring*">
+          <jni2cpp>
+            reinterpret_cast&lt;std::wstring*&gt;(#jni_var#)
+          </jni2cpp>
+          <cpp2jni>
+            reinterpret_cast&lt;jlong&gt;(#cpp_var#)
+          </cpp2jni>
+        </type>
+        <type meta="std::wstring" pass="reference" jni="jlong"
+          cpp="std::wstring*" returntype="std::wstring&amp;">
+          <jni2cpp>
+            reinterpret_cast&lt;std::wstring*&gt;(#jni_var#)
+          </jni2cpp>
+          <cpp2jni>
+            reinterpret_cast&lt;jlong&gt;(&amp;#cpp_var#)
+          </cpp2jni>
+        </type>
+        <type meta="std::wstring" pass="reference" jni="jstring"
+          cpp="std::wstring&amp;" returntype="std::wstring&amp;"
+          const="true">
+          <jni2cpp>
+            org::xbig::jni::to_stdwstring(#jni_env#,
+            #jni_var#)
+          </jni2cpp>
+          <cpp2jni>
+            org::xbig::jni::to_jstring(#jni_env#, #cpp_var#)
+          </cpp2jni>
+        </type>
+        <type meta="std::wstring" jni="jstring">
+          <jni2cpp>
+            org::xbig::jni::to_stdwstring(#jni_env#,
+            #jni_var#)
+          </jni2cpp>
+          <cpp2jni>
+            org::xbig::jni::to_jstring(#jni_env#, #cpp_var#)
+          </cpp2jni>
+        </type>
+
         <type meta="size_t" pass="pointer" jni="jlong"
           cpp="size_t*">
           <jni2cpp>
@@ -949,6 +999,7 @@
 			<type meta="float" java="float" genericParameter="Float" />
 
       <type meta="std::string" java="String" genericParameter="String" />
+      <type meta="std::wstring" java="String" genericParameter="String" />
       <type meta="size_t" java="int" genericParameter="Integer" />
 			<type meta="wchar_t" java="char" genericParameter="Character" />
 
