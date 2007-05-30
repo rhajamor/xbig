@@ -1,6 +1,6 @@
 <namespace name="std" fullName="std">
 
-	<class name="vector" fullName="std::vector" template="true">
+	<class protection="public" name="vector" fullName="std::vector" template="true">
 		<templateparameters>
 			<templateparameter templateType="class" templateDeclaration="T"/>
 		</templateparameters>
@@ -200,7 +200,7 @@
 
 	</class>
 
-	<class name="deque" fullName="std::deque" template="true">
+	<class protection="public" name="deque" fullName="std::deque" template="true">
 		<templateparameters>
 			<templateparameter templateType="class" templateDeclaration="T"/>
 		</templateparameters>
@@ -347,7 +347,7 @@
 		</function>
 	</class>
 
-	<class name="list" fullName="std::list" template="true">
+	<class protection="public" name="list" fullName="std::list" template="true">
 		<templateparameters>
 			<templateparameter templateType="class" templateDeclaration="T"/>
 		</templateparameters>
@@ -564,7 +564,7 @@
 		</function>
 	</class>
 
-	<class name="priority_queue" fullName="std::priority_queue" template="true">
+	<class protection="public" name="priority_queue" fullName="std::priority_queue" template="true">
 		<templateparameters>
 			<templateparameter templateType="class" templateDeclaration="T"/>
 		</templateparameters>
@@ -637,7 +637,7 @@
 		</function>
 	</class>
 
-	<class name="queue" fullName="std::queue" template="true">
+	<class protection="public" name="queue" fullName="std::queue" template="true">
 		<templateparameters>
 			<templateparameter templateType="class" templateDeclaration="T"/>
 		</templateparameters>
@@ -704,7 +704,7 @@
 	</class>
 
 
-	<class name="stack" fullName="std::stack" template="true">
+	<class protection="public" name="stack" fullName="std::stack" template="true">
 		<templateparameters>
 			<templateparameter templateType="class" templateDeclaration="T"/>
 		</templateparameters>
@@ -763,7 +763,7 @@
 		</function>
 	</class>
 
-	<class name="set" fullName="std::set" template="true">
+	<class protection="public" name="set" fullName="std::set" template="true">
 		<templateparameters>
 			<templateparameter templateType="class" templateDeclaration="K"/>
 		</templateparameters>
@@ -865,7 +865,7 @@
  -->
 	</class>
 
-	<class name="multiset" fullName="std::multiset" template="true">
+	<class protection="public" name="multiset" fullName="std::multiset" template="true">
 		<templateparameters>
 			<templateparameter templateType="class" templateDeclaration="K"/>
 		</templateparameters>
@@ -967,7 +967,7 @@
  -->
 	</class>
 
-	<class name="map" fullName="std::map" template="true">
+	<class protection="public" name="map" fullName="std::map" template="true">
 		<templateparameters>
 			<templateparameter templateType="class" templateDeclaration="K"/>
 			<templateparameter templateType="class" templateDeclaration="V"/>
@@ -1096,7 +1096,7 @@
 
 	</class>
 	
-	<class name="hash_map" fullName="std::hash_map" template="true">
+	<class protection="public" name="hash_map" fullName="std::hash_map" template="true">
 		<templateparameters>
 			<templateparameter templateType="class" templateDeclaration="K"/>
 			<templateparameter templateType="class" templateDeclaration="V"/>
@@ -1225,7 +1225,7 @@
 
 	</class>
 
-	<class name="multimap" fullName="std::multimap" template="true">
+	<class protection="public" name="multimap" fullName="std::multimap" template="true">
 		<templateparameters>
 			<templateparameter templateType="class" templateDeclaration="K"/>
 			<templateparameter templateType="class" templateDeclaration="V"/>
@@ -1329,7 +1329,7 @@
  -->
 	</class>
 
-	<class name="bitset" fullName="std::bitset" template="true">
+	<class protection="public" name="bitset" fullName="std::bitset" template="true">
 		<templateparameters>
 			<templateparameter templateType="class" templateDeclaration="T"/>
 		</templateparameters>
@@ -1398,7 +1398,7 @@
 		</function>
 	</class>
 
-	<class name="pair" fullName="std::pair" template="true">
+	<class protection="public" name="pair" fullName="std::pair" template="true">
 		<templateparameters>
 			<templateparameter templateType="class" templateDeclaration="F"/>
 			<templateparameter templateType="class" templateDeclaration="S"/>
@@ -1419,7 +1419,7 @@
         </variable>
 	</class>
 
-	<class name="type_info" fullName="std::type_info">
+	<class protection="public" name="type_info" fullName="std::type_info">
 		<includes local="no">typeinfo</includes>
 		<function virt="non-virtual" visibility="public" static="false" const="true"
 					passedBy="value">
@@ -1441,7 +1441,7 @@
 		</function>
 	</class>
 
-	<class name="ostream" fullName="std::ostream">
+	<class protection="public" name="ostream" fullName="std::ostream">
 		<includes local="no">iostream</includes>
 		<function virt="non-virtual" visibility="public" static="false" const="false"
 					passedBy="value">
@@ -1545,6 +1545,400 @@
 				</parameter>
 			</parameters>
 		</function>
+	</class>
+
+	<class protection="public" name="ofstream" fullName="std::ofstream">
+		<includes local="no">fstream</includes>
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="value">
+			<name>ofstream</name>
+			<definition>std::ofstream::ofstream</definition>
+		</function>
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="value">
+			<name>ofstream</name>
+			<definition>std::ofstream::ofstream</definition>
+			<parameters>
+				<parameter passedBy="pointer">
+					<type const="true">char</type>
+					<name>filename</name>
+				</parameter>
+			</parameters>
+		</function>
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="value">
+			<name>clear</name>
+			<type>void</type>
+			<definition>void std::ofstream::clear</definition>
+		</function>
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="value">
+			<name>eof</name>
+			<type>bool</type>
+			<definition>bool std::ofstream::eof</definition>
+		</function>
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="value">
+			<name>fail</name>
+			<type>bool</type>
+			<definition>bool std::ofstream::fail</definition>
+		</function>
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="value">
+			<name>fill</name>
+			<type>char</type>
+			<definition>char std::ofstream::fill</definition>
+		</function>
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="value">
+			<name>fill</name>
+			<type>char</type>
+			<definition>char std::ofstream::fill</definition>
+			<parameters>
+				<parameter passedBy="value">
+					<type>char</type>
+					<name>ch</name>
+				</parameter>
+			</parameters>
+		</function>
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="reference">
+			<name>flush</name>
+			<type>ostream</type>
+			<definition>ostream &amp; std::ofstream::flush</definition>
+		</function>
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="value">
+			<name>good</name>
+			<type>bool</type>
+			<definition>bool std::ofstream::good</definition>
+		</function>
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="reference">
+			<name>put</name>
+			<type>ostream</type>
+			<definition>ostream &amp; std::ofstream::put</definition>
+			<parameters>
+				<parameter passedBy="value">
+					<type>char</type>
+					<name>ch</name>
+				</parameter>
+			</parameters>
+		</function>
+		<function virt="non-virtual" visibility="public" static="true" const="false"
+					passedBy="value">
+			<name>sync_with_stdio</name>
+			<type>bool</type>
+			<definition>bool std::ofstream::sync_with_stdio</definition>
+		</function>
+		<function virt="non-virtual" visibility="public" static="true" const="false"
+					passedBy="value">
+			<name>sync_with_stdio</name>
+			<type>bool</type>
+			<definition>bool std::ofstream::sync_with_stdio</definition>
+			<parameters>
+				<parameter passedBy="value">
+					<type>bool</type>
+					<name>sync</name>
+				</parameter>
+			</parameters>
+		</function>
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="value">
+			<name>width</name>
+			<type>int</type>
+			<definition>int std::ofstream::width</definition>
+		</function>
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="value">
+			<name>width</name>
+			<type>int</type>
+			<definition>int std::ofstream::width</definition>
+			<parameters>
+				<parameter passedBy="value">
+					<type>int</type>
+					<name>w</name>
+				</parameter>
+			</parameters>
+		</function>
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="value">
+			<name>is_open</name>
+			<type>bool</type>
+			<definition>int std::ofstream::is_open</definition>
+		</function>
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="value">
+			<name>close</name>
+			<type>void</type>
+			<definition>int std::ofstream::close</definition>
+		</function>
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="value">
+			<name>open</name>
+			<type>void</type>
+			<definition>int std::ofstream::open</definition>
+			<parameters>
+				<parameter passedBy="pointer">
+					<type const="true">char</type>
+					<name>filename</name>
+				</parameter>
+			</parameters>
+		</function>
+	</class>
+
+	<class protection="public" name="istream" fullName="std::istream">
+		<includes local="no">iostream</includes>
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="value">
+			<name>bad</name>
+			<type>bool</type>
+			<definition>bool std::istream::bad</definition>
+		</function>
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="value">
+			<name>clear</name>
+			<type>void</type>
+			<definition>void std::istream::clear</definition>
+		</function>
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="value">
+			<name>eof</name>
+			<type>bool</type>
+			<definition>bool std::istream::eof</definition>
+		</function>
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="value">
+			<name>fail</name>
+			<type>bool</type>
+			<definition>bool std::istream::fail</definition>
+		</function>
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="value">
+			<name>fill</name>
+			<type>char</type>
+			<definition>char std::istream::fill</definition>
+		</function>
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="value">
+			<name>fill</name>
+			<type>char</type>
+			<definition>char std::istream::fill</definition>
+			<parameters>
+				<parameter passedBy="value">
+					<type>char</type>
+					<name>ch</name>
+				</parameter>
+			</parameters>
+		</function>
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="value">
+			<name>good</name>
+			<type>bool</type>
+			<definition>bool std::istream::good</definition>
+		</function>
+		<function virt="non-virtual" visibility="public" static="true" const="false"
+					passedBy="value">
+			<name>sync_with_stdio</name>
+			<type>bool</type>
+			<definition>bool std::istream::sync_with_stdio</definition>
+		</function>
+		<function virt="non-virtual" visibility="public" static="true" const="false"
+					passedBy="value">
+			<name>sync_with_stdio</name>
+			<type>bool</type>
+			<definition>bool std::istream::sync_with_stdio</definition>
+			<parameters>
+				<parameter passedBy="value">
+					<type>bool</type>
+					<name>sync</name>
+				</parameter>
+			</parameters>
+		</function>
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="value">
+			<name>width</name>
+			<type>int</type>
+			<definition>int std::istream::width</definition>
+		</function>
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="value">
+			<name>width</name>
+			<type>int</type>
+			<definition>int std::istream::width</definition>
+			<parameters>
+				<parameter passedBy="value">
+					<type>int</type>
+					<name>w</name>
+				</parameter>
+			</parameters>
+		</function>
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="reference">
+			<name>get</name>
+			<type>istream</type>
+			<definition>int std::istream::get</definition>
+			<parameters>
+				<parameter passedBy="reference">
+					<type>char</type>
+					<name>c</name>
+				</parameter>
+			</parameters>
+		</function>
+	</class>
+
+	<class protection="public" name="ifstream" fullName="std::ifstream">
+		<includes local="no">fstream</includes>
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="value">
+			<name>ifstream</name>
+			<definition>std::ifstream::ifstream</definition>
+		</function>
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="value">
+			<name>ifstream</name>
+			<definition>std::ifstream::ifstream</definition>
+			<parameters>
+				<parameter passedBy="pointer">
+					<type const="true">char</type>
+					<name>filename</name>
+				</parameter>
+			</parameters>
+		</function>
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="value">
+			<name>clear</name>
+			<type>void</type>
+			<definition>void std::ifstream::clear</definition>
+		</function>
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="value">
+			<name>eof</name>
+			<type>bool</type>
+			<definition>bool std::ifstream::eof</definition>
+		</function>
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="value">
+			<name>fail</name>
+			<type>bool</type>
+			<definition>bool std::ifstream::fail</definition>
+		</function>
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="value">
+			<name>fill</name>
+			<type>char</type>
+			<definition>char std::ifstream::fill</definition>
+		</function>
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="value">
+			<name>fill</name>
+			<type>char</type>
+			<definition>char std::ifstream::fill</definition>
+			<parameters>
+				<parameter passedBy="value">
+					<type>char</type>
+					<name>ch</name>
+				</parameter>
+			</parameters>
+		</function>
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="value">
+			<name>good</name>
+			<type>bool</type>
+			<definition>bool std::ifstream::good</definition>
+		</function>
+		<function virt="non-virtual" visibility="public" static="true" const="false"
+					passedBy="value">
+			<name>sync_with_stdio</name>
+			<type>bool</type>
+			<definition>bool std::ifstream::sync_with_stdio</definition>
+		</function>
+		<function virt="non-virtual" visibility="public" static="true" const="false"
+					passedBy="value">
+			<name>sync_with_stdio</name>
+			<type>bool</type>
+			<definition>bool std::ifstream::sync_with_stdio</definition>
+			<parameters>
+				<parameter passedBy="value">
+					<type>bool</type>
+					<name>sync</name>
+				</parameter>
+			</parameters>
+		</function>
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="value">
+			<name>width</name>
+			<type>int</type>
+			<definition>int std::ifstream::width</definition>
+		</function>
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="value">
+			<name>width</name>
+			<type>int</type>
+			<definition>int std::ifstream::width</definition>
+			<parameters>
+				<parameter passedBy="value">
+					<type>int</type>
+					<name>w</name>
+				</parameter>
+			</parameters>
+		</function>
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="value">
+			<name>is_open</name>
+			<type>bool</type>
+			<definition>int std::ifstream::is_open</definition>
+		</function>
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="value">
+			<name>close</name>
+			<type>void</type>
+			<definition>int std::ifstream::close</definition>
+		</function>
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="value">
+			<name>open</name>
+			<type>void</type>
+			<definition>int std::ifstream::open</definition>
+			<parameters>
+				<parameter passedBy="pointer">
+					<type const="true">char</type>
+					<name>filename</name>
+				</parameter>
+			</parameters>
+		</function>
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="reference">
+			<name>get</name>
+			<type>istream</type>
+			<definition>int std::ifstream::get</definition>
+			<parameters>
+				<parameter passedBy="reference">
+					<type>char</type>
+					<name>c</name>
+				</parameter>
+			</parameters>
+		</function>
+	</class>
+
+	<class protection="public" name="ios" fullName="std::ios">
+		<enumeration protection="public" name="fmtflags" fullName="std::ios::fmtflags">
+               <enum name="boolalpha"/>
+               <enum name="showbase"/>
+               <enum name="showpoint"/>
+               <enum name="showpos"/>
+               <enum name="skipws"/>
+               <enum name="unitbuf"/>
+               <enum name="uppercase"/>
+               <enum name="dec"/>
+               <enum name="hex"/>
+               <enum name="oct"/>
+               <enum name="fixed"/>
+               <enum name="scientific"/>
+               <enum name="internal"/>
+               <enum name="left"/>
+               <enum name="right"/>
+        </enumeration>
 	</class>
 
 </namespace>

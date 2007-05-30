@@ -44,12 +44,15 @@ namespace org { namespace xbig { namespace jni {
 	
 EXPORT std::string to_stdstring(JNIEnv* env, jstring jString);
 
+EXPORT std::wstring to_stdwstring(JNIEnv* env, jstring jString);
+
 EXPORT char* to_cstring(JNIEnv* env, jstring jString);
 
 EXPORT jstring to_jstring(JNIEnv* env, const std::string& str);
 
 EXPORT jstring to_jstring(JNIEnv* env, const char*);
 
+EXPORT jstring to_jstring(JNIEnv* env, const std::wstring&);
 
 }}}
 
