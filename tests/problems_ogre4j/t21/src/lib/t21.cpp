@@ -5,4 +5,5 @@
 
 bool ResourceGroupManager::resourceExists(ResourceGroup group, const std::string& filename) {
 	std::cout << "t21: ResourceGroupManager::resourceExists(ResourceGroup group, const std::string& filename)" << std::endl;
+	return false;
 }

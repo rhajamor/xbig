@@ -40,4 +40,5 @@ public:
 template <class T>
 typename T::pointer VectorIterator<T>::peekNextPtr() {
 	std::cout << "t31: VectorIterator<T>::peekNextPtr()" << std::endl;
+	return NULL;
 }

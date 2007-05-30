@@ -15,6 +15,6 @@ public class BasicTests {
 	@Test
 	public void test() {
 		AnimationStateIterator asi = new AnimationStateIterator();
-		ase.delete();
+		asi.delete();
 	}
 }
