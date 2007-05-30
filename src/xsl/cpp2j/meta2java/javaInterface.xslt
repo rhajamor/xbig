@@ -62,11 +62,16 @@
 		<xd:param name="buildFile">
 			ant build.xml file. Needed for called templates
 		</xd:param>
+		<xd:param name="isOuterClassTemplate">
+			Boolean value that indicates if this is an inner type of a template.
+			Usally false() execpt for some inner types.
+		</xd:param>
 	</xd:doc>
 	<xsl:template name="javaInterface">
 		<xsl:param name="config" />
 		<xsl:param name="class" />
 		<xsl:param name="buildFile" />
+		<xsl:param name="isOuterClassTemplate" as="xs:boolean"/>
 
 		<xsl:message>Generating Java interface for class <xsl:value-of select="$class/@fullName"/></xsl:message>
 
@@ -271,11 +276,6 @@
 								</xsl:choose>
 							</xsl:when>
 							<xsl:otherwise>
-								<!-- 
-								<xsl:value-of
-									select="xbig:getFullJavaName(
-														$usedType, $class, $root, $config)" />
-								 -->
 								<xsl:call-template name="javaType">
 									<xsl:with-param name="config" select="$config"/>
 									<xsl:with-param name="param" select="$generatedParam"/>
@@ -315,6 +315,16 @@
 					<xsl:with-param name="class" select="." />
 					<xsl:with-param name="buildFile"
 						select="$buildFile" />
+					<xsl:with-param name="isOuterClassTemplate">
+						<xsl:choose>
+							<xsl:when test="$isOuterClassTemplate = true() or $class/@template">
+								<xsl:sequence select="true()"/>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:sequence select="false()"/>
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:with-param>
 				</xsl:call-template>
 			</xsl:for-each>
 			<xsl:for-each select="struct">
@@ -323,6 +333,16 @@
 					<xsl:with-param name="class" select="." />
 					<xsl:with-param name="buildFile"
 						select="$buildFile" />
+					<xsl:with-param name="isOuterClassTemplate">
+						<xsl:choose>
+							<xsl:when test="$isOuterClassTemplate = true() or $class/@template">
+								<xsl:sequence select="true()"/>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:sequence select="false()"/>
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:with-param>
 				</xsl:call-template>
 			</xsl:for-each>
 
@@ -354,6 +374,16 @@
 							<xsl:with-param name="class" select="." />
 							<xsl:with-param name="buildFile"
 								select="$buildFile" />
+							<xsl:with-param name="isOuterClassTemplate">
+								<xsl:choose>
+									<xsl:when test="$isOuterClassTemplate = true() or $class/@template">
+										<xsl:sequence select="true()"/>
+									</xsl:when>
+									<xsl:otherwise>
+										<xsl:sequence select="false()"/>
+									</xsl:otherwise>
+								</xsl:choose>
+							</xsl:with-param>
 						</xsl:call-template>
 					</xsl:for-each>
 				</xsl:if>
@@ -366,7 +396,7 @@
 			</xsl:variable>
 
 			<!-- As there are problems with interfaces for templates, they don't get any methods -->
-			<xsl:if test="not($class/@template)">
+			<xsl:if test="not($class/@template) and not($isOuterClassTemplate = true())">
 
 				<!-- handling of member functions -->
 				<xsl:for-each select="$methodsForJava/function">
@@ -543,7 +573,7 @@
 			</xsl:if>
 
 			<!-- generate comment for templates -->
-			<xsl:if test="$class/@template">
+			<xsl:if test="$class/@template or $isOuterClassTemplate = true()">
 				<xsl:text>
 					// interfaces for templates do not get any methods&#10;
 				</xsl:text>

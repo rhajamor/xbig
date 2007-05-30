@@ -123,6 +123,7 @@
 						<xsl:with-param name="config" select="$config" />
 						<xsl:with-param name="class" select="." />
 						<xsl:with-param name="buildFile" select="$buildFile" />
+						<xsl:with-param name="isOuterClassTemplate" select="false()" />
 					</xsl:call-template>
 
 				</xsl:result-document>
