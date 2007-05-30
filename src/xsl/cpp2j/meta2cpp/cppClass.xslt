@@ -69,10 +69,9 @@
 		<xsl:param name="lib_dir" />
 		<xsl:param name="config" />
 
-		<!-- do not generate content if type is on ignore list -->
+		<!-- do not generate files if type is on ignore list -->
 		<xsl:if
-			test="not($ignore_list/ignore_list/item[. = @fullName])">
-
+			test="not($ignore_list/ignore_list/item[. = current()/@fullName])">
 
 			<xsl:message>Generating C code for class <xsl:value-of select="./@fullName" /></xsl:message>
 			<!-- we cannot create JNI functions for templates -->
