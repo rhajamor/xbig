@@ -1406,14 +1406,9 @@
 					<xsl:attribute name="passedBy" select="$passedBy" />
 				</xsl:if>
 
-				<!-- remove const prefix or postfix, take care of bug 1714365 -->
+				<!-- remove const prefix or postfix, take care of bugs 1714365 and 1723314 -->
 				<xsl:variable name="non_const_type">
 					<xsl:choose>
-						<xsl:when test="$isFirstChildTextNode = true() and count(type/node()) > 1 and starts-with($type, 'const')">
-							<!-- <xsl:value-of
-								select="replace($type/child::text()[1], '[ \t]*^const[ \t]', '')" /> -->
-							<xsl:value-of select="type/node()[position() != 1]"/>
-						</xsl:when>
 						<xsl:when test="$isFirstChildTextNode = true() and starts-with($type, 'const')">
 							<xsl:value-of select="replace($type, '[ \t]*^const[ \t]', '')"/>
 						</xsl:when>

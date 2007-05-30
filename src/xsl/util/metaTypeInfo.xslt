@@ -35,9 +35,12 @@
 	xmlns:xdt="http://www.w3.org/2005/xpath-datatypes"
 	xmlns:xd="http://www.pnp-software.com/XSLTdoc"
 	xmlns:xbig="http://xbig.sourceforge.net/XBiG"
-	xmlns:str="http://exslt.org/strings">
+	xmlns:str="http://exslt.org/strings"
+	xmlns:java="java:org.xbig.xsltext.XsltExt" 
+	extension-element-prefixes="java">
 
 	<xsl:import href="../exslt/str.split.template.xsl" />
+
 
 	<xd:doc type="stylesheet">
 		<xd:short>Templates and function to handle types.</xd:short>
@@ -716,17 +719,10 @@
 
 		<!-- handle the type parameters -->
 		<xsl:variable name="templateBracket">
-			<xsl:variable name="bracket"
-				select="substring-after($type, '&lt;')" />
-			<xsl:variable name="insideBracket"
-				select="normalize-space(substring($bracket, 0, string-length($bracket)-1))" />
-
 			<xsl:variable name="insideBracketResolved">
 				<xsl:variable name="tokens">
-					<xsl:call-template name="str:split">
-						<xsl:with-param name="string"
-							select="$insideBracket" />
-						<xsl:with-param name="pattern" select="','" />
+				 	<xsl:call-template name="xbig:getListOfTypeParameters">
+						<xsl:with-param name="type" select="$type" />
 					</xsl:call-template>
 				</xsl:variable>
 				<xsl:for-each select="$tokens/*">
@@ -759,6 +755,223 @@
 		<xsl:value-of
 			select="concat($templateBaseType, $templateBracket)" />
 	</xsl:function>
+
+
+
+	<xd:doc type="template">
+		<xd:short>
+			Takes a type containing type parameters. Returns a list of it's parameters.
+			Does not fully qualify them.
+			E.g. std::vector &lt; std::pair &lt; String, String &gt; &gt; 
+			becomes std::pair &lt; String, String &gt;.
+			or
+			std::map &lt; String, A &gt; becomes String and A.
+		</xd:short>
+		<xd:param name="type">type name to be resolved. Contains unresolved type parameters.</xd:param>
+	</xd:doc>
+	<xsl:template name="xbig:getListOfTypeParameters">
+		<xsl:param name="type" as="xs:string" />
+
+		<xsl:variable name="bracket"
+			select="substring-after($type, '&lt;')" />
+		<xsl:variable name="insideBracket"
+			select="normalize-space(substring($bracket, 0, string-length(normalize-space($bracket))))" />
+
+		<xsl:choose>
+			<!-- easiest case: no further templates as type parameters -->
+			<xsl:when test="not(contains($insideBracket, '&lt;'))">
+				<xsl:for-each select="tokenize($insideBracket, ',')">
+					<xsl:element name="typeParameter">
+						<xsl:sequence select="normalize-space(.)"/>
+					</xsl:element>
+				</xsl:for-each>
+			</xsl:when>
+
+			<!-- templates as type parameters: ',' could be inside one type parameter -->
+			<xsl:otherwise>
+
+				<xsl:call-template name="xbig:parseTemplateContainingTypeParameters">
+					<xsl:with-param name="remainingString" select="$insideBracket" />
+				</xsl:call-template>
+
+			</xsl:otherwise>
+		</xsl:choose>
+
+	</xsl:template>
+
+
+
+	<xd:doc type="template">
+		<xd:short>
+			Takes care of templates as type parameters, 
+			to be called by xbig:getListOfTypeParameters only!
+		</xd:short>
+		<xd:param name="remainingString">Unprocessed part of type parameter string.</xd:param>
+	</xd:doc>
+	<xsl:template name="xbig:parseTemplateContainingTypeParameters">
+		<xsl:param name="remainingString" as="xs:string" />
+
+		<xsl:choose>
+			<!-- recursion end on part after last ',' -->
+			<xsl:when test="not(contains($remainingString, ','))">
+				<xsl:element name="typeParameter">
+					<xsl:sequence select="normalize-space($remainingString)"/>
+				</xsl:element>
+			</xsl:when>
+
+			<!-- template as type parameter -->
+			<xsl:when test="contains(substring-before($remainingString, ','), '&lt;')">
+				<xsl:variable name="tokensByComma">
+					<xsl:for-each select="tokenize($remainingString, ',')">
+						<xsl:element name="token">
+							<xsl:sequence select="normalize-space(.)"/>
+						</xsl:element>
+					</xsl:for-each>
+				</xsl:variable>
+
+				<xsl:choose>
+					<!-- type parameter is a template and has only one parameter itself -->
+					<xsl:when test="java:countOccurrencesInString($tokensByComma/*[1], '&lt;') = 
+									 java:countOccurrencesInString($tokensByComma/*[1], '&gt;')">
+						<xsl:element name="token">
+							<xsl:sequence select="$tokensByComma/*[1]"/>
+						</xsl:element>
+						<xsl:call-template name="xbig:parseTemplateContainingTypeParameters">
+							<xsl:with-param name="remainingString" 
+								select="normalize-space(substring-after($remainingString, ','))" />
+						</xsl:call-template>
+					</xsl:when>
+
+					<!-- type parameter is a template and has more than one parameter itself -->
+					<xsl:otherwise>
+						<xsl:call-template name="xbig:compareTokensByCommaWithLessThan">
+							<xsl:with-param name="firstString" select="$tokensByComma/*[1]" />
+							<xsl:with-param name="tokensByComma" select="$tokensByComma" />
+							<xsl:with-param name="tokenToCompare" select="2" />
+						</xsl:call-template>
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:when>
+
+			<!-- no template as type parameter -->
+			<xsl:otherwise>
+				<xsl:element name="typeParameter">
+					<xsl:sequence select="normalize-space(substring-before($remainingString, ','))"/>
+				</xsl:element>
+				<xsl:call-template name="xbig:parseTemplateContainingTypeParameters">
+					<xsl:with-param name="remainingString" 
+						select="normalize-space(substring-after($remainingString, ','))" />
+				</xsl:call-template>
+			</xsl:otherwise>
+		</xsl:choose>
+
+	</xsl:template>
+
+
+
+	<xd:doc type="template">
+		<xd:short>
+			Takes care of templates as type parameters which have more than one parameter themselfs, 
+			to be called by xbig:parseTemplateContainingTypeParameters only!
+		</xd:short>
+		<xd:param name="firstString">Part of type parameter string before a ','.</xd:param>
+		<xd:param name="tokensByComma">List of type parameter string parts splitted by ','.</xd:param>
+		<xd:param name="tokenToCompare">Number of part to compare firstString to.</xd:param>
+	</xd:doc>
+	<xsl:template name="xbig:compareTokensByCommaWithLessThan">
+		<xsl:param name="firstString" as="xs:string"/>
+		<xsl:param name="tokensByComma"/>
+		<xsl:param name="tokenToCompare" as="xs:integer"/>
+
+			<xsl:choose>
+				<!-- found corresponding token -->
+				<xsl:when test="(java:countOccurrencesInString($firstString, '&lt;') + 
+								 java:countOccurrencesInString($tokensByComma/*[$tokenToCompare], '&lt;')
+								) -
+								(java:countOccurrencesInString($firstString, '&gt;') + 
+								 java:countOccurrencesInString($tokensByComma/*[$tokenToCompare], '&gt;')
+								)
+								= 0">
+					<xsl:element  name="typeParameter">
+						<xsl:sequence
+							select="concat($firstString, ',', $tokensByComma/*[$tokenToCompare])"/>
+					</xsl:element>
+
+					<!-- next recursion step ('outer loop') -->
+					<xsl:choose>
+						<xsl:when test="count($tokensByComma/*) &gt;= $tokenToCompare+2">
+							<xsl:call-template name="xbig:parseTemplateContainingTypeParameters">
+								<xsl:with-param name="remainingString" select="
+									xbig:rebuildRemainingStringFromTokens(
+									$tokensByComma/*[$tokenToCompare+1],
+									$tokensByComma, $tokenToCompare+2)" />
+							</xsl:call-template>
+						</xsl:when>
+						<xsl:when test="count($tokensByComma/*) &gt;= $tokenToCompare+1">
+							<xsl:call-template name="xbig:parseTemplateContainingTypeParameters">
+								<xsl:with-param name="remainingString"
+									select="$tokensByComma/*[$tokenToCompare+1]" />
+							</xsl:call-template>
+						</xsl:when>
+						<xsl:otherwise>
+							<!-- nothing, string already fully parsed -->
+						</xsl:otherwise>
+					</xsl:choose>
+				</xsl:when>
+
+				<!-- recursion end ('inner loop') -->
+				<xsl:when test="count($tokensByComma/*) &lt; $tokenToCompare">
+					<xsl:variable name="rebuildRemainingString" select="
+						xbig:rebuildRemainingStringFromTokens($tokensByComma/*[1], $tokensByComma, 2)"/>
+					<xsl:message>ERROR parsing template parameter string: <xsl:value-of select="$rebuildRemainingString"/>!</xsl:message>
+					<xsl:element name="typeParameter">
+						<xsl:sequence select="$rebuildRemainingString"/>
+					</xsl:element>
+				</xsl:when>
+
+				<!-- check next token (recursion of 'inner loop') -->
+				<xsl:otherwise>
+					<xsl:call-template name="xbig:compareTokensByCommaWithLessThan">
+						<xsl:with-param name="firstString"
+							select="concat($firstString, $tokensByComma/*[$tokenToCompare])" />
+						<xsl:with-param name="tokensByComma" select="$tokensByComma" />
+						<xsl:with-param name="tokenToCompare" select="$tokenToCompare+1" />
+					</xsl:call-template>
+				</xsl:otherwise>
+			</xsl:choose>
+
+	</xsl:template>
+
+
+
+	<xd:doc type="template">
+		<xd:short>
+			Builds rest of a type parameter string from tokens which has been splitted by ',', 
+			to be called by xbig:compareTokensByCommaWithLessThan only!
+		</xd:short>
+		<xd:param name="baseString">Part of type parameter string after a complete parameter.</xd:param>
+		<xd:param name="tokensByComma">List of type parameter string parts splitted by ','.</xd:param>
+		<xd:param name="tokenToStartAt">Number of part to concat to baseString.</xd:param>
+	</xd:doc>
+	<xsl:function name="xbig:rebuildRemainingStringFromTokens" as="xs:string">
+		<xsl:param name="baseString" as="xs:string"/>
+		<xsl:param name="tokensByComma"/>
+		<xsl:param name="tokenToStartAt" as="xs:integer"/>
+
+		<xsl:choose>
+			<xsl:when test="count($tokensByComma) &gt; $tokenToStartAt">
+				<xsl:sequence select="xbig:rebuildRemainingStringFromTokens(concat(
+					$baseString, ',', $tokensByComma/*[$tokenToStartAt]),
+					$tokensByComma, $tokenToStartAt+1)"/>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:sequence select="concat($baseString, ',', $tokensByComma/*[$tokenToStartAt])"/>
+			</xsl:otherwise>
+		</xsl:choose>
+
+	</xsl:function>
+
+
 
 	<xd:doc type="function">
 		<xd:short>Helper function to check if a param or return value is const. Return <b>true</b> if param const, otherwise false.</xd:short>

@@ -131,7 +131,8 @@
 				<!-- find and print java name of baseclass -->
 				<!-- TODO we need something like getFullJavaNameForTemplate() -->
 				<!-- TODO handle pointers as template parameters -->
-				<!-- TODO check what happens if there is a typedef for a template which inherits something -->
+				<!-- TODO check what happens if there is a typedef for a template
+						  which inherits something -->
 				<xsl:variable name="baseClassJavaName">
 					<xsl:choose>
 						<xsl:when
@@ -268,15 +269,23 @@
 								</xsl:choose>
 							</xsl:when>
 							<xsl:otherwise>
+								<!-- 
 								<xsl:value-of
 									select="xbig:getFullJavaName(
 														$usedType, $class, $root, $config)" />
+								 -->
+								<xsl:call-template name="javaType">
+									<xsl:with-param name="config" select="$config"/>
+									<xsl:with-param name="param" select="$generatedParam"/>
+									<xsl:with-param name="class" select="$class"/>
+									<xsl:with-param name="typeName" select="$usedType"/>
+								</xsl:call-template>
 							</xsl:otherwise>
 						</xsl:choose>
 
 						<!-- comma for more than one type parameter -->
 						<xsl:if test="position()!=last()">
-							<xsl:text>,</xsl:text>
+							<xsl:text>,&#32;</xsl:text>
 						</xsl:if>
 					</xsl:for-each>
 					<xsl:value-of select="' &gt;'" />
@@ -284,7 +293,7 @@
 
 				<!-- gen commas as seperator between base interfaces -->
 				<xsl:if test="position()!=last()">
-					<xsl:text>,</xsl:text>
+					<xsl:text>,&#32;</xsl:text>
 				</xsl:if>
 
 			</xsl:for-each>

@@ -548,14 +548,9 @@
 		<xsl:param name="typedef" />
 
 		<!-- build list of type parameters -->
-		<xsl:variable name="bracket"
-			select="substring-after($typedef/@basetype, '&lt;')" />
-		<xsl:variable name="insideBracket"
-			select="normalize-space(substring($bracket, 0, string-length($bracket)-1))" />
 		<xsl:variable name="tokens">
-			<xsl:call-template name="str:split">
-				<xsl:with-param name="string" select="$insideBracket" />
-				<xsl:with-param name="pattern" select="','" />
+			<xsl:call-template name="xbig:getListOfTypeParameters">
+				<xsl:with-param name="type" select="$typedef/@basetype" />
 			</xsl:call-template>
 		</xsl:variable>
 
