@@ -91,24 +91,23 @@
 			<xsl:choose>
 				<xsl:when test="$typeIsTemplate = true()">
 					<!-- resolve types of template parameters -->
-					<xsl:variable name="bracket" select="substring-after($typeName, '&lt;')"/>
-					<xsl:variable name="insideBracket"
-						select="normalize-space(substring($bracket, 0, string-length($bracket)-1))"/>
 					<xsl:variable name="insideBracketResolved">
 						<xsl:variable name="tokens">
-							<xsl:call-template name="str:split">
-								<xsl:with-param name="string" select="$insideBracket" />
-								<xsl:with-param name="pattern" select="','" />
+							<xsl:call-template name="xbig:getListOfTypeParameters">
+								<xsl:with-param name="type" select="$typeName" />
 							</xsl:call-template>
 						</xsl:variable>
 						<xsl:for-each select="$tokens/*">
 							<xsl:variable name="normalizedType" select="normalize-space(.)"/>
+							<xsl:variable name="resolvedToken"
+								select="xbig:resolveTypedef($normalizedType, $class, $root)"/>
 							<xsl:choose>
 								<!-- primitive Types are handled different -->
-								<xsl:when test="$config/config/java/types/type[@meta = $normalizedType]">
+								<xsl:when test="$config/config/java/types/type[@meta = $resolvedToken]">
 									<xsl:value-of select="$config/config/java/types/type
-															[@meta = $normalizedType]/@genericParameter"/>
+															[@meta = $resolvedToken]/@genericParameter"/>
 								</xsl:when>
+
 								<xsl:otherwise>
 									<xsl:call-template name="javaType">
 										<xsl:with-param name="config" select="$config" />
