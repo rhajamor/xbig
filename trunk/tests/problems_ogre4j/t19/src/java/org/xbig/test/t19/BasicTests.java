@@ -6,6 +6,7 @@ package org.xbig.test.t19;
 import org.junit.Assert;
 import org.junit.Test;
 import org.xbig.Matrix3;
+import org.xbig.IMatrix3;
 /**
  * @author nenning
  *
@@ -16,7 +17,8 @@ public class BasicTests {
 	public void test() {
 		Matrix3 m = new Matrix3();
 		m.Inverse(m, 0.0F);
-		m.Inverse(0.0F);
+        IMatrix3 tmp = m.Inverse(0.0F);
+        tmp.delete();
 		m.delete();
 	}
 }

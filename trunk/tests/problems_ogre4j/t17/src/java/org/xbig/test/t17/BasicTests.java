@@ -15,10 +15,10 @@ public class BasicTests {
 	
 	@Test
 	public void test() {
-		StringPointer sp = new StringPointer("");
+		//StringPointer sp = new StringPointer("");
 		TextureUnitState tus = new TextureUnitState();
-		tus.setCubicTextureName(sp, false);
+		tus.setCubicTextureName("", false);
 		tus.delete();
-		sp.delete();
+		//sp.delete();
 	}
 }

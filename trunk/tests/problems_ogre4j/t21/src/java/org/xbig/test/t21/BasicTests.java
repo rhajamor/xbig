@@ -17,7 +17,11 @@ public class BasicTests {
 	public void test() {
 		StringPointer sp = new StringPointer("");
 		ResourceGroupManager rgm = new ResourceGroupManager();
-		resourceExists(, sp);
+        //ResourceGroupManager.ResourceGroup  rg = new ResourceGroupManager.ResourceGroup();
+
+        //rgm.resourceExists(rg, sp);
+
+        //rg.delete();
 		rgm.delete();
 		sp.delete();
 	}

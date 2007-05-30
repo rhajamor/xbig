@@ -42,4 +42,5 @@ typedef MapIterator<AnimationStateMap> AnimationStateIterator;
 template <class T>
 typename T::mapped_type* MapIterator<T>::peekNextValuePtr() {
 	std::cout << "t30: MapIterator::peekNextValuePtr()" << std::endl;
+	return NULL;
 }

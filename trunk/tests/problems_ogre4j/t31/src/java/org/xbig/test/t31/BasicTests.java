@@ -15,6 +15,6 @@ public class BasicTests {
 	@Test
 	public void test() {
 		CompositorChain.InstanceIterator ii = new CompositorChain.InstanceIterator();
-		ii.delete()
+		ii.delete();
 	}
 }

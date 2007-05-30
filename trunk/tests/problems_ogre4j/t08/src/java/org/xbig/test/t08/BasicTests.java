@@ -21,14 +21,15 @@ public class BasicTests {
 		nti.delete();
 		ntl.delete();
 
-		StringPointer plugin = new StringPointer("");
-		StringPointer config = new StringPointer("");
-		StringPointer log = new StringPointer("");
-		Root root = new Root(plugin, config, log);
+//		StringPointer plugin = new StringPointer("");
+//		StringPointer config = new StringPointer("");
+//		StringPointer log = new StringPointer("");
+//		Root root = new Root(plugin, config, log);
+        Root root = new Root("", "", "");
 		root.saveConfig();
 		root.delete();
-		plugin.delete();
-		config.delete();
-		log.delete();
+//		plugin.delete();
+//		config.delete();
+//		log.delete();
 	}
 }
