@@ -123,6 +123,10 @@
 							"$config/config/cpp/jni/types/type[@meta=$resolvedType][not(@pass)]/@jni" />
 					</xsl:when>
 
+					<xsl:when test="$param/type/@pointerPointer = 'true'">
+						<xsl:value-of select="'jlong'"/>
+					</xsl:when>
+
 					<!-- print first type found in result list -->
 					<xsl:otherwise>
 						<xsl:value-of select="$type_info/type/@jni" />
