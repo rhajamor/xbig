@@ -5,6 +5,7 @@
 	<!-- bug 1723312 -->
 	<item>Ogre::CompositorScriptCompiler::TokenActionMap</item>
 	<item>Ogre::MaterialSerializer::AttribParserList</item>
+	<item>Ogre::MaterialScriptCompiler::TokenActionMap</item>
 
 	<!-- bug 1724332 -->
 	<item>Ogre::ExceptionFactory</item>

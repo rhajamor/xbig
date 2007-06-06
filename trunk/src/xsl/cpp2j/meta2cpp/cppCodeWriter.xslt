@@ -122,8 +122,16 @@
 		<!-- add '*' for pointer pointer -->
 		<xsl:variable name="pointerPointer">
 			<xsl:choose>
-				<xsl:when test="$param/type/@pointerPointer = 'true'">
+				<xsl:when test="$param/type/@pointerPointer = 'true' and $param/name() = 'parameter'">
 					<xsl:value-of select="'*'" />
+				</xsl:when>
+				<!-- This is an easy and pragmatic solution (others would call it a hack)
+					 for a part of bug 1728998.
+					 If the return type is a pointer pointer it is declared partly const always.
+					 See Ogre::SceneNode::ConstObjectIterator::peekNextValuePtr.
+				 -->
+				<xsl:when test="$param/type/@pointerPointer = 'true' and $param/name() = 'function'">
+					<xsl:value-of select="' const *'" />
 				</xsl:when>
 				<xsl:otherwise>
 					<xsl:value-of select="''" />
@@ -143,17 +151,8 @@
 				<!-- references need different conversion and return types -->
 				<xsl:when
 					test="$type_info/type/@pass='reference' and $param/definition">
-					<xsl:choose>
-						<!-- if const -->
-						<xsl:when test="$param/type/@const eq 'true'">
-							<xsl:value-of
-								select="concat('const ', $type_info/type/@returntype)" />
-						</xsl:when>
-						<xsl:otherwise>
-							<xsl:value-of
-								select="$type_info/type/@returntype" />
-						</xsl:otherwise>
-					</xsl:choose>
+					<xsl:value-of
+						select="concat($const, $type_info/type/@returntype)" />
 				</xsl:when>
 				<xsl:otherwise>
 					<!-- if const -->
@@ -266,6 +265,10 @@
 			</xsl:call-template>
 		</xsl:variable>
 
+		<!-- const or not, for a later concat -->
+		<xsl:variable name="const"
+			select="if($param/type/@const eq 'true') then 'const ' else ''" />
+
 		<!-- shortcut for parameter name -->
 		<!-- if there is no param name in original lib -->
 		<xsl:variable name="parameterPosition" select="$paramPosition" />
@@ -312,7 +315,7 @@
 					<xsl:variable name="part5" select="$param_name" />
 					<xsl:variable name="part6" select="')'" />
 					<xsl:value-of
-						select="concat($part1, $part2, $part3, $part4, $part5, $part6)" />
+						select="concat($part1, $const, $part2, $part3, $part4, $part5, $part6)" />
 				</xsl:when>
 
 				<!-- if this is a typedef for a template -->
@@ -327,7 +330,7 @@
 					<xsl:variable name="part5" select="$param_name" />
 					<xsl:variable name="part6" select="')'" />
 					<xsl:value-of
-						select="concat($part1, $part2, $part3, $part4, $part5, $part6)" />
+						select="concat($part1, $const, $part2, $part3, $part4, $part5, $part6)" />
 				</xsl:when>
 
 				<!-- test for enums -->
@@ -350,7 +353,7 @@
 					<xsl:variable name="part5" select="$param_name" />
 					<xsl:variable name="part6" select="')'" />
 					<xsl:value-of
-						select="concat($part1, $part2, $part3, $part4, $part5, $part6)" />
+						select="concat($part1, $const, $part2, $part3, $part4, $part5, $part6)" />
 				</xsl:when>
 
 				<xsl:otherwise>

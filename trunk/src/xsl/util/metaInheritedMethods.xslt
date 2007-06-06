@@ -310,7 +310,8 @@
 						<xsl:when test="$equalSiblings/* = true()">
 							<!-- OK, we know this method is duplicate, but we have to generate it once -->
 							<!-- again the id trick -->
-							<!-- we must take the first one, to use the correct class name in JNI for multiple inheritance -->
+							<!-- we must take the first one, to use the correct class name in JNI for multiple inheritance
+								 handling of multiple inheritance has changed to support abstract classes as return types -->
 							<xsl:if
 								test="count(../function[name = $currentMethod/name][@const = $currentMethod/@const][position() = 1] | $currentMethod) = 1">
 								<xsl:copy-of select="." />
@@ -350,9 +351,13 @@
 			Find all inherited methods, including base class c-tors and
 			overridden methods. For internal usage. Is recursive.
 		</xd:short>
-		<xd:param name="config">config file.</xd:param>
-		<xd:param name="class">class or struct which shall be expanded with it's inherited methods.</xd:param>
-		<xd:param name="baseClassTypedef">optional parameter. Needed if base class is a template.</xd:param>
+		<xd:param name="config">Config file.</xd:param>
+		<xd:param name="class">
+			Class or struct which shall be expanded with it's inherited methods.
+		</xd:param>
+		<xd:param name="baseClassTypedef">
+			Optional parameter. Needed if base class is a template.
+		</xd:param>
 	</xd:doc>
 	<xsl:template name="findAllInheritedMethods">
 		<xsl:param name="config" />

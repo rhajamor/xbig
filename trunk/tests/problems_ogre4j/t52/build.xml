@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE AntProject []>
+<?xml version="1.0" encoding="UTF-8"?> <!DOCTYPE AntProject []>
 
 <!--
 	
@@ -24,48 +23,29 @@
 	Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 	http://www.gnu.org/copyleft/lesser.txt.
 	
-	Author: Kai Klesatschke
+	Author: Frank Bielig
 	
 -->
 
 
-<project name="Ogre3D" default="all" basedir=".">
+<project name="t52" default="all" basedir=".">
 
 	<property name="dir.cur" location="." />
-	<property name="dir.top" location="../.." />
-	<property name="lib.name" value="Ogre3D" />
-
+	<property name="dir.top" location="../../.." />
+	<property name="lib.name" value="t52" />
+	
 	<import file="${dir.top}/src/ant/cpp2j.xml" />
-
+	
 	<!-- Initialization -->
-	<target name="init" depends="cpp2j.init">
-	</target>
-
-	<!-- Compilation of base library -->
-	<target name="compile-base-lib">
-		<ant dir="../../src/c" inheritAll="false"/>
-		<ant dir="../../src/java" inheritAll="false"/>
-	</target>
+	<target name="init" depends="cpp2j.init"></target>
 
 	<!-- Compilation of test library -->
 	<target name="compile-lib-base" depends="init">
-		<cpp-shared-lib name="Ogre3D">
-			<moreincludes>
-				<includepath path="${dir.cpp.inc}/OGRE" />
-			</moreincludes>
-		</cpp-shared-lib>
-		<cpp-shared-test name="simple" libs="Ogre3D">
-			<moreincludes>
-				<includepath path="${dir.cpp.inc}/OGRE" />
-			</moreincludes>
-		</cpp-shared-test>
+		<cpp-shared-lib name="t52" />
+		<cpp-shared-test name="simple" libs="t52" />
 	</target>
 
-	<!--
-	<target name="all" depends="compile-base-lib, compile-lib-base, javalib-test">
-	</target>
-	-->
-	<target name="all" depends="compile-base-lib, doxygen2meta, meta2java, meta2cpp"/>
+	<target name="all" depends="compile-lib-base, javalib-test"></target>
 
 	<target name="clean" depends="cpp-clean">
 		<delete dir="${dir.cpp.build}" />

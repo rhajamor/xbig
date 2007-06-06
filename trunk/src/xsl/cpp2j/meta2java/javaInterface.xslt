@@ -134,164 +134,69 @@
 			<xsl:for-each select="inherits/baseClass">
 
 				<!-- find and print java name of baseclass -->
-				<!-- TODO we need something like getFullJavaNameForTemplate() -->
-				<!-- TODO handle pointers as template parameters -->
 				<!-- TODO check what happens if there is a typedef for a template
 						  which inherits something -->
-				<xsl:variable name="baseClassJavaName">
-					<xsl:choose>
-						<xsl:when
-							test="contains(./@fullBaseClassName, '&lt;')">
-							<!-- generate a meta parameter element for type parameter -->
-							<xsl:variable name="generatedParam">
-								<xsl:element name="param">
-									<xsl:attribute name="passedBy"
-										select="'value'" />
-									<xsl:element name="type">
-										<xsl:value-of
-											select="./@fullBaseClassName" />
-									</xsl:element>
-								</xsl:element>
-							</xsl:variable>
-
-							<xsl:call-template name="javaType">
-								<xsl:with-param name="config"
-									select="$config" />
-								<xsl:with-param name="param"
-									select="$generatedParam/*" />
-								<xsl:with-param name="class"
-									select="$class" />
-								<xsl:with-param name="typeName"
-									select="./@fullBaseClassName" />
-							</xsl:call-template>
-						</xsl:when>
-						<xsl:otherwise>
-							<xsl:value-of
-								select="xbig:getFullJavaName(
-													./@fullBaseClassName, $class, $root, $config)" />
-						</xsl:otherwise>
-					</xsl:choose>
-				</xsl:variable>
-				<xsl:value-of select="$baseClassJavaName" />
-
-				<!-- if this class is a typedef for a template, we have to use type parameters -->
-				<!-- generate no type parameters if type is on ignore_list -->
-				<xsl:if test="$class/typeparameters and
-								not($ignore_list/ignore_list/item[. = $class/@fullName])">
-					<xsl:value-of select="'&lt; '" />
-					<xsl:for-each
-						select="$class/typeparameters/typepara">
-
-						<!-- find out which type is used as parameter in typedef -->
-						<xsl:variable name="typeWithoutPass">
-							<xsl:choose>
-								<xsl:when test="contains(@used, '*')">
-									<xsl:value-of
-										select="normalize-space(substring-before(@used, '*'))" />
-								</xsl:when>
-								<xsl:when
-									test="contains(@used, '&amp;')">
-									<xsl:value-of
-										select="substring-before(@used, '&amp;')" />
-								</xsl:when>
-								<xsl:otherwise>
-									<xsl:value-of select="@used" />
-								</xsl:otherwise>
-							</xsl:choose>
-						</xsl:variable>
-
-						<!-- remove global namespace prefix -->
-						<xsl:variable name="typeWithoutNSprefix">
-							<xsl:choose>
-								<xsl:when
-									test="starts-with($typeWithoutPass, '::')">
-									<xsl:value-of
-										select="substring-after($typeWithoutPass, '::')" />
-								</xsl:when>
-								<xsl:otherwise>
-									<xsl:value-of
-										select="$typeWithoutPass" />
-								</xsl:otherwise>
-							</xsl:choose>
-						</xsl:variable>
-
-						<!-- resolve typedefs -->
-						<xsl:variable name="resolvedType"
-							select="xbig:resolveTypedef(
-												$typeWithoutNSprefix, $class, $root)" />
-
-						<xsl:variable name="usedType"
-							select="$resolvedType" />
-
-						<!-- find out how a parameter is passed in typedef -->
-						<xsl:variable name="usedPassedBy">
-							<xsl:choose>
-								<xsl:when test="contains(@used, '*')">
-									<xsl:value-of select="'pointer'" />
-								</xsl:when>
-								<xsl:when
-									test="contains(@used, '&amp;')">
-									<xsl:value-of select="'reference'" />
-								</xsl:when>
-								<xsl:otherwise>
-									<xsl:value-of select="'value'" />
-								</xsl:otherwise>
-							</xsl:choose>
-						</xsl:variable>
-
-						<!-- generate a meta parameter element for type parameter -->
-						<xsl:variable name="generatedParam">
-							<xsl:element name="param">
-								<xsl:attribute name="passedBy"
-									select="$usedPassedBy" />
-								<xsl:element name="type">
-									<xsl:value-of select="$usedType" />
-								</xsl:element>
-							</xsl:element>
-						</xsl:variable>
-
-						<!-- write java type to result document -->
+				<xsl:choose>
+					<!-- this class is a typedef for a template -->
+					<xsl:when test="./@originalTypedefBasetype">
 						<xsl:choose>
-							<!-- check for primitive types -->
-							<xsl:when
-								test="$config/config/java/types/type[@meta = $usedType]">
-								<xsl:choose>
-									<xsl:when
-										test="$usedPassedBy = 'value'">
-										<xsl:value-of
-											select="$config/config/java/types/type
-													  [@meta = $usedType]/@genericParameter" />
-									</xsl:when>
-									<xsl:otherwise>
-										<xsl:call-template
-											name="javaPointerClass">
-											<xsl:with-param
-												name="config" select="$class" />
-											<xsl:with-param name="param"
-												select="$generatedParam/*" />
-											<xsl:with-param
-												name="typeName" select="$usedType" />
-										</xsl:call-template>
-									</xsl:otherwise>
-								</xsl:choose>
-							</xsl:when>
-							<xsl:otherwise>
+
+							<!-- generate no type parameters if type is on ignore_list -->
+							<xsl:when test="not($ignore_list/ignore_list/item[. = $class/@fullName])">
+								<xsl:variable name="generatedParam">
+									<xsl:element name="param">
+										<xsl:attribute name="passedBy" select="'value'" />
+										<xsl:element name="type">
+											<xsl:value-of select="./@originalTypedefBasetype" />
+										</xsl:element>
+									</xsl:element>
+								</xsl:variable>
 								<xsl:call-template name="javaType">
 									<xsl:with-param name="config" select="$config"/>
 									<xsl:with-param name="param" select="$generatedParam"/>
 									<xsl:with-param name="class" select="$class"/>
-									<xsl:with-param name="typeName" select="$usedType"/>
+									<xsl:with-param name="typeName" 
+											select="./@originalTypedefBasetype"/>
+									<xsl:with-param name="writingNativeMethod" select="false()" />
+									<xsl:with-param name="isTypeParameter" select="false()" />
 								</xsl:call-template>
+							</xsl:when>
+
+							<!-- this type is on ignore list -->
+							<xsl:otherwise>
+								<xsl:value-of select="xbig:getFullJavaName(
+											./@fullBaseClassName, $class, $root, $config)" />
 							</xsl:otherwise>
 						</xsl:choose>
+					</xsl:when>
 
-						<!-- comma for more than one type parameter -->
-						<xsl:if test="position()!=last()">
-							<xsl:text>,&#32;</xsl:text>
-						</xsl:if>
-					</xsl:for-each>
-					<xsl:value-of select="' &gt;'" />
-				</xsl:if><!-- type parameters for typedefs for templates -->
+					<!-- class inherits a template -->
+					<xsl:when test="contains(./@fullBaseClassName, '&lt;')">
+						<xsl:variable name="generatedParam">
+							<xsl:element name="param">
+								<xsl:attribute name="passedBy" select="'value'" />
+								<xsl:element name="type">
+									<xsl:value-of select="./@originalTypedefBasetype" />
+								</xsl:element>
+							</xsl:element>
+						</xsl:variable>
+						<xsl:call-template name="javaType">
+							<xsl:with-param name="config" select="$config"/>
+							<xsl:with-param name="param" select="$generatedParam"/>
+							<xsl:with-param name="class" select="$class"/>
+							<xsl:with-param name="typeName" 
+									select="./@fullBaseClassName"/>
+							<xsl:with-param name="writingNativeMethod" select="false()" />
+							<xsl:with-param name="isTypeParameter" select="false()" />
+						</xsl:call-template>
+					</xsl:when>
+
+					<!-- inheritance without templates -->
+					<xsl:otherwise>
+						<xsl:value-of select="xbig:getFullJavaName(
+											./@fullBaseClassName, $class, $root, $config)" />
+					</xsl:otherwise>
+				</xsl:choose>
 
 				<!-- gen commas as seperator between base interfaces -->
 				<xsl:if test="position()!=last()">

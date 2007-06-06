@@ -84,8 +84,9 @@
 					<xsl:value-of select="$sigs/type[@meta=$param_type]/@signature"/>
 				</xsl:when>
 				<xsl:otherwise>
-					<xsl:value-of select="replace(replace(replace(replace(replace(
-								$param_type, ' ', '_'), '::', '_'), '&lt;', '_'), '&gt;', '_'), ',', '_')"/>
+					<xsl:value-of select="replace(replace(replace(replace(replace(replace(replace(
+								$param_type, ' ', '_'), '::', '_'), '&lt;', '_'), '&gt;', '_'),
+								 ',', '_'), '\*', 'ptr'), '&amp;', 'ref')"/>
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
