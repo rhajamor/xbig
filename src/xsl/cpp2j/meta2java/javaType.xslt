@@ -39,6 +39,7 @@
 
 	<xsl:import href="../../util/metaTypeInfo.xslt" />
 	<xsl:import href="../../util/firstLetterToUpperCase.xslt" />
+	<xsl:import href="../../util/createMetaParameterElement.xslt" />
 	<xsl:import href="../../exslt/str.split.template.xsl" />
 
 	<xd:doc type="stylesheet">
@@ -46,269 +47,235 @@
 	</xd:doc>
 
 	<xd:doc type="template">
-		<xd:short>Generates java types.
-				Called for method parameters and return types. Can be used for public and native methods.
+		<xd:short>
+			Generates java types.
+			Called for method parameters and return types. Can be used for public and native methods.
 		</xd:short>
-		<xd:param name="config">config file.</xd:param>
+		<xd:param name="config">Config file.</xd:param>
 		<xd:param name="param">
-			parameter or method element to be processed. Important are it's attributes.
+			Parameter or method element to be processed. Important are it's attributes.
 		</xd:param>
-		<xd:param name="class">class which contains current type.</xd:param>
+		<xd:param name="class">Class which contains current type.</xd:param>
 		<xd:param name="writingNativeMethod">
-			Contains string 'true' if a native method is generated. Otherwise it is not passed.
+			True if a native method is generated. Type 'long' is often used then.
 		</xd:param>
 		<xd:param name="typeName">Already resolved and full qualified type name.</xd:param>
+		<xd:param name="isTypeParameter">
+			True if this type is a parameter of a Generic. Wrapper classes for primitve types are
+			used in this case.
+		</xd:param>
 	</xd:doc>
 	<xsl:template name="javaType">
 		<xsl:param name="config" />
 		<xsl:param name="param" />
 		<xsl:param name="class" />
-		<xsl:param name="writingNativeMethod" />
-		<xsl:param name="typeName" />
+		<xsl:param name="writingNativeMethod" as="xs:boolean" />
+		<xsl:param name="typeName" as="xs:string"/>
+		<xsl:param name="isTypeParameter" as="xs:boolean" />
 
-		<!-- if this type is a parametrized template -->
-		<xsl:variable name="typeIsTemplate">
-			<xsl:choose>
-				<xsl:when test="contains($typeName, '&lt;')">
-					<xsl:value-of select="true()"/>
-				</xsl:when>
-				<xsl:otherwise>
-					<xsl:value-of select="false()"/>
-				</xsl:otherwise>
-			</xsl:choose>
-		</xsl:variable>
-		<xsl:variable name="templateBaseType">
-			<xsl:choose>
-				<xsl:when test="$typeIsTemplate = true()">
-					<xsl:value-of select="substring-before($typeName, '&lt;')"/>
-				</xsl:when>
-				<xsl:otherwise>
-					<xsl:value-of select="$typeName"/>
-				</xsl:otherwise>
-			</xsl:choose>
-		</xsl:variable>
-		<xsl:variable name="templateBracket">
-			<xsl:choose>
-				<xsl:when test="$typeIsTemplate = true()">
-					<!-- resolve types of template parameters -->
-					<xsl:variable name="insideBracketResolved">
-						<xsl:variable name="tokens">
-							<xsl:call-template name="xbig:getListOfTypeParameters">
-								<xsl:with-param name="type" select="$typeName" />
-							</xsl:call-template>
-						</xsl:variable>
-						<xsl:for-each select="$tokens/*">
-							<xsl:variable name="normalizedType" select="normalize-space(.)"/>
-							<xsl:variable name="resolvedToken"
-								select="xbig:resolveTypedef($normalizedType, $class, $root)"/>
-							<xsl:choose>
-								<!-- primitive Types are handled different -->
-								<xsl:when test="$config/config/java/types/type[@meta = $resolvedToken]">
-									<xsl:value-of select="$config/config/java/types/type
-															[@meta = $resolvedToken]/@genericParameter"/>
-								</xsl:when>
-
-								<xsl:otherwise>
-									<xsl:call-template name="javaType">
-										<xsl:with-param name="config" select="$config" />
-										<xsl:with-param name="param" select="$param" />
-										<xsl:with-param name="class" select="$class" />
-										<xsl:with-param name="typeName" select="$normalizedType"/>
-									</xsl:call-template>
-								</xsl:otherwise>
-							</xsl:choose>
-							<xsl:if test="position() != last()">
-								<xsl:value-of select="', '"/>
-							</xsl:if>
-						</xsl:for-each>
-					</xsl:variable>
-					<xsl:value-of select="concat('&lt; ', $insideBracketResolved, ' &gt;')"/>
-				</xsl:when>
-				<xsl:otherwise>
-					<!-- <xsl:value-of select="''"/> -->
-					<xsl:sequence select="''"/>
-				</xsl:otherwise>
-			</xsl:choose>
-		</xsl:variable>
-
-		<!-- resolve typedefs -->
-		<xsl:variable name="resolvedType" select="xbig:resolveTypedef($templateBaseType, $class, $root)"/>
-
-		<xsl:variable name="fullTypeName" select="$resolvedType"/>
-
-		<!-- extract jni type depending on meta type, const/non-const, pass type -->
-		<xsl:variable name="type_info">
-			<xsl:call-template name="metaFirstTypeInfo">
-				<xsl:with-param name="root" 
-					select="$config/config/java/types" />
-				<xsl:with-param name="param" select="$param" />
-				<xsl:with-param name="typeName" select="$resolvedType" />
-			</xsl:call-template>
-		</xsl:variable>
-
-		<!-- class used for pointer pointer -->
-		<xsl:variable name="pointerPointerClass" select="'NativeObjectPointer'"/>
-
-		<!-- DEBUG MESSAGES -->
-		<!-- 
-		<xsl:if test="$param/name() ne 'function' and starts-with($param/name,'c')">
-			<xsl:message></xsl:message>
-			<xsl:message>==== <xsl:value-of select="$param/name"/> ====</xsl:message>
-			<xsl:message>Definition:           <xsl:value-of select="$param/definition"/></xsl:message>
-			<xsl:message>Pointer or Reference: <xsl:value-of select="$param/@passedBy='pointer' or $param/@passedBy='reference'"/></xsl:message>
-			<xsl:message>Const:                <xsl:value-of select="xbig:isTypeConst($param)"/></xsl:message>
-			<xsl:message>Native:               <xsl:value-of select="boolean($writingNativeMethod)"/></xsl:message>
-			<xsl:message>Primitive:            <xsl:value-of select="boolean($type_info/type/@java)"/></xsl:message>
-		</xsl:if>
-		 -->
-		<!-- choose type -->
 		<xsl:choose>
-			<!-- write pointer class if the value is passed by pointer or reference and not const -->
-			<xsl:when test="(($param/@passedBy='pointer' and not($resolvedType='char')) or ($param/@passedBy='reference' and not(xbig:isTypeConst($param))))
-							and ($writingNativeMethod ne 'true')
-							and $type_info/type/@java">	
-				<xsl:variable name="fullTypeNameWithPointer">
-					<xsl:call-template name="javaPointerClass">
-						<xsl:with-param name="config" select="$config" />
-						<xsl:with-param name="param" select="$param" />
-						<xsl:with-param name="typeName" select="$fullTypeName" />
-					</xsl:call-template>
-				</xsl:variable>
+			<!-- if this type is a parametrized template -->
+			<xsl:when test="contains($typeName, '&lt;')">
 				<xsl:choose>
-					<xsl:when test="$param/type/@pointerPointer = 'true'">
-						<xsl:value-of select="concat(
-								$pointerPointerClass, '&lt;', $fullTypeNameWithPointer, '&gt;')"/>
+					<xsl:when test="$writingNativeMethod = false()">
+						<xsl:sequence select="xbig:getFullJavaNameForParametrizedTemplate(
+														$typeName, $config, $param, $class)"/>
 					</xsl:when>
 					<xsl:otherwise>
-						<xsl:value-of select="$fullTypeNameWithPointer"/>
+						<xsl:sequence select="'long'" />
 					</xsl:otherwise>
 				</xsl:choose>
 			</xsl:when>
 
-			<!-- if no type info is found -> we are dealing with a class / enum / ... -->
-			<xsl:when test="not($type_info/type/@java)">
+			<!-- not a template -->
+			<xsl:otherwise>
+
+				<!-- resolve typedefs -->
+				<xsl:variable name="resolvedType" select="xbig:resolveTypedef(
+															$typeName, $class, $root)"/>
+
+				<xsl:variable name="fullTypeName" select="$resolvedType"/>
+
+				<!-- extract jni type depending on meta type, const/non-const, pass type -->
+				<xsl:variable name="type_info">
+					<xsl:call-template name="metaFirstTypeInfo">
+						<xsl:with-param name="root" 
+							select="$config/config/java/types" />
+						<xsl:with-param name="param" select="$param" />
+						<xsl:with-param name="typeName" select="$resolvedType" />
+					</xsl:call-template>
+				</xsl:variable>
+
+				<!-- class used for pointer pointer -->
+				<xsl:variable name="pointerPointerClass" select="'NativeObjectPointer'"/>
+
+				<!-- DEBUG MESSAGES -->
+				<!-- 
+				<xsl:if test="$param/name() ne 'function' and starts-with($param/name,'c')">
+					<xsl:message></xsl:message>
+					<xsl:message>==== <xsl:value-of select="$param/name"/> ====</xsl:message>
+					<xsl:message>Definition:           <xsl:value-of select="$param/definition"/></xsl:message>
+					<xsl:message>Pointer or Reference: <xsl:value-of select="$param/@passedBy='pointer' or $param/@passedBy='reference'"/></xsl:message>
+					<xsl:message>Const:                <xsl:value-of select="xbig:isTypeConst($param)"/></xsl:message>
+					<xsl:message>Native:               <xsl:value-of select="boolean($writingNativeMethod)"/></xsl:message>
+					<xsl:message>Primitive:            <xsl:value-of select="boolean($type_info/type/@java)"/></xsl:message>
+				</xsl:if>
+				 -->
+				<!-- choose type -->
 				<xsl:choose>
-
-					<!-- template parameter used as method parameter or return type -->
-					<xsl:when test="$class/templateparameters/templateparameter
-									[@templateType='class' or @templateType='typename']
-									[@templateDeclaration = $resolvedType]">
-						<xsl:choose>
-							<xsl:when test="$writingNativeMethod eq 'true'">
-								<xsl:value-of select="'long'"/>
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:choose>
-									<xsl:when test="$param/type/@pointerPointer = 'true'">
-										<xsl:value-of select="concat(
-												$pointerPointerClass, '&lt;', $fullTypeName, '&gt;')"/>
-									</xsl:when>
-									<xsl:otherwise>
-										<xsl:value-of select="$fullTypeName"/>
-									</xsl:otherwise>
-								</xsl:choose>
-							</xsl:otherwise>
-						</xsl:choose>
-					</xsl:when>
-
-					<!-- if this type is a template typedef -->
-					<xsl:when test="xbig:isTemplateTypedef($fullTypeName, $class, $root)">
-						<xsl:choose>
-							<xsl:when test="$writingNativeMethod eq 'true'">
-								<xsl:value-of select="'long'"/>
-							</xsl:when>
-							<xsl:otherwise>
-								<!-- add the template angle bracket -->
-								<xsl:variable name="fullJavaName" select="xbig:getFullJavaName(
-														$fullTypeName, $class, $root, $config)"/>
-								<xsl:choose>
-									<xsl:when test="$param/type/@pointerPointer = 'true'">
-										<xsl:value-of select="concat(
-												$pointerPointerClass, '&lt;', $fullJavaName, '&gt;')"/>
-									</xsl:when>
-									<xsl:otherwise>
-										<xsl:value-of select="$fullJavaName"/>
-									</xsl:otherwise>
-								</xsl:choose>
-							</xsl:otherwise>
-						</xsl:choose>
-					</xsl:when>
-
-					<!-- if this type is an enum -->
-					<xsl:when test="xbig:isEnum($fullTypeName, $class, $root)">
-						<xsl:choose>
-							<xsl:when test="$writingNativeMethod eq 'true'">
-								<xsl:value-of select="'int'"/>
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:variable name="fullJavaName" select="xbig:getFullJavaName(
-														$fullTypeName, $class, $root, $config)"/>
-								<xsl:choose>
-									<xsl:when test="$param/type/@pointerPointer = 'true'">
-										<xsl:value-of select="concat(
-												$pointerPointerClass, '&lt;', $fullJavaName, '&gt;')"/>
-									</xsl:when>
-									<xsl:otherwise>
-										<xsl:value-of select="$fullJavaName"/>
-									</xsl:otherwise>
-								</xsl:choose>
-							</xsl:otherwise>
-						</xsl:choose>
-					</xsl:when>
-
-					<!-- if this type is a class or struct -->
-					<xsl:when test="xbig:isClassOrStruct($fullTypeName, $class, $root)">
-						<xsl:choose>
-							<xsl:when test="$writingNativeMethod eq 'true'">
-								<xsl:value-of select="'long'"/>
-							</xsl:when>
-							<xsl:otherwise>
-								<!-- add the template angle bracket -->
-								<xsl:variable name="fullJavaName" select="concat(xbig:getFullJavaName(
-												$fullTypeName, $class, $root, $config), $templateBracket)"/>
-								<xsl:choose>
-									<xsl:when test="$param/type/@pointerPointer = 'true'">
-										<xsl:value-of select="concat(
-												$pointerPointerClass, '&lt;', $fullJavaName, '&gt;')"/>
-									</xsl:when>
-									<xsl:otherwise>
-										<xsl:value-of select="$fullJavaName"/>
-									</xsl:otherwise>
-								</xsl:choose>
-							</xsl:otherwise>
-						</xsl:choose>
-					</xsl:when>
-
-					<!-- if type is not found and a native method is generated -> use long -->
-					<xsl:when test="$writingNativeMethod eq 'true'">
-						<xsl:value-of select="'long'"/>
-					</xsl:when>
-
-					<xsl:otherwise>
-						<xsl:variable name="fullJavaName" select="xbig:getFullJavaName(
-									$fullTypeName, $class, $root, $config)"/>
+					<!-- write pointer class if the value is passed by pointer or reference and not const -->
+					<xsl:when test="(($param/@passedBy='pointer' and not($resolvedType='char')) or
+									($param/@passedBy='reference' and not(xbig:isTypeConst($param))))
+									and ($writingNativeMethod ne true())
+									and $type_info/type/@java">	
+						<xsl:variable name="fullTypeNameWithPointer">
+							<xsl:call-template name="javaPointerClass">
+								<xsl:with-param name="config" select="$config" />
+								<xsl:with-param name="param" select="$param" />
+								<xsl:with-param name="typeName" select="$fullTypeName" />
+							</xsl:call-template>
+						</xsl:variable>
 						<xsl:choose>
 							<xsl:when test="$param/type/@pointerPointer = 'true'">
 								<xsl:value-of select="concat(
-										$pointerPointerClass, '&lt;', $fullJavaName, '&gt;')"/>
+										$pointerPointerClass, '&lt;', $fullTypeNameWithPointer, '&gt;')"/>
 							</xsl:when>
 							<xsl:otherwise>
-								<xsl:value-of select="$fullJavaName"/>
+								<xsl:value-of select="$fullTypeNameWithPointer"/>
 							</xsl:otherwise>
 						</xsl:choose>
-					</xsl:otherwise>
-				</xsl:choose>
-			</xsl:when>
-
-			<!-- types in config (usually primitive types) -->
-			<xsl:otherwise>
-				<xsl:choose>
-					<!-- mapp char* to String -->
-					<xsl:when test="$param/@passedBy='pointer' and $resolvedType='char'">
-						<xsl:value-of select="'String'"/>
 					</xsl:when>
+
+					<!-- if no type info is found -> we are dealing with a class / enum / ... -->
+					<xsl:when test="not($type_info/type/@java)">
+						<xsl:choose>
+
+							<!-- template parameter used as method parameter or return type -->
+							<xsl:when test="$class/templateparameters/templateparameter
+											[@templateType='class' or @templateType='typename']
+											[@templateDeclaration = $resolvedType]">
+								<xsl:choose>
+									<xsl:when test="$writingNativeMethod eq true()">
+										<xsl:value-of select="'long'"/>
+									</xsl:when>
+									<xsl:otherwise>
+										<xsl:choose>
+											<xsl:when test="$param/type/@pointerPointer = 'true'">
+												<xsl:value-of select="concat(
+														$pointerPointerClass, '&lt;', $fullTypeName, '&gt;')"/>
+											</xsl:when>
+											<xsl:otherwise>
+												<xsl:value-of select="$fullTypeName"/>
+											</xsl:otherwise>
+										</xsl:choose>
+									</xsl:otherwise>
+								</xsl:choose>
+							</xsl:when>
+
+							<!-- if this type is a template typedef -->
+							<xsl:when test="xbig:isTemplateTypedef($fullTypeName, $class, $root)">
+								<xsl:choose>
+									<xsl:when test="$writingNativeMethod eq true()">
+										<xsl:value-of select="'long'"/>
+									</xsl:when>
+									<xsl:otherwise>
+										<!-- add the template angle bracket -->
+										<xsl:variable name="fullJavaName" select="xbig:getFullJavaName(
+																$fullTypeName, $class, $root, $config)"/>
+										<xsl:choose>
+											<xsl:when test="$param/type/@pointerPointer = 'true'">
+												<xsl:value-of select="concat(
+														$pointerPointerClass, '&lt;', $fullJavaName, '&gt;')"/>
+											</xsl:when>
+											<xsl:otherwise>
+												<xsl:value-of select="$fullJavaName"/>
+											</xsl:otherwise>
+										</xsl:choose>
+									</xsl:otherwise>
+								</xsl:choose>
+							</xsl:when>
+
+							<!-- if this type is an enum -->
+							<xsl:when test="xbig:isEnum($fullTypeName, $class, $root)">
+								<xsl:choose>
+									<xsl:when test="$writingNativeMethod eq true()">
+										<xsl:value-of select="'int'"/>
+									</xsl:when>
+									<xsl:otherwise>
+										<xsl:variable name="fullJavaName" select="xbig:getFullJavaName(
+																$fullTypeName, $class, $root, $config)"/>
+										<xsl:choose>
+											<xsl:when test="$param/type/@pointerPointer = 'true'">
+												<xsl:value-of select="concat(
+														$pointerPointerClass, '&lt;', $fullJavaName, '&gt;')"/>
+											</xsl:when>
+											<xsl:otherwise>
+												<xsl:value-of select="$fullJavaName"/>
+											</xsl:otherwise>
+										</xsl:choose>
+									</xsl:otherwise>
+								</xsl:choose>
+							</xsl:when>
+
+							<!-- if this type is a class or struct -->
+							<xsl:when test="xbig:isClassOrStruct($fullTypeName, $class, $root)">
+								<xsl:choose>
+									<xsl:when test="$writingNativeMethod eq true()">
+										<xsl:value-of select="'long'"/>
+									</xsl:when>
+									<xsl:otherwise>
+										<!-- add the template angle bracket -->
+										<xsl:variable name="fullJavaName" select="xbig:getFullJavaName(
+														$fullTypeName, $class, $root, $config)"/>
+										<xsl:choose>
+											<xsl:when test="$param/type/@pointerPointer = 'true'">
+												<xsl:value-of select="concat(
+														$pointerPointerClass, '&lt;', $fullJavaName, '&gt;')"/>
+											</xsl:when>
+											<xsl:otherwise>
+												<xsl:value-of select="$fullJavaName"/>
+											</xsl:otherwise>
+										</xsl:choose>
+									</xsl:otherwise>
+								</xsl:choose>
+							</xsl:when>
+
+							<!-- if type is not found and a native method is generated -> use long -->
+							<xsl:when test="$writingNativeMethod eq true()">
+								<xsl:value-of select="'long'"/>
+							</xsl:when>
+
+							<xsl:otherwise>
+								<xsl:variable name="fullJavaName" select="xbig:getFullJavaName(
+											$fullTypeName, $class, $root, $config)"/>
+								<xsl:choose>
+									<xsl:when test="$param/type/@pointerPointer = 'true'">
+										<xsl:value-of select="concat(
+												$pointerPointerClass, '&lt;', $fullJavaName, '&gt;')"/>
+									</xsl:when>
+									<xsl:otherwise>
+										<xsl:value-of select="$fullJavaName"/>
+									</xsl:otherwise>
+								</xsl:choose>
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:when>
+
+					<!-- types in config (usually primitive types) -->
 					<xsl:otherwise>
-						<xsl:value-of select="$type_info/type/@java" />
+						<xsl:choose>
+							<!-- mapp char* to String -->
+							<xsl:when test="$param/@passedBy='pointer' and $resolvedType='char'">
+								<xsl:value-of select="'String'"/>
+							</xsl:when>
+							<xsl:when test="$isTypeParameter = true()">
+								<xsl:value-of select="$config/config/java/types/type
+														[@meta = $resolvedType]/@genericParameter" />
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:value-of select="$type_info/type/@java" />
+							</xsl:otherwise>
+						</xsl:choose>
 					</xsl:otherwise>
 				</xsl:choose>
 			</xsl:otherwise>
@@ -585,7 +552,8 @@
 						</xsl:when>
 
 						<!-- template has inner class -->
-						<xsl:when test="$baseTypeNode/class[@name = $fullNameTokens/*[$currentPosition+2]]">
+						<xsl:when test="$baseTypeNode/class
+										[@name = $fullNameTokens/*[$currentPosition+2]]">
 							<xsl:value-of select="concat($currentJavaFullNameWithDot,
 									$interfacePrefix,
 									$fullNameTokens/*[$currentPosition+1],
@@ -598,7 +566,8 @@
 						</xsl:when>
 
 						<!-- template has inner struct -->
-						<xsl:when test="$baseTypeNode/struct[@name = $fullNameTokens/*[$currentPosition+2]]">
+						<xsl:when test="$baseTypeNode/struct
+										[@name = $fullNameTokens/*[$currentPosition+2]]">
 							<xsl:value-of select="concat($currentJavaFullNameWithDot,
 									$interfacePrefix,
 									$fullNameTokens/*[$currentPosition+1],
@@ -657,9 +626,10 @@
 
 			<!-- next recursion -->
 			<xsl:otherwise>
-				<xsl:variable name="metaNameIncrement"
-						select="concat($currentMetaFullNameWithDot, $fullNameTokens/*[$currentPosition+1])"/>
-				<xsl:value-of select="xbig:getFullJavaNameHelper($currentNameIncremented, $metaNameIncrement,
+				<xsl:variable name="metaNameIncrement" select="concat(
+								$currentMetaFullNameWithDot, $fullNameTokens/*[$currentPosition+1])"/>
+				<xsl:value-of select="xbig:getFullJavaNameHelper(
+										$currentNameIncremented, $metaNameIncrement,
 										$currentPosition+1, $fullNameTokens, $inputTreeRoot,
 										$interfacePrefix, $interfaceSuffix)"/>
 			</xsl:otherwise>
@@ -691,6 +661,92 @@
 
 	</xsl:function>
 
+
+
+	<xd:doc type="function">
+		<xd:short>
+			Takes a type string which contains several '&lt;', '*', 'const' and other modifiers.
+			Finds out correct type parameters (even parameters which are templates themselfs) and
+			how they are passed (wether whole type is a pointer or just one parameter).
+			Full java type is returned.
+		</xd:short>
+		<xd:param name="type">Type string to be parsed.</xd:param>
+		<xd:param name="config">Config file.</xd:param>
+		<xd:param name="param">
+			Meta parameter element which contains this whole type. May be a parameter or a function.
+		</xd:param>
+		<xd:param name="class">
+			Meta class element which contains function in which this type is used.
+		</xd:param>
+	</xd:doc>
+	<xsl:function name="xbig:getFullJavaNameForParametrizedTemplate" as="xs:string">
+		<xsl:param name="type" as="xs:string"/>
+		<xsl:param name="config" />
+		<xsl:param name="param" />
+		<xsl:param name="class" />
+
+		<!-- remember template it self -->	
+		<xsl:variable name="templateBaseType">
+			<xsl:variable name="resolvedBaseType" select="xbig:resolveTypedef(normalize-space(
+												substring-before($type, '&lt;')), $class, $root)"/>
+			<xsl:call-template name="javaType">
+				<xsl:with-param name="config" select="$config" />
+				<xsl:with-param name="param" select="$param" />
+				<xsl:with-param name="class" select="$class" />
+				<xsl:with-param name="typeName" select="$resolvedBaseType" />
+				<xsl:with-param name="writingNativeMethod" select="false()" />
+				<xsl:with-param name="isTypeParameter" select="false()" />
+			</xsl:call-template>
+		</xsl:variable>
+
+		<!-- get list of type parameters -->
+		<xsl:variable name="tokens">
+			<xsl:call-template name="xbig:getListOfTypeParameters">
+				<xsl:with-param name="type" select="$type" />
+			</xsl:call-template>
+		</xsl:variable>
+
+		<!-- get java type for each type parameter -->
+		<xsl:variable name="insideBracketResolved">
+			<xsl:for-each select="$tokens/*">
+				<xsl:variable name="paraElement">
+					<xsl:call-template name="createMetaParameterElement">
+						<xsl:with-param name="type" select="."/>
+					</xsl:call-template>
+				</xsl:variable>
+
+				<xsl:choose>
+					<!-- if type parameter is a template -->
+					<xsl:when test="contains(., '&lt;')">
+						<xsl:sequence select="xbig:getFullJavaNameForParametrizedTemplate(
+											$paraElement/*[1]/type, $config, $paraElement, $class)"/>
+					</xsl:when>
+
+					<!-- type parameter is not a template -->
+					<xsl:otherwise>
+						<xsl:variable name="resolvedToken"
+							select="xbig:resolveTypedef($paraElement/*[1]/type, $class, $root)"/>
+						<xsl:call-template name="javaType">
+							<xsl:with-param name="config" select="$config" />
+							<xsl:with-param name="param" select="$paraElement/*[1]" />
+							<xsl:with-param name="class" select="$class" />
+							<xsl:with-param name="typeName" select="$resolvedToken"/>
+							<xsl:with-param name="writingNativeMethod" select="false()" />
+							<xsl:with-param name="isTypeParameter" select="true()" />
+						</xsl:call-template>
+					</xsl:otherwise>
+				</xsl:choose>
+
+				<!-- generate ',' between type parameters -->
+				<xsl:if test="position() != last()">
+					<xsl:value-of select="', '"/>
+				</xsl:if>
+			</xsl:for-each>
+		</xsl:variable>
+
+		<xsl:value-of select="concat($templateBaseType, '&lt; ', $insideBracketResolved, ' &gt;')"/>
+
+	</xsl:function>
 
 
 </xsl:stylesheet>

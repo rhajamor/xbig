@@ -153,6 +153,8 @@
                 <xsl:with-param name="param" select="$method" />
                 <xsl:with-param name="class" select="$class" />
                 <xsl:with-param name="typeName" select="$return_type" />
+				<xsl:with-param name="writingNativeMethod" select="false()" />
+				<xsl:with-param name="isTypeParameter" select="false()" />
               </xsl:call-template>
             </xsl:otherwise>
           </xsl:choose>
@@ -173,6 +175,8 @@
             <xsl:with-param name="param" select="$method" />
             <xsl:with-param name="class" select="$class" />
             <xsl:with-param name="typeName" select="$return_type" />
+			<xsl:with-param name="writingNativeMethod" select="false()" />
+			<xsl:with-param name="isTypeParameter" select="false()" />
           </xsl:call-template>
         </xsl:otherwise>
       </xsl:choose>
@@ -221,6 +225,8 @@
                 <xsl:with-param name="param" select="." />
                 <xsl:with-param name="class" select="$class" />
                 <xsl:with-param name="typeName" select="./type" />
+				<xsl:with-param name="writingNativeMethod" select="false()" />
+				<xsl:with-param name="isTypeParameter" select="false()" />
               </xsl:call-template>
             </xsl:otherwise>
           </xsl:choose>
@@ -232,6 +238,8 @@
             <xsl:with-param name="param" select="." />
             <xsl:with-param name="class" select="$class" />
             <xsl:with-param name="typeName" select="./type" />
+			<xsl:with-param name="writingNativeMethod" select="false()" />
+			<xsl:with-param name="isTypeParameter" select="false()" />
           </xsl:call-template>
         </xsl:otherwise>
       </xsl:choose>

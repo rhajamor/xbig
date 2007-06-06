@@ -36,7 +36,10 @@
 	xmlns:xbig="http://xbig.sourceforge.net/XBiG"
 	xmlns:str="http://exslt.org/strings">
 
+
+	<xsl:import href="../util/createMetaParameterElement.xslt" />
 	<xsl:import href="../exslt/str.split.template.xsl" />
+
 
 	<xd:doc type="stylesheet">
 		<xd:short>Templates to handle C++ Templates.</xd:short>
@@ -84,7 +87,7 @@
 				select="$typedef/@fullName" />
 			<xsl:attribute name="originalTemplateFullName"
 				select="$template/@fullName" />
-				
+
 			<!-- store access modifier of typedef -->
 			<xsl:attribute name="protection" select="$typedef/@protection"/>
 
@@ -113,8 +116,13 @@
 				<xsl:element name="baseClass">
 					<xsl:attribute name="fullBaseClassName"
 						select="$template/@fullName" />
+					<!-- very important for javaInterface -->
+					<xsl:attribute name="originalTypedefBasetype"
+						select="$typedef/@basetype" />
+
 					<xsl:value-of select="$template/@name" />
 				</xsl:element>
+
 				<!-- copy base classes of template -->
 				<xsl:for-each select="$template/inherits/baseClass">
 					<xsl:copy-of select="." />
@@ -228,7 +236,7 @@
 		</xd:short>
 		<xd:param name="type">
 			type as in meta. Maybe something like 'T' or a real type
-			like 'int'
+			like 'int'. Whole type element not just a string.
 		</xd:param>
 		<xd:param name="template">template which is used.</xd:param>
 		<xd:param name="typedef">
@@ -271,7 +279,7 @@
 					<xsl:variable name="pos">
 						<xsl:for-each
 							select="$template/templateparameters/templateparameter
-												[@templateType = 'class' or @templateType = 'typename']">
+											[@templateType = 'class' or @templateType = 'typename']">
 							<xsl:if
 								test="@templateDeclaration = $type">
 								<xsl:value-of select="position()" />
@@ -380,7 +388,8 @@
 
 					<!-- return used type parameter -->
 					<xsl:element name="type">
-						<xsl:attribute name="const" select="if($infoNode/@addConst) then 'true' else
+						<xsl:attribute name="const" select="if($infoNode/@addConst) then 'true'
+								else if($type/@const = 'true') then 'true' else 
 								$resolvedTypeParas/*[position() = $infoNode/@typeParaPos]/type/@const"/>
 						<xsl:value-of
 							select="$resolvedTypeParas/*[position() = $infoNode/@typeParaPos]/type" />
@@ -556,27 +565,26 @@
 
 		<!-- start list -->
 		<xsl:for-each select="$tokens/*">
+
+			<!-- get meta parameter element -->
+			<xsl:variable name="metaParaElement">
+				<xsl:call-template name="createMetaParameterElement">
+					<xsl:with-param name="type" select="."/>
+				</xsl:call-template>
+			</xsl:variable>
+
+			<!-- create own parameter element for caller -->
 			<xsl:element name="para">
 				<!-- set passedBy attribute -->
-				<xsl:attribute name="passedBy"
-					select="if(matches(.,'&amp;')) then
-								'reference'
-							else if(matches(.,'\*')) then
-							    'pointer'
-							else
-							    'value'" />
+				<xsl:attribute name="passedBy" select="$metaParaElement/*[1]/@passedBy" />
+
 				<!-- add type child element -->
 				<xsl:element name="type">
 					<!-- set const attribute -->
-					<xsl:attribute name="const"
-						select="if(matches(.,'const')) then
-							     'true'
-							   else
-							     'false'" />
+					<xsl:attribute name="const" select="$metaParaElement/*[1]/type/@const" />
 
 					<!-- remove all modifiers and spaces -->
-					<xsl:variable name="normalizedToken"
-						select="normalize-space(xbig:removeTypeModifiers(.))" />
+					<xsl:variable name="normalizedToken" select="$metaParaElement/*[1]/type" />
 
 					<!-- resolve typedef -->
 					<xsl:variable name="resolvedType"
@@ -840,24 +848,5 @@
 
 	</xsl:template>
 
-	<xd:doc type="function">
-		<xd:short>
-			Removes all type modifiers with a string and returns the raw
-			type name.
-		</xd:short>
-		<xd:detial>
-			Removes all type modifiers with a string and returns the raw
-			type name. Modifiers are "&amp;", "*" and "const". Uses the
-			XPath function translate(string1,string2,string3) where the
-			first string is the input, second the regular expression and
-			the third the string to replace.
-		</xd:detial>
-		<xd:param name="typeString">The string to process.</xd:param>
-	</xd:doc>
-	<xsl:function name="xbig:removeTypeModifiers" as="xs:string">
-		<xsl:param name="typeString" as="xs:string" />
-		<xsl:sequence
-			select="replace($typeString, '&amp; | \* | const', '', 'x')" />
-	</xsl:function>
 
 </xsl:stylesheet>

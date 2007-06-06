@@ -39,6 +39,8 @@
 	xmlns:java="java:org.xbig.xsltext.XsltExt" 
 	extension-element-prefixes="java">
 
+
+	<xsl:import href="createMetaParameterElement.xslt" />
 	<xsl:import href="../exslt/str.split.template.xsl" />
 
 
@@ -696,6 +698,7 @@
 	<xd:doc type="function">
 		<xd:short>
 			Finds full name of a template and for all of it's parameters.
+			Adds type modifiers like 'const' or '*' to type parameters.
 		</xd:short>
 		<xd:param name="type">type name to be resolved. Contains unresolved type parameters.</xd:param>
 		<xd:param name="currentNode">
@@ -717,30 +720,52 @@
 									, $currentNode, $inputTreeRoot)" />
 		</xsl:variable>
 
-		<!-- handle the type parameters -->
+		<!-- handle type parameters -->
 		<xsl:variable name="templateBracket">
 			<xsl:variable name="insideBracketResolved">
+
+				<!-- get list of type parameters -->
 				<xsl:variable name="tokens">
 				 	<xsl:call-template name="xbig:getListOfTypeParameters">
 						<xsl:with-param name="type" select="$type" />
 					</xsl:call-template>
 				</xsl:variable>
+
+				<!-- iterate through type parameters -->
 				<xsl:for-each select="$tokens/*">
 					<xsl:variable name="normalizedToken"
 						select="normalize-space(.)" />
-					<xsl:choose>
-						<xsl:when test="contains(., '&lt;')">
-							<xsl:value-of
-								select="xbig:getFullTemplateName(
-										$normalizedToken, $currentNode, $inputTreeRoot)" />
-						</xsl:when>
-						<xsl:otherwise>
-							<xsl:value-of
-								select="xbig:getFullTypeName(xbig:resolveTypedef(
-										$normalizedToken, $currentNode, $inputTreeRoot)
-										, $currentNode, $inputTreeRoot)" />
-						</xsl:otherwise>
-					</xsl:choose>
+
+					<!-- check for const and ptr -->
+					<xsl:variable name="paraElement">
+						<xsl:call-template name="createMetaParameterElement">
+							<xsl:with-param name="type" select="$normalizedToken" />
+						</xsl:call-template>
+					</xsl:variable>
+
+					<xsl:variable name="const" select="if 
+											($paraElement/*[1]/type/@const eq 'true') 
+											then 'const ' else ''"/>
+					<xsl:variable name="passedBy" select="if 
+											($paraElement/*[1]/@passedBy eq 'value') 
+											then ''
+											else if($paraElement/*[1]/@passedBy eq 'reference')
+											then '&amp;'
+											else '*'"/>
+
+					<xsl:variable name="resolvedToken">
+						<xsl:choose>
+							<xsl:when test="contains(., '&lt;')">
+								<xsl:value-of select="xbig:getFullTemplateName($paraElement/*[1]/type,
+																	$currentNode, $inputTreeRoot)" />
+							</xsl:when>
+							<xsl:otherwise>
+								 <xsl:value-of select="xbig:resolveTypedef($paraElement/*[1]/type,
+																	$currentNode, $inputTreeRoot)" />
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:variable>
+					<xsl:value-of select="concat($const, $resolvedToken, $passedBy)" />
 
 					<xsl:if test="position() != last()">
 						<xsl:value-of select="', '" />
@@ -774,8 +799,14 @@
 
 		<xsl:variable name="bracket"
 			select="substring-after($type, '&lt;')" />
-		<xsl:variable name="insideBracket"
-			select="normalize-space(substring($bracket, 0, string-length(normalize-space($bracket))))" />
+		<xsl:variable name="insideBracket">
+			<xsl:for-each select="tokenize($bracket, '&gt;')[position() != last()]">
+				<xsl:value-of select="."/>
+				<xsl:if test="position() != last()">
+					<xsl:value-of select="' &gt;'"/>
+				</xsl:if>
+			</xsl:for-each>
+		</xsl:variable>
 
 		<xsl:choose>
 			<!-- easiest case: no further templates as type parameters -->

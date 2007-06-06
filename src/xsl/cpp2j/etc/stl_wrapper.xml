@@ -173,7 +173,7 @@
 				</parameter>
 			</parameters>
 		</function>
-
+		<!-- second parameter is a c-tor
 		<function virt="non-virtual" visibility="public" static="false" const="false"
 					passedBy="value">
 			<type>void</type>
@@ -185,12 +185,12 @@
 					<name>num</name>
 				</parameter>
 				<parameter passedBy="reference">
-					<type const="false">T</type><!-- const has been changed manually ! -->
+					<type const="false">T</type>
 					<name>val</name>
 				</parameter>
 			</parameters>
 		</function>
-
+		 -->
 		<function virt="non-virtual" visibility="public" static="false" const="false"
 					passedBy="value">
 			<type>size_t</type>
@@ -321,7 +321,7 @@
 				</parameter>
 			</parameters>
 		</function>
-		
+		<!-- second parameter is a c-tor
 		<function virt="non-virtual" visibility="public" static="false" const="false"
 					passedBy="value">
 			<name>resize</name>
@@ -338,7 +338,7 @@
 				</parameter>
 			</parameters>
 		</function>
-		
+		 -->
 		<function virt="non-virtual" visibility="public" static="false" const="true"
 					passedBy="value">
 			<name>size</name>

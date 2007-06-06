@@ -44,25 +44,28 @@
 	</xd:doc>
 
 	<xd:doc type="template">
-		<xd:short>Generates parameter types and names for public and native methods.
-				The template parameters to control weather native method or not are optional.
+		<xd:short>
+			Generates parameter types and names for public and native methods.
 		</xd:short>
 		<xd:param name="config">config.xml file.</xd:param>
-		<xd:param name="class">class which contains current method.</xd:param>
+		<xd:param name="class">Class which contains current method.</xd:param>
 		<xd:param name="method">method to be processed.</xd:param>
-		<xd:param name="with_types">if set to the string 'true', types are generated.
-						If it has a different value, only names are generated</xd:param>
+		<xd:param name="with_types">
+			If set to the string 'true', types are generated.
+			If it has a different value, only names are generated
+		</xd:param>
 		<xd:param name="writingNativeMethod">With this call a native method is generated.</xd:param>
-		<xd:param name="callingNativeMethod">With this call the body of a 
-											public method is generated.</xd:param>
+		<xd:param name="callingNativeMethod">
+			With this call the body of a  public method is generated.
+		</xd:param>
 	</xd:doc>
 	<xsl:template name="javaMethodParameterList">
 		<xsl:param name="config" />
 		<xsl:param name="class" />
 		<xsl:param name="method" />
 		<xsl:param name="with_types" />
-		<xsl:param name="writingNativeMethod" />
-		<xsl:param name="callingNativeMethod" />
+		<xsl:param name="writingNativeMethod" as="xs:boolean" />
+		<xsl:param name="callingNativeMethod" as="xs:boolean" />
 
 		<!-- iterator through all parameters -->
 		<xsl:for-each select="$method/parameters/parameter">
@@ -72,13 +75,14 @@
 
 				<!-- write parameter type -->
 				<xsl:choose>
-					<xsl:when test="($writingNativeMethod eq 'true') 
-									and ((./@passedBy='pointer' and not(./type='char')) or (./@passedBy eq 'reference' and not(xbig:isTypeConst(.))))">
+					<xsl:when test="($writingNativeMethod eq true()) 
+									and ((./@passedBy='pointer' and not(./type='char')) or 
+									(./@passedBy eq 'reference' and not(xbig:isTypeConst(.))))">
 						<xsl:value-of select="'long'" />
 					</xsl:when>
 
 					<!-- if this parameter is a parametrized template -->
-					<xsl:when test="($writingNativeMethod eq 'true') and
+					<xsl:when test="($writingNativeMethod eq true()) and
 						 (contains(./type, '&lt;'))">
 						<xsl:value-of select="'long'" />
 					</xsl:when>
@@ -90,6 +94,7 @@
 							<xsl:with-param name="class" select="$class" />
 							<xsl:with-param name="writingNativeMethod" select="$writingNativeMethod" />
 							<xsl:with-param name="typeName" select="./type" />
+							<xsl:with-param name="isTypeParameter" select="false()" />
 						</xsl:call-template>
 					</xsl:otherwise>
 				</xsl:choose>
@@ -132,32 +137,33 @@
 			</xsl:variable>
 
 			<!-- if we call a native method and have to pass an InstancePointer -->
-			<xsl:if test="($callingNativeMethod eq 'true')
+			<xsl:if test="($callingNativeMethod eq true())
 						 and $type_info/type/@java
-						 and ((./@passedBy='pointer' and not(./type='char')) or (./@passedBy eq 'reference' and not(xbig:isTypeConst(.))))">
+						 and ((./@passedBy='pointer' and not(./type='char')) or 
+						 (./@passedBy eq 'reference' and not(xbig:isTypeConst(.))))">
 				<xsl:value-of select="'.object.pointer'" />
 			</xsl:if>
 
 			<!-- if this parameter is a enum -->
-			<xsl:if test="($callingNativeMethod eq 'true') and
+			<xsl:if test="($callingNativeMethod eq true()) and
 				 		  (xbig:isEnum($fullTypeName, $class, $root))">
 				<xsl:value-of select="'.value'" />
 			</xsl:if>
 
 			<!-- if this parameter is a class or struct -->
-			<xsl:if test="($callingNativeMethod eq 'true') and
+			<xsl:if test="($callingNativeMethod eq true()) and
 				 		  (xbig:isClassOrStruct($fullTypeName, $class, $root))">
 				<xsl:value-of select="'.getInstancePointer().pointer'" />
 			</xsl:if>
 
 			<!-- if this parameter is a parametrized template -->
-			<xsl:if test="($callingNativeMethod eq 'true') and
+			<xsl:if test="($callingNativeMethod eq true()) and
 				 		  (contains($fullTypeName, '&lt;'))">
 				<xsl:value-of select="'.getInstancePointer().pointer'" />
 			</xsl:if>
 
 			<!-- if this parameter is a template typedef -->
-			<xsl:if test="($callingNativeMethod eq 'true') and
+			<xsl:if test="($callingNativeMethod eq true()) and
 				 		  (xbig:isTemplateTypedef($fullTypeName, $class, $root))">
 				<xsl:value-of select="'.getInstancePointer().pointer'" />
 			</xsl:if>

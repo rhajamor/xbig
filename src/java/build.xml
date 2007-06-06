@@ -36,6 +36,12 @@
 	
 	<import file="${dir.top}/src/ant/util/util_java.xml" />
 
+	<target name="documentation">
+		<javadoc destdir="../../doc/java" encoding="utf8" sourcepath=".">
+			<package name="org.xbig.*"/>
+		</javadoc>
+	</target>
+
 	<target name="all" depends="init">
 		<javalib name="xbig-base">
 			<sources>

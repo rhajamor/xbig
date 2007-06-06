@@ -112,6 +112,8 @@
 				<xsl:with-param name="param" select="$method" />
 				<xsl:with-param name="class" select="$class" />
 				<xsl:with-param name="typeName" select="$resolvedType" />
+				<xsl:with-param name="writingNativeMethod" select="false()" />
+				<xsl:with-param name="isTypeParameter" select="false()" />
 			</xsl:call-template>
 			<xsl:text>)&#32;</xsl:text>
 			<xsl:text>(org.xbig.base.INativeObject)&#32;</xsl:text>
@@ -198,7 +200,8 @@
 			<xsl:with-param name="config" select="$config" />
 			<xsl:with-param name="class" select="$class" />
 			<xsl:with-param name="method" select="$method" />
-			<xsl:with-param name="callingNativeMethod" select="'true'" />
+			<xsl:with-param name="writingNativeMethod" select="false()" />
+			<xsl:with-param name="callingNativeMethod" select="true()" />
 		</xsl:call-template>
 
 		<!-- create a ULongLong object for "unsigned long long" -->

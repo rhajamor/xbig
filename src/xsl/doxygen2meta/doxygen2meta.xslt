@@ -29,7 +29,9 @@
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:xd="http://www.pnp-software.com/XSLTdoc" version="2.0"
-	xmlns:str="http://exslt.org/strings">
+	xmlns:str="http://exslt.org/strings"
+	xmlns:java="java:org.xbig.xsltext.XsltExt" 
+	extension-element-prefixes="java">
 
 	<xsl:import href="../exslt/str.split.template.xsl" />
 
@@ -1238,7 +1240,10 @@
 			</xsl:when>
 			<!-- passed by pointer -->
 			<xsl:when test="contains(type,'*')">
-				<xsl:attribute name="passedBy" select="'pointer'" />
+				<xsl:variable name="typeAfterLastGT" select="if (contains(type, '&gt;')) then
+														  tokenize(type, '&gt;')[last()] else type"/>
+				<xsl:attribute name="passedBy" select="if(contains($typeAfterLastGT, '*'))
+														then 'pointer' else 'value'" />
 				<xsl:call-template name="typeMap">
 					<xsl:with-param name="type" select="type" />
 				</xsl:call-template>
@@ -1358,6 +1363,7 @@
 	<xsl:template name="typeMap">
 		<xsl:param name="type" />
 		<xsl:param name="passedBy" />
+
 		<xsl:if test="type!=''">
 			<xsl:element name="type">
 
@@ -1374,30 +1380,33 @@
 				</xsl:variable>
 
 				<!-- check for const, take care of const pointer or const data
-					(const int* vs int* const) -->
-				<xsl:choose>
-					<!-- <xsl:when test="$passedBy = 'pointer'"> -->
-					<xsl:when test="contains(type, '*')">
-						<!-- const data -->
-						<xsl:if
-							test="contains(substring-before(type, '*'), 'const')">
-							<xsl:attribute name="const" select="'true'" />
-						</xsl:if>
-						<!-- const pointer -->
-						<xsl:if
-							test="contains(substring-after(type, '*'), 'const')">
-							<xsl:attribute name="constPointer"
-								select="'true'" />
-						</xsl:if>
-					</xsl:when>
-					<xsl:otherwise>
-						<!-- see Ogre::AlignedAllocator::address(const_reference), t37, bug 1714365 -->
-						<xsl:if
-							test="$isFirstChildTextNode = true() and starts-with(type, 'const')">
-							<xsl:attribute name="const" select="'true'" />
-						</xsl:if>
-					</xsl:otherwise>
-				</xsl:choose>
+					 (const int* vs int* const) 
+					 only if type is not a template -->
+				<xsl:if test="not(contains(type, '&lt;'))">
+					<xsl:choose>
+						<!-- <xsl:when test="$passedBy = 'pointer'"> -->
+						<xsl:when test="contains(type, '*')">
+							<!-- const data -->
+							<xsl:if
+								test="contains(substring-before(type, '*'), 'const')">
+								<xsl:attribute name="const" select="'true'" />
+							</xsl:if>
+							<!-- const pointer -->
+							<xsl:if
+								test="contains(substring-after(type, '*'), 'const')">
+								<xsl:attribute name="constPointer"
+									select="'true'" />
+							</xsl:if>
+						</xsl:when>
+						<xsl:otherwise>
+							<!-- see Ogre::AlignedAllocator::address(const_reference), t37, bug 1714365 -->
+							<xsl:if
+								test="$isFirstChildTextNode = true() and starts-with(type, 'const')">
+								<xsl:attribute name="const" select="'true'" />
+							</xsl:if>
+						</xsl:otherwise>
+					</xsl:choose>
+				</xsl:if>
 
 				<xsl:if test="array">
 					<xsl:attribute name="array" select="array" />
@@ -1419,8 +1428,28 @@
 									<xsl:value-of select="$type" />
 								</xsl:when>
 								<xsl:otherwise>
-									<xsl:value-of
-										select="substring-before($type, 'const')" />
+									<xsl:choose>
+										<!-- if just type parameter is const -->
+										<xsl:when test="contains($type, '&lt;')">
+											<xsl:choose>
+												<xsl:when test="contains(substring-before(
+																	$type, '&lt;'), 'const')">
+													<xsl:value-of
+														select="substring-after($type, 'const')" />
+												</xsl:when>
+												<xsl:otherwise>
+													<xsl:value-of
+														select="$type" />
+												</xsl:otherwise>
+											</xsl:choose>
+										</xsl:when>
+
+										<!-- it's not a type parameter that is const -->
+										<xsl:otherwise>
+											<xsl:value-of
+												select="substring-before($type, 'const')" />
+										</xsl:otherwise>
+									</xsl:choose>
 								</xsl:otherwise>
 							</xsl:choose>
 						</xsl:when>
@@ -1459,15 +1488,15 @@
 				<xsl:variable name="stripped_type">
 					<xsl:choose>
 						<xsl:when
-							test="contains($typeWithoutRef, '*')">
+							test="contains($typeWithoutRef, '*') and not(contains(type, '&lt;'))">
 							<xsl:choose>
 								<!-- recognize pointer pointer -->
 								<xsl:when
 									test="contains(substring-after($typeWithoutRef, '*'), '*')">
 									<!-- keep some '*' to recognize pointer pointer -->
 									<!-- 
-										<xsl:value-of select="concat(substring-before($typeWithoutRef, '*'),
-										substring-after($typeWithoutRef, '*'))"/>
+										<xsl:value-of select="concat(substring-before($typeWithoutRef, 
+										'*'), substring-after($typeWithoutRef, '*'))"/>
 									-->
 
 									<xsl:value-of
@@ -1475,11 +1504,34 @@
 															$pointerPointerToken)" />
 								</xsl:when>
 								<xsl:otherwise>
+									<!-- whole type is a Ptr (there are no type parameters) -->
 									<xsl:value-of
 										select="substring-before($typeWithoutRef, '*')" />
 								</xsl:otherwise>
 							</xsl:choose>
 						</xsl:when>
+
+						<!-- remove '*' if type is a template -->
+						<xsl:when test="contains(type, '&lt;')">
+							<xsl:variable name="typeAfterLastGT" 
+								select="tokenize($typeWithoutRef, '&gt;')[last()]"/>
+							
+							<xsl:choose>
+								<xsl:when test="contains($typeAfterLastGT, '*')">
+									<xsl:for-each
+										select="tokenize($typeWithoutRef, '\*')[position() != last()]">
+										<xsl:value-of select="."/>
+										<xsl:if test="position() != last()">
+											<xsl:value-of select="'* '"/>
+										</xsl:if>
+									</xsl:for-each>
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:value-of select="$typeWithoutRef" />
+								</xsl:otherwise>
+							</xsl:choose>
+						</xsl:when>
+
 						<xsl:otherwise>
 							<xsl:value-of select="$typeWithoutRef" />
 						</xsl:otherwise>
@@ -1929,6 +1981,8 @@
 		</xsl:element>
 		
 	</xsl:template>
+
+
 
 </xsl:stylesheet>
 <!--

@@ -88,7 +88,8 @@
 			<xsl:with-param name="config" select="$config" />
 			<xsl:with-param name="class" select="$class" />
 			<xsl:with-param name="method" select="$method" />
-			<xsl:with-param name="callingNativeMethod" select="'true'" />
+			<xsl:with-param name="writingNativeMethod" select="false()" />
+			<xsl:with-param name="callingNativeMethod" select="true()" />
 		</xsl:call-template>
 
 		<!-- close c-tor of VoidPointer -->
