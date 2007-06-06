@@ -157,8 +157,13 @@
 				<xsl:otherwise>
 					<!-- if const -->
 					<!-- TODO check for const pointers (int* const) -->
+					<!-- signed / unsigned char as pointer pointer, see bug 1728985 -->
+					<xsl:variable name="cppType" select="if(contains($fullTypeName, 'char')
+															and $pointerPointer != '')
+															then concat($fullTypeName, '*')
+															else $type_info/type/@cpp"/>
 					<xsl:value-of
-						select="concat($const, $type_info/type/@cpp, $pointerPointer)" />
+						select="concat($const, $cppType, $pointerPointer)" />
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:if>
@@ -384,6 +389,13 @@
 					</xsl:choose>
 				</xsl:when>
 
+				<!-- signed / unsigned char as pointer pointer, see bug 1728985 -->
+				<xsl:when test="contains($fullTypeName, 'char') and $pointerPointerAddOn != ''">
+					<xsl:value-of select="concat('(', $const, $fullTypeName, '*', 
+													$pointerPointerAddOn, ')',
+												 '(',$param_name, ')')" />
+				</xsl:when>
+
 				<!-- the 'normal' way -->
 				<xsl:otherwise>
 					<!-- perform general code transformations -->
@@ -522,6 +534,17 @@
 							<xsl:value-of select="$code2" />
 						</xsl:otherwise>
 					</xsl:choose>
+				</xsl:when>
+
+				<!-- signed / unsigned char as pointer pointer, see bug 1728985 -->
+				<xsl:when test="contains($fullTypeName, 'char') 
+								and $param/type/@pointerPointer = 'true'">
+					<!-- 
+					<xsl:value-of select="concat('(', $const, $fullTypeName, '*', 
+													$pointerPointerAddOn, ')',
+												 '(',$param_name, ')')" />
+												  -->
+					<xsl:value-of select="concat('reinterpret_cast&lt;jlong&gt;(',$param_name,')')"/>
 				</xsl:when>
 
 				<!-- the 'normal way' -->
