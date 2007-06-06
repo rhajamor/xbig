@@ -67,7 +67,7 @@
 					<name>num</name>
 				</parameter>
 				<parameter passedBy="value">
-					<type const="false">T</type><!-- const has been changed manually ! -->
+					<type const="true">T</type>
 					<name>val</name>
 				</parameter>
 			</parameters>
@@ -142,7 +142,7 @@
 			<name>push_back</name>
 			<parameters>
 				<parameter passedBy="reference">
-					<type const="false">T</type><!-- const has been changed manually ! -->
+					<type const="true">T</type>
 					<name>val</name>
 				</parameter>
 			</parameters>
@@ -628,11 +628,10 @@
 			<definition>std::priority_queue::size</definition>
 		</function>
 
-		<!-- passedBy has been changed manually ! -->
-		<function virt="non-virtual" visibility="public" static="false" const="false"
-					passedBy="value">
+		<function virt="non-virtual" visibility="public" static="false" const="true"
+					passedBy="reference">
 			<name>top</name>
-			<type>T</type>
+			<type const="true">T</type>
 			<definition>std::priority_queue::top</definition>
 		</function>
 	</class>
@@ -1047,7 +1046,7 @@
 			<definition>std::map::get</definition>
 			<parameters>
 				<parameter passedBy="reference">
-					<type const="false">K</type>
+					<type const="true">K</type>
 					<name>key</name>
 				</parameter>
 			</parameters>
@@ -1073,7 +1072,7 @@
 			<definition>std::map::insert</definition>
 			<parameters>
 				<parameter passedBy="reference">
-					<type const="false">K</type>
+					<type const="true">K</type>
 					<name>key</name>
 				</parameter>
 				<parameter passedBy="reference">
@@ -1176,7 +1175,7 @@
 			<definition>std::hash_map::get</definition>
 			<parameters>
 				<parameter passedBy="reference">
-					<type const="false">K</type>
+					<type const="true">K</type>
 					<name>key</name>
 				</parameter>
 			</parameters>
@@ -1202,7 +1201,7 @@
 			<definition>std::hash_map::insert</definition>
 			<parameters>
 				<parameter passedBy="reference">
-					<type const="false">K</type>
+					<type const="true">K</type>
 					<name>key</name>
 				</parameter>
 				<parameter passedBy="reference">

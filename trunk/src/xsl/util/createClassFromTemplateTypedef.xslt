@@ -235,15 +235,16 @@
 			parameters, those elements are also created here.
 		</xd:short>
 		<xd:param name="type">
-			type as in meta. Maybe something like 'T' or a real type
-			like 'int'. Whole type element not just a string.
+			Type as in meta. Maybe something like 'T' or a real type like 'int'.
+			Whole type element not just a string.
+			@const and ../@passedBy are needed.
 		</xd:param>
 		<xd:param name="template">template which is used.</xd:param>
 		<xd:param name="typedef">
-			typedef which uses a template.
+			Typedef which uses a template.
 		</xd:param>
 		<xd:param name="resolvedTypeParas">
-			list of used type parameters. Must be fully qualified.
+			List of used type parameters. Must be fully qualified.
 		</xd:param>
 	</xd:doc>
 	<xsl:template name="createTypeElementAndPassedByAttribute">
@@ -295,7 +296,8 @@
 						
 					<!-- return -->
 					<xsl:element name="type">
-						<xsl:attribute name="const" select="$selectedTypePara/type/@const"/>
+						<xsl:attribute name="const" select="if ($selectedTypePara/type/@const = 'true')
+												then $selectedTypePara/type/@const else $type/@const"/>
 						<xsl:choose>
 							<xsl:when
 								test="starts-with($selectedTypePara/type, '::')">
@@ -317,6 +319,12 @@
 								<xsl:attribute name="pointerPointer" select="'true'"/>
 								<xsl:value-of
 									select="'pointer'" />
+							</xsl:when>
+
+							<!-- when type para is by value -> keep passedBy of orignial template -->
+							<xsl:when test="$selectedTypePara/@passedBy = 'value'">
+								<xsl:value-of
+									select="$type/../@passedBy" />
 							</xsl:when>
 
 							<!-- no implicit pointer pointer -->
