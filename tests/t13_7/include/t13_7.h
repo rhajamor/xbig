@@ -73,8 +73,9 @@ public:
 
 class EXPORT A {
 public:
-	A() {std::cout << "t13_3 A::A()" << std::endl; }
-	virtual ~A() {std::cout << "t13_3 A::~A()" << std::endl; }
+	A() {std::cout << "t13_7 A::A()" << std::endl; }
+	A(const A& rhs) {std::cout << "t13_7 A::A(const A&)" << std::endl; }
+	virtual ~A() {std::cout << "t13_7 A::~A()" << std::endl; }
 };
 
 class EXPORT Tester {

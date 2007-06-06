@@ -25,7 +25,7 @@ public class BasicTests {
 		Assert.assertTrue(sv.empty());
 		sv.push_back(sPtr.get());
 		Assert.assertFalse(sv.empty());
-		Assert.assertEquals(sPtr.get(), sv.at(0));
+		Assert.assertEquals(sPtr.get(), sv.at(0).get());
 
 		t.a(sv);
 		IStringVector vec = t.b();

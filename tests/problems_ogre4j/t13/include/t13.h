@@ -18,7 +18,12 @@
 #endif
 
 
+
+#include <iostream>
 #include <assert.h>
+
+
+
 
 template <typename T>
 class EXPORT Singleton {
@@ -28,8 +33,14 @@ protected:
 public:
 	Singleton( void ) {ms_Singleton = static_cast< T* >( this );}
 
-	static T& getSingleton( void ) {   assert( ms_Singleton );  return ( *ms_Singleton ); }
-	static T* getSingletonPtr( void ) { return ms_Singleton; }
+	static T& getSingleton( void ) {
+		std::cout << "Singleton::getSingleton. Type: " << typeid(ms_Singleton).name() << "\n";
+		assert( ms_Singleton );  return ( *ms_Singleton );
+	}
+	static T* getSingletonPtr( void ) {
+		std::cout << "Singleton::getSingletonPtr. Type: " << typeid(ms_Singleton).name() << "\n";
+		return ms_Singleton;
+	}
 };
 
 class EXPORT Root : public Singleton<Root> {};

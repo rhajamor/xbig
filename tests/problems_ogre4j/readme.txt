@@ -26,7 +26,7 @@ t09              s
 t10              f (at least on windows)
 t11              s
 t12              s
-t13              f
+t13              s
 t14              s
 t15              f
 t16              s
@@ -69,3 +69,4 @@ t49              s
 t50              s
 t51              s
 t52              s
+t53              f
