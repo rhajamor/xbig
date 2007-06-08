@@ -190,10 +190,11 @@
 			select="$allInheritedMethodsWithoutConstParams/function">
 			<xsl:variable name="currentMethod" select="." />
 			<xsl:variable name="currentMethodPos" select="position()" />
+
 			<xsl:choose>
 
 				<!-- filter base class c-tors -->
-				<xsl:when test="not(type) and name != $class/@name">
+				<xsl:when test="not(./type) and ./name != $class/@name">
 				</xsl:when>
 
 				<!-- filter c-tors of current class that have unresolved types as parameters -->
@@ -240,7 +241,12 @@
 									</xsl:when>
 									<xsl:when
 										test="xbig:isClassOrStruct($fullTypeName, $class, $root)">
-										<xsl:sequence select="false()" />
+										<!-- if parameter is a template without type parameters
+											 , filter it! See bug 1728990, t53 and Ogre::SharedPtr -->
+										<xsl:sequence select="if (
+											$root//class[@fullName = $fullTypeName]/@template = 'true' or
+											$root//struct[@fullName = $fullTypeName]/@template = 'true')
+											then true() else false()" />
 									</xsl:when>
 									<xsl:when
 										test="xbig:isTemplateTypedef($fullTypeName, $class, $root)">
@@ -250,7 +256,7 @@
 									<!-- template parameters -->
 									<xsl:when
 										test="$class/templateparameters/templateparameter
-																		[@templateDeclaration = $typeName]">
+																	[@templateDeclaration = $typeName]">
 										<!-- TODO check if $fullTypeName must be used here -->
 										<xsl:sequence select="false()" />
 									</xsl:when>
