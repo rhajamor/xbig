@@ -122,16 +122,8 @@
 		<!-- add '*' for pointer pointer -->
 		<xsl:variable name="pointerPointer">
 			<xsl:choose>
-				<xsl:when test="$param/type/@pointerPointer = 'true' and $param/name() = 'parameter'">
+				<xsl:when test="$param/type/@pointerPointer = 'true'">
 					<xsl:value-of select="'*'" />
-				</xsl:when>
-				<!-- This is an easy and pragmatic solution (others would call it a hack)
-					 for a part of bug 1728998.
-					 If the return type is a pointer pointer it is declared partly const always.
-					 See Ogre::SceneNode::ConstObjectIterator::peekNextValuePtr.
-				 -->
-				<xsl:when test="$param/type/@pointerPointer = 'true' and $param/name() = 'function'">
-					<xsl:value-of select="' const *'" />
 				</xsl:when>
 				<xsl:otherwise>
 					<xsl:value-of select="''" />
@@ -162,8 +154,16 @@
 															and $pointerPointer != '')
 															then concat($fullTypeName, '*')
 															else $type_info/type/@cpp"/>
-					<xsl:value-of
-						select="concat($const, $cppType, $pointerPointer)" />
+
+					<!-- Return types are declared partly const always, see bug 1728998.
+						 See Ogre::SceneNode::ConstObjectIterator::peekNextValuePtr.
+					 -->
+					<xsl:value-of select="
+								if ($param//@constInTemplate = 'true'  and $param/name() = 'function')
+								then concat('const ', $cppType, $const, $pointerPointer)
+								else if ($param//@constInTemplate = 'true')
+								then concat($cppType, $const, $pointerPointer)
+								else concat($const, $cppType, $pointerPointer)" />
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:if>
@@ -220,8 +220,18 @@
 				</xsl:choose>
 			</xsl:variable>
 
-			<xsl:value-of
-				select="concat($const, $type, $pass, $pointerPointer)" />
+			<!-- Return types are declared partly const always, see bug 1728998.
+				 See Ogre::SceneNode::ConstObjectIterator::peekNextValuePtr.
+			 -->
+			<xsl:value-of select="if ($param//@constInTemplate = 'true' and $param/name() = 'function')
+									then concat('const ', $type, $pass, $const, $pointerPointer)
+									else if ($param//@constInTemplate = 'true')
+									then concat($type, $pass, $const, $pointerPointer)
+									else if ($pointerPointer != '' and $param/name() = 'function')
+									then concat('const ', $type, $pass, ' const ', $pointerPointer)
+									else if ($param/name() = 'function')
+									then concat('const ', $type, $pass, $pointerPointer)
+									else concat($const, $type, $pass, $pointerPointer)" />
 		</xsl:if>
 
 	</xsl:function>
@@ -272,7 +282,7 @@
 
 		<!-- const or not, for a later concat -->
 		<xsl:variable name="const"
-			select="if($param/type/@const eq 'true') then 'const ' else ''" />
+			select="if($param/type/@const eq 'true') then ' const ' else ''" />
 
 		<!-- shortcut for parameter name -->
 		<!-- if there is no param name in original lib -->
@@ -316,11 +326,14 @@
 														$fullTypeName, $class, $root)" />
 					<xsl:variable name="part3"
 						select="$pointerPointerAddOn" />
-					<xsl:variable name="part4" select="'* &gt;('" />
+					<xsl:variable name="part4" select="if ($param//@constInTemplate = 'true')
+														then '* const &gt;('
+														else '* &gt;('" />
 					<xsl:variable name="part5" select="$param_name" />
 					<xsl:variable name="part6" select="')'" />
-					<xsl:value-of
-						select="concat($part1, $const, $part2, $part3, $part4, $part5, $part6)" />
+					<xsl:value-of select="if ($param//@constInTemplate = 'true')
+						then concat($part1, $part2, $part3, $part4, $part5, $part6)
+						else concat($part1, $const, $part2, $part3, $part4, $part5, $part6)" />
 				</xsl:when>
 
 				<!-- if this is a typedef for a template -->
@@ -331,11 +344,14 @@
 					<xsl:variable name="part2" select="$fullTypeName" />
 					<xsl:variable name="part3"
 						select="$pointerPointerAddOn" />
-					<xsl:variable name="part4" select="'* &gt;('" />
+					<xsl:variable name="part4" select="if ($param//@constInTemplate = 'true')
+														then '* const &gt;('
+														else '* &gt;('" />
 					<xsl:variable name="part5" select="$param_name" />
 					<xsl:variable name="part6" select="')'" />
-					<xsl:value-of
-						select="concat($part1, $const, $part2, $part3, $part4, $part5, $part6)" />
+					<xsl:value-of select="if ($param//@constInTemplate = 'true')
+						then concat($part1, $part2, $part3, $part4, $part5, $part6)
+						else concat($part1, $const, $part2, $part3, $part4, $part5, $part6)" />
 				</xsl:when>
 
 				<!-- test for enums -->
@@ -354,11 +370,14 @@
 					<xsl:variable name="part2" select="$fullTypeName" />
 					<xsl:variable name="part3"
 						select="$pointerPointerAddOn" />
-					<xsl:variable name="part4" select="'* &gt;('" />
+					<xsl:variable name="part4" select="if ($param//@constInTemplate = 'true')
+														then '* const &gt;('
+														else '* &gt;('" />
 					<xsl:variable name="part5" select="$param_name" />
 					<xsl:variable name="part6" select="')'" />
-					<xsl:value-of
-						select="concat($part1, $const, $part2, $part3, $part4, $part5, $part6)" />
+					<xsl:value-of select="if ($param//@constInTemplate = 'true')
+						then concat($part1, $part2, $part3, $part4, $part5, $part6)
+						else concat($part1, $const, $part2, $part3, $part4, $part5, $part6)" />
 				</xsl:when>
 
 				<xsl:otherwise>

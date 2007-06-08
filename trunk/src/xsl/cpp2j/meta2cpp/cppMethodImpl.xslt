@@ -44,7 +44,8 @@
 	</xd:doc>
 
 	<xd:doc type="template">
-		<xd:short>Generate method implementation. Selects a code template from config and calls CodeWriter.
+		<xd:short>
+			Generate method implementation. Selects a code template from config and calls CodeWriter.
 		</xd:short>
 		<xd:param name="config">config file.</xd:param>
 		<xd:param name="class_prefix">

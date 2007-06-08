@@ -298,6 +298,8 @@
 					<xsl:element name="type">
 						<xsl:attribute name="const" select="if ($selectedTypePara/type/@const = 'true')
 												then $selectedTypePara/type/@const else $type/@const"/>
+						<xsl:attribute name="constInTemplate" select="if ($type/@const = 'true')
+																		then 'true' else 'false'"/>
 						<xsl:choose>
 							<xsl:when
 								test="starts-with($selectedTypePara/type, '::')">
@@ -399,6 +401,8 @@
 						<xsl:attribute name="const" select="if($infoNode/@addConst) then 'true'
 								else if($type/@const = 'true') then 'true' else 
 								$resolvedTypeParas/*[position() = $infoNode/@typeParaPos]/type/@const"/>
+						<xsl:attribute name="constInTemplate" select="if ($type/@const = 'true')
+																		then 'true' else 'false'"/>
 						<xsl:value-of
 							select="$resolvedTypeParas/*[position() = $infoNode/@typeParaPos]/type" />
 					</xsl:element>
@@ -538,7 +542,6 @@
 							$typeAndPassedBy/passedBy/@pointerPointer = 'true'">
 				<xsl:attribute name="pointerPointer" select="'true'" />
 			</xsl:if>
-
 			<!-- copy all attributes -->
 			<xsl:for-each select="$typeAndPassedBy/type/@*">
 				<xsl:copy-of select="." />
