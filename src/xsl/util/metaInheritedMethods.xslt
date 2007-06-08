@@ -391,8 +391,8 @@
 		<!-- return methods -->
 		<xsl:for-each select="$class/function">
 			<xsl:choose>
-				<!-- change template types -->
-				<xsl:when test="$baseClassTypedef">
+				<!-- change template types, but not for c-tors -->
+				<xsl:when test="$baseClassTypedef and type">
 					<xsl:call-template name="createFunctionElement">
 						<xsl:with-param name="function" select="." />
 						<xsl:with-param name="typedef"
