@@ -1602,8 +1602,9 @@
 	<xsl:template name="variable">
 		<xsl:param name="ifGlobal" select="false()"/>
 
-		<!-- see bug 1719159 -->
-		<xsl:for-each select="memberdef[@kind='variable'][not(starts-with(name, '@'))]">
+		<!-- see bug 1719159 and 1728987 -->
+		<xsl:for-each select="memberdef[@kind='variable']
+								[not(starts-with(name, '@'))][not(contains(type, '@'))]">
 			<xsl:element name="variable">
 				<!--
 					<xsl:attribute name="static">
