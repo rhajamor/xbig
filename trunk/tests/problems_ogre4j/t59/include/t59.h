@@ -37,13 +37,13 @@ namespace Ogre {
 
 	class EXPORT Node : public Renderable {
 	public:
-		virtual Node* Ogre::Node::createChild(const String& name, const Vector3& translate, const Quaternion& rotate) {return NULL;}
-		virtual Node* Ogre::Node::createChild(const Vector3& translate, const Quaternion& rotate) {return NULL;}
+		virtual Node* createChild(const String name, const Vector3 translate, const Quaternion rotate) {return NULL;}
+		virtual Node* createChild(const Vector3 translate, const Quaternion rotate) {return NULL;}
 	};
 
 	class EXPORT Bone : public Node {
 	public:
-		virtual Bone* Ogre::Bone::createChild(unsigned short handle, const Vector3& translate, const Quaternion& rotate) {return NULL;}
+		Bone* createChild(unsigned short handle, const Vector3 translate, const Quaternion rotate) {return NULL;}
 	};
 
 	class EXPORT TagPoint : public Bone {};
