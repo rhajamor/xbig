@@ -161,6 +161,7 @@
 			</parameters>
 		</function>
 
+		<!-- uses default c-tor of type parameter
 		<function virt="non-virtual" visibility="public" static="false" const="false"
 					passedBy="value">
 			<type>void</type>
@@ -173,6 +174,7 @@
 				</parameter>
 			</parameters>
 		</function>
+		-->
 		<!-- second parameter is a c-tor
 		<function virt="non-virtual" visibility="public" static="false" const="false"
 					passedBy="value">
@@ -502,7 +504,7 @@
 			</parameters>
 		</function>
 		-->
-		
+		<!-- uses default c-tor of type parameter
 		<function virt="non-virtual" visibility="public" static="false" const="false"
 					passedBy="value">
 			<name>resize</name>
@@ -519,7 +521,7 @@
 				</parameter>
 			</parameters>
 		</function>
-		
+		-->
 		<function virt="non-virtual" visibility="public" static="false" const="false"
 					passedBy="value">
 			<name>reverse</name>
@@ -533,14 +535,14 @@
 			<type>size_t</type>
 			<definition>std::list::size</definition>
 		</function>
-		
+		<!-- uses operator&lt; of type parameter
 		<function virt="non-virtual" visibility="public" static="false" const="false"
 					passedBy="value">
 			<name>sort</name>
 			<type>void</type>
 			<definition>std::list::sort</definition>
 		</function>
-		
+		-->
 		<!--
 		<function virt="non-virtual" visibility="public" static="false" const="false"
 					passedBy="value">

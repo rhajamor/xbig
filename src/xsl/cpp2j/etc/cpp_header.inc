@@ -28,3 +28,14 @@
 
 
 
+// disable warnings
+#ifdef WIN32
+	#pragma warning (disable : 4267) // conversion from 'size_t' to 'jint'
+#else
+	#define EXPORT
+#endif
+
+
+
+// to avoid problems with ogre4j
+#include &lt;Ogre.h&gt;

@@ -335,7 +335,14 @@
             reinterpret_cast&lt;jlong&gt;(&amp;#cpp_var#)
           </cpp2jni>
         </type>
-        <type meta="bool" jni="jboolean" />
+        <type meta="bool" jni="jboolean">
+          <jni2cpp>
+            #jni_var# ? true : false
+          </jni2cpp>
+          <cpp2jni>
+            #cpp_var# ? 1 : 0
+          </cpp2jni>
+        </type>
 
         <type meta="char" pass="pointer" const="true"
           jni="jstring" cpp="char*">
