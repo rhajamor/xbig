@@ -17,6 +17,7 @@
 
 #ifdef WIN32
 	#define EXPORT __declspec(dllexport)
+	#pragma warning (disable : 4996)
 #else
 	#define EXPORT
 #endif
@@ -102,6 +103,40 @@ namespace Ogre {
 	typedef unsigned char uchar;
 	class EXPORT RenderTarget {};
 	typedef std::multimap<uchar, RenderTarget * > RenderTargetPriorityMap;
+
+
+
+	enum PixelFormat {
+		PF_FLOAT16_R,
+		PF_FLOAT16_RGB,
+		PF_FLOAT16_RGBA,
+		PF_FLOAT32_R,
+		PF_FLOAT32_RGB, 	
+		PF_FLOAT32_RGBA,
+		PF_FLOAT16_GR,
+		PF_FLOAT32_GR
+	};
+	class EXPORT ColourValue {};
+	class EXPORT PixelUtil {
+	public:
+		static void packColour (const ColourValue &colour, const PixelFormat pf, void *dest){}
+	};
+
+
+	class EXPORT ParticleSystemRenderer {};
+	template <class T>
+	class EXPORT FactoryObj {
+	public:
+		virtual const String & 	getType () const =0;
+	};
+	class EXPORT ParticleSystemRendererFactory : public FactoryObj<ParticleSystemRenderer> {
+	};
+	class EXPORT BillboardParticleRendererFactory : public ParticleSystemRendererFactory {
+		String str;
+	public:
+		BillboardParticleRendererFactory() {str = "bulldozer";}
+		virtual const String & 	getType () const {return str;}
+	};
 }
 
 #endif

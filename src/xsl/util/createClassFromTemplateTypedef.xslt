@@ -480,6 +480,7 @@
 						<xsl:when
 							test="xbig:isClassOrStruct($fullTypeName, $template, $root)">
 							<xsl:element name="type">
+								<xsl:attribute name="const" select="$type/@const"/>
 								<xsl:value-of
 									select="concat('::', xbig:getFullTypeName(
 													$type, $template, $root))" />
@@ -492,6 +493,7 @@
 						<xsl:when
 							test="xbig:isEnum($fullTypeName, $template, $root)">
 							<xsl:element name="type">
+								<xsl:attribute name="const" select="$type/@const"/>
 								<xsl:value-of
 									select="concat('::', xbig:getFullTypeName(
 													$type, $template, $root))" />
@@ -504,6 +506,7 @@
 						<xsl:when
 							test="xbig:isTypedef($fullTypeName, $template, $root)">
 							<xsl:element name="type">
+								<xsl:attribute name="const" select="$type/@const"/>
 								<xsl:value-of
 									select="concat('::', xbig:getFullTypeName(
 													xbig:resolveTypedef($type, $template, $root)
@@ -516,6 +519,7 @@
 						</xsl:when>
 						<xsl:otherwise>
 							<xsl:element name="type">
+								<xsl:attribute name="const" select="$type/@const"/>
 								<xsl:value-of select="$type" />
 							</xsl:element>
 							<xsl:element name="passedBy">
