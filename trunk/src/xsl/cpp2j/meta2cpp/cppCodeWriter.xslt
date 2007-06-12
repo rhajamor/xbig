@@ -161,7 +161,8 @@
 					<xsl:value-of select="
 								if ($param//@constInTemplate = 'true'  and $param/name() = 'function')
 									then concat('const ', $cppType, $const, $pointerPointer)
-								else if ($param//@constInTemplate = 'true' and $pointerPointer = '')
+								else if ($param//@constInTemplate = 'true' 
+																and $param/@passedBy != 'pointer')
 									then concat($const, $cppType, $pointerPointer)
 								else if ($param//@constInTemplate = 'true')
 									then concat($cppType, $const, $pointerPointer)
