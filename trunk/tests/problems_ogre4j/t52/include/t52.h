@@ -84,6 +84,24 @@ namespace Ogre {
 	typedef VectorIterator<AVec> AIterator;
 	typedef std::vector<A*> APtrVec;
 	typedef VectorIterator<APtrVec> APtrIterator;
+
+
+	enum TextureEffectType {
+		ET_ENVIRONMENT_MAP,
+		ET_PROJECTIVE_TEXTURE,
+		ET_UVSCROLL,
+		ET_USCROLL,
+		ET_VSCROLL,
+		ET_ROTATE,
+		ET_TRANSFORM
+	};
+	struct EXPORT TextureEffect {};
+	typedef std::multimap< TextureEffectType, TextureEffect > EffectMap;
+
+
+	typedef unsigned char uchar;
+	class EXPORT RenderTarget {};
+	typedef std::multimap<uchar, RenderTarget * > RenderTargetPriorityMap;
 }
 
 #endif
