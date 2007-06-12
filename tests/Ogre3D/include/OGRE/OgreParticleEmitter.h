@@ -146,7 +146,7 @@ namespace Ogre {
         String mEmittedEmitter;
 
 		// If 'true', this emitter is emitted by another emitter.
-		// NB. That doesn't imply that the emitter itself emits other emitters (that could or could not be the case)
+		// NB. That doesn´t imply that the emitter itself emits other emitters (that could or could not be the case)
 		bool mEmitted;
 
 		// NB Method below here are to help out people implementing emitters by providing the
@@ -490,7 +490,7 @@ namespace Ogre {
 		/** Sets the name of the emitter to be emitted*/
 		virtual void setEmittedEmitter(const String& emittedEmitter);
 
-		/** Return true if the emitter is emitted by another emitter */
+		/** Return ´true´ if the emitter is emitted by another emitter */
 		virtual bool isEmitted(void) const;
 
 		/** Set the indication (true/false) to indicate that the emitter is emitted by another emitter */

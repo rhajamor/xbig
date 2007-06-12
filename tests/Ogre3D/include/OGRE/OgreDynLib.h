@@ -60,7 +60,7 @@ namespace Ogre {
             This class holds the data required to get symbols from
             libraries loaded at run-time (i.e. from DLL's for so's)
         @author
-            Adrian Cearny (cearny@cearny.ro)
+            Adrian Cearnãu (cearny@cearny.ro)
         @since
             27 January 2002
         @see
