@@ -132,6 +132,10 @@
       <indent>&#10;&#32;&#32;</indent>
     </format>
 
+	<always_include>
+		<!-- <header>Ogre.h</header> -->
+	</always_include>
+
     <variables>
       <jni>
         <environment name="_jni_env_" />

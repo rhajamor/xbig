@@ -70,8 +70,20 @@
 			<xsl:with-param name="config" select="$config" />
 		</xsl:call-template>
 
+		<!-- include headers from config -->
+		<xsl:if test="$config/config/cpp/always_include/header">
+		<xsl:text>&#10;</xsl:text>
+		<xsl:text>// includes from config</xsl:text>
+		<xsl:text>&#10;</xsl:text>
+			<xsl:for-each select="$config/config/cpp/always_include/header">
+				<xsl:text>#include &lt;</xsl:text>
+				<xsl:sequence select="." />
+				<xsl:text>&gt;&#10;</xsl:text>
+			</xsl:for-each>
+		</xsl:if>
+
 		<!-- include all JNI utility functions -->
-		<xsl:text>&#10;&#10;</xsl:text>
+		<xsl:text>&#10;</xsl:text>
 		<xsl:text>// use base library for cpp2j</xsl:text>
 		<xsl:text>&#10;#include "jni_base_all.h"&#10;</xsl:text>
 

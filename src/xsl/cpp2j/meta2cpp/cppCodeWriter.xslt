@@ -160,10 +160,13 @@
 					 -->
 					<xsl:value-of select="
 								if ($param//@constInTemplate = 'true'  and $param/name() = 'function')
-								then concat('const ', $cppType, $const, $pointerPointer)
+									then concat('const ', $cppType, $const, $pointerPointer)
+								else if ($param//@constInTemplate = 'true' and $pointerPointer = '')
+									then concat($const, $cppType, $pointerPointer)
 								else if ($param//@constInTemplate = 'true')
-								then concat($cppType, $const, $pointerPointer)
-								else concat($const, $cppType, $pointerPointer)" />
+									then concat($cppType, $const, $pointerPointer)
+								else
+									concat($const, $cppType, $pointerPointer)" />
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:if>
@@ -224,14 +227,18 @@
 				 See Ogre::SceneNode::ConstObjectIterator::peekNextValuePtr.
 			 -->
 			<xsl:value-of select="if ($param//@constInTemplate = 'true' and $param/name() = 'function')
-									then concat('const ', $type, $pass, $const, $pointerPointer)
+										then concat('const ', $type, $pass, $const, $pointerPointer)
+									else if ($param//@constInTemplate = 'true' 
+													and $param/@passedBy != 'pointer')
+										then concat($const, $type, $pass, $pointerPointer)
 									else if ($param//@constInTemplate = 'true')
-									then concat($type, $pass, $const, $pointerPointer)
+										then concat($type, $pass, $const, $pointerPointer)
 									else if ($pointerPointer != '' and $param/name() = 'function')
-									then concat('const ', $type, $pass, ' const ', $pointerPointer)
+										then concat('const ', $type, $pass, ' const ', $pointerPointer)
 									else if ($param/name() = 'function')
-									then concat('const ', $type, $pass, $pointerPointer)
-									else concat($const, $type, $pass, $pointerPointer)" />
+										then concat('const ', $type, $pass, $pointerPointer)
+									else
+										concat($const, $type, $pass, $pointerPointer)" />
 		</xsl:if>
 
 	</xsl:function>

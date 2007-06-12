@@ -557,7 +557,7 @@
 			</parameters>
 		</function>
 		-->
-			
+		
 		<function virt="non-virtual" visibility="public" static="false" const="false"
 					passedBy="value">
 			<name>unique</name>
