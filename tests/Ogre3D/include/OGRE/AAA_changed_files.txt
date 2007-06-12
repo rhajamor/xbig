@@ -1,9 +1,6 @@
 
 following files contain changes:
 ====================================
-OgreDynLib.h
-OgreParticleEmitter.h
-OgreParticleSystem.h
 OgreUTFString.h
 
 

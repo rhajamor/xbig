@@ -18,9 +18,15 @@ namespace t1
 
    namespace t11
    {
-     
      /** Test class T1.
-      * 
+      *@remarks
+            A simple test class
+        @author
+            NameWithUTFCharã
+        @since
+            12 June 2007
+        @see
+            INSTALL
       */
      class EXPORT T1  {
   
@@ -43,10 +49,13 @@ namespace t1
         T1(int i, unsigned int u, const std::string& str);
       
         /** Simple output function.
+         * @author
+            NameWithUTFCharã
          */
         void print() const;
         
         /** Test of setting string.
+         * Return �nothing�
          */
         void setString(const std::string& str);
         
