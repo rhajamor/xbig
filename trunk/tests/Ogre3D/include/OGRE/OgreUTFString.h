@@ -204,11 +204,7 @@ namespace Ogre {
 
 		//#########################################################################
 		//! base iterator class for UTFString
-	class _base_iterator
-#ifndef DOXYGEN	     
-	     : public std::iterator<std::random_access_iterator_tag, value_type> /* i don't know why the beautifier is freaking out on this line */
-#endif	     
-	     { 
+	class _base_iterator: public std::iterator<std::random_access_iterator_tag, value_type> { /* i don't know why the beautifier is freaking out on this line */
 			friend class UTFString;
 		protected:
 			_base_iterator() {
@@ -379,20 +375,20 @@ namespace Ogre {
 
 			//! dereference operator
 			value_type& operator*() const {
-				return mIter.operator*();
+				return *mIter;
 			}
 
 			//! dereference at offset operator
 			value_type& operator[]( size_type n ) const {
 				_fwd_iterator tmp( *this );
 				tmp += n;
-				return tmp.operator*();
+				return *tmp;
 			}
 			//! dereference at offset operator
 			value_type& operator[]( difference_type n ) const {
 				_fwd_iterator tmp( *this );
 				tmp += n;
-				return tmp.operator*();
+				return *tmp;
 			}
 
 			//! advances to the next Unicode character, honoring surrogate pairs in the UTF-16 stream
@@ -513,20 +509,20 @@ namespace Ogre {
 
 			//! dereference operator
 			const value_type& operator*() const {
-				return mIter.operator*();
+				return *mIter;
 			}
 
 			//! dereference at offset operator
 			const value_type& operator[]( size_type n ) const {
 				_const_fwd_iterator tmp( *this );
 				tmp += n;
-				return tmp.operator*();
+				return *tmp;
 			}
 			//! dereference at offset operator
 			const value_type& operator[]( difference_type n ) const {
 				_const_fwd_iterator tmp( *this );
 				tmp += n;
-				return tmp.operator*();
+				return *tmp;
 			}
 
 			//! advances to the next Unicode character, honoring surrogate pairs in the UTF-16 stream
@@ -665,13 +661,13 @@ namespace Ogre {
 			value_type& operator[]( size_type n ) const {
 				_rev_iterator tmp( *this );
 				tmp -= n;
-				return tmp.operator*();
+				return *tmp;
 			}
 			//! dereference at offset operator
 			value_type& operator[]( difference_type n ) const {
 				_rev_iterator tmp( *this );
 				tmp -= n;
-				return tmp.operator*();
+				return *tmp;
 			}
 		};
 		//#########################################################################
@@ -776,13 +772,13 @@ namespace Ogre {
 			const value_type& operator[]( size_type n ) const {
 				_const_rev_iterator tmp( *this );
 				tmp -= n;
-				return tmp.operator*();
+				return *tmp;
 			}
 			//! dereference at offset operator
 			const value_type& operator[]( difference_type n ) const {
 				_const_rev_iterator tmp( *this );
 				tmp -= n;
-				return tmp.operator*();
+				return *tmp;
 			}
 
 			//! difference operator

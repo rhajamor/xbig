@@ -1,0 +1,12 @@
+
+following files contain changes:
+====================================
+OgreDynLib.h
+OgreParticleEmitter.h
+OgreParticleSystem.h
+OgreUTFString.h
+
+
+
+*******************************************************************************
+note: this file's name begins with AAA that it is not overseen

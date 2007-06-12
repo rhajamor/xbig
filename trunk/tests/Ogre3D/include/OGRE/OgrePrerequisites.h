@@ -22,8 +22,8 @@ along with this library; if not, write to the Free Software Foundation,
 Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA or go to
 http://www.gnu.org/copyleft/lesser.txt
 -------------------------------------------------------------------------*/
-#ifndef __Prerequisites_H__
-#define __Prerequisites_H__
+#ifndef __OgrePrerequisites_H__
+#define __OgrePrerequisites_H__
 
 // undefine this to not require new angular units where applicable
 #define OGRE_FORCE_ANGLE_TYPES
@@ -90,8 +90,8 @@ namespace Ogre {
     // Define ogre version
     #define OGRE_VERSION_MAJOR 1
     #define OGRE_VERSION_MINOR 4
-    #define OGRE_VERSION_PATCH 0
-	#define OGRE_VERSION_SUFFIX "RC2"
+    #define OGRE_VERSION_PATCH 1
+	#define OGRE_VERSION_SUFFIX ""
     #define OGRE_VERSION_NAME "Eihort"
 
     #define OGRE_VERSION    ((OGRE_VERSION_MAJOR << 16) | (OGRE_VERSION_MINOR << 8) | OGRE_VERSION_PATCH)
@@ -149,6 +149,8 @@ namespace Ogre {
 		#define OGRE_AUTO_MUTEX mutable boost::recursive_mutex OGRE_AUTO_MUTEX_NAME;
 		#define OGRE_LOCK_AUTO_MUTEX boost::recursive_mutex::scoped_lock ogreAutoMutexLock(OGRE_AUTO_MUTEX_NAME);
 		#define OGRE_MUTEX(name) mutable boost::recursive_mutex name;
+		#define OGRE_STATIC_MUTEX(name) static boost::recursive_mutex name;
+		#define OGRE_STATIC_MUTEX_INSTANCE(name) boost::recursive_mutex name;
 		#define OGRE_LOCK_MUTEX(name) boost::recursive_mutex::scoped_lock ogrenameLock(name);
 		#define OGRE_LOCK_MUTEX_NAMED(mutexName, lockName) boost::recursive_mutex::scoped_lock lockName(mutexName);
 		// like OGRE_AUTO_MUTEX but mutex held by pointer
@@ -172,6 +174,8 @@ namespace Ogre {
 		#define OGRE_AUTO_MUTEX
 		#define OGRE_LOCK_AUTO_MUTEX
 		#define OGRE_MUTEX(name)
+		#define OGRE_STATIC_MUTEX(name)
+		#define OGRE_STATIC_MUTEX_INSTANCE(name)
 		#define OGRE_LOCK_MUTEX(name)
 		#define OGRE_LOCK_MUTEX_NAMED(mutexName, lockName)
 		#define OGRE_AUTO_SHARED_MUTEX
