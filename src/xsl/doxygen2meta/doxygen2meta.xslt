@@ -1319,7 +1319,9 @@
 		<!-- name -->
 		<xsl:if test="declname!=''">
 			<xsl:element name="name">
-				<xsl:value-of select="declname" />
+				<xsl:value-of select="if (declname = 'min') then 'min_as_parameter'
+									  else if (declname = 'max') then 'max_as_parameter'
+									  else declname" />
 			</xsl:element>
 		</xsl:if>
 	</xsl:template>

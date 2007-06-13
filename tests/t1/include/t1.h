@@ -87,7 +87,9 @@ namespace t1
 		/**
 		 * On Windows names min and max are defined
 		 */
-		//void testParameterNameOnWindows(int min, int max){}
+		void testParameterNameOnWindows(int min, int max){}
+		void min(){}
+		void max(){}
 
       private:
         int 		    _test_int;
