@@ -138,42 +138,6 @@
 	    <!-- write return type if available-->
 	    <xsl:if test="$return_type">
 	      <xsl:text>&#32;</xsl:text>
-
-	      <xsl:choose>
-	        <!-- if this is a typedef for a template and the type parameter is a primitive -->
-	        <xsl:when test="$method/type/@originalType">
-	          <xsl:choose>
-	            <xsl:when
-	              test="$method/type/@originalType != $return_type and
-											$config/config/java/types/type[@meta = $return_type] and
-											$method/@passedBy = 'value'">
-	              <xsl:value-of
-	                select="$config/config/java/types/type
-													  [@meta = $return_type]/@genericParameter" />
-	            </xsl:when>
-	            <xsl:otherwise>
-	              <xsl:call-template name="javaType">
-	                <xsl:with-param name="config" select="$config" />
-	                <xsl:with-param name="param" select="$method" />
-	                <xsl:with-param name="class" select="$class" />
-	                <xsl:with-param name="typeName" select="$return_type" />
-					<xsl:with-param name="writingNativeMethod" select="false()" />
-					<xsl:with-param name="isTypeParameter" select="false()" />
-	              </xsl:call-template>
-	            </xsl:otherwise>
-	          </xsl:choose>
-	        </xsl:when>
-
-	        <!-- if a template parameter is returned -->
-	        <xsl:when
-	          test="$class/templateparameters/templateparameter
-									[@templateType='class'][@templateDeclaration = $return_type] and
-									$method/@passedBy = 'value'">
-	          <!-- <xsl:value-of select="'void'"/> -->
-	          <xsl:value-of select="$return_type" />
-	        </xsl:when>
-
-	        <xsl:otherwise>
 	          <xsl:call-template name="javaType">
 	            <xsl:with-param name="config" select="$config" />
 	            <xsl:with-param name="param" select="$method" />
@@ -182,8 +146,6 @@
 				<xsl:with-param name="writingNativeMethod" select="false()" />
 				<xsl:with-param name="isTypeParameter" select="false()" />
 	          </xsl:call-template>
-	        </xsl:otherwise>
-	      </xsl:choose>
 	    </xsl:if>
 
 	    <!-- write method name -->
@@ -210,43 +172,14 @@
 	    <xsl:for-each select="$method/parameters/parameter">
 
         <!-- write parameter type -->
-        <xsl:choose>
-
-	        <!-- if this is a typedef for a template and the type parameter is a primitive -->
-	        <xsl:when test="./type/@originalType">
-	          <xsl:choose>
-	            <xsl:when
-	              test="./type/@originalType != ./type 
-	                    and $config/config/java/types/type[@meta = current()/type] 
-	                    and ./@passedBy = 'value'">
-	              <xsl:value-of
-	                select="$config/config/java/types/type
-				[@meta = current()/type]/@genericParameter" />
-	            </xsl:when>
-	            <xsl:otherwise>
-	              <xsl:call-template name="javaType">
-	                <xsl:with-param name="config" select="$config" />
-	                <xsl:with-param name="param" select="." />
-	                <xsl:with-param name="class" select="$class" />
-	                <xsl:with-param name="typeName" select="./type" />
-					<xsl:with-param name="writingNativeMethod" select="false()" />
-					<xsl:with-param name="isTypeParameter" select="false()" />
-	              </xsl:call-template>
-	            </xsl:otherwise>
-	          </xsl:choose>
-	        </xsl:when>
-
-	        <xsl:otherwise>
-	          <xsl:call-template name="javaType">
+ 	    <xsl:call-template name="javaType">
 	            <xsl:with-param name="config" select="$config" />
 	            <xsl:with-param name="param" select="." />
 	            <xsl:with-param name="class" select="$class" />
 	            <xsl:with-param name="typeName" select="./type" />
 				<xsl:with-param name="writingNativeMethod" select="false()" />
 				<xsl:with-param name="isTypeParameter" select="false()" />
-	          </xsl:call-template>
-	        </xsl:otherwise>
-	      </xsl:choose>
+	    </xsl:call-template>
 
 	      <!-- seperator type and name -->
 	      <xsl:text>&#32;</xsl:text>
