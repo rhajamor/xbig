@@ -2,7 +2,9 @@
 following files contain changes:
 ====================================
 OgreUTFString.h
-
+OgreDynLib.h
+OgreParticleEmitter.h
+OgreParticleSystem.h
 
 
 *******************************************************************************
