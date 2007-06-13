@@ -57,162 +57,168 @@
 		<xsl:param name="class" />
 		<xsl:param name="method" />
 
-		<!-- shortcut of function name -->
-		<xsl:variable name="method_name" select="$method/name" />
+		<!-- check if method is on ignore list -->
+		<xsl:if test="not($ignore_list/ignore_list/function
+						[. = concat($class/@fullName, '::', $method/name)])">
 
-		<!-- shortcut for return type, take long for constructors, pointers and references -->
-		<!-- 
-		<xsl:variable name="return_type">
+			<!-- shortcut of function name -->
+			<xsl:variable name="method_name" select="$method/name" />
+
+			<!-- shortcut for return type, take long for constructors, pointers and references -->
+			<!-- 
+			<xsl:variable name="return_type">
+				<xsl:choose>
+					<xsl:when test="$method/@passedBy='pointer' or $method/@passedBy='reference'">
+						<value-of select="'long'" />
+					</xsl:when>
+					<xsl:otherwise>
+						<value-of select="if($method/type) then $method/type else 'long'" />
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:variable>
+			 -->
+
+			<!-- shortcut for static property -->
+			<xsl:variable name="static" select="$method/@static" />
+
+			<!-- shortcut for virtuality property -->
+			<xsl:variable name="virtuality" select="$method/@virt" />
+
+			<!-- write visibility modifier -->
+			<xsl:text>&#32;private</xsl:text>
+
+			<!-- write native method modifier -->
+			<xsl:text>&#32;native</xsl:text>
+
+			<!-- write static method modifier (static attribute or constructor -->
+			<xsl:if test="$static eq'true' or not($method/type)">
+				<xsl:text>&#32;static</xsl:text>
+			</xsl:if>
+
+			<!-- handle virtual modifiers -->
 			<xsl:choose>
-				<xsl:when test="$method/@passedBy='pointer' or $method/@passedBy='reference'">
-					<value-of select="'long'" />
+				<xsl:when test="$virtuality = 'non-virtual'">
+					<!-- <xsl:text>&#32;final</xsl:text> -->
 				</xsl:when>
+
+				<!-- this is not necessary because 
+					 of the interfaces that are generated for multiple inheritance -->
+				<xsl:when test="$virtuality = 'pure-virtual'">
+					<!-- <xsl:text>&#32;abstract</xsl:text> -->
+				</xsl:when>
+
+				<xsl:when test="$virtuality = 'virtual'" />
 				<xsl:otherwise>
-					<value-of select="if($method/type) then $method/type else 'long'" />
+					<xsl:message terminate="no">
+						ERROR: virtual type '
+						<xsl:value-of select="$virtuality" />
+						' not allowed.
+					</xsl:message>
 				</xsl:otherwise>
 			</xsl:choose>
-		</xsl:variable>
-		 -->
 
-		<!-- shortcut for static property -->
-		<xsl:variable name="static" select="$method/@static" />
+			<!-- write seperator for return type -->
+			<xsl:text>&#32;</xsl:text>
 
-		<!-- shortcut for virtuality property -->
-		<xsl:variable name="virtuality" select="$method/@virt" />
+			<!-- resolve typedefs -->
+			<xsl:variable name="resolvedType">
+				<xsl:choose>
+					<xsl:when test="not($method/type)">
+						<!-- <xsl:value-of select="''"/> -->
+						<xsl:sequence select="''"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="xbig:resolveTypedef($method/type, $class, $root)"/>
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:variable>
 
-		<!-- write visibility modifier -->
-		<xsl:text>&#32;private</xsl:text>
-
-		<!-- write native method modifier -->
-		<xsl:text>&#32;native</xsl:text>
-
-		<!-- write static method modifier (static attribute or constructor -->
-		<xsl:if test="$static eq'true' or not($method/type)">
-			<xsl:text>&#32;static</xsl:text>
-		</xsl:if>
-
-		<!-- handle virtual modifiers -->
-		<xsl:choose>
-			<xsl:when test="$virtuality = 'non-virtual'">
-				<!-- <xsl:text>&#32;final</xsl:text> -->
-			</xsl:when>
-
-			<!-- this is not necessary because 
-				 of the interfaces that are generated for multiple inheritance -->
-			<xsl:when test="$virtuality = 'pure-virtual'">
-				<!-- <xsl:text>&#32;abstract</xsl:text> -->
-			</xsl:when>
-
-			<xsl:when test="$virtuality = 'virtual'" />
-			<xsl:otherwise>
-				<xsl:message terminate="no">
-					ERROR: virtual type '
-					<xsl:value-of select="$virtuality" />
-					' not allowed.
-				</xsl:message>
-			</xsl:otherwise>
-		</xsl:choose>
-
-		<!-- write seperator for return type -->
-		<xsl:text>&#32;</xsl:text>
-
-		<!-- resolve typedefs -->
-		<xsl:variable name="resolvedType">
-			<xsl:choose>
-				<xsl:when test="not($method/type)">
-					<!-- <xsl:value-of select="''"/> -->
-					<xsl:sequence select="''"/>
-				</xsl:when>
-				<xsl:otherwise>
-					<xsl:value-of select="xbig:resolveTypedef($method/type, $class, $root)"/>
-				</xsl:otherwise>
-			</xsl:choose>
-		</xsl:variable>
-
-		<xsl:variable name="fullTypeName" select="$resolvedType"/>
+			<xsl:variable name="fullTypeName" select="$resolvedType"/>
 		
 
-		<!-- write return type -->
-		<xsl:choose>
+			<!-- write return type -->
+			<xsl:choose>
 
-			<!-- if this method returns a parametrized template -->
-			<xsl:when test="contains($method/type, '&lt;')">
-				<!-- <value-of select="'long'" /> -->
-				<xsl:text>long</xsl:text>
-			</xsl:when>
+				<!-- if this method returns a parametrized template -->
+				<xsl:when test="contains($method/type, '&lt;')">
+					<!-- <value-of select="'long'" /> -->
+					<xsl:text>long</xsl:text>
+				</xsl:when>
 
-			<xsl:when test="($method/@passedBy='pointer' and not($resolvedType='char')) or ($method/@passedBy eq 'reference'
-			            and not(xbig:isTypeConst($method)))">
-				<xsl:value-of select="'long'" />
-			</xsl:when>
+				<xsl:when test="($method/@passedBy='pointer' and not($resolvedType='char')) or ($method/@passedBy eq 'reference'
+				            and not(xbig:isTypeConst($method)))">
+					<xsl:value-of select="'long'" />
+				</xsl:when>
 
-			<!-- c-tor -->
-			<xsl:when test="not($method/type)">
-				<xsl:value-of select="'long'" />
-			</xsl:when>
+				<!-- c-tor -->
+				<xsl:when test="not($method/type)">
+					<xsl:value-of select="'long'" />
+				</xsl:when>
 
-			<xsl:when test="xbig:isTemplateTypedef($fullTypeName, $class, $root)">
-				<xsl:value-of select="'long'" />
-			</xsl:when>
+				<xsl:when test="xbig:isTemplateTypedef($fullTypeName, $class, $root)">
+					<xsl:value-of select="'long'" />
+				</xsl:when>
 
-			<xsl:when test="xbig:isClassOrStruct($fullTypeName, $class, $root)">
-				<xsl:value-of select="'long'" />
-			</xsl:when>
+				<xsl:when test="xbig:isClassOrStruct($fullTypeName, $class, $root)">
+					<xsl:value-of select="'long'" />
+				</xsl:when>
 
-			<xsl:when test="xbig:isEnum($fullTypeName, $class, $root)">
-				<xsl:value-of select="'int'" />
-			</xsl:when>
+				<xsl:when test="xbig:isEnum($fullTypeName, $class, $root)">
+					<xsl:value-of select="'int'" />
+				</xsl:when>
 
-			<xsl:when test="$fullTypeName = 'unsigned long long'">
-				<xsl:value-of select="'long'" />
-			</xsl:when>
+				<xsl:when test="$fullTypeName = 'unsigned long long'">
+					<xsl:value-of select="'long'" />
+				</xsl:when>
 
-			<xsl:otherwise>
-				<xsl:call-template name="javaType">
-					<xsl:with-param name="config" select="$config" />
-					<xsl:with-param name="param" select="$method" />
-					<xsl:with-param name="class" select="$class" />
-					<xsl:with-param name="typeName" select="$method/type" />
-					<xsl:with-param name="writingNativeMethod" select="true()" />
-					<xsl:with-param name="isTypeParameter" select="false()" />
-				</xsl:call-template>
-			</xsl:otherwise>
-		</xsl:choose>
+				<xsl:otherwise>
+					<xsl:call-template name="javaType">
+						<xsl:with-param name="config" select="$config" />
+						<xsl:with-param name="param" select="$method" />
+						<xsl:with-param name="class" select="$class" />
+						<xsl:with-param name="typeName" select="$method/type" />
+						<xsl:with-param name="writingNativeMethod" select="true()" />
+						<xsl:with-param name="isTypeParameter" select="false()" />
+					</xsl:call-template>
+				</xsl:otherwise>
+			</xsl:choose>
 
-		<!-- write method name -->
-		<xsl:text>&#32;</xsl:text>
-		<xsl:call-template name="metaMethodName">
-			<xsl:with-param name="config" select="$config" />
-			<xsl:with-param name="method" select="$method" />
-		</xsl:call-template>
+			<!-- write method name -->
+			<xsl:text>&#32;</xsl:text>
+			<xsl:call-template name="metaMethodName">
+				<xsl:with-param name="config" select="$config" />
+				<xsl:with-param name="method" select="$method" />
+			</xsl:call-template>
 
-		<!-- begin parameter declaration -->
-		<xsl:text>(</xsl:text>
+			<!-- begin parameter declaration -->
+			<xsl:text>(</xsl:text>
 
-		<!-- write instance pointer if no static function and no constructor -->
-		<xsl:if test="$static ne 'true' and $method/type">
+			<!-- write instance pointer if no static function and no constructor -->
+			<xsl:if test="$static ne 'true' and $method/type">
 
-			<xsl:text>long _pointer_</xsl:text>
+				<xsl:text>long _pointer_</xsl:text>
 
-			<!-- if more parameters available -->
-			<xsl:if test="count($method/parameters/parameter) > 0">
-				<!-- write seperator for following parameters -->
-				<xsl:text>,</xsl:text>
+				<!-- if more parameters available -->
+				<xsl:if test="count($method/parameters/parameter) > 0">
+					<!-- write seperator for following parameters -->
+					<xsl:text>,</xsl:text>
+				</xsl:if>
 			</xsl:if>
-		</xsl:if>
 
-		<!-- write real parameter list including types -->
-		<xsl:call-template name="javaMethodParameterList">
-			<xsl:with-param name="config" select="$config" />
-			<xsl:with-param name="class" select="$class" />
-			<xsl:with-param name="method" select="$method" />
-			<xsl:with-param name="with_types" select="'true'" />
-			<xsl:with-param name="writingNativeMethod" select="true()" />
-			<xsl:with-param name="callingNativeMethod" select="false()" />
-		</xsl:call-template>
+			<!-- write real parameter list including types -->
+			<xsl:call-template name="javaMethodParameterList">
+				<xsl:with-param name="config" select="$config" />
+				<xsl:with-param name="class" select="$class" />
+				<xsl:with-param name="method" select="$method" />
+				<xsl:with-param name="with_types" select="'true'" />
+				<xsl:with-param name="writingNativeMethod" select="true()" />
+				<xsl:with-param name="callingNativeMethod" select="false()" />
+			</xsl:call-template>
 
-		<!-- end parameter declaration -->
-		<xsl:text>);</xsl:text>
+			<!-- end parameter declaration -->
+			<xsl:text>);</xsl:text>
+
+		</xsl:if> <!-- ignore list check -->
 
 	</xsl:template>
 

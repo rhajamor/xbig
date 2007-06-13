@@ -58,56 +58,61 @@
 		<xsl:param name="class" />
 		<xsl:param name="method" />
 
-		<!-- write parameter type -->
-		<xsl:call-template name="javaAccessMethodDeclaration">
-			<xsl:with-param name="config" select="$config" />
-			<xsl:with-param name="class" select="$class" />
-			<xsl:with-param name="method" select="$method" />
-		</xsl:call-template>
+		<!-- check if method is on ignore list -->
+		<xsl:if test="not($ignore_list/ignore_list/function
+						[. = concat($class/@fullName, '::', $method/name)])">
 
-		<xsl:text>&#32;</xsl:text>
+			<!-- write parameter type -->
+			<xsl:call-template name="javaAccessMethodDeclaration">
+				<xsl:with-param name="config" select="$config" />
+				<xsl:with-param name="class" select="$class" />
+				<xsl:with-param name="method" select="$method" />
+			</xsl:call-template>
 
-		<!-- start implementation -->
-		<xsl:text>{</xsl:text>
-		<xsl:text>&#10;</xsl:text>
+			<xsl:text>&#32;</xsl:text>
 
-		<!-- choose correct implementation -->
-		<xsl:choose>
+			<!-- start implementation -->
+			<xsl:text>{</xsl:text>
+			<xsl:text>&#10;</xsl:text>
 
-			<!-- constructor -->
-			<xsl:when test="not($method/type)">
-				<xsl:call-template name="javaConstructorImpl">
-					<xsl:with-param name="config" select="$config" />
-					<xsl:with-param name="class" select="$class" />
-					<xsl:with-param name="method" select="$method" />
-				</xsl:call-template>
-			</xsl:when>
+			<!-- choose correct implementation -->
+			<xsl:choose>
 
-			<!-- method without return value -->
-			<xsl:when test="$method/type eq 'void'">
-				<xsl:call-template name="javaVoidMethodImpl">
-					<xsl:with-param name="config" select="$config" />
-					<xsl:with-param name="class" select="$class" />
-					<xsl:with-param name="method" select="$method" />
-				</xsl:call-template>
-			</xsl:when>
+				<!-- constructor -->
+				<xsl:when test="not($method/type)">
+					<xsl:call-template name="javaConstructorImpl">
+						<xsl:with-param name="config" select="$config" />
+						<xsl:with-param name="class" select="$class" />
+						<xsl:with-param name="method" select="$method" />
+					</xsl:call-template>
+				</xsl:when>
 
-			<!-- methods with return value -->
-			<xsl:otherwise>
-				<xsl:call-template name="javaReturnMethodImpl">
-					<xsl:with-param name="config" select="$config" />
-					<xsl:with-param name="class" select="$class" />
-					<xsl:with-param name="method" select="$method" />
-				</xsl:call-template>
-			</xsl:otherwise>
+				<!-- method without return value -->
+				<xsl:when test="$method/type eq 'void'">
+					<xsl:call-template name="javaVoidMethodImpl">
+						<xsl:with-param name="config" select="$config" />
+						<xsl:with-param name="class" select="$class" />
+						<xsl:with-param name="method" select="$method" />
+					</xsl:call-template>
+				</xsl:when>
 
-		</xsl:choose>
+				<!-- methods with return value -->
+				<xsl:otherwise>
+					<xsl:call-template name="javaReturnMethodImpl">
+						<xsl:with-param name="config" select="$config" />
+						<xsl:with-param name="class" select="$class" />
+						<xsl:with-param name="method" select="$method" />
+					</xsl:call-template>
+				</xsl:otherwise>
+
+			</xsl:choose>
 
 
-		<!-- implementation finished -->
-		<xsl:text>&#10;</xsl:text>
-		<xsl:text>}</xsl:text>
+			<!-- implementation finished -->
+			<xsl:text>&#10;</xsl:text>
+			<xsl:text>}</xsl:text>
 
+		</xsl:if> <!-- ignore list check -->
 	</xsl:template>
 
 </xsl:stylesheet>
