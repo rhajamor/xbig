@@ -809,7 +809,7 @@ namespace Ogre {
 		/** Resize the internal pool of emitted emitters.
             @remarks
                 The pool consists of multiple vectors containing pointers to particle emitters. Increasing the 
-				pool with ´size´ implies that the vectors are equally increased. The quota of emitted emitters is 
+				pool with ï¿½sizeï¿½ implies that the vectors are equally increased. The quota of emitted emitters is 
 				defined on a particle system level and not on a particle emitter level. This is to prevent that
 				the number of created emitters becomes too high; the quota is shared amongst the emitted emitters.
 		*/
@@ -867,7 +867,7 @@ namespace Ogre {
             @remarks
                 This function should be called if new emitters are added to a ParticleSystem or deleted from a
 				ParticleSystem. The emitted emitter data structures become out of sync and need to be build up
-				again. The data structures are not reorganised in this function, but by setting a ´flag´, 
+				again. The data structures are not reorganised in this function, but by setting a flag, 
 				they are rebuild in the regular process flow.
         */
 		void _notifyReorganiseEmittedEmitterData (void);
