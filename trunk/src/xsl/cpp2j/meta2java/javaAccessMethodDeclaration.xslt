@@ -58,221 +58,227 @@
     <xsl:param name="class" />
     <xsl:param name="method" />
 
-    <!-- shortcut of function name -->
-    <xsl:variable name="method_name" select="$method/name" />
+	<!-- check if method is on ignore list -->
+	<xsl:if test="not($ignore_list/ignore_list/function
+					[. = concat($class/@fullName, '::', $method/name)])">
 
-    <!-- shortcut for return type, take long for constructors -->
-    <xsl:variable name="return_type" select="$method/type" />
+	    <!-- shortcut of function name -->
+	    <xsl:variable name="method_name" select="$method/name" />
 
-    <!-- shortcut for visibility -->
-    <xsl:variable name="visibility" select="$method/@visibility" />
+	    <!-- shortcut for return type, take long for constructors -->
+	    <xsl:variable name="return_type" select="$method/type" />
 
-    <!-- shortcut for static property -->
-    <xsl:variable name="static" select="$method/@static" />
+	    <!-- shortcut for visibility -->
+	    <xsl:variable name="visibility" select="$method/@visibility" />
 
-    <!-- shortcut for virtuality property -->
-    <xsl:variable name="virtuality" select="$method/@virt" />
+	    <!-- shortcut for static property -->
+	    <xsl:variable name="static" select="$method/@static" />
+
+	    <!-- shortcut for virtuality property -->
+	    <xsl:variable name="virtuality" select="$method/@virt" />
 
 
-    <!-- write method documentation -->
+	    <!-- write method documentation -->
 
-    <xsl:text>/**&#32;</xsl:text>
-    <xsl:for-each select="$method/detaileddescription/para">
-      <xsl:text>&#10;</xsl:text>
-      <!-- caused a problem with ogre4j -->
-      <!-- <xsl:value-of select="normalize-space(text())" />-->
-      <xsl:value-of select="text()" />
-    </xsl:for-each>
-    <xsl:text>&#32;**/</xsl:text>
-    <xsl:text>&#10;</xsl:text>
+	    <xsl:text>/**&#32;</xsl:text>
+	    <xsl:for-each select="$method/detaileddescription/para">
+	      <xsl:text>&#10;</xsl:text>
+	      <!-- caused a problem with ogre4j -->
+	      <!-- <xsl:value-of select="normalize-space(text())" />-->
+	      <xsl:value-of select="text()" />
+	    </xsl:for-each>
+	    <xsl:text>&#32;**/</xsl:text>
+	    <xsl:text>&#10;</xsl:text>
 
-    <!-- write method modifiers -->
+    	<!-- write method modifiers -->
 
-    <!-- write method visibility -->
-    <xsl:if test="$visibility">
-      <xsl:text>&#32;</xsl:text>
-      <xsl:value-of select="$visibility" />
-    </xsl:if>
+	    <!-- write method visibility -->
+	    <xsl:if test="$visibility">
+	      <xsl:text>&#32;</xsl:text>
+	      <xsl:value-of select="$visibility" />
+	    </xsl:if>
 
-    <!-- write static method modifier -->
-    <xsl:if test="$static eq'true'">
-      <xsl:text>&#32;static</xsl:text>
-    </xsl:if>
+	    <!-- write static method modifier -->
+	    <xsl:if test="$static eq'true'">
+	      <xsl:text>&#32;static</xsl:text>
+	    </xsl:if>
 
-    <!-- handle virtual modifiers -->
-    <xsl:choose>
+	    <!-- handle virtual modifiers -->
+	    <xsl:choose>
 
-      <!-- no virtual function -->
-      <xsl:when test="$virtuality eq 'non-virtual'">
-        <xsl:if test="not(empty($return_type))">
-          <!-- generate no final because of interfaces
-            <xsl:text>&#32;final</xsl:text>
-          -->
-        </xsl:if>
-      </xsl:when>
+	      <!-- no virtual function -->
+	      <xsl:when test="$virtuality eq 'non-virtual'">
+	        <xsl:if test="not(empty($return_type))">
+	          <!-- generate no final because of interfaces
+	            <xsl:text>&#32;final</xsl:text>
+	          -->
+	        </xsl:if>
+	      </xsl:when>
 
-      <!-- abstract function -->
-      <!-- this is not necessary because of the interfaces 
-        that are generated for multiple inheritance -->
-      <xsl:when test="$virtuality = 'pure-virtual'">
-        <!-- <xsl:text>&#32;abstract</xsl:text> -->
-      </xsl:when>
+	      <!-- abstract function -->
+	      <!-- this is not necessary because of the interfaces 
+	        that are generated for multiple inheritance -->
+	      <xsl:when test="$virtuality = 'pure-virtual'">
+	        <!-- <xsl:text>&#32;abstract</xsl:text> -->
+	      </xsl:when>
 
-      <!-- virtual function -->
-      <xsl:when test="$virtuality = 'virtual'" />
+	      <!-- virtual function -->
+	      <xsl:when test="$virtuality = 'virtual'" />
 
-      <!-- error, not handled type of virtuality -->
-      <xsl:otherwise>
-        <xsl:message terminate="no">
-          ERROR: virtual type '
-          <xsl:value-of select="$virtuality" />
-          ' not allowed.
-        </xsl:message>
-      </xsl:otherwise>
-    </xsl:choose>
+	      <!-- error, not handled type of virtuality -->
+	      <xsl:otherwise>
+	        <xsl:message terminate="no">
+	          ERROR: virtual type '
+	          <xsl:value-of select="$virtuality" />
+	          ' not allowed.
+	        </xsl:message>
+	      </xsl:otherwise>
+	    </xsl:choose>
 
-    <!-- write return type if available-->
-    <xsl:if test="$return_type">
-      <xsl:text>&#32;</xsl:text>
+	    <!-- write return type if available-->
+	    <xsl:if test="$return_type">
+	      <xsl:text>&#32;</xsl:text>
 
-      <xsl:choose>
-        <!-- if this is a typedef for a template and the type parameter is a primitive -->
-        <xsl:when test="$method/type/@originalType">
-          <xsl:choose>
-            <xsl:when
-              test="$method/type/@originalType != $return_type and
-										$config/config/java/types/type[@meta = $return_type] and
-										$method/@passedBy = 'value'">
-              <xsl:value-of
-                select="$config/config/java/types/type
-												  [@meta = $return_type]/@genericParameter" />
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:call-template name="javaType">
-                <xsl:with-param name="config" select="$config" />
-                <xsl:with-param name="param" select="$method" />
-                <xsl:with-param name="class" select="$class" />
-                <xsl:with-param name="typeName" select="$return_type" />
+	      <xsl:choose>
+	        <!-- if this is a typedef for a template and the type parameter is a primitive -->
+	        <xsl:when test="$method/type/@originalType">
+	          <xsl:choose>
+	            <xsl:when
+	              test="$method/type/@originalType != $return_type and
+											$config/config/java/types/type[@meta = $return_type] and
+											$method/@passedBy = 'value'">
+	              <xsl:value-of
+	                select="$config/config/java/types/type
+													  [@meta = $return_type]/@genericParameter" />
+	            </xsl:when>
+	            <xsl:otherwise>
+	              <xsl:call-template name="javaType">
+	                <xsl:with-param name="config" select="$config" />
+	                <xsl:with-param name="param" select="$method" />
+	                <xsl:with-param name="class" select="$class" />
+	                <xsl:with-param name="typeName" select="$return_type" />
+					<xsl:with-param name="writingNativeMethod" select="false()" />
+					<xsl:with-param name="isTypeParameter" select="false()" />
+	              </xsl:call-template>
+	            </xsl:otherwise>
+	          </xsl:choose>
+	        </xsl:when>
+
+	        <!-- if a template parameter is returned -->
+	        <xsl:when
+	          test="$class/templateparameters/templateparameter
+									[@templateType='class'][@templateDeclaration = $return_type] and
+									$method/@passedBy = 'value'">
+	          <!-- <xsl:value-of select="'void'"/> -->
+	          <xsl:value-of select="$return_type" />
+	        </xsl:when>
+
+	        <xsl:otherwise>
+	          <xsl:call-template name="javaType">
+	            <xsl:with-param name="config" select="$config" />
+	            <xsl:with-param name="param" select="$method" />
+	            <xsl:with-param name="class" select="$class" />
+	            <xsl:with-param name="typeName" select="$return_type" />
 				<xsl:with-param name="writingNativeMethod" select="false()" />
 				<xsl:with-param name="isTypeParameter" select="false()" />
-              </xsl:call-template>
-            </xsl:otherwise>
-          </xsl:choose>
-        </xsl:when>
+	          </xsl:call-template>
+	        </xsl:otherwise>
+	      </xsl:choose>
+	    </xsl:if>
 
-        <!-- if a template parameter is returned -->
-        <xsl:when
-          test="$class/templateparameters/templateparameter
-								[@templateType='class'][@templateDeclaration = $return_type] and
-								$method/@passedBy = 'value'">
-          <!-- <xsl:value-of select="'void'"/> -->
-          <xsl:value-of select="$return_type" />
-        </xsl:when>
+	    <!-- write method name -->
+	    <xsl:text>&#32;</xsl:text>
+	    <xsl:value-of select="$method_name" />
 
-        <xsl:otherwise>
-          <xsl:call-template name="javaType">
-            <xsl:with-param name="config" select="$config" />
-            <xsl:with-param name="param" select="$method" />
-            <xsl:with-param name="class" select="$class" />
-            <xsl:with-param name="typeName" select="$return_type" />
-			<xsl:with-param name="writingNativeMethod" select="false()" />
-			<xsl:with-param name="isTypeParameter" select="false()" />
-          </xsl:call-template>
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:if>
+	    <!-- begin parameter declaration -->
+	    <xsl:text>(</xsl:text>
 
-    <!-- write method name -->
-    <xsl:text>&#32;</xsl:text>
-    <xsl:value-of select="$method_name" />
+	    <!-- if a template parameter is returned, we need an additional parameter -->
+	    <!-- 
+	      <xsl:if test="$class/templateparameters/templateparameter
+	      [@templateType='class'][@templateDeclaration = $return_type]">
+	      <xsl:value-of select="$return_type"/>
+	      <xsl:text>&#32;</xsl:text>
+	      <xsl:value-of select="$config/config/java/generics/returnvalueasparametername"/>
+	      <xsl:if test="$method/parameters/parameter">
+	      <xsl:text>,&#32;</xsl:text>
+	      </xsl:if>
+	      </xsl:if>
+	    -->
 
-    <!-- begin parameter declaration -->
-    <xsl:text>(</xsl:text>
+	    <!-- iterator through all parameters -->
+	    <xsl:for-each select="$method/parameters/parameter">
 
-    <!-- if a template parameter is returned, we need an additional parameter -->
-    <!-- 
-      <xsl:if test="$class/templateparameters/templateparameter
-      [@templateType='class'][@templateDeclaration = $return_type]">
-      <xsl:value-of select="$return_type"/>
-      <xsl:text>&#32;</xsl:text>
-      <xsl:value-of select="$config/config/java/generics/returnvalueasparametername"/>
-      <xsl:if test="$method/parameters/parameter">
-      <xsl:text>,&#32;</xsl:text>
-      </xsl:if>
-      </xsl:if>
-    -->
-
-    <!-- iterator through all parameters -->
-    <xsl:for-each select="$method/parameters/parameter">
-
-      <!-- write parameter type -->
-      <xsl:choose>
-
-        <!-- if this is a typedef for a template and the type parameter is a primitive -->
-        <xsl:when test="./type/@originalType">
-          <xsl:choose>
-            <xsl:when
-              test="./type/@originalType != ./type 
-                    and $config/config/java/types/type[@meta = current()/type] 
-                    and ./@passedBy = 'value'">
-              <xsl:value-of
-                select="$config/config/java/types/type
-			[@meta = current()/type]/@genericParameter" />
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:call-template name="javaType">
-                <xsl:with-param name="config" select="$config" />
-                <xsl:with-param name="param" select="." />
-                <xsl:with-param name="class" select="$class" />
-                <xsl:with-param name="typeName" select="./type" />
-				<xsl:with-param name="writingNativeMethod" select="false()" />
-				<xsl:with-param name="isTypeParameter" select="false()" />
-              </xsl:call-template>
-            </xsl:otherwise>
-          </xsl:choose>
-        </xsl:when>
-
-        <xsl:otherwise>
-          <xsl:call-template name="javaType">
-            <xsl:with-param name="config" select="$config" />
-            <xsl:with-param name="param" select="." />
-            <xsl:with-param name="class" select="$class" />
-            <xsl:with-param name="typeName" select="./type" />
-			<xsl:with-param name="writingNativeMethod" select="false()" />
-			<xsl:with-param name="isTypeParameter" select="false()" />
-          </xsl:call-template>
-        </xsl:otherwise>
-      </xsl:choose>
-
-      <!-- seperator type and name -->
-      <xsl:text>&#32;</xsl:text>
-
-      <!-- write parameter name -->
-      <!-- if there is no param name in original lib -->
-      <xsl:variable name="parameterPosition" select="position()" />
-      <xsl:variable name="paramName">
+        <!-- write parameter type -->
         <xsl:choose>
-          <xsl:when test="not(./name) or ./name = ''">
-            <xsl:value-of
-              select="concat($config/config/meta/parameter/defaultName,
-												$parameterPosition)" />
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:value-of select="./name" />
-          </xsl:otherwise>
-        </xsl:choose>
-      </xsl:variable>
-      <xsl:value-of select="$paramName" />
 
-      <!-- if another parameter follows, write seperator -->
-      <xsl:if test="position()!=last()">
-        <xsl:text>,&#32;</xsl:text>
-      </xsl:if>
+	        <!-- if this is a typedef for a template and the type parameter is a primitive -->
+	        <xsl:when test="./type/@originalType">
+	          <xsl:choose>
+	            <xsl:when
+	              test="./type/@originalType != ./type 
+	                    and $config/config/java/types/type[@meta = current()/type] 
+	                    and ./@passedBy = 'value'">
+	              <xsl:value-of
+	                select="$config/config/java/types/type
+				[@meta = current()/type]/@genericParameter" />
+	            </xsl:when>
+	            <xsl:otherwise>
+	              <xsl:call-template name="javaType">
+	                <xsl:with-param name="config" select="$config" />
+	                <xsl:with-param name="param" select="." />
+	                <xsl:with-param name="class" select="$class" />
+	                <xsl:with-param name="typeName" select="./type" />
+					<xsl:with-param name="writingNativeMethod" select="false()" />
+					<xsl:with-param name="isTypeParameter" select="false()" />
+	              </xsl:call-template>
+	            </xsl:otherwise>
+	          </xsl:choose>
+	        </xsl:when>
 
-    </xsl:for-each>
+	        <xsl:otherwise>
+	          <xsl:call-template name="javaType">
+	            <xsl:with-param name="config" select="$config" />
+	            <xsl:with-param name="param" select="." />
+	            <xsl:with-param name="class" select="$class" />
+	            <xsl:with-param name="typeName" select="./type" />
+				<xsl:with-param name="writingNativeMethod" select="false()" />
+				<xsl:with-param name="isTypeParameter" select="false()" />
+	          </xsl:call-template>
+	        </xsl:otherwise>
+	      </xsl:choose>
 
-    <!-- end parameter declaration -->
-    <xsl:text>)</xsl:text>
+	      <!-- seperator type and name -->
+	      <xsl:text>&#32;</xsl:text>
+
+	      <!-- write parameter name -->
+	      <!-- if there is no param name in original lib -->
+	      <xsl:variable name="parameterPosition" select="position()" />
+	      <xsl:variable name="paramName">
+	        <xsl:choose>
+	          <xsl:when test="not(./name) or ./name = ''">
+	            <xsl:value-of
+	              select="concat($config/config/meta/parameter/defaultName,
+													$parameterPosition)" />
+	          </xsl:when>
+	          <xsl:otherwise>
+	            <xsl:value-of select="./name" />
+	          </xsl:otherwise>
+	        </xsl:choose>
+	      </xsl:variable>
+	      <xsl:value-of select="$paramName" />
+
+	      <!-- if another parameter follows, write seperator -->
+	      <xsl:if test="position()!=last()">
+	        <xsl:text>,&#32;</xsl:text>
+	      </xsl:if>
+
+	    </xsl:for-each>
+
+	    <!-- end parameter declaration -->
+	    <xsl:text>)</xsl:text>
+
+	</xsl:if> <!-- ignore list check -->
 
   </xsl:template>
 

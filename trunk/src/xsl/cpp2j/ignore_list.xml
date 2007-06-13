@@ -15,4 +15,81 @@
 
 	<!-- bug 1666890 -->
 	<item>Ogre::CompositorInstance::TargetOperation::RenderQueueBitSet</item>
+
+
+
+	<!-- union -->
+	<function>Ogre::UTFString::getmStrBuffer</function>
+	<function>Ogre::UTFString::setmStrBuffer</function>
+	<function>Ogre::UTFString::getmUTF32StrBuffer</function>
+	<function>Ogre::UTFString::setmUTF32StrBuffer</function>
+	<function>Ogre::UTFString::getmVoidBuffer</function>
+	<function>Ogre::UTFString::setmVoidBuffer</function>
+	<function>Ogre::UTFString::getmWStrBuffer</function>
+	<function>Ogre::UTFString::setmWStrBuffer</function>
+
+	<!-- protected in sub class -->
+	<function>Ogre::WireBoundingBox::getWorldTransforms</function>
+	<function>Ogre::WireBoundingBox::getWorldOrientation</function>
+	<function>Ogre::WireBoundingBox::getWorldPosition</function>
+	<function>Ogre::Rectangle2D::getWorldTransforms</function>
+	<function>Ogre::Rectangle2D::getWorldOrientation</function>
+	<function>Ogre::Rectangle2D::getWorldPosition</function>
+
+	<!-- wrong inheritance resolution -->
+	<function>Ogre::RibbonTrail::objectDestroyed</function>
+	<function>Ogre::RibbonTrail::objectAttached</function>
+	<function>Ogre::RibbonTrail::objectDetached</function>
+	<function>Ogre::RibbonTrail::objectMoved</function>
+	<function>Ogre::RibbonTrail::objectRendering</function>
+	<function>Ogre::RibbonTrail::objectQueryLights</function>
+	<function>Ogre::Entity::objectDestroyed</function>
+	<function>Ogre::Entity::objectAttached</function>
+	<function>Ogre::Entity::objectDetached</function>
+	<function>Ogre::Entity::objectMoved</function>
+	<function>Ogre::Entity::objectRendering</function>
+	<function>Ogre::Entity::objectQueryLights</function>
+
+	<!-- arrays -->
+	<function>Ogre::PixelUtil::getBitDepths</function>
+	<function>Ogre::PixelUtil::getBitMasks</function>
+	<function>Ogre::Matrix3::EigenSolveSymmetric</function>
+	<function>Ogre::ShadowVolumeExtrudeProgram::getprogramNames</function>
+	<function>Ogre::Matrix4::getm</function>
+	<function>Ogre::Matrix4::get_m</function>
+	<function>Ogre::EdgeData::Triangle::getvertIndex</function>
+	<function>Ogre::EdgeData::Triangle::getsharedVertIndex</function>
+	<function>Ogre::EdgeData::Edge::gettriIndex</function>
+	<function>Ogre::EdgeData::Edge::getvertIndex</function>
+	<function>Ogre::EdgeData::Edge::getsharedVertIndex</function>
+	<function>Ogre::AnimableValue::getmBaseValueReal</function>
+	<function>Ogre::ShadowVolumeExtrudeProgram::setprogramNames</function>
+	<function>Ogre::Matrix4::setm</function>
+	<function>Ogre::Matrix4::set_m</function>
+	<function>Ogre::EdgeData::Triangle::setvertIndex</function>
+	<function>Ogre::EdgeData::Triangle::setsharedVertIndex</function>
+	<function>Ogre::EdgeData::Edge::settriIndex</function>
+	<function>Ogre::EdgeData::Edge::setvertIndex</function>
+	<function>Ogre::EdgeData::Edge::setsharedVertIndex</function>
+	<function>Ogre::AnimableValue::setmBaseValueReal</function>
+	<function>Ogre::GlobalUtility::getSPOT_SHADOW_FADE_PNG</function>
+	<function>Ogre::GlobalUtility::setSPOT_SHADOW_FADE_PNG</function>
+	<function>finddata_t::getname</function>
+	<function>finddata_t::setname</function>
+
+	<!-- stl wrapper -->
+	<function>Ogre::ResourceGroupManager::ResourceDeclarationList::remove</function>
+	<function>Ogre::ResourceGroupManager::ResourceDeclarationList::unique</function>
+	<function>Ogre::GpuLogicalIndexUseMap::remove</function>
+
+	<!-- protected typedef as return type -->
+	<function>Ogre::InstancedGeometry::MaterialBucket::getMaterialBucketMap</function>
+
+	<!-- protected attribute -->
+	<function>Ogre::AnimableValue::getmBaseValueInt</function>
+	<function>Ogre::AnimableValue::setmBaseValueInt</function>
+
+	<!-- protected struct -->
+	<function>Ogre::ProgressiveMesh::PMFaceVertex::getcommonVertex</function>
+	<function>Ogre::ProgressiveMesh::PMFaceVertex::setcommonVertex</function>
 </ignore_list>

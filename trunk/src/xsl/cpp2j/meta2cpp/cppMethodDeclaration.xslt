@@ -60,23 +60,27 @@
 		<xsl:param name="method" />
 		<xsl:param name="class" />
 
-		<!-- write method comment -->
-		<xsl:call-template name="cppMethodDeclarationComment">
-			<xsl:with-param name="config" select="$config" />
-			<xsl:with-param name="class_prefix" select="$class_prefix" />
-			<xsl:with-param name="method" select="$method" />
-			<xsl:with-param name="class" select="$class" />
-		</xsl:call-template>
+		<!-- check if method is on ignore list -->
+		<xsl:if test="not($ignore_list/ignore_list/function
+						[. = concat($class/@fullName, '::', $method/name)])">
 
-		<!-- write real method real declaration -->
-		<xsl:call-template name="cppRealMethodDeclaration">
-			<xsl:with-param name="config" select="$config" />
-			<xsl:with-param name="class_prefix" select="$class_prefix" />
-			<xsl:with-param name="method" select="$method" />
-			<xsl:with-param name="class" select="$class" />
-		</xsl:call-template>
+			<!-- write method comment -->
+			<xsl:call-template name="cppMethodDeclarationComment">
+				<xsl:with-param name="config" select="$config" />
+				<xsl:with-param name="class_prefix" select="$class_prefix" />
+				<xsl:with-param name="method" select="$method" />
+				<xsl:with-param name="class" select="$class" />
+			</xsl:call-template>
 
+			<!-- write real method real declaration -->
+			<xsl:call-template name="cppRealMethodDeclaration">
+				<xsl:with-param name="config" select="$config" />
+				<xsl:with-param name="class_prefix" select="$class_prefix" />
+				<xsl:with-param name="method" select="$method" />
+				<xsl:with-param name="class" select="$class" />
+			</xsl:call-template>
 
+		</xsl:if> <!-- ignore list check -->
 
 	</xsl:template>
 
