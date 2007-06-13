@@ -162,25 +162,6 @@
 			</xsl:call-template>
 		</xsl:variable>
 
-
-		<!-- check if a parameter of a method of this class uses 'min' or 'max' as name -->
-		<xsl:if test="$inheritedMethodsForJava//parameter[name = 'min'] or
-						$inheritedMethodsForJava//parameter[name = 'max'] or
-						$helper_methods//parameter[name = 'min'] or
-						$helper_methods//parameter[name = 'min']">
-			<xsl:text>&#10;</xsl:text>
-			<xsl:text>// allow min and max as parameter names on windows&#10;</xsl:text>
-			<xsl:text>#ifdef WIN32&#10;</xsl:text>
-			<xsl:text>#  ifdef max&#10;</xsl:text>
-			<xsl:text>#    undef max&#10;</xsl:text>
-			<xsl:text>#  endif&#10;</xsl:text>
-			<xsl:text>#  ifdef min&#10;</xsl:text>
-			<xsl:text>#    undef min&#10;</xsl:text>
-			<xsl:text>#  endif&#10;</xsl:text>
-			<xsl:text>#endif&#10;</xsl:text>
-		</xsl:if>
-
-
 		<!-- generate method impl -->
 		<xsl:for-each select="$inheritedMethodsForJava/function">			
 			<xsl:if test="$isAbstract = false() or xbig:isCtor($class,.) = false()">
