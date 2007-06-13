@@ -82,7 +82,13 @@ namespace t1
         /** Returns the name of this class
          */
         static const char* getClassName();
-        
+
+
+		/**
+		 * On Windows names min and max are defined
+		 */
+		//void testParameterNameOnWindows(int min, int max){}
+
       private:
         int 		    _test_int;
         unsigned int 	_test_uint;
