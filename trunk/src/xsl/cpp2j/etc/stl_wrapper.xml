@@ -1942,4 +1942,9 @@
         </enumeration>
 	</class>
 
+	<class protection="public" name="basic_string" fullName="std::basic_string" template="true">
+		<templateparameters>
+			<templateparameter templateType="class" templateDeclaration="T"/>
+		</templateparameters>
+	</class>
 </namespace>
