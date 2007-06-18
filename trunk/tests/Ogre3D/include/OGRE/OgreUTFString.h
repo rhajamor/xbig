@@ -205,10 +205,10 @@ namespace Ogre {
 		//#########################################################################
 		//! base iterator class for UTFString
 	class _base_iterator
-#ifndef DOXYGEN	     
-	     : public std::iterator<std::random_access_iterator_tag, value_type> /* i don't know why the beautifier is freaking out on this line */
-#endif	     
-		{
+#ifndef DOXYGEN
+	: public std::iterator<std::random_access_iterator_tag, value_type> /* i don't know why the beautifier is freaking out on this line */
+#endif
+	 {
 			friend class UTFString;
 		protected:
 			_base_iterator() {
