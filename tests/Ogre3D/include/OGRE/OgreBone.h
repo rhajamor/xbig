@@ -62,7 +62,7 @@ namespace Ogre
             @param
                 rotate Initial rotation relative to parent
         */
-		Bone* createChild(std::string handle, 
+        Bone* createChild(unsigned short handle, 
             const Vector3& translate = Vector3::ZERO, const Quaternion& rotate = Quaternion::IDENTITY);
 
 
