@@ -731,6 +731,13 @@
 							</xsl:if>
 						</xsl:element>
 					</xsl:for-each>
+
+					<!-- copy all includes into meta output -->
+					<xsl:element name="includes">
+						<xsl:attribute name="local" select="'yes'" />
+						<xsl:value-of select="tokenize(location/@file, '/')[last()]" />
+					</xsl:element>
+
 					<!-- documentation -->
 					<xsl:call-template name="documentation" />
 				</xsl:element>
@@ -758,6 +765,12 @@
 									</xsl:if>
 								</xsl:element>
 							</xsl:for-each>
+
+							<!-- copy all includes into meta output -->
+							<xsl:element name="includes">
+								<xsl:attribute name="local" select="'yes'" />
+								<xsl:value-of select="tokenize(location/@file, '/')[last()]" />
+							</xsl:element>
 
 							<!-- documentation -->
 							<xsl:call-template name="documentation" />
