@@ -1947,4 +1947,10 @@
 			<templateparameter templateType="class" templateDeclaration="T"/>
 		</templateparameters>
 	</class>
+
+	<class protection="public" name="less" fullName="std::less" template="true">
+		<templateparameters>
+			<templateparameter templateType="class" templateDeclaration="T"/>
+		</templateparameters>
+	</class>
 </namespace>

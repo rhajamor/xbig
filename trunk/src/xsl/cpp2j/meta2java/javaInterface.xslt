@@ -427,22 +427,27 @@
 						</xsl:choose>
 					</xsl:variable>
 
-					<!-- interfaces cannot have consructors or static methods
-						we also don't want operators -->
+					<!-- interfaces cannot have consructors or static methods -->
 					<xsl:if
-						test="name!=$class/@name and @static!='true' and not(starts-with(name, 'operator'))">
-						<xsl:call-template
-							name="javaAccessMethodDeclaration">
-							<xsl:with-param name="config"
-								select="$config" />
-							<xsl:with-param name="class"
-								select="$class" />
-							<xsl:with-param name="method"
-								select="$methodContainer/function" />
-						</xsl:call-template>
+						test="name!=$class/@name and @static!='true'">
 
-						<!-- finish declaration -->
-						<xsl:text>;&#10;&#10;</xsl:text>
+						<!-- check for configured operators -->
+						<xsl:if test="not(starts-with(name, 'operator')) or 
+									$config/config/java/operators/op = 
+									normalize-space(substring-after(name, 'operator'))">
+							<xsl:call-template
+								name="javaAccessMethodDeclaration">
+								<xsl:with-param name="config"
+									select="$config" />
+								<xsl:with-param name="class"
+									select="$class" />
+								<xsl:with-param name="method"
+									select="$methodContainer/function" />
+							</xsl:call-template>
+	
+							<!-- finish declaration -->
+							<xsl:text>;&#10;&#10;</xsl:text>
+						</xsl:if>
 					</xsl:if>
 				</xsl:for-each>
 

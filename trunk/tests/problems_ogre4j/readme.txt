@@ -36,7 +36,7 @@ t19              s
 t20              s
 t21              s
 t22              s
-t23              f
+t23              s
 t24              f
 t25              s
 t26              s

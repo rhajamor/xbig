@@ -282,6 +282,11 @@
 
 				<!-- filter operators -->
 				<xsl:when test="starts-with(name, 'operator')">
+					<!-- keep operators that are configured -->
+					<xsl:if test="$config/config/java/operators/op = 
+									normalize-space(substring-after(name, 'operator'))">
+						<xsl:copy-of select="." />
+					</xsl:if>
 				</xsl:when>
 
 				<!-- filter duplicate methods -->

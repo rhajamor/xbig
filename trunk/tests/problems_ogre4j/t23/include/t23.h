@@ -20,8 +20,25 @@
 
 class EXPORT Vector {
 public:
-	Vector operator+(const Vector& rkVector) const;
+	Vector(int x, int y, int z);
+	Vector(const Vector& rhs);
+	~Vector();
+
+	Vector operator+ (const Vector& rkVector) const;
+	Vector operator - (const Vector& rkVector) const;
+	Vector operator *(const Vector& rkVector) const; // not a real vector product
+	Vector operator/(const Vector& rkVector) const;
+
+	const Vector operator+() const;
+	const Vector operator-() const;
+
+	const Vector& operator++();
+	const Vector operator++(int);
+
+	int operator [](unsigned index);
+
+	void operator-> () const;
 
 private:
-	int i;
+	int i[3];
 };

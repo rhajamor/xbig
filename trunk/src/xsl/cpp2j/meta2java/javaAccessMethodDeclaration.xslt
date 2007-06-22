@@ -58,12 +58,16 @@
     <xsl:param name="class" />
     <xsl:param name="method" />
 
+    <!-- shortcut of function name, rename operators -->
+    <xsl:variable name="method_name" select="
+				if (starts-with($method/name, 'operator'))
+				then $config/config/java/operators/op
+					[. = normalize-space(substring-after($method/name, 'operator'))]/@javaName
+    			else $method/name" />
+
 	<!-- check if method is on ignore list -->
 	<xsl:if test="not($ignore_list/ignore_list/function
-					[. = concat($class/@fullName, '::', $method/name)])">
-
-	    <!-- shortcut of function name -->
-	    <xsl:variable name="method_name" select="$method/name" />
+					[. = concat($class/@fullName, '::', $method_name)])">
 
 	    <!-- shortcut for return type, take long for constructors -->
 	    <xsl:variable name="return_type" select="$method/type" />
