@@ -59,20 +59,29 @@
 		<!-- shortcut to method name configuration depending on constructor 
 			or normal method -->
 		<!-- <xsl:variable name="mcfg"
-			select="if($method/type) then $meta_config/method/name else $meta_config/constructor/name" /> -->
+			select="if($method/type) then $meta_config/method/name else $meta_config/constructor/name" />
+		 -->
 		<xsl:variable name="method_name">
 			<xsl:choose>
 				<xsl:when test="not($method/type)">
 					<xsl:value-of select="concat($meta_config/constructor/name/prefix, 
 											$method/name, $meta_config/constructor/name/suffix)" />
 				</xsl:when>
+
 				<!-- destructor -->
 				<xsl:when test="$method/name = $meta_config/destructor/name">
 					<xsl:value-of select="$method/name" />
 				</xsl:when>
+
 				<xsl:otherwise>
+					<!-- rename operators -->
+					<xsl:variable name="method_name" select="
+							if (starts-with($method/name, 'operator'))
+							then $config/config/java/operators/op
+								[. = normalize-space(substring-after($method/name, 'operator'))]/@javaName
+			    			else $method/name" />
 					<xsl:value-of select="concat($meta_config/method/name/prefix, 
-											$method/name, $meta_config/method/name/suffix)" />
+											$method_name, $meta_config/method/name/suffix)" />
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>

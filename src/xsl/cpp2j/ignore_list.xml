@@ -17,6 +17,13 @@
 	<item>Ogre::CompositorInstance::TargetOperation::RenderQueueBitSet</item>
 
 
+	<!-- senseless -->
+	<item>_finddata_t</item>
+	<item>GlobalUtility::_findfirst</item>
+	<item>GlobalUtility::_findnext</item>
+	<item>GlobalUtility::_findclose</item>
+
+
 
 	<!-- union -->
 	<function>Ogre::UTFString::getmStrBuffer</function>
