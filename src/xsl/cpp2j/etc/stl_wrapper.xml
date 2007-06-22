@@ -1939,6 +1939,7 @@
                <enum name="internal"/>
                <enum name="left"/>
                <enum name="right"/>
+               <includes>ios</includes>
         </enumeration>
 	</class>
 

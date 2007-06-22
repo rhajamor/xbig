@@ -190,6 +190,7 @@
 				<xsl:text>
 					// import header files of original library
 				</xsl:text>
+				<!-- 
 				<xsl:variable name="nodeContainingIncludeFiles">
 					<xsl:element name="node">
 						<xsl:call-template name="findIncludeFiles">
@@ -203,6 +204,12 @@
 					<xsl:value-of select="text()" />
 					<xsl:text>"&#10;</xsl:text>
 				</xsl:for-each>
+				<xsl:text>&#10;&#10;</xsl:text>
+				 -->
+				<xsl:text>&#10;#include </xsl:text>
+				<xsl:value-of select="if($enum/includes/@local = yes) then '&quot;' else '&lt;'" />
+				<xsl:value-of select="$enum/includes" />
+				<xsl:value-of select="if($enum/includes/@local = yes) then '&quot;' else '&gt;'" />
 				<xsl:text>&#10;&#10;</xsl:text>
 
 				<!-- comment for enum getter function -->
