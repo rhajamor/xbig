@@ -1040,12 +1040,12 @@
     </constoverloading>
 
 	<operators>
-		<op javaName="operatorAddition" isUnary="false" isPreFix="false" isPostFix="false">+</op>
-		<op javaName="operatorSubtraction" isUnary="false" isPreFix="false" isPostFix="false">-</op>
-		<op javaName="operatorMultiplication" isUnary="false" isPreFix="false" isPostFix="false">*</op>
-		<op javaName="operatorDivision" isUnary="false" isPreFix="false" isPostFix="false">/</op>
-		<op javaName="operatorIncrement" isUnary="false" isPreFix="false" isPostFix="false">++</op>
-		<op javaName="operatorIndex" isUnary="false" isPreFix="false" isPostFix="false">[]</op>
+		<op javaName="operatorAddition">+</op>
+		<op javaName="operatorSubtraction">-</op>
+		<op javaName="operatorMultiplication">*</op>
+		<op javaName="operatorDivision">/</op>
+		<op javaName="operatorIncrement">++</op>
+		<op javaName="operatorIndex">[]</op>
 	</operators>
 
   </java>
