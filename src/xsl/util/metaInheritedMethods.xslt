@@ -184,7 +184,7 @@
 				</xsl:choose>
 			</xsl:for-each>
 		</xsl:variable>		
-			
+
 		<!-- filter -->
 		<xsl:for-each
 			select="$allInheritedMethodsWithoutConstParams/function">
@@ -298,10 +298,21 @@
 									<xsl:choose>
 										<xsl:when
 											test="xbig:areTheseMethodsEqual($currentMethod, .,false())">
+
+											<!-- remember outer loop position of equal methods -->
+											<xsl:variable name="currentMethodOfInnerLoop" select="." />
+											<xsl:for-each select="../function">
+												<xsl:if test="count($currentMethodOfInnerLoop | .) = 1">
+													<xsl:attribute name="pos" select="position()"/>
+												</xsl:if>
+											</xsl:for-each>
+
+											<!-- remember that methods are equal -->
 											<xsl:value-of
 												select="true()" />
 										</xsl:when>
 										<xsl:otherwise>
+											<!-- remember that methods are different -->
 											<xsl:value-of
 												select="false()" />
 										</xsl:otherwise>
@@ -315,11 +326,10 @@
 					<xsl:choose>
 						<xsl:when test="$equalSiblings/* = true()">
 							<!-- OK, we know this method is duplicate, but we have to generate it once -->
-							<!-- again the id trick -->
 							<!-- we must take the first one, to use the correct class name in JNI for multiple inheritance
 								 handling of multiple inheritance has changed to support abstract classes as return types -->
 							<xsl:if
-								test="count(../function[name = $currentMethod/name][@const = $currentMethod/@const][position() = 1] | $currentMethod) = 1">
+								test="$equalSiblings/*[@pos][1]/@pos >= $currentMethodPos">
 								<xsl:copy-of select="." />
 							</xsl:if>
 						</xsl:when>
