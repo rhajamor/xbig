@@ -59,15 +59,19 @@ namespace Ogre {
   			WFT_RENDER_OPERATION
 		};
 		DefaultAxisAlignedBoxSceneQuery (SceneManager *creator) {}
+		/*
 		~DefaultAxisAlignedBoxSceneQuery () {}
 		void 	execute (SceneQueryListener *listener) {}
 		void 	setBox (const AxisAlignedBox &box) {}
 		const AxisAlignedBox & 	getBox (void) const {return mAxisAlignedBox;}
 		virtual SceneQueryResult & 	execute (void) {return mSceneQueryResult;}
-		virtual SceneQueryResult & 	getLastResults (void) /*const*/ {return mSceneQueryResult;}
+		//virtual SceneQueryResult & 	getLastResults (void) const {return mSceneQueryResult;}
+		virtual SceneQueryResult & 	getLastResults (void) {return mSceneQueryResult;}
 		virtual void 	clearResults (void) {}
+		*/
 		bool 	queryResult (MovableObject *first) {return false;}
 		bool 	queryResult (WorldFragment *fragment) {return false;}
+		/*
 		virtual void 	setQueryMask (uint32 mask) {}
 		virtual uint32 	getQueryMask (void) const {return 0;}
 		virtual void 	setQueryTypeMask (uint32 mask) {}
@@ -75,6 +79,7 @@ namespace Ogre {
 		virtual void 	setWorldFragmentType (enum WorldFragmentType wft) {}
 		virtual WorldFragmentType 	getWorldFragmentType (void) const {return WFT_NONE;}
 		virtual const std::set< WorldFragmentType > * 	getSupportedWorldFragmentTypes (void) const {return NULL;}
+		*/
 	};
 
 
