@@ -70,14 +70,16 @@ public class BasicTests {
 	public void setAndGetMapWithTwoCalls() {
 		// set and get map with two calls
 		t.a(nativeMap);
-		IAptrMap map = t.b();
+		IAptrMap map = new AptrMap();
+        t.b(map);
 		Assert.assertEquals(valVec.get(0).get(), map.get(keyVec.get(0)).get());
 		map.delete();			
 	}
     
     @Test
     public void setAndGetMapWithOneCall(){
-        IAptrMap map2 = t.c(nativeMap);
+        IAptrMap map2 = new AptrMap();
+        t.c(map2, nativeMap);
         Assert.assertEquals(nativeMap.get(keyVec.get(0)).get(), map2.get(keyVec.get(0)).get());
         map2.delete();
     }

@@ -163,10 +163,10 @@ A::A() {
 	std::cout << "t10_2: A::A()" << std::endl;
 }
 
-void t(A b) {
+void t_set(A b) {
 	std::cout << "t10_2: s(A b)" << std::endl;
 }
-A t(void) {
+A t_get(void) {
 	std::cout << "t10_2: s(void)" << std::endl;
 	A a;
 	return a;

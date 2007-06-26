@@ -1,5 +1,5 @@
-#ifndef __T13_3_H__
-#define __T13_3_H__
+#ifndef __T13_7_H__
+#define __T13_7_H__
 /******************************************************************
  *
  * Test file for the XSLT Bindings Generator (XBiG)
@@ -83,16 +83,18 @@ protected:
 	typedef A Alias;
 	typedef std::map<std::string, A> AliasMap;
 
-private:
-	AliasMap m;
-	
 public:
 	typedef MapIterator<AliasMap> AMapIterator;
-	
-	Tester(){m["eins"] = A(); m["zwei"] = A(); m["drei"] = A();}
+
+private:
+	AliasMap m;
+	AMapIterator ami;
+
+public:
+	Tester() : ami(m) {m["eins"] = A(); m["zwei"] = A(); m["drei"] = A();}
 	virtual ~Tester(){}
 	
-	AMapIterator getMapIterator() {return AMapIterator(m);}
+	AMapIterator* getMapIterator() {return &ami;}
 	//virtual AliasMap& getMap(){ return AliasMap(); };	
 };
 #endif

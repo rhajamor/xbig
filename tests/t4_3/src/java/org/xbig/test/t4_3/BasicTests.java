@@ -115,13 +115,13 @@ public class BasicTests {
 
 	@Test
 	public void getObjectsFromNativeLib() {
-		org.xbig.IA a = null;
-		org.xbig.n.IA na = null;
-		org.xbig.n.m.IA nma = null;
-		org.xbig.o.IA oa = null;
-		org.xbig.o.p.IA opa = null;
-		org.xbig.o.n.IA ona = null;
-		org.xbig.o.p.q.IA opqa = null;
+		org.xbig.IA a = new org.xbig.A();
+		org.xbig.n.IA na = new org.xbig.n.A();
+		org.xbig.n.m.IA nma = new org.xbig.n.m.A();
+		org.xbig.o.IA oa = new org.xbig.o.A();
+		org.xbig.o.p.IA opa = new org.xbig.o.p.A();
+		org.xbig.o.n.IA ona = new org.xbig.o.n.A();
+		org.xbig.o.p.q.IA opqa = new org.xbig.o.p.q.A();
 
 		org.xbig.C c = new org.xbig.C();
 		org.xbig.n.C nc = new org.xbig.n.C();
@@ -131,13 +131,13 @@ public class BasicTests {
 		org.xbig.o.n.C onc = new org.xbig.o.n.C();
 		org.xbig.o.p.q.C opqc = new org.xbig.o.p.q.C();
 
-		a = c.getG();
-		na = c.getN();
-		nma = c.getM();
-		oa = c.getO();
-		opa = c.getP();
-		opqa = c.getQ();
-		ona = c.getON();
+		c.getG(a);
+		c.getN(na);
+		c.getM(nma);
+		c.getO(oa);
+		c.getP(opa);
+		c.getQ(opqa);
+		c.getON(ona);
 
 		Assert.assertEquals(5, a.get5());
 		Assert.assertEquals(2, na.get2());
@@ -147,45 +147,21 @@ public class BasicTests {
 		Assert.assertEquals(6, ona.get6());
 		Assert.assertEquals(7, opqa.get7());
 
-		a.delete();
-		na.delete();
-		nma.delete();
-		oa.delete();
-		opa.delete();
-		ona.delete();
-		opqa.delete();
+//		a.delete();
+//		na.delete();
+//		nma.delete();
+//		oa.delete();
+//		opa.delete();
+//		ona.delete();
+//		opqa.delete();
 
-		a = nc.getG();
-		na = nc.getN();
-		nma = nc.getM();
-		oa = nc.getO();
-		opa = nc.getP();
-		opqa = nc.getQ();
-		ona = nc.getON();
-
-		Assert.assertEquals(5, a.get5());
-		Assert.assertEquals(2, na.get2());
-		Assert.assertEquals(1, nma.get1());
-		Assert.assertEquals(4, oa.get4());
-		Assert.assertEquals(3, opa.get3());
-		Assert.assertEquals(6, ona.get6());
-		Assert.assertEquals(7, opqa.get7());
-
-		a.delete();
-		na.delete();
-		nma.delete();
-		oa.delete();
-		opa.delete();
-		ona.delete();
-		opqa.delete();
-
-		a = nmc.getG();
-		na = nmc.getN();
-		nma = nmc.getM();
-		oa = nmc.getO();
-		opa = nmc.getP();
-		opqa = nmc.getQ();
-		ona = nmc.getON();
+		nc.getG(a);
+		nc.getN(na);
+		nc.getM(nma);
+		nc.getO(oa);
+		nc.getP(opa);
+		nc.getQ(opqa);
+		nc.getON(ona);
 
 		Assert.assertEquals(5, a.get5());
 		Assert.assertEquals(2, na.get2());
@@ -195,45 +171,21 @@ public class BasicTests {
 		Assert.assertEquals(6, ona.get6());
 		Assert.assertEquals(7, opqa.get7());
 
-		a.delete();
-		na.delete();
-		nma.delete();
-		oa.delete();
-		opa.delete();
-		ona.delete();
-		opqa.delete();
+//		a.delete();
+//		na.delete();
+//		nma.delete();
+//		oa.delete();
+//		opa.delete();
+//		ona.delete();
+//		opqa.delete();
 
-		a = oc.getG();
-		na = oc.getN();
-		nma = oc.getM();
-		oa = oc.getO();
-		opa = oc.getP();
-		opqa = oc.getQ();
-		ona = oc.getON();
-
-		Assert.assertEquals(5, a.get5());
-		Assert.assertEquals(2, na.get2());
-		Assert.assertEquals(1, nma.get1());
-		Assert.assertEquals(4, oa.get4());
-		Assert.assertEquals(3, opa.get3());
-		Assert.assertEquals(6, ona.get6());
-		Assert.assertEquals(7, opqa.get7());
-
-		a.delete();
-		na.delete();
-		nma.delete();
-		oa.delete();
-		opa.delete();
-		ona.delete();
-		opqa.delete();
-
-		a = opc.getG();
-		na = opc.getN();
-		nma = opc.getM();
-		oa = opc.getO();
-		opa = opc.getP();
-		opqa = opc.getQ();
-		ona = opc.getON();
+		nmc.getG(a);
+		nmc.getN(na);
+		nmc.getM(nma);
+		nmc.getO(oa);
+		nmc.getP(opa);
+		nmc.getQ(opqa);
+		nmc.getON(ona);
 
 		Assert.assertEquals(5, a.get5());
 		Assert.assertEquals(2, na.get2());
@@ -243,21 +195,21 @@ public class BasicTests {
 		Assert.assertEquals(6, ona.get6());
 		Assert.assertEquals(7, opqa.get7());
 
-		a.delete();
-		na.delete();
-		nma.delete();
-		oa.delete();
-		opa.delete();
-		ona.delete();
-		opqa.delete();
+//		a.delete();
+//		na.delete();
+//		nma.delete();
+//		oa.delete();
+//		opa.delete();
+//		ona.delete();
+//		opqa.delete();
 
-		a = opqc.getG();
-		na = opqc.getN();
-		nma = opqc.getM();
-		oa = opqc.getO();
-		opa = opqc.getP();
-		opqa = opqc.getQ();
-		ona = opqc.getON();
+		oc.getG(a);
+		oc.getN(na);
+		oc.getM(nma);
+		oc.getO(oa);
+		oc.getP(opa);
+		oc.getQ(opqa);
+		oc.getON(ona);
 
 		Assert.assertEquals(5, a.get5());
 		Assert.assertEquals(2, na.get2());
@@ -267,21 +219,69 @@ public class BasicTests {
 		Assert.assertEquals(6, ona.get6());
 		Assert.assertEquals(7, opqa.get7());
 
-		a.delete();
-		na.delete();
-		nma.delete();
-		oa.delete();
-		opa.delete();
-		ona.delete();
-		opqa.delete();
+//		a.delete();
+//		na.delete();
+//		nma.delete();
+//		oa.delete();
+//		opa.delete();
+//		ona.delete();
+//		opqa.delete();
 
-		a = onc.getG();
-		na = onc.getN();
-		nma = onc.getM();
-		oa = onc.getO();
-		opa = onc.getP();
-		opqa = onc.getQ();
-		ona = onc.getON();
+		opc.getG(a);
+		opc.getN(na);
+		opc.getM(nma);
+		opc.getO(oa);
+		opc.getP(opa);
+		opc.getQ(opqa);
+		opc.getON(ona);
+
+		Assert.assertEquals(5, a.get5());
+		Assert.assertEquals(2, na.get2());
+		Assert.assertEquals(1, nma.get1());
+		Assert.assertEquals(4, oa.get4());
+		Assert.assertEquals(3, opa.get3());
+		Assert.assertEquals(6, ona.get6());
+		Assert.assertEquals(7, opqa.get7());
+
+//		a.delete();
+//		na.delete();
+//		nma.delete();
+//		oa.delete();
+//		opa.delete();
+//		ona.delete();
+//		opqa.delete();
+
+		opqc.getG(a);
+		opqc.getN(na);
+		opqc.getM(nma);
+		opqc.getO(oa);
+		opqc.getP(opa);
+		opqc.getQ(opqa);
+		opqc.getON(ona);
+
+		Assert.assertEquals(5, a.get5());
+		Assert.assertEquals(2, na.get2());
+		Assert.assertEquals(1, nma.get1());
+		Assert.assertEquals(4, oa.get4());
+		Assert.assertEquals(3, opa.get3());
+		Assert.assertEquals(6, ona.get6());
+		Assert.assertEquals(7, opqa.get7());
+
+//		a.delete();
+//		na.delete();
+//		nma.delete();
+//		oa.delete();
+//		opa.delete();
+//		ona.delete();
+//		opqa.delete();
+
+		onc.getG(a);
+		onc.getN(na);
+		onc.getM(nma);
+		onc.getO(oa);
+		onc.getP(opa);
+		onc.getQ(opqa);
+		onc.getON(ona);
 
 		Assert.assertEquals(5, a.get5());
 		Assert.assertEquals(2, na.get2());

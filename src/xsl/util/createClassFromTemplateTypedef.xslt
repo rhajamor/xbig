@@ -113,6 +113,7 @@
 				<!-- causes problems with primitive types as type parameters
 					thogether with things like 'T* foo();' -->
 				<!-- reenabled -->
+				<!-- must be the first base class for javaType -->
 				<xsl:element name="baseClass">
 					<xsl:attribute name="fullBaseClassName"
 						select="$template/@fullName" />

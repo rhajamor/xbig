@@ -19,7 +19,17 @@
 
 class EXPORT B {
 public:
+	B();
+	B(const B&);
+	~B();
+
 	int get1();
+
+	int geti();
+	void seti(int i);
+
+private:
+	int i;
 };
 
 class EXPORT A {
@@ -29,9 +39,15 @@ public:
 	B* b();
 	bool c(B& a);
 	B& d();
+
+	B e();
+	void f(B);
+	B g(B);
+
 private:
 	B* b_ptr;
 	B& b_ref;
+	B b_val;
 };
 
 class EXPORT S {

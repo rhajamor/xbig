@@ -1,5 +1,5 @@
-#ifndef __T13_3_H__
-#define __T13_3_H__
+#ifndef __T13_8_H__
+#define __T13_8_H__
 /******************************************************************
  *
  * Test file for the XSLT Bindings Generator (XBiG)

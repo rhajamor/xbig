@@ -46,12 +46,14 @@ public class BasicTests {
 
 		// set and get map with two calls
 		t.a(nativeVector);
-		IAptrVector vector = t.b();
+		IAptrVector vector = new AptrVector();
+        t.b(vector);
 		Assert.assertEquals(valVec.get(0).get(), vector.at(0).get());
 		vector.delete();
 
 		// set and get Iterator with one call
-		IAptrVector vector2 = t.c(nativeVector);
+		IAptrVector vector2 = new AptrVector();
+        t.c(vector2, nativeVector);
 		Assert.assertEquals(nativeVector.at(0).get(), vector2.at(0).get());
 		vector2.delete();
 

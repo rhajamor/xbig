@@ -89,8 +89,8 @@ public class BasicTests {
 		GlobalUtility.s();
 
 		IA aValue=new A();
-		GlobalUtility.t(aValue);
-		aValue=GlobalUtility.t();
+		GlobalUtility.t_set(aValue);
+		GlobalUtility.t_get(aValue);
 		aValue.delete();
 
 		IntegerPointer intPointer;

@@ -44,8 +44,9 @@ public class BasicTests {
 		public MyImpl(){ super( new org.xbig.base.InstancePointer(MyImpl()), false);}
 		private native static final long MyImpl();
 
-		public IC a() {
-			return new org.xbig.C(new InstancePointer(a(this.object.pointer)), false);
+		public void a(IC retVal) {
+            retVal.delete();
+            retVal.setInstancePointer(new InstancePointer(a(this.object.pointer)), false);
 		}
 		private native final long a(long _pointer_);
 
@@ -54,8 +55,9 @@ public class BasicTests {
 		}
 		private native final void b(long _pointer_, long c);
 
-		public IC c(IC a) {
-			return new org.xbig.C(new InstancePointer(
+		public void c(IC retVal, IC a) {
+            retVal.delete();
+            retVal.setInstancePointer(new InstancePointer(
 					c(this.object.pointer, a.getInstancePointer().pointer)), false);
 		}
 		private native final long c(long _pointer_, long a);
@@ -68,21 +70,21 @@ public class BasicTests {
 		MyImpl myi;
 		myi = new MyImpl();
 
-		// you cannot use methods that return templates
-/*
-		ParametrizedTemplateReturnPlaceHolder placeHolder;
-		placeHolder = (ParametrizedTemplateReturnPlaceHolder) t.b();
-		myi = new MyImpl(placeHolder.getInstancePointer(), true);
-*/
+		t.b(myi);
+
 		Assert.assertTrue(t.a(myi));
 
-		IC c = myi.a();
+		IC c = new C();
+        myi.a(c);
 		Assert.assertEquals(5, c.get5());
 		c.delete();
 
 		myi.b(c);
 
-		c = myi.c(c);
+        c = new C();
+        IC c2 = new C();
+        myi.c(c2, c);
+        c2.delete();
 		c.delete();
 
 		myi.delete();

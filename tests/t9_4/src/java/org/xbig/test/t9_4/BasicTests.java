@@ -7,6 +7,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.xbig.A;
 import org.xbig.B;
+import org.xbig.IVocals1;
 import org.xbig.Vocals1;
 import org.xbig.n.Tester;
 /**
@@ -48,7 +49,9 @@ public class BasicTests {
 		Assert.assertEquals(A.Vocals2.a, r.getA());
 		Assert.assertEquals(B.Vocals3.a, r.getB());
 
-		Assert.assertEquals(5, r.getObject().get5());
+        IVocals1 vocals1 = new Vocals1();
+        r.getObject(vocals1);
+		Assert.assertEquals(5, vocals1.get5());
 
 		r.delete();
 
@@ -58,7 +61,8 @@ public class BasicTests {
 		Assert.assertEquals(A.Vocals2.a, nr.getA());
 		Assert.assertEquals(B.Vocals3.a, nr.getB());
 
-		Assert.assertEquals(5, nr.getObject().get5());
+        nr.getObject(vocals1);
+		Assert.assertEquals(5, vocals1.get5());
 
 		nr.delete();
 
@@ -68,7 +72,9 @@ public class BasicTests {
 		Assert.assertEquals(A.Vocals2.a, br.getA());
 		Assert.assertEquals(B.Vocals3.a, br.getB());
 
-		Assert.assertEquals(5, br.getObject().get5());
+        br.getObject(vocals1);
+		Assert.assertEquals(5, vocals1.get5());
+        vocals1.delete();
 
 		br.delete();
 	}

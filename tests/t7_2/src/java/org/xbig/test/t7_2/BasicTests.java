@@ -24,9 +24,10 @@ public class BasicTests {
 		C c = new C();
 		Assert.assertEquals(i, c.a(a));
 
-		((A)a).delete();
+		a.delete();
 
-		a = c.getB();
+		a = new A();
+        c.getB(a);
 		a.delete();
 
 		c.delete();

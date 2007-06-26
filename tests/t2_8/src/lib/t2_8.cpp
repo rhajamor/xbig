@@ -3,13 +3,34 @@
 #include "t2_8.h"
 #include <iostream>
 
-B global;
+B::B() {
+	std::cout << "t2_8: B::B()" << std::endl;
+}
+
+B::B(const B& rhs) {
+	std::cout << "t2_8: B::B(const B&)" << std::endl;
+	i = rhs.i;
+}
+
+B::~B() {
+	std::cout << "t2_8: B::~B()" << std::endl;
+}
 
 int B::get1() {
 	return 1;
 }
 
-A::A() : b_ref(global) {
+int B::geti() {
+	return i;
+}
+
+void B::seti(int i) {
+	this->i = i;
+}
+
+A::A() : b_ref(b_val) {
+	b_ptr = &b_val;
+	b_val.seti(0);
 }
 
 void A::a(B* b) {
@@ -30,4 +51,20 @@ bool A::c(B& b) {
 B& A::d() {
 	std::cout << "t2_8: A::d()" << std::endl;
 	return b_ref;
+}
+
+B A::e() {
+	std::cout << "t2_8: A::e()" << std::endl;
+	return b_val;
+}
+
+void A::f(B para) {
+	std::cout << "t2_8: A::f(B)" << std::endl;
+	b_val = para;
+}
+
+B A::g(B para) {
+	std::cout << "t2_8: A::g(B)" << std::endl;
+	b_val = para;
+	return b_val;
 }

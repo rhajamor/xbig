@@ -28,10 +28,11 @@ public class BasicTests {
 		Assert.assertEquals(sPtr.get(), sv.at(0).get());
 
 		t.a(sv);
-		IStringVector vec = t.b();
+		IStringVector vec = new StringVector();
+        t.b(vec);
 		Assert.assertEquals(sv.size(), vec.size());
 		vec.delete();
-		vec = t.c(sv);
+		t.c(vec, sv);
 		Assert.assertEquals(sv.size(), vec.size());
 		vec.delete();
 

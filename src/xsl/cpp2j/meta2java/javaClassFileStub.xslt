@@ -162,7 +162,8 @@
 
 
 	<xd:doc type="template">
-		<xd:short>Writes package and imports to .java file.
+		<xd:short>
+			Writes header, package and imports to .java file.
 		</xd:short>
 		<xd:param name="java_ns_name">java package name with dots.</xd:param>
 		<xd:param name="config">config file.</xd:param>
@@ -170,6 +171,10 @@
 	<xsl:template name="javaFileFirstContent">
 		<xsl:param name="java_ns_name" />
 		<xsl:param name="config" />
+
+		<!-- header -->
+		<xsl:value-of select="concat('/', substring-after($config/config/java/format/file/header, '/'))" />
+		<xsl:text>&#10;&#10;</xsl:text>
 
 		<!-- write package -->
 		<xsl:text>package&#32;</xsl:text>
