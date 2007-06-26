@@ -29,6 +29,27 @@ public class BasicTests {
 		b2 = a.d();
 		Assert.assertEquals(1, b2.get1());
 
+        final int value = 5;
+        b.seti(value);
+        a.f(b);
+
+        // wether or not objects returned by value are passed as parameters
+        IB result = new B();
+        a.e(result);
+        //IB result = a.e();
+
+        Assert.assertEquals(value, result.geti());
+        final int value2 = 7;
+        b.seti(value2);
+        a.f(b);
+
+        // wether or not objects returned by value are passed as parameters
+        //result.delete();
+        a.g(result, b);
+        //result = a.g(b);
+
+        result.delete();
+
 		a.delete();
 		b.delete();
 	}

@@ -76,11 +76,35 @@
 		<!-- class used for pointer pointer -->
 		<xsl:variable name="pointerPointerClass" select="'NativeObjectPointer'"/>
 
-		<!-- write return statement -->
-		<xsl:text>&#32;return&#32;</xsl:text>
+		<!-- remember if an object is returned by value -->
+		<xsl:variable name="objectReturnedByValue" select="if($method/@passedBy = 'value' and
+      						count($config/config/java/types/type[@meta = $resolvedType]) = 0
+      						and $config/config/java/passObjectsReturnedByValueAsParameters = 'yes'
+      						and not(xbig:isEnum($resolvedType, $class, $root)))
+      						then true() else false()"/>
+
+		<!-- if an object is returned by value or a parametrized template is returned -->
+		<xsl:choose>
+			<xsl:when test="$objectReturnedByValue = true() or contains($method/type, '&lt;')">
+				<xsl:text>&#32;&#32;</xsl:text>
+				<xsl:value-of select="$config/config/java/returnValueAsParameterName"/>
+				<xsl:text>.</xsl:text>
+				<xsl:text>delete</xsl:text>
+				<xsl:text>();&#10;</xsl:text>
+				<xsl:text>&#32;&#32;</xsl:text>
+				<xsl:value-of select="$config/config/java/returnValueAsParameterName"/>
+				<xsl:text>.setInstancePointer</xsl:text>
+			</xsl:when>
+
+			<xsl:otherwise>
+				<!-- write return statement -->
+				<xsl:text>&#32;return&#32;</xsl:text>
+			</xsl:otherwise>
+		</xsl:choose>
 
 		<!-- create Pointer object when necessary -->
-		<xsl:if test="(($method/@passedBy='pointer' and not($resolvedType='char')) or ($method/@passedBy='reference' and not(xbig:isTypeConst($method))))
+		<xsl:if test="(($method/@passedBy='pointer' and not($resolvedType='char')) or
+						($method/@passedBy='reference' and not(xbig:isTypeConst($method))))
 					  and ($type_info/type/@java or $resolvedType = 'void')">
 			<xsl:text>new&#32;</xsl:text>
 			<xsl:variable name="fullTypeNameWithPointer">
@@ -104,55 +128,27 @@
 			<xsl:text>(new&#32;InstancePointer(</xsl:text>
 		</xsl:if>
 
-		<!-- create casted native object for returned parametrized templates -->
-		<xsl:if test="contains($method/type, '&lt;')">
-			<xsl:text>(</xsl:text>
-			<xsl:call-template name="javaType">
-				<xsl:with-param name="config" select="$config" />
-				<xsl:with-param name="param" select="$method" />
-				<xsl:with-param name="class" select="$class" />
-				<xsl:with-param name="typeName" select="$resolvedType" />
-				<xsl:with-param name="writingNativeMethod" select="false()" />
-				<xsl:with-param name="isTypeParameter" select="false()" />
-			</xsl:call-template>
-			<xsl:text>)&#32;</xsl:text>
-			<xsl:text>(org.xbig.base.INativeObject)&#32;</xsl:text>
-			<xsl:text>new&#32;</xsl:text>
-			<xsl:text>org.xbig.base.ParametrizedTemplateReturnPlaceHolder</xsl:text>
-			<xsl:text>(new&#32;InstancePointer(</xsl:text>
-		</xsl:if>
-
-		<!-- if this is a template typedef -->
-		<xsl:if test="xbig:isTemplateTypedef($fullTypeName, $class, $root)">
-			<xsl:text>new&#32;</xsl:text>
+		<!-- if this is a class, struct or template typedef -->
+		<xsl:if test="xbig:isTemplateTypedef($fullTypeName, $class, $root) or
+						xbig:isClassOrStruct($fullTypeName, $class, $root) or
+						contains($method/type, '&lt;')">
 			<xsl:choose>
+				<!-- pointer pointer -->
 				<xsl:when test="$method/type/@pointerPointer = 'true'">
+					<xsl:text>new&#32;</xsl:text>
 					<xsl:value-of select="concat(
 									$pointerPointerClass, '&lt;')"/>
 					<xsl:value-of select="xbig:getFullJavaName(
 											$fullTypeName, $class, $root, $config)"/>
 					<xsl:value-of select="'&gt;'"/>
 				</xsl:when>
-				<xsl:otherwise>
-					<xsl:value-of select="xbig:getFullJavaClassAndNotInterfaceName(
-											$fullTypeName, $class, $root, $config)"/>
-				</xsl:otherwise>
-			</xsl:choose>
-			<xsl:text>(new&#32;InstancePointer(</xsl:text>
-		</xsl:if>
 
-		<!-- create native object when necessary -->
-		<xsl:if test="xbig:isClassOrStruct($fullTypeName, $class, $root)">
-			<xsl:text>new&#32;</xsl:text>
-			<xsl:choose>
-				<xsl:when test="$method/type/@pointerPointer = 'true'">
-					<xsl:value-of select="concat(
-									$pointerPointerClass, '&lt;')"/>
-					<xsl:value-of select="xbig:getFullJavaName(
-											$fullTypeName, $class, $root, $config)"/>
-					<xsl:value-of select="'&gt;'"/>
+				<!-- object returned by value -->
+				<xsl:when test="$objectReturnedByValue = true() or contains($method/type, '&lt;')">
 				</xsl:when>
+
 				<xsl:otherwise>
+					<xsl:text>new&#32;</xsl:text>
 					<xsl:value-of select="xbig:getFullJavaClassAndNotInterfaceName(
 											$fullTypeName, $class, $root, $config)"/>
 				</xsl:otherwise>
@@ -219,6 +215,10 @@
 			<!-- we have copied the returned object to the heap -->
 			<xsl:if test="$method/@passedBy = 'value'">
 				<xsl:text>, false</xsl:text>
+			</xsl:if>
+			<!-- not copied to heap, but parametrized templates as return values are always passed -->
+			<xsl:if test="$method/@passedBy != 'value'">
+				<xsl:text>, true</xsl:text>
 			</xsl:if>
 		</xsl:if>
 		<xsl:if test="xbig:isTemplateTypedef($fullTypeName, $class, $root)">

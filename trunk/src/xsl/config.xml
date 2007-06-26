@@ -29,7 +29,8 @@
 
 <!DOCTYPE DaemonConfig [
   <!ENTITY cppFileHeader SYSTEM "cpp2j/etc/cpp_header.inc">
-	<!ENTITY javaClassContent SYSTEM "cpp2j/etc/java_class_content.inc">
+  <!ENTITY javaFileHeader SYSTEM "cpp2j/etc/java_header.inc">
+  <!ENTITY javaClassContent SYSTEM "cpp2j/etc/java_class_content.inc">
 ]>
 
 <config>
@@ -1039,14 +1040,61 @@
       <suffix>_const</suffix>
     </constoverloading>
 
+	<passObjectsReturnedByValueAsParameters>yes</passObjectsReturnedByValueAsParameters>
+	<returnValueAsParameterName>returnValue</returnValueAsParameterName>
+
+	<generateDefaultConstructorWithoutNativeMethodCall>
+		<class>Ogre::SceneManager::AnimationIterator</class>
+	</generateDefaultConstructorWithoutNativeMethodCall>
+
 	<operators>
 		<op javaName="operatorAddition">+</op>
 		<op javaName="operatorSubtraction">-</op>
 		<op javaName="operatorMultiplication">*</op>
 		<op javaName="operatorDivision">/</op>
+		<op javaName="operatorModulus">%</op>
+		<op javaName="operatorBitwiseExclusiveOR">^</op>
+		<op javaName="operatorBitwiseAND">&amp;</op>
+		<op javaName="operatorBitwiseOR">|</op>
+		<op javaName="operatorBitwiseComplement">~</op>
+		<op javaName="operatorLogicalNegation">!</op>
+		<op javaName="operatorAssignment">=</op>
+		<op javaName="operatorLessThan">&lt;</op>
+		<op javaName="operatorGreaterThan">&gt;</op>
+		<op javaName="operatorIncrementAndAssign">+=</op>
+		<op javaName="operatorDecrementAndAssign">-=</op>
+		<op javaName="operatorMultiplyAndAssign">*=</op>
+		<op javaName="operatorDivideAndAssign">/=</op>
+		<op javaName="operatorModuloAndAssign">%=</op>
+		<op javaName="operatorBitwiseExclusiveORAndAssign">^=</op>
+		<op javaName="operatorBitwiseANDAndAssign">&amp;=</op>
+		<op javaName="operatorBitwiseORAndAssign">|=</op>
+		<op javaName="operatorLeftShift">&lt;&lt;</op>
+		<op javaName="operatorRightShift">&gt;&gt;</op>
+		<op javaName="operatorLeftShiftAndAssign">&lt;&lt;=</op>
+		<op javaName="operatorRightShiftAndAssign">&gt;&gt;=</op>
+		<op javaName="operatorEqual">==</op>
+		<op javaName="operatorNotEqual">!=</op>
+		<op javaName="operatorLessThanOrEqual">&lt;=</op>
+		<op javaName="operatorGreaterThanOrEqual">&gt;=</op>
+		<op javaName="operatorLogicalAnd">&amp;&amp;</op>
+		<op javaName="operatorLogicalOr">||</op>
 		<op javaName="operatorIncrement">++</op>
+		<op javaName="operatorDecrement">--</op>
+		<op javaName="operatorMemberPointerSelector">-&gt;*</op>
+		<op javaName="operatorSequentialEvaluation">,</op>
+		<op javaName="operatorMemberAccessFromAPointer">-&gt;</op>
 		<op javaName="operatorIndex">[]</op>
+		<op javaName="operatorFunctionCall">()</op>
 	</operators>
+
+	<format>
+      <file>
+        <header>
+          &javaFileHeader;
+        </header>
+      </file>
+    </format>
 
   </java>
 </config>

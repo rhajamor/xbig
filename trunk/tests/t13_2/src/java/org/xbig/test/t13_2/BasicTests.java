@@ -42,20 +42,22 @@ public class BasicTests {
 		t.setVector(nativeStringVector);
 
 		// set and get Iterator with two calls
-		IStringIterator stringIterator = t.b();
+		IStringIterator stringIterator = new StringIterator(nativeStringVector);
+        t.b(stringIterator);
 		t.a(stringIterator);
 		Assert.assertEquals(javaVec.get(0), stringIterator.peekNext());
 		stringIterator.delete();
 
 		// set and get Iterator with one call
 		stringIterator = new StringIterator(nativeStringVector);
-		IStringIterator stringIterator2 = t.c(stringIterator);
+		IStringIterator stringIterator2 = new StringIterator(nativeStringVector);
+        t.c(stringIterator2, stringIterator);
 		Assert.assertEquals(stringIterator.peekNext(), stringIterator2.peekNext());
 		stringIterator.delete();
 		stringIterator2.delete();
 
 		// test Iterator methods
-		stringIterator = t.b();
+		t.b(stringIterator);
 		Assert.assertTrue(stringIterator.hasMoreElements());
 		for (int i=0; i<javaVec.size(); i++) {
 			Assert.assertEquals(javaVec.get(i), stringIterator.getNext());
@@ -64,7 +66,7 @@ public class BasicTests {
 		stringIterator.delete();
 
 		// test more Iterator methods
-		stringIterator = t.b();
+		t.b(stringIterator);
 		for (int i=0; i<javaVec.size(); i++) {
 			Assert.assertEquals(javaVec.get(i), stringIterator.peekNext());
 			Assert.assertEquals(javaVec.get(i), stringIterator.peekNextPtr().get());

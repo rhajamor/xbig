@@ -19,9 +19,10 @@ public class BasicTests {
 		ConfigFile.SettingsMultiMap smm = new ConfigFile.SettingsMultiMap();
 		ConfigFile.SettingsBySection sbs = new ConfigFile.SettingsBySection();
 
-		IConfigFile.ISectionIterator si = cf.getSectionIterator();
+		IConfigFile.ISectionIterator si = new ConfigFile.SectionIterator();
+        cf.getSectionIterator(si);
 
-		((ConfigFile.SectionIterator)si).delete();
+		si.delete();
 		sbs.delete();
 		smm.delete();
 		cf.delete();

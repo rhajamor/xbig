@@ -11,11 +11,11 @@ public #classname#(org.xbig.base.InstancePointer p) {
 
 /**
  * <p>
- * This constructor is public for internal useage only!
- * Do not use it!
+ * Creates a Java wrapper object for an existing C++ object.
+ * If remote is set to 'true' this object cannot be deleted in Java.
  * </p>
  */
-public #classname#(org.xbig.base.InstancePointer p, boolean remote) {
+protected #classname#(org.xbig.base.InstancePointer p, boolean remote) {
 	super(p, remote);
 }
 

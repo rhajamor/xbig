@@ -16,45 +16,50 @@ public class BasicTests {
 	@Test
 	public void test() {
 		IVector v = new Vector(1, 2, 3);
-        IVector sum = null;
+        IVector sum = new Vector(0, 0, 0);
 
         // add
-        sum = v.operatorAddition(v);
+        v.operatorAddition(sum, v);
         Assert.assertEquals(2, sum.operatorIndex(0));
         Assert.assertEquals(4, sum.operatorIndex(1));
         Assert.assertEquals(6, sum.operatorIndex(2));
         sum.delete();
 
         // sub
-        sum = v.operatorSubtraction(v);
+        sum = new Vector(0, 0, 0);
+        v.operatorSubtraction(sum, v);
         Assert.assertEquals(0, sum.operatorIndex(0));
         Assert.assertEquals(0, sum.operatorIndex(1));
         Assert.assertEquals(0, sum.operatorIndex(2));
         sum.delete();
 
         // mul
-        sum = v.operatorMultiplication(v);
+        sum = new Vector(0, 0, 0);
+        v.operatorMultiplication(sum, v);
         Assert.assertEquals(1, sum.operatorIndex(0));
         Assert.assertEquals(4, sum.operatorIndex(1));
         Assert.assertEquals(9, sum.operatorIndex(2));
         sum.delete();
 
         // div
-        sum = v.operatorDivision(v);
+        sum = new Vector(0, 0, 0);
+        v.operatorDivision(sum, v);
         Assert.assertEquals(1, sum.operatorIndex(0));
         Assert.assertEquals(1, sum.operatorIndex(1));
         Assert.assertEquals(1, sum.operatorIndex(2));
         sum.delete();
 
         // unary +
-        sum = v.operatorAddition();
+        sum = new Vector(0, 0, 0);
+        v.operatorAddition(sum);
         Assert.assertEquals(1, sum.operatorIndex(0));
         Assert.assertEquals(2, sum.operatorIndex(1));
         Assert.assertEquals(3, sum.operatorIndex(2));
         sum.delete();
 
         // unary -
-        sum = v.operatorSubtraction();
+        sum = new Vector(0, 0, 0);
+        v.operatorSubtraction(sum);
         Assert.assertEquals(-1, sum.operatorIndex(0));
         Assert.assertEquals(-2, sum.operatorIndex(1));
         Assert.assertEquals(-3, sum.operatorIndex(2));
@@ -67,7 +72,8 @@ public class BasicTests {
         Assert.assertEquals(4, sum.operatorIndex(2));
 
         // postfix ++
-        sum = v.operatorIncrement(0);
+        sum = new Vector(0, 0, 0);
+        v.operatorIncrement(sum, 0);
         Assert.assertEquals(2, sum.operatorIndex(0));
         Assert.assertEquals(3, sum.operatorIndex(1));
         Assert.assertEquals(4, sum.operatorIndex(2));

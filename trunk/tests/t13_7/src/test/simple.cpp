@@ -5,13 +5,13 @@ int main(int argc, char* argv[])
 {
     Tester tester;	 
 	//std::map<std::string, A> gaga = tester.getMap();
-    Tester::AMapIterator it = tester.getMapIterator();
+    Tester::AMapIterator* it = tester.getMapIterator();
     
     std::cout << "--------------------------------" << std::endl;
-    while(it.hasMoreElements())
+    while(it->hasMoreElements())
     {        
-        std::cout << it.peekNextKey() << std::endl;
-        it.getNext();
+        std::cout << it->peekNextKey() << std::endl;
+        it->getNext();
     }
     std::cout << "--------------------------------" << std::endl;
     

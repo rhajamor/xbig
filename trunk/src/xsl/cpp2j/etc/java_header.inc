@@ -23,12 +23,3 @@
 ///
 ///
 ///////////////////////////////////////////////////////////////////////////////
-
-
-
-#ifdef WIN32
-	// disable warnings
-	#pragma warning (disable : 4267) // conversion from 'size_t' to 'jint'
-#else
-
-#endif

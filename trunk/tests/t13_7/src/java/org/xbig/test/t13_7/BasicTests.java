@@ -19,17 +19,18 @@ public class BasicTests {
 	public void useStdMapAndOgreMapIterator() {
 		Tester tester = new Tester();
         ITester.IAMapIterator it = tester.getMapIterator();
-        
+
+        IA a = new A();
         while(it.hasMoreElements()){
             String key = it.peekNextKey();
             Assert.assertNotNull(key);
             System.out.println("key: "+key);
             
-            IA a = it.getNext();
+            it.getNext(a);
             Assert.assertNotNull(a);
             if(a.getInstancePointer().pointer == 0)
                 throw new NullPointerException();
-            
+            a.delete();
         }
 
         tester.delete();

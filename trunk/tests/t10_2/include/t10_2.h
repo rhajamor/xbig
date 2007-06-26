@@ -66,8 +66,8 @@ public:
 	A();
 };
 
-EXPORT void t(A b);
-EXPORT A t(void);
+EXPORT void t_set(A b);
+EXPORT A t_get(void);
 
 //the array is not handled correctly
 //EXPORT void u(int b[]);

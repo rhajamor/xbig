@@ -20,7 +20,9 @@ public class BasicTests {
 		p.setRotation(r);
 		p.getRotation();
 		p.setrotation(r);
-		p.getrotation();
+        Radian r2 = new Radian();
+		p.getrotation(r2);
+        r2.delete();
 		p.delete();
 		r.delete();
 	}

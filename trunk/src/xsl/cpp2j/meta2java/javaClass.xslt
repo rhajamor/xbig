@@ -316,6 +316,21 @@
 				</xsl:if>
 			</xsl:for-each>
 
+			<!-- generate default c-tor if in config -->
+			<xsl:if test="
+					$config/config/java/generateDefaultConstructorWithoutNativeMethodCall/class
+					[. = $class/@fullName]">
+				<xsl:text>&#32;&#32;</xsl:text>
+				<xsl:text>// Default constructor which does not create a C++ object&#10;</xsl:text>
+				<xsl:text>&#32;&#32;public&#32;</xsl:text>
+				<xsl:value-of select="$class/@name"/>
+				<xsl:text>()&#32;{&#10;</xsl:text>
+				<xsl:text>&#32;&#32;&#32;&#32;setInstancePointer(-1, false);&#10;</xsl:text>
+				<xsl:text>&#32;&#32;&#32;&#32;object.pointer&#32;=&#32;0;&#10;</xsl:text>
+				<xsl:text>&#32;&#32;}</xsl:text>
+				<xsl:text>&#10;&#10;</xsl:text>
+			</xsl:if>
+
 			<!-- generate public attributes getters and setters -->
 			<xsl:for-each
 				select="$inheritedMethods/attribute/variable">
