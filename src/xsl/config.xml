@@ -120,6 +120,8 @@
 
     <parameter>
       <defaultName>a</defaultName>
+      <rename meta="_min">min</rename>
+      <rename meta="_max">max</rename>
     </parameter>
 		
     <globalmember>

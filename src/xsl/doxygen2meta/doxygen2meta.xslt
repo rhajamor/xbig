@@ -1330,11 +1330,14 @@
 			</xsl:otherwise>
 		</xsl:choose>
 		<!-- name -->
+
 		<xsl:if test="declname!=''">
 			<xsl:element name="name">
-				<xsl:value-of select="if (declname = 'min') then 'min_as_parameter'
-									  else if (declname = 'max') then 'max_as_parameter'
-									  else declname" />
+				<xsl:value-of select="if ($config/config/meta/parameter/rename
+											[text() = current()/declname])
+										then $config/config/meta/parameter/rename
+											[. = current()/declname]/@meta
+										else declname" />
 			</xsl:element>
 		</xsl:if>
 	</xsl:template>
