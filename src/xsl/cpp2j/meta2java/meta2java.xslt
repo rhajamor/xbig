@@ -34,6 +34,7 @@
 	xmlns:xbig="http://xbig.sourceforge.net/XBiG" version="2.0">
 
 	<xsl:import href="javaNamespace.xslt" />
+	<xsl:import href="javaUtil.xslt" />
 	<xsl:import href="../../util/createClassForArray.xslt" />
 	<xsl:import href="../../util/metaTypeInfo.xslt" />
 	<xsl:import href="../../util/utilXmlPrint.xslt" />
@@ -83,7 +84,7 @@
 
 				<xsl:call-template name="javaNamespace">
 					<xsl:with-param name="meta_ns_name"
-						select="@fullName" />
+						select="xbig:getJavaPackageName(@fullName, $config)" />
 					<xsl:with-param name="outdir" select="$outdir" />
 					<xsl:with-param name="config" select="$config" />
 					<xsl:with-param name="buildFile"

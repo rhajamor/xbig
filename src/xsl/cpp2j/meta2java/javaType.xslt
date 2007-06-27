@@ -556,7 +556,9 @@
 				<!-- namespaces -->
 				<xsl:when test="$currentNode/*/namespace[@name = $fullNameTokens/*[$currentPosition+1]]">
 					<xsl:value-of select="concat($currentJavaFullNameWithDot,
-															$fullNameTokens/*[$currentPosition+1])"/>
+									xbig:getUnqualifiedJavaPackageName(concat(
+									$currentMetaFullNameWithDot, $fullNameTokens/*[$currentPosition+1]),
+									$config))"/>
 				</xsl:when>
 
 				<!-- typedefs for templates -> generated meta class -->
