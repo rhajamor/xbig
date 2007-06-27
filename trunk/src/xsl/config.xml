@@ -1019,6 +1019,11 @@
 
     <namespaces>
       <packageprefix>org.xbig</packageprefix>
+<!-- 
+      <rename package="ogre4j">Ogre</rename>
+      <rename package="ogre4j.emittercommands">Ogre::EmitterCommands</rename>
+      <rename package="ogre4j.overlayelementcommands">Ogre::OverlayElementCommands</rename>
+ -->
     </namespaces>
 
 

@@ -28,12 +28,14 @@
 	
 -->
 
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+<xsl:stylesheet version="2.0"
+	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:xd="http://www.pnp-software.com/XSLTdoc"
 	xmlns:exsl="http://exslt.org/common" extension-element-prefixes="exsl"
-	version="2.0">
+	xmlns:xbig="http://xbig.sourceforge.net/XBiG">
 
 	<xsl:import href="cppNamespace.xslt" />
+	<xsl:import href="../meta2java/javaUtil.xslt" />
 	<!--<xsl:import href="cppGlobals.xslt" />
 	<xsl:import href="cppEnum.xslt" />-->
 
@@ -83,7 +85,8 @@
 			<xsl:for-each select="namespace">
 
 				<xsl:call-template name="cppNamespace">
-					<xsl:with-param name="meta_ns_name" select="@fullName" />
+					<xsl:with-param name="meta_ns_name"
+							select="xbig:getJavaPackageName(@fullName, $config)" />
 					<xsl:with-param name="include_dir"
 						select="$include_dir" />
 					<xsl:with-param name="lib_dir" select="$lib_dir" />

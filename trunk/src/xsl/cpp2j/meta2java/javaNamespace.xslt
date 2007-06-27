@@ -69,7 +69,7 @@
     <!-- iterate over child namespaces -->
     <xsl:for-each select="namespace">
       <xsl:call-template name="javaNamespace">
-        <xsl:with-param name="meta_ns_name" select="@fullName" />
+        <xsl:with-param name="meta_ns_name" select="xbig:getJavaPackageName(@fullName, $config)" />
         <xsl:with-param name="outdir" select="$outdir" />
         <xsl:with-param name="config" select="$config" />
         <xsl:with-param name="buildFile" select="$buildFile" />

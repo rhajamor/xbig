@@ -48,8 +48,8 @@
 		<xd:short>
 			Takes a list of functions and returns a filtered list which
 			is valid for Java.
-		<xd:param name="functionNodeList">method list to be filtered.</xd:param>
 		</xd:short>
+		<xd:param name="functionNodeList">method list to be filtered.</xd:param>
 	</xd:doc>
 	<xsl:template name="getValidMethodList">
 		<xsl:param name="functionNodeList" />
@@ -112,4 +112,51 @@
 			</xsl:choose>
 		</xsl:for-each>
 	</xsl:template>
+
+
+	<xd:doc type="function">
+		<xd:short>
+			Takes a fully qualified C++ namespace and returns the almost fully qualified Java package.
+			Only the configurable prefix is missing.
+		</xd:short>
+		<xd:param name="namespace">C++ namespace to be checked.</xd:param>
+		<xd:param name="config">config.xml file, contains namespace mapping.</xd:param>
+	</xd:doc>
+	<xsl:function name="xbig:getJavaPackageName" as="xs:string">
+		<xsl:param name="namespace" as="xs:string" />
+		<xsl:param name="config" />
+
+		<xsl:sequence select="if($config/config/java/namespaces/rename[. = $namespace])
+								then $config/config/java/namespaces/rename[. = $namespace]/@package
+								else replace($namespace, '::', '.')"/>
+
+	</xsl:function>
+
+
+	<xd:doc type="function">
+		<xd:short>
+			Takes a fully qualified C++ namespace and returns the _not_ fully qualified Java package.
+			Needed in javaType.xslt.
+		</xd:short>
+		<xd:param name="namespace">C++ namespace to be checked.</xd:param>
+		<xd:param name="config">config.xml file, contains namespace mapping.</xd:param>
+	</xd:doc>
+	<xsl:function name="xbig:getUnqualifiedJavaPackageName" as="xs:string">
+		<xsl:param name="namespace" as="xs:string" />
+		<xsl:param name="config" />
+
+		<xsl:variable name="prefixedNamespace" select="if (not(contains($namespace, '::')))
+									then concat('::', $namespace) else $namespace"/>
+
+		<xsl:sequence select="if(not($config/config/java/namespaces/rename[. = $namespace]))
+								then tokenize($prefixedNamespace, '::')[last()]
+								else if (not(contains($config/config/java/namespaces/rename
+										[. = $namespace]/@package, '.')))
+								then $config/config/java/namespaces/rename
+										[. = $namespace]/@package
+								else tokenize($config/config/java/namespaces/rename
+										[. = $namespace]/@package, '\.')[last()]"/>
+
+	</xsl:function>
+
 </xsl:stylesheet>

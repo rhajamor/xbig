@@ -38,6 +38,7 @@
 
 	<xsl:import href="cppClass.xslt" />
 	<xsl:import href="cppEnum.xslt" />
+	<xsl:import href="../meta2java/javaUtil.xslt" />
 	<xsl:import href="../../util/createClassFromTemplateTypedef.xslt" />
 
 	<xd:doc type="stylesheet">
@@ -63,7 +64,7 @@
 		<!-- iterate over child namespaces -->
 		<xsl:for-each select="namespace">
 			<xsl:call-template name="cppNamespace">
-				<xsl:with-param name="meta_ns_name" select="@fullName" />
+				<xsl:with-param name="meta_ns_name" select="xbig:getJavaPackageName(@fullName, $config)" />
 				<xsl:with-param name="include_dir" select="$include_dir" />
 				<xsl:with-param name="lib_dir" select="$lib_dir" />
 				<xsl:with-param name="config" select="$config" />
