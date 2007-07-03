@@ -141,6 +141,7 @@ public abstract class NativeObject implements INativeObject {
 			throw new NullPointerException("Instance pointer is null!");
 		this.object = pInstance;
 		this.remote = argRemote;
+        this.deleted = false;
 	}
 
 	/* (non-Javadoc)

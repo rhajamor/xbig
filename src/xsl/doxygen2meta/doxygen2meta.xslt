@@ -87,9 +87,7 @@
 	<xsl:template match="/">
 		<xsl:element name="meta"
 			namespace="http://xbig.sourceforge.net/XBiG">
-			<xsl:attribute name="schemaLocation">
-				http://xbig.sourceforge.net/XMLSchema/xsd/meta.xsd
-			</xsl:attribute>
+			<xsl:attribute name="schemaLocation" select="'http://xbig.sourceforge.net/XBiG http://xbig.sourceforge.net/XMLSchema/xsd/meta.xsd'"/>
 
 			<xsl:element name="namespace">
 				<xsl:attribute name="name" select="''" />
@@ -1815,6 +1813,20 @@
 		</xsl:variable>
 		<xsl:attribute name="name" select="$className" />
 		<xsl:attribute name="fullName" select="compoundname" />
+
+		<!-- check if this class is abstract, this is not right in every case
+			 (base classes need to be checked if listofallmembers is not present) -->
+		<xsl:choose>
+			<xsl:when test="listofallmembers">
+				<xsl:attribute name="abstract" select="if (listofallmembers/member[@virt='pure-virtual'])
+														then 'true' else 'false'" />
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:attribute name="abstract" select="if (sectiondef/memberdef
+														[@kind='function' and @virt='pure-virtual'])
+														then 'true' else 'false'" />
+			</xsl:otherwise>
+		</xsl:choose>
 
 		<!-- template attributes -->
 		<xsl:if test="templateparamlist">

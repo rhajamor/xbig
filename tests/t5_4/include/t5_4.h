@@ -56,3 +56,8 @@ public:
 	virtual void abstractA();
 	virtual void abstractB();
 };
+
+class EXPORT E {
+private:
+	virtual void abstractE() = 0;
+};
