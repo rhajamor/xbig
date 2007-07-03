@@ -50,31 +50,27 @@
 			</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element
-				ref="detaileddescription"
-				minOccurs="0"
+			<xs:element ref="detaileddescription" minOccurs="0"
 				maxOccurs="1">
 			</xs:element>
-			<xs:element
-				name="includes"
-				minOccurs="0" />
-			<xs:element
-				minOccurs="0"
-				name="inherits"
+			<xs:element name="includes" minOccurs="0" type="xs:string"/>
+			<xs:element minOccurs="0" name="inherits"
 				type="ListOfBaseClasses" />
-			<xs:element
-				minOccurs="0"
-				name="derives"
+			<xs:element minOccurs="0" name="derives"
 				type="ListOfSubClasses" />
 			<xs:group ref="Declarations" />
 		</xs:sequence>
-		<xs:attribute
-			name="name"
-			type="xs:NCName">
-		</xs:attribute>
-		<xs:attribute
-			name="fullName"
-			type="xs:Name">
+		<xs:attribute name="name" type="xs:NCName"></xs:attribute>
+		<xs:attribute name="fullName" type="xs:Name"></xs:attribute>
+		<xs:attribute name="abstract" type="xs:boolean"></xs:attribute>
+		<xs:attribute name="protection">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="public"></xs:enumeration>
+					<xs:enumeration value="protected"></xs:enumeration>
+					<xs:enumeration value="private"></xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
 		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="Function">
@@ -92,18 +88,18 @@
 			<xs:element
 				name="definition"
 				type="xs:string"
-				maxOccurs="0"
-				minOccurs="1" />
+				maxOccurs="1"
+				minOccurs="0" />
 			<xs:element
 				name="name"
 				type="xs:NCName"
-				maxOccurs="0"
-				minOccurs="1" />
+				maxOccurs="1"
+				minOccurs="0" />
 			<xs:element
-				minOccurs="0"
-				minOccurs="1"
 				name="type"
-				type="xs:string" />
+				type="xs:string"
+				minOccurs="0"
+				maxOccurs="1" />
 			<xs:element
 				minOccurs="0"
 				maxOccurs="1"
@@ -151,15 +147,11 @@
 			</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element
-				ref="detaileddescription"
-				minOccurs="1"
+			<xs:element ref="detaileddescription" minOccurs="1"
 				maxOccurs="1" />
-			<xs:element
-				maxOccurs="unbounded"
-				name="enum"
-				nillable="true"
-				type="xs:NCName" />
+			<xs:element maxOccurs="unbounded" name="enum"
+				nillable="true" type="xs:NCName" />
+			<xs:element name="includes" type="xs:string" maxOccurs="1" minOccurs="0"></xs:element>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="Typedef">

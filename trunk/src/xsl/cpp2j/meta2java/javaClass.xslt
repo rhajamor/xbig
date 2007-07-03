@@ -73,8 +73,12 @@
 
 		<xsl:message>Generating Java code for class <xsl:value-of select="$class/@fullName"/></xsl:message>
 
+		<!-- 
 		<xsl:variable name="isAbstract"
-			select="xbig:areThereUnimplementedAbstractMethods($class)" />
+			select="xbig:areThereUnimplementedAbstractMethods($class)" />		
+		 -->
+		<xsl:variable name="isAbstract"
+			select="$class/@abstract = 'true'" />
 
 		<!-- shortcut for class configuration -->
 		<xsl:variable name="class_config"
