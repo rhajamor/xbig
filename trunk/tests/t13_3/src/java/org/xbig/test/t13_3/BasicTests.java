@@ -58,24 +58,39 @@ public class BasicTests {
 		t.setMap(nativeMap);
 
 		// set and get Iterator with two calls
-		IAMapIterator mapIterator = t.getMapIterator();
+		IAMapIterator mapIterator = new AMapIterator(nativeMap);
+		t.getMapIterator(mapIterator);
 		t.a(mapIterator);
-		Assert.assertEquals(javaMap.get(keyVec.get(0).get()).get(), mapIterator.peekNextValue().get());
+		IA aReturned = new A();
+		mapIterator.peekNextValue(aReturned);
+		Assert.assertEquals(javaMap.get(keyVec.get(0).get()).get(), aReturned.get());
+		aReturned.delete();
 		mapIterator.delete();
 
 		// set and get Iterator with one call
 		mapIterator = new AMapIterator(nativeMap);
-		IAMapIterator mapIterator2 = t.c(mapIterator);
-		Assert.assertEquals(mapIterator.peekNextValue().get(), mapIterator2.peekNextValue().get());
+		IAMapIterator mapIterator2 = new AMapIterator(nativeMap);
+		t.c(mapIterator2, mapIterator);
+		aReturned = new A();
+		mapIterator2.peekNextValue(aReturned);
+		IA aReturned2 = new A();
+		mapIterator.peekNextValue(aReturned2);
+		Assert.assertEquals(aReturned2.get(), aReturned.get());
+		aReturned2.delete();
+		aReturned.delete();
 		mapIterator.delete();
 		mapIterator2.delete();
 
 		// test Iterator methods
-		mapIterator = t.getMapIterator();
+		mapIterator = new AMapIterator(nativeMap);
+		t.getMapIterator(mapIterator);
 		Assert.assertTrue(mapIterator.hasMoreElements());
 		for (int i=0; i<javaMap.size(); i++) {
 			String currentKey = keyVec.get(i).get();
-			Assert.assertEquals(javaMap.get(currentKey).get(), mapIterator.getNext().get());
+			aReturned = new A();
+			mapIterator.getNext(aReturned);
+			Assert.assertEquals(javaMap.get(currentKey).get(), aReturned.get());
+			aReturned.delete();
 		}
 		Assert.assertFalse(mapIterator.hasMoreElements());
 		mapIterator.delete();
@@ -84,7 +99,10 @@ public class BasicTests {
 		mapIterator = new AMapIterator(nativeMap);
 		for (int i=0; i<javaMap.size(); i++) {
 			String nextKey = mapIterator.peekNextKey();
-			Assert.assertEquals(javaMap.get(nextKey).get(), mapIterator.peekNextValue().get());
+			aReturned = new A();
+			mapIterator.peekNextValue(aReturned);
+			Assert.assertEquals(javaMap.get(nextKey).get(), aReturned.get());
+			aReturned.delete();
 			Assert.assertEquals(javaMap.get(nextKey).get(), mapIterator.peekNextValuePtr().get());
 			mapIterator.moveNext();
 		}
