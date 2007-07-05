@@ -467,6 +467,35 @@
 
 	<xd:doc type="function">
 		<xd:short>
+			Checks if a type is a template if it doesn't have type parameters.
+		</xd:short>
+		<xd:param name="type">
+			Fully qualified type name to be checked.
+		</xd:param>
+		<xd:param name="inputTreeRoot">
+			Root of input tree. Usually selected with '/'.
+		</xd:param>
+	</xd:doc>
+	<xsl:function name="xbig:isTemplate" as="xs:boolean">
+		<xsl:param name="type" />
+		<xsl:param name="inputTreeRoot" />
+
+		<xsl:variable name="node"
+			select="$inputTreeRoot//*[@fullName = $type]" />
+
+		<xsl:choose>
+			<xsl:when test="$node/@template = 'true'">
+				<xsl:value-of select="true()" />
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="false()" />
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:function>
+
+
+	<xd:doc type="function">
+		<xd:short>
 			Resolves full meta name of a type. It may be already complete, or contain '::'.
 		</xd:short>
 		<xd:param name="type">type name to be completed.</xd:param>
