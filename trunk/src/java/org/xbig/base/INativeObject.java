@@ -118,6 +118,8 @@ public interface INativeObject {
      * With this method an unneeded Java object can be deleted without deleting a still needed
      * C++ object. Do not forget to set the unneeded Java reference to <code>null</code>!
      * </p>
+     * 
+     * @see org.xbig.base.WithoutNativeObject
      */
     void disconnectFromNativeObject();
 }

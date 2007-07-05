@@ -1050,10 +1050,6 @@
 	<passObjectsReturnedByValueAsParameters>yes</passObjectsReturnedByValueAsParameters>
 	<returnValueAsParameterName>returnValue</returnValueAsParameterName>
 
-	<generateDefaultConstructorWithoutNativeMethodCall>
-		<class>Ogre::SceneManager::AnimationIterator</class>
-	</generateDefaultConstructorWithoutNativeMethodCall>
-
 	<operators>
 		<op javaName="operatorAddition">+</op>
 		<op javaName="operatorSubtraction">-</op>
