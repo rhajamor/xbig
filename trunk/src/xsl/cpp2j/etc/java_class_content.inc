@@ -19,15 +19,25 @@ protected #classname#(org.xbig.base.InstancePointer p, boolean remote) {
 	super(p, remote);
 }
 
+/**
+ * {@inheritDoc}
+ */
+public #classname#(org.xbig.base.WithoutNativeObject val) {
+	super(val);
+}
+
 public void delete() {
 	if (this.remote) {
        throw new RuntimeException("can't dispose object created by native library");
     }
 
-    __delete(object.pointer);
-    this.deleted = true;
+	if(!this.deleted) {
+	    __delete(object.pointer);
+	    this.deleted = true;
+	   	this.object.pointer = 0;
+	}
 }
-	
+
 public void finalize() {
 	if(!this.remote &amp;&amp; !this.deleted) {
 		delete();

@@ -5,6 +5,7 @@ package org.xbig.test.t65;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.xbig.base.*;
 import org.xbig.Ogre.*;
 import org.xbig.std.*;
 /**
@@ -38,8 +39,9 @@ public class BasicTests {
 
         IAIterator it2 = new AIterator(nativeMap);
         Assert.assertEquals(firstKeyReturned, it2.peekNextKey());
-        IAIterator tmp = new AIterator(nativeMap);
+        IAIterator tmp = new AIterator(WithoutNativeObject.I_WILL_DISCONNECT_THIS_OBJECT);
         it2.operatorAssignment(tmp, it1);
+        tmp.disconnectFromNativeObject();
         tmp = null;
         Assert.assertEquals(secondKeyReturned, it2.peekNextKey());
 
