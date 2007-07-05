@@ -95,7 +95,19 @@ public abstract class NativeObject implements INativeObject {
 		setInstancePointer(pInstance, remote);
 	}
 
-	/* (non-Javadoc)
+    /**
+     * Allows creation of Java objects without C++ objects.
+     * 
+     * @see org.xbig.base.WithoutNativeObject
+     * @see org.xbig.base.INativeObject#disconnectFromNativeObject()
+     */
+    public NativeObject(WithoutNativeObject val) {
+        object = new InstancePointer(0);
+        this.remote = false;
+        this.deleted = true;
+    }
+
+    /* (non-Javadoc)
 	 * @see INativeObject#delete()
 	 */
 	public abstract void delete();
@@ -169,4 +181,16 @@ public abstract class NativeObject implements INativeObject {
 		buf.append(object.toString());
 		return buf.toString();
 	}
+
+	/**
+     * {@inheritDoc}
+     * @see org.xbig.base.INativeObject#disconnectFromNativeObject()
+	 */
+    public void disconnectFromNativeObject() {
+        if(this.object != null) {
+            this.object.pointer = 0;
+        }
+        this.remote = false;
+        this.deleted = true;
+    }
 }

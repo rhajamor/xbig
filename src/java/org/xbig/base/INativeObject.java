@@ -88,4 +88,36 @@ public interface INativeObject {
 	 */
 	void setInstancePointer(long pInstance, boolean createdByLibray);
 
+    /**
+     * Separates this Java object from it's corresponding C++ object.<br/>
+     * Allows deletion of this Java object without deleting the C++ object.
+     * <p>
+     * Needed for templates as return values.<br/>
+     * Consider following situation in the original library:
+     * <pre>
+     *  template &lt;class T&gt; class A;
+     *  class B;
+     *  class C {
+     *  public:
+     *      A&lt;B&gt;* a();
+     *  };
+     * </pre>
+     * The method <code>C::a()</code> must return a Java object. But there is no Java
+     * class we could instantiate because only Java interfaces can be generated for 
+     * templates. So this return value must be passed as parameter which has the generated 
+     * interface as type (with default configuration):<br/>
+     * <code>public void a(org.xbig.IA&lt; org.xbig.IB &gt; returnValue)</code>.<br/>
+     * This way you have to decide which Java class shall be instantiated and do so by your
+     * own. Possible classes are typedefs for this template which use same type parameters
+     * or you could implement an own subclass of NativeObject. 
+     * But as this object is returned as a pointer, it is not allowed to be deleted in Java.
+     * Furthermore a method could return a pointer or reference to itself which would result
+     * in one C++ object corresponding to two Java objects.
+     * </p>
+     * <p>
+     * With this method an unneeded Java object can be deleted without deleting a still needed
+     * C++ object. Do not forget to set the unneeded Java reference to <code>null</code>!
+     * </p>
+     */
+    void disconnectFromNativeObject();
 }

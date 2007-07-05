@@ -72,12 +72,15 @@ package org.xbig.base;
  * get ClassCastExceptions. So you cannot use methods like the above one.
  * Thus the only use of this class is to have the generated code compileable.
  * </p>
+ * @Deprecated Such return types are passed as parameters now.
+ * @see org.xbig.base.INativeObject#disconnectFromNativeObject()
  */
+@Deprecated
 public class ParametrizedTemplateReturnPlaceHolder extends NativeObject {
 	public ParametrizedTemplateReturnPlaceHolder(InstancePointer pInstance) {
 		super(pInstance, true);
 	}
-	public void delete(){
+    public void delete(){
 	}
 
 	/**
