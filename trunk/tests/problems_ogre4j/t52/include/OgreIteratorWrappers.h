@@ -333,13 +333,13 @@ namespace Ogre {
         {
             return mCurrent->first;
         }
-        /** Required to overcome intermittent bug */
+        /** Required to overcome intermittent bug *//*
         MapIterator<T> & operator=( MapIterator<T> &rhs )
         {
             mCurrent = rhs.mCurrent;
             mEnd = rhs.mEnd;
             return *this;
-        }
+        }*/
         /** Returns a pointer to the next value element in the collection, without 
         advancing to the next afterwards. */
         const typename T::mapped_type* peekNextValuePtr(void) const

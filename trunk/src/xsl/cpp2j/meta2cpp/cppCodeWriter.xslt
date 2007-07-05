@@ -195,7 +195,11 @@
 					<xsl:when
 						test="xbig:isTemplate($fullTypeName, $root)">
 						<xsl:value-of
-							select="concat($class/@originalTypedefFullName, '*')" />
+							select="if($class/@originalTypedefFullName)
+									then
+										concat($class/@originalTypedefFullName, '*')
+									else
+										concat($class/@fullName, '*')" />
 					</xsl:when>
 					<xsl:when
 						test="xbig:isClassOrStruct($fullTypeName, $class, $root)">
@@ -376,7 +380,11 @@
 					test="xbig:isTemplate($fullTypeName, $root)">
 					<xsl:variable name="part1"
 						select="'reinterpret_cast&lt; '" />
-					<xsl:variable name="part2" select="$class/@originalTypedefFullName" />
+					<xsl:variable name="part2" select="if($class/@originalTypedefFullName)
+												then
+													$class/@originalTypedefFullName
+												else
+													$class/@fullName" />
 					<xsl:variable name="part3"
 						select="$pointerPointerAddOn" />
 					<xsl:variable name="part4" select="if ($param//@constInTemplate = 'true')
