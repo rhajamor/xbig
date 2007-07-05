@@ -183,26 +183,14 @@
 
 		<!-- generate additional parameter for objects returned by value _or_ parametrized templates -->
 		<xsl:if test="$objectReturnedByValue = true() or contains($method/type, '&lt;')">
-			<!-- 
-			<xsl:choose>
-				<xsl:when test="contains($method/type, '&lt;') and $class/@originalTypedefFullName">
-					<xsl:value-of select="
-							xbig:getFullJavaName($class/@originalTypedefFullName, $class, $root, $config)"/>
-				</xsl:when>
-				<xsl:otherwise>
-			 -->
-					<xsl:call-template name="javaType">
-						<xsl:with-param name="config" select="$config" />
-						<xsl:with-param name="param" select="$method" />
-						<xsl:with-param name="class" select="$class" />
-						<xsl:with-param name="typeName" select="$resolvedType" />
-						<xsl:with-param name="writingNativeMethod" select="false()" />
-						<xsl:with-param name="isTypeParameter" select="false()" />
-					</xsl:call-template>
-			<!-- 
-				</xsl:otherwise>
-			</xsl:choose>
-			 -->
+			<xsl:call-template name="javaType">
+				<xsl:with-param name="config" select="$config" />
+				<xsl:with-param name="param" select="$method" />
+				<xsl:with-param name="class" select="$class" />
+				<xsl:with-param name="typeName" select="$resolvedType" />
+				<xsl:with-param name="writingNativeMethod" select="false()" />
+				<xsl:with-param name="isTypeParameter" select="false()" />
+			</xsl:call-template>
 			<xsl:text>&#32;</xsl:text>
 			<xsl:value-of select="$config/config/java/returnValueAsParameterName"/>
 			<xsl:if test="$method/parameters/parameter">

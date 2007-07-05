@@ -23,10 +23,18 @@
 
 
 #include <string>
-#include <hash_map>
+#ifdef __GNUC__
+	#include <ext/hash_map>
+#else
+	#include <hash_map>
+#endif
 
 
-#define HashMap ::std::hash_map
+//#ifdef __GNUG__
+//	#define HashMap ::std::map
+//#else
+	#define HashMap ::std::hash_map
+//#endif
 
 
 namespace Ogre {

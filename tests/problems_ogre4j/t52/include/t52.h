@@ -26,7 +26,11 @@
 #include <list>
 #include <vector>
 #include <map>
-#include <hash_map>
+#ifdef __GNUC__
+	#include <ext/hash_map>
+#else
+	#include <hash_map>
+#endif
 #include <string>
 #include "OgreIteratorWrappers.h"
 

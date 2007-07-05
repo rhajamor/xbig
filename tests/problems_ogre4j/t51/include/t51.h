@@ -37,11 +37,15 @@ namespace Ogre {
 	public:
 		void _updateRenderQueue(RenderQueue *queue, std::list< Particle * > &currentParticles, bool cullIndividually) {}
 
+#ifdef WIN32
 		void constTypePara(std::list< const Particle >){}
+#endif
 		void constTypeParaPtr(std::list< const Particle* >){}
 		void templatePtr(std::list< Particle >*){}
 		void templatePtrWithConstTypeParaPtr(std::list< const Particle* >*){}
+#ifdef WIN32
 		void constTypeParaConst(const std::list< const Particle >){}
+#endif
 		void constTypeParaPtrConst(const std::list< const Particle* >){}
 		void templatePtrConst(const std::list< Particle >*){}
 		void templatePtrWithConstTypeParaPtrConst(const std::list< const Particle* >*){}

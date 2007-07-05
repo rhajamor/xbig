@@ -182,34 +182,9 @@
 					</xsl:when>
 
 					<xsl:when test="contains($fullTypeName, '&lt;')">
-						<!-- if template uses itself as a parameter, like Ogre::MapIterator::operator= -->
-						<xsl:variable name="useOriginalTypedefFullName">
-							<xsl:choose>
-								<xsl:when test="$class/@originalTemplateFullName != '' and 
-													$class/@originalTypedefFullName != ''">
-									<xsl:variable name="typeNameWithoutNamespace" select="
-												if(contains($fullTypeName, '::')) then
-												tokenize($fullTypeName, '::')[last()] else $fullTypeName"/>
-									<xsl:variable name="templateWithoutNamespace" select="if(contains(
-												$class/@originalTemplateFullName, '::')) then 
-												tokenize($class/@originalTemplateFullName, '::')[last()] 
-												else $class/@originalTemplateFullName"/>
-									<xsl:sequence select="
-												if ($class/@originalTypedefFullName and 
-													substring-before($typeNameWithoutNamespace, '&lt;') 
-													= $templateWithoutNamespace)
-												then true() else false()"/>
-								</xsl:when>
-								<xsl:otherwise>
-									<xsl:sequence select="false()"/>
-								</xsl:otherwise>
-							</xsl:choose>
-						</xsl:variable>
 						<xsl:value-of
-							select="if($useOriginalTypedefFullName = true())
-								then concat($class/@originalTypedefFullName, '*')
-								else concat(xbig:getFullTemplateName(
-														$fullTypeName, $class, $root), '*')" />
+							select="concat(xbig:getFullTemplateName(
+											$fullTypeName, $class, $root), '*')" />
 					</xsl:when>
 
 					<xsl:when
@@ -360,37 +335,11 @@
 				<!-- if this type is a parametrized template -->
 				<xsl:when test="contains($fullTypeName, '&lt;')">
 
-					<!-- if template uses itself as a parameter, like Ogre::MapIterator::operator= -->
-					<xsl:variable name="useOriginalTypedefFullName">
-						<xsl:choose>
-							<xsl:when test="$class/@originalTemplateFullName != '' and 
-												$class/@originalTypedefFullName != ''">
-								<xsl:variable name="typeNameWithoutNamespace" select="
-											if(contains($fullTypeName, '::')) then
-											tokenize($fullTypeName, '::')[last()] else $fullTypeName"/>
-								<xsl:variable name="templateWithoutNamespace" select="if(contains(
-											$class/@originalTemplateFullName, '::')) then 
-											tokenize($class/@originalTemplateFullName, '::')[last()] 
-											else $class/@originalTemplateFullName"/>
-								<xsl:sequence select="
-											if ($class/@originalTypedefFullName and 
-												substring-before($typeNameWithoutNamespace, '&lt;') 
-												= $templateWithoutNamespace)
-											then true() else false()"/>
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:sequence select="false()"/>
-							</xsl:otherwise>
-						</xsl:choose>
-					</xsl:variable>
-
 					<xsl:variable name="part1"
 						select="'reinterpret_cast&lt; '" />
 					<xsl:variable name="part2"
-						select="if($useOriginalTypedefFullName = true())
-								then $class/@originalTypedefFullName
-								else xbig:getFullTemplateName(
-														$fullTypeName, $class, $root)" />
+						select="xbig:getFullTemplateName(
+												$fullTypeName, $class, $root)" />
 					<xsl:variable name="part3"
 						select="$pointerPointerAddOn" />
 					<xsl:variable name="part4" select="if ($param//@constInTemplate = 'true')
