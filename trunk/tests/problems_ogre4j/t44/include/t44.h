@@ -125,9 +125,9 @@ namespace Ogre {
     	{
 			if (!mContent) 
 			{
-				OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS,
-					"Bad cast from uninitialised Any", 
-					"Any::operator()");
+//				OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS,
+//					"Bad cast from uninitialised Any", 
+//					"Any::operator()");
 			}
 			else if(getType() == typeid(ValueType))
 			{
@@ -135,12 +135,12 @@ namespace Ogre {
 			}
 			else
 			{
-				StringUtil::StrStreamType str;
-				str << "Bad cast from type '" << getType().name() << "' "
-					<< "to '" << typeid(ValueType).name() << "'";
-				OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS,
-					 str.str(), 
-					"Any::operator()");
+//				StringUtil::StrStreamType str;
+//				str << "Bad cast from type '" << getType().name() << "' "
+//					<< "to '" << typeid(ValueType).name() << "'";
+//				OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS,
+//					 str.str(), 
+//					"Any::operator()");
 			}
 		}
     };

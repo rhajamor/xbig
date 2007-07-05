@@ -47,7 +47,7 @@ namespace Ogre {
 	};
 	class EXPORT AxisAlignedBoxSceneQuery : public RegionSceneQuery {};
 
-	class EXPORT DefaultAxisAlignedBoxSceneQuery : public AxisAlignedBoxSceneQuery {
+	class EXPORT ConcreteAxisAlignedBoxSceneQuery : public AxisAlignedBoxSceneQuery {
 			AxisAlignedBox mAxisAlignedBox;
 			SceneQueryResult mSceneQueryResult;
 	public:
@@ -58,9 +58,9 @@ namespace Ogre {
   			WFT_CUSTOM_GEOMETRY,
   			WFT_RENDER_OPERATION
 		};
-		DefaultAxisAlignedBoxSceneQuery (SceneManager *creator) {}
+		ConcreteAxisAlignedBoxSceneQuery (SceneManager *creator) {}
 		/*
-		~DefaultAxisAlignedBoxSceneQuery () {}
+		~ConcreteAxisAlignedBoxSceneQuery () {}
 		void 	execute (SceneQueryListener *listener) {}
 		void 	setBox (const AxisAlignedBox &box) {}
 		const AxisAlignedBox & 	getBox (void) const {return mAxisAlignedBox;}

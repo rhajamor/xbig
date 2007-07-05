@@ -21,6 +21,7 @@
 
 
 #include <string>
+#include <ios>
 
 
 namespace Ogre {

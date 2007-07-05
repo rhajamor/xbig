@@ -517,14 +517,66 @@
 						<xsl:attribute name="const" select="$type/@const"/>
 
 						<!-- return type -->
-						<xsl:variable name="templateNameWithOpeningBracket"
-							select="concat('::', xbig:getFullTypeName(normalize-space(substring-before(
-									$type, '&lt;')), $template, $root), '&lt;')" />
+						<!-- find out some values -->
+						<xsl:variable name="isTypeThisTemplate" as="xs:boolean">
+							<xsl:variable name="typeBeforeBracket" select="normalize-space(
+										substring-before($type, '&lt;'))"/>
+							<xsl:variable name="typeNameWithoutNamespace" select="
+										if(contains($typeBeforeBracket, '::'))
+										then tokenize($typeBeforeBracket, '::')[last()]
+										else $typeBeforeBracket"/>
+							<xsl:variable name="templateWithoutNamespace" select="if(contains(
+										$template/@fullName, '::')) then 
+										tokenize($template/@fullName, '::')[last()] 
+										else $template/@fullName"/>
+							<xsl:sequence select="
+										if ($typeNameWithoutNamespace 
+											= $templateWithoutNamespace)
+										then true() else false()"/>
+						</xsl:variable>
 
-						<xsl:value-of select="concat(
-							xbig:extendMethodParameterTemplateWithTypeparasOfMethodContainingTemplate(
-							$templateNameWithOpeningBracket, 1, $resolvedTypeParas, $tokens, $template)
-							, '&gt;')"/>
+						<xsl:variable name="checkTokensAndTypeparameters">
+							<xsl:for-each select="$template/templateparameters/templateparameter
+									[@templateType = 'class' or @templateType = 'typename']">
+								<xsl:element name="check">
+									<xsl:choose>
+										<xsl:when test="@templateDeclaration = $tokens/*[current()/position()]">
+											<xsl:sequence select="true()"/>
+										</xsl:when>
+										<xsl:otherwise>
+											<xsl:sequence select="false()"/>
+										</xsl:otherwise>
+									</xsl:choose>
+								</xsl:element>
+							</xsl:for-each>
+						</xsl:variable>
+
+						<xsl:variable name="areTypeParasEqual" select="
+								if($checkTokensAndTypeparameters/* = false())
+								then false() else true()"
+								as="xs:boolean">
+						</xsl:variable>
+
+						<xsl:choose>
+							<!-- use typedef -->
+							<xsl:when test="$isTypeThisTemplate = true()
+											and $areTypeParasEqual = true()">
+								<xsl:value-of select="concat('::', $typedef/@fullName)"/>
+							</xsl:when>
+
+							<!-- use type with replaced type parameters -->
+							<xsl:otherwise>
+								<xsl:variable name="templateNameWithOpeningBracket"
+									select="concat('::', xbig:getFullTypeName(normalize-space(substring-before(
+											$type, '&lt;')), $template, $root), '&lt;')" />
+
+								<xsl:value-of select="concat(
+									xbig:extendMethodParameterTemplateWithTypeparasOfMethodContainingTemplate(
+									$templateNameWithOpeningBracket, 1, $resolvedTypeParas, $tokens, $template)
+									, '&gt;')"/>
+							</xsl:otherwise>
+						</xsl:choose>
+						
 					</xsl:element>
 
 					<!-- return passedBy -->

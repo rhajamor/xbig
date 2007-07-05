@@ -95,24 +95,24 @@ namespace Ogre {
 		typedef MapIterator<ConstAnimationPointerList> ConstAnimationPointerIterator;
 	};
 
-	class EXPORT DefaultSceneManager : public SceneManager {
+	class EXPORT ConcreteSceneManager : public SceneManager {
 	public:
 
-		DefaultSceneManager() {
+		ConcreteSceneManager() {
 			str = "Bulldozer";
 			ai = new AnimationIterator(m);
 			cai = new ConstAnimationIterator(mcal);
 			capi = new ConstAnimationPointerIterator(mcapl);
 		}
 
-		DefaultSceneManager(const DefaultSceneManager& dsm) {
+		ConcreteSceneManager(const ConcreteSceneManager& dsm) {
 			str = "Bulldozer";
 			ai = new AnimationIterator(m);
 			cai = new ConstAnimationIterator(mcal);
 			capi = new ConstAnimationPointerIterator(mcapl);
 		}
 
-		virtual ~DefaultSceneManager() {
+		virtual ~ConcreteSceneManager() {
 			delete ai;
 			delete cai;
 			delete capi;

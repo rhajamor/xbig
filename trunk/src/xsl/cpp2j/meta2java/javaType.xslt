@@ -76,37 +76,9 @@
 		<xsl:choose>
 			<!-- if this type is a parametrized template -->
 			<xsl:when test="contains($typeName, '&lt;')">
-
-				<!-- if template uses itself as a parameter, like Ogre::MapIterator::operator= -->
-				<xsl:variable name="useOriginalTypedefFullName">
-					<xsl:choose>
-						<xsl:when test="$class/@originalTemplateFullName != '' and 
-											$class/@originalTypedefFullName != ''">
-							<xsl:variable name="typeNameWithoutNamespace" select="
-										if(contains($typeName, '::')) then
-										tokenize($typeName, '::')[last()] else $typeName"/>
-							<xsl:variable name="templateWithoutNamespace" select="if(contains(
-										$class/@originalTemplateFullName, '::')) then 
-										tokenize($class/@originalTemplateFullName, '::')[last()] 
-										else $class/@originalTemplateFullName"/>
-							<xsl:sequence select="
-										if ($class/@originalTypedefFullName and 
-											substring-before($typeNameWithoutNamespace, '&lt;') 
-											= $templateWithoutNamespace)
-										then true() else false()"/>
-						</xsl:when>
-						<xsl:otherwise>
-							<xsl:sequence select="false()"/>
-						</xsl:otherwise>
-					</xsl:choose>
-				</xsl:variable>
-
 				<xsl:choose>
 					<xsl:when test="$writingNativeMethod = false()">
-						<xsl:sequence select="if($useOriginalTypedefFullName = true())
-							then xbig:getFullJavaNameForParametrizedTemplate(
-							$class/inherits/baseClass[1]/@originalTypedefBasetype, $config, $param, $class)
-							else xbig:getFullJavaNameForParametrizedTemplate(
+						<xsl:sequence select="xbig:getFullJavaNameForParametrizedTemplate(
 								$typeName, $config, $param, $class)"/>
 					</xsl:when>
 					<xsl:otherwise>

@@ -23,7 +23,7 @@ t06              f
 t07              s
 t08              s
 t09              s
-t10              f (at least on windows)
+t10              f
 t11              s
 t12              s
 t13              s
@@ -51,12 +51,12 @@ t34              s
 ************************
 XBiG
 ************************
-t35              s
+t35              s now f
 t36              s
 t37              s
 t38              s
 t39              s
-t40              s
+t40              s on win, f on lin
 t41              s
 t42              s
 t43              s
@@ -68,8 +68,8 @@ t48              s
 t49              s
 t50              s
 t51              s
-t52              s
-t53              s
+t52              s on win, f on lin
+t53              s now f
 t54              f
 t55              f
 t56              f
