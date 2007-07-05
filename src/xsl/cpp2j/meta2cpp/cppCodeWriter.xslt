@@ -218,6 +218,11 @@
 							select="concat($fullTypeName, '*')" />
 					</xsl:when>
 					<xsl:when
+						test="xbig:isTemplate($fullTypeName, $root)">
+						<xsl:value-of
+							select="concat($class/@originalTypedefFullName, '*')" />
+					</xsl:when>
+					<xsl:when
 						test="xbig:isClassOrStruct($fullTypeName, $class, $root)">
 						<xsl:value-of
 							select="concat($fullTypeName, '*')" />
@@ -404,6 +409,25 @@
 					<xsl:variable name="part1"
 						select="'reinterpret_cast&lt; '" />
 					<xsl:variable name="part2" select="$fullTypeName" />
+					<xsl:variable name="part3"
+						select="$pointerPointerAddOn" />
+					<xsl:variable name="part4" select="if ($param//@constInTemplate = 'true')
+														then '* const &gt;('
+														else '* &gt;('" />
+					<xsl:variable name="part5" select="$param_name" />
+					<xsl:variable name="part6" select="')'" />
+					<xsl:value-of select="if ($param//@constInTemplate = 'true')
+						then concat($part1, $part2, $part3, $part4, $part5, $part6)
+						else concat($part1, $const, $part2, $part3, $part4, $part5, $part6)" />
+				</xsl:when>
+
+				<!-- if this type is a template without type parameter,
+					 e.g. Ogre::SharedPtr::operator=(SharedPtr) -->
+				<xsl:when
+					test="xbig:isTemplate($fullTypeName, $root)">
+					<xsl:variable name="part1"
+						select="'reinterpret_cast&lt; '" />
+					<xsl:variable name="part2" select="$class/@originalTypedefFullName" />
 					<xsl:variable name="part3"
 						select="$pointerPointerAddOn" />
 					<xsl:variable name="part4" select="if ($param//@constInTemplate = 'true')

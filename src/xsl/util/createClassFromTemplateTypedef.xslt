@@ -255,6 +255,42 @@
 		<xsl:param name="resolvedTypeParas" />
 
 
+		<!-- if this type is a template, get a list of it's typeparameters -->
+		<!-- e.g. Ogre::ConstMapIterator<T>::operator=(Ogre::MapIterator<T>) -->
+		<xsl:variable name="tokens">
+			<xsl:if test="contains($type, '&lt;')">
+				<xsl:call-template name="xbig:getListOfTypeParameters">
+					<xsl:with-param name="type" select="$type" />
+				</xsl:call-template>
+			</xsl:if>
+		</xsl:variable>
+		<xsl:variable name="checkTokens">
+			<xsl:for-each select="$tokens/*">
+				<xsl:element name="check">
+					<xsl:choose>
+						<xsl:when test="$template/templateparameters/templateparameter
+										[@templateType = 'class' or @templateType = 'typename']
+										[@templateDeclaration = current()]">
+							<xsl:value-of select="true()"/>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:value-of select="false()"/>
+						</xsl:otherwise>
+					</xsl:choose>
+				</xsl:element>
+			</xsl:for-each>
+		</xsl:variable>
+		<xsl:variable name="typeUsesTypeParameters" as="xs:boolean">
+			<xsl:choose>
+				<xsl:when test="$checkTokens/* = true()">
+					<xsl:value-of select="true()"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="false()"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+
 		<!-- DEBUG OUTPUT -->
 		<!-- 
 		<xsl:message>createTypeElementAndPassedByAttribute</xsl:message>
@@ -266,6 +302,7 @@
 		<xsl:for-each select="$resolvedTypeParas/*">
 			<xsl:message>    type para <xsl:value-of select="position()" />: <xsl:value-of select="." /></xsl:message>
 		</xsl:for-each>
+		<xsl:message>  $typeUsesTypeParameters: <xsl:value-of select="$typeUsesTypeParameters" /></xsl:message>
 		 -->
 
 
@@ -471,6 +508,33 @@
 
 				</xsl:when><!-- end special OGRE IteratorWrapper stuff -->
 
+				<!-- template as method parameter which 
+					 uses type parameter of template which contains method
+					 e.g. Ogre::ConstMapIterator<T>::operator=(Ogre::MapIterator<T>) -->
+				<xsl:when test="$typeUsesTypeParameters = true()">
+					<xsl:element name="type">
+						<!-- return const -->
+						<xsl:attribute name="const" select="$type/@const"/>
+
+						<!-- return type -->
+						<xsl:variable name="templateNameWithOpeningBracket"
+							select="concat('::', xbig:getFullTypeName(normalize-space(substring-before(
+									$type, '&lt;')), $template, $root), '&lt;')" />
+
+						<xsl:value-of select="concat(
+							xbig:extendMethodParameterTemplateWithTypeparasOfMethodContainingTemplate(
+							$templateNameWithOpeningBracket, 1, $resolvedTypeParas, $tokens, $template)
+							, '&gt;')"/>
+					</xsl:element>
+
+					<!-- return passedBy -->
+					<xsl:element name="passedBy">
+						<xsl:value-of
+							select="$type/../@passedBy" />
+					</xsl:element>
+
+				</xsl:when><!-- end template with generic type parameter -->
+
 				<!-- use type used in template -->
 				<xsl:otherwise>
 
@@ -556,6 +620,77 @@
 			<xsl:value-of select="$typeAndPassedBy/type" />
 		</xsl:element>
 	</xsl:template>
+
+
+	<xd:doc type="function">
+		<xd:short>
+			Internal recursive helper function. Used for parameters of methods which are templates
+			and use a type parameter of the template the method is declared in.
+			E.g. Ogre::ConstMapIterator&lt;T&gt;::operator=(Ogre::MapIterator&lt;T&gt;)
+		</xd:short>
+		<xd:param name="baseString">
+			String to add next type parameter to. For first call e.g. 'Ogre::MapIterator&lt;'.
+		</xd:param>
+		<xd:param name="currentPosition">
+			Number of type parameter to process.
+		</xd:param>
+		<xd:param name="resolvedTypeParas">
+			Resolved type parameters of template which contains method and a typedef.
+		</xd:param>
+		<xd:param name="tokens">
+			Original type parameters of template used as method parameter. E.g. T.
+		</xd:param>
+		<xd:param name="template">
+			Meta node of template which contains method. Needed for type parameter declarations. E.g. T.
+		</xd:param>
+	</xd:doc>
+	<xsl:function name="xbig:extendMethodParameterTemplateWithTypeparasOfMethodContainingTemplate"
+			as="xs:string">
+		<xsl:param name="baseString" as="xs:string"/>
+		<xsl:param name="currentPosition" as="xs:integer"/>
+		<xsl:param name="resolvedTypeParas"/>
+		<xsl:param name="tokens"/>
+		<xsl:param name="template"/>
+
+		<xsl:variable name="extendedString">
+			<xsl:choose>
+				<!-- replace type parameter -->
+				<xsl:when test="$template/templateparameters/templateparameter
+								[@templateType = 'class' or @templateType = 'typename']
+								[@templateDeclaration = $tokens/*[$currentPosition]]">
+					<xsl:sequence select="concat($baseString, $resolvedTypeParas/*[$currentPosition])"/>
+				</xsl:when>
+
+				<!-- keep type parameter -->
+				<xsl:otherwise>
+					<xsl:sequence select="concat($baseString, $tokens/*[$currentPosition])"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+
+		<xsl:choose>
+			<!-- next recursion -->
+			<xsl:when test="count($tokens/*) lt $currentPosition - 1">
+				<xsl:sequence select="
+						xbig:extendMethodParameterTemplateWithTypeparasOfMethodContainingTemplate(
+						concat($extendedString, ','),
+						$currentPosition + 1, $resolvedTypeParas, $tokens, $template)"/>
+			</xsl:when>
+
+			<!-- last recursion step -->
+			<xsl:when test="count($tokens/*) lt $currentPosition">
+				<xsl:sequence select="
+						xbig:extendMethodParameterTemplateWithTypeparasOfMethodContainingTemplate(
+						$extendedString, $currentPosition + 1, $resolvedTypeParas, $tokens, $template)"/>
+			</xsl:when>
+
+			<!-- recursion end -->
+			<xsl:otherwise>
+				<xsl:sequence select="$extendedString"/>
+			</xsl:otherwise>
+		</xsl:choose>
+
+	</xsl:function>
 
 
 	<xd:doc type="template">

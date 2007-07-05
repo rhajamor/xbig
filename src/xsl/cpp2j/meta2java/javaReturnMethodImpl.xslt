@@ -128,33 +128,62 @@
 			<xsl:text>(new&#32;InstancePointer(</xsl:text>
 		</xsl:if>
 
-		<!-- if this is a class, struct or template typedef -->
-		<xsl:if test="xbig:isTemplateTypedef($fullTypeName, $class, $root) or
-						xbig:isClassOrStruct($fullTypeName, $class, $root) or
-						contains($method/type, '&lt;')">
-			<xsl:choose>
-				<!-- pointer pointer -->
-				<xsl:when test="$method/type/@pointerPointer = 'true'">
-					<xsl:text>new&#32;</xsl:text>
-					<xsl:value-of select="concat(
-									$pointerPointerClass, '&lt;')"/>
-					<xsl:value-of select="xbig:getFullJavaName(
-											$fullTypeName, $class, $root, $config)"/>
-					<xsl:value-of select="'&gt;'"/>
-				</xsl:when>
+		<xsl:choose>
+			<!-- if this is a template without type parameters,
+				 e.g. Ogre::SharedPtr::operator=(SharedPtr) -->
+			<xsl:when test="xbig:isTemplate($fullTypeName, $root) and not(contains($method/type, '&lt;'))">
+				<xsl:choose>
+					<!-- pointer pointer -->
+					<xsl:when test="$method/type/@pointerPointer = 'true'">
+						<xsl:text>new&#32;</xsl:text>
+						<xsl:value-of select="concat(
+										$pointerPointerClass, '&lt;')"/>
+						<xsl:value-of select="xbig:getFullJavaName(
+												$fullTypeName, $class, $root, $config)"/>
+						<xsl:value-of select="'&gt;'"/>
+					</xsl:when>
 
-				<!-- object returned by value -->
-				<xsl:when test="$objectReturnedByValue = true() or contains($method/type, '&lt;')">
-				</xsl:when>
+					<!-- object returned by value -->
+					<xsl:when test="$objectReturnedByValue = true() or contains($method/type, '&lt;')">
+					</xsl:when>
 
-				<xsl:otherwise>
-					<xsl:text>new&#32;</xsl:text>
-					<xsl:value-of select="xbig:getFullJavaClassAndNotInterfaceName(
-											$fullTypeName, $class, $root, $config)"/>
-				</xsl:otherwise>
-			</xsl:choose>
-			<xsl:text>(new&#32;InstancePointer(</xsl:text>
-		</xsl:if>
+					<xsl:otherwise>
+						<xsl:text>new&#32;</xsl:text>
+						<xsl:value-of select="xbig:getFullJavaClassAndNotInterfaceName(
+												$class/@originalTypedefFullName, $class, $root, $config)"/>
+					</xsl:otherwise>
+				</xsl:choose>
+				<xsl:text>(new&#32;InstancePointer(</xsl:text>
+			</xsl:when>
+
+			<!-- if this is a class, struct or template typedef -->
+			<xsl:when test="xbig:isTemplateTypedef($fullTypeName, $class, $root) or
+							xbig:isClassOrStruct($fullTypeName, $class, $root) or
+							contains($method/type, '&lt;')">
+				<xsl:choose>
+					<!-- pointer pointer -->
+					<xsl:when test="$method/type/@pointerPointer = 'true'">
+						<xsl:text>new&#32;</xsl:text>
+						<xsl:value-of select="concat(
+										$pointerPointerClass, '&lt;')"/>
+						<xsl:value-of select="xbig:getFullJavaName(
+												$fullTypeName, $class, $root, $config)"/>
+						<xsl:value-of select="'&gt;'"/>
+					</xsl:when>
+
+					<!-- object returned by value -->
+					<xsl:when test="$objectReturnedByValue = true() or contains($method/type, '&lt;')">
+					</xsl:when>
+
+					<xsl:otherwise>
+						<xsl:text>new&#32;</xsl:text>
+						<xsl:value-of select="xbig:getFullJavaClassAndNotInterfaceName(
+												$fullTypeName, $class, $root, $config)"/>
+					</xsl:otherwise>
+				</xsl:choose>
+				<xsl:text>(new&#32;InstancePointer(</xsl:text>
+			</xsl:when>
+		</xsl:choose>
 
 		<!-- get enum when necessary -->
 		<xsl:if test="xbig:isEnum($fullTypeName, $class, $root)">

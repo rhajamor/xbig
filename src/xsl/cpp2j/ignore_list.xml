@@ -24,6 +24,22 @@
 	<item>GlobalUtility::_findclose</item>
 
 
+	<!-- not needed -->
+	<item>Ogre::DefaultAxisAlignedBoxSceneQuery</item>
+	<item>Ogre::DefaultHardwareBufferManager</item>
+	<item>Ogre::DefaultHardwareIndexBuffer</item>
+	<item>Ogre::DefaultHardwareVertexBuffer</item>
+	<item>Ogre::DefaultIntersectionSceneQuery</item>
+	<item>Ogre::DefaultPlaneBoundedVolumeListSceneQuery</item>
+	<item>Ogre::DefaultRaySceneQuery</item>
+	<item>Ogre::DefaultSceneManager</item>
+	<item>Ogre::DefaultSceneManagerFactory</item>
+	<item>Ogre::DefaultShadowCameraSetup</item>
+	<item>Ogre::DefaultSphereSceneQuery</item>
+	<item>Ogre::ConfigDialog</item>
+	<item>Ogre::StringConverter</item>
+	<item>Ogre::UTFString</item>
+
 
 	<!-- union -->
 	<function>Ogre::UTFString::getmStrBuffer</function>

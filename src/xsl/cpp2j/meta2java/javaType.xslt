@@ -223,6 +223,31 @@
 								</xsl:choose>
 							</xsl:when>
 
+							<!-- if this type is a template without type parameters,
+								 e.g. Ogre::SharedPtr::operator=(SharedPtr) -->
+							<xsl:when test="xbig:isTemplate($fullTypeName, $root)">
+								<xsl:choose>
+									<xsl:when test="$writingNativeMethod eq true()">
+										<xsl:value-of select="'long'"/>
+									</xsl:when>
+									<xsl:otherwise>
+										<!-- add the template angle bracket -->
+										<xsl:variable name="fullJavaName" select="xbig:getFullJavaName(
+														$class/@originalTypedefFullName,
+														$class, $root, $config)"/>
+										<xsl:choose>
+											<xsl:when test="$param/type/@pointerPointer = 'true'">
+												<xsl:value-of select="concat(
+														$pointerPointerClass, '&lt;', $fullJavaName, '&gt;')"/>
+											</xsl:when>
+											<xsl:otherwise>
+												<xsl:value-of select="$fullJavaName"/>
+											</xsl:otherwise>
+										</xsl:choose>
+									</xsl:otherwise>
+								</xsl:choose>
+							</xsl:when>
+
 							<!-- if this type is an enum -->
 							<xsl:when test="xbig:isEnum($fullTypeName, $class, $root)">
 								<xsl:choose>
@@ -719,6 +744,7 @@
 		<xsl:variable name="templateBaseType">
 			<xsl:variable name="resolvedBaseType" select="xbig:resolveTypedef(normalize-space(
 												substring-before($type, '&lt;')), $class, $root)"/>
+			<!-- 
 			<xsl:call-template name="javaType">
 				<xsl:with-param name="config" select="$config" />
 				<xsl:with-param name="param" select="$param" />
@@ -727,6 +753,9 @@
 				<xsl:with-param name="writingNativeMethod" select="false()" />
 				<xsl:with-param name="isTypeParameter" select="false()" />
 			</xsl:call-template>
+			 -->
+
+			<xsl:sequence select="xbig:getFullJavaName($resolvedBaseType, $class, $root, $config)"/>
 		</xsl:variable>
 
 		<!-- get list of type parameters -->
