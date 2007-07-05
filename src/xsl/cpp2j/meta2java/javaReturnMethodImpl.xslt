@@ -149,8 +149,13 @@
 
 					<xsl:otherwise>
 						<xsl:text>new&#32;</xsl:text>
-						<xsl:value-of select="xbig:getFullJavaClassAndNotInterfaceName(
-												$class/@originalTypedefFullName, $class, $root, $config)"/>
+						<xsl:value-of select="if($class/@originalTypedefFullName)
+											then
+												xbig:getFullJavaClassAndNotInterfaceName(
+												$class/@originalTypedefFullName, $class, $root, $config)
+											else
+												xbig:getFullJavaClassAndNotInterfaceName(
+												$class/@fullName, $class, $root, $config)"/>
 					</xsl:otherwise>
 				</xsl:choose>
 				<xsl:text>(new&#32;InstancePointer(</xsl:text>

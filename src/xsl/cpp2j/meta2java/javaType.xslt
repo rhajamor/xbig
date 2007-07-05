@@ -204,8 +204,15 @@
 									</xsl:when>
 									<xsl:otherwise>
 										<!-- add the template angle bracket -->
-										<xsl:variable name="fullJavaName" select="xbig:getFullJavaName(
+										<xsl:variable name="fullJavaName" select="if
+														($class/@originalTypedefFullName)
+													then
+														xbig:getFullJavaName(
 														$class/@originalTypedefFullName,
+														$class, $root, $config)
+													else
+														xbig:getFullJavaName(
+														$class/@fullName,
 														$class, $root, $config)"/>
 										<xsl:choose>
 											<xsl:when test="$param/type/@pointerPointer = 'true'">
