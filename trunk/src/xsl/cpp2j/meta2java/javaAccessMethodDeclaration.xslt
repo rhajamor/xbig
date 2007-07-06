@@ -143,12 +143,12 @@
 		<xsl:variable name="resolvedType" select="if($method/type != '') then
 													xbig:resolveTypedef(
 													$method/type, $class, $root)
-													else 'void'"/>
+													else 'void'" as="xs:string"/>
 		<xsl:variable name="objectReturnedByValue" select="if($method/@passedBy = 'value' and
       						count($config/config/java/types/type[@meta = $resolvedType]) = 0
       						and $config/config/java/passObjectsReturnedByValueAsParameters = 'yes'
       						and not(xbig:isEnum($resolvedType, $class, $root)))
-      						then true() else false()"/>
+      						then true() else false()" as="xs:boolean"/>
 
 	    <!-- write return type if available-->
 	    <xsl:if test="$return_type">
@@ -187,7 +187,7 @@
 				<xsl:with-param name="config" select="$config" />
 				<xsl:with-param name="param" select="$method" />
 				<xsl:with-param name="class" select="$class" />
-				<xsl:with-param name="typeName" select="$resolvedType" />
+				<xsl:with-param name="typeName" select="$return_type" />
 				<xsl:with-param name="writingNativeMethod" select="false()" />
 				<xsl:with-param name="isTypeParameter" select="false()" />
 			</xsl:call-template>

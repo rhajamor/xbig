@@ -698,7 +698,7 @@
 
 		<xsl:variable name="fullName"
 			select="xbig:getFullTypeName($type, $currentNode, $inputTreeRoot)" />
-			
+
 		<xsl:choose>
 			<xsl:when
 				test="xbig:isTypedef($fullName, $currentNode, $inputTreeRoot)">

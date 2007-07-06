@@ -69,7 +69,7 @@ t49              s
 t50              s
 t51              s
 t52              s on win, f on lin
-t53              s now f
+t53              s
 t54              f
 t55              f
 t56              f
