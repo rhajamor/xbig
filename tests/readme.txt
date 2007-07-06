@@ -84,7 +84,6 @@ t13: external types
 	t13_5: pointer as type parameter
 	t13_6: const pointer as type parameter
 	t13_7: protected type as template parameter in public typedef
-	t13_8: long as default mapping for unresolved types in native methods (fails but is considered successful)
 
 t14: arrays
 	t14_1: arrays as parameters
