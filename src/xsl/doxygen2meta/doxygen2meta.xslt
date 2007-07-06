@@ -27,9 +27,14 @@
 	Frank Bielig
 -->
 
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-	xmlns:xd="http://www.pnp-software.com/XSLTdoc" version="2.0"
+<xsl:stylesheet version="2.0"
+	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+	xmlns:xd="http://www.pnp-software.com/XSLTdoc" 
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:fn="http://www.w3.org/2005/xpath-functions"
+	xmlns:xdt="http://www.w3.org/2005/xpath-datatypes"
 	xmlns:str="http://exslt.org/strings"
+	xmlns:xbig="http://xbig.sourceforge.net/XBiG"
 	xmlns:java="java:org.xbig.xsltext.XsltExt" 
 	extension-element-prefixes="java">
 
@@ -829,56 +834,66 @@
 	</xd:doc>
 	<xsl:template name="typedef">
 		<xsl:for-each select="memberdef[@kind='typedef']">
-			<xsl:element name="typedef">
-				<xsl:attribute name="name" select="name" />
-				<xsl:attribute name="fullName">
+
+			<!-- do not include inherited typedefs -->
+			<xsl:variable name="definitionFullNameTokens"
+							select="tokenize(tokenize(./definition, ' ')[last()], '::')"/>
+			<xsl:variable name="namespaceDefinedIn" select="if (count($definitionFullNameTokens) = 1)
+						then ../../compoundname
+						else xbig:buildNamespaceNameTypeIsDefinedIn('', $definitionFullNameTokens, 1)" />
+			<xsl:if test="$namespaceDefinedIn = ../../compoundname">
+
+				<xsl:element name="typedef">
+					<xsl:attribute name="name" select="name" />
+					<xsl:attribute name="fullName">
+						<xsl:choose>
+							<xsl:when
+								test="../../@kind = 'namespace' 
+											or ../../@kind = 'class' 
+											or ../../@kind = 'struct'">
+								<xsl:value-of
+									select="concat(../../compoundname, '::', name)" />
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:value-of select="name" />
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:attribute>
+					<xsl:attribute name="protection" select="@prot" />
+					<xsl:attribute name="basetype"
+						select="normalize-space(./type)" />
+
+					<!-- copy all includes into meta output -->
 					<xsl:choose>
 						<xsl:when
-							test="../../@kind = 'namespace' 
-										or ../../@kind = 'class' 
-										or ../../@kind = 'struct'">
-							<xsl:value-of
-								select="concat(../../compoundname, '::', name)" />
+							test="../../@kind = 'class' or ../../@kind = 'struct'">
+							<xsl:copy-of copy-namespaces="no"
+								select="../../includes" />
 						</xsl:when>
+
+						<!-- typedef inside a namespace -->
+						<xsl:when
+							test="../../@kind = 'namespace'">
+							<xsl:element name="includes">
+								<xsl:attribute name="local" select="'yes'" />
+								<xsl:value-of select="tokenize(location/@file, '/')[last()]" />
+							</xsl:element>
+						</xsl:when>
+
+						<!-- inside a file -->
 						<xsl:otherwise>
-							<xsl:value-of select="name" />
+							<xsl:element name="includes">
+								<xsl:attribute name="local" select="'yes'" />
+								<xsl:value-of select="../../compoundname" />
+							</xsl:element>
 						</xsl:otherwise>
 					</xsl:choose>
-				</xsl:attribute>
-				<xsl:attribute name="protection" select="@prot" />
-				<xsl:attribute name="basetype"
-					select="normalize-space(./type)" />
 
-				<!-- copy all includes into meta output -->
-				<xsl:choose>
-					<xsl:when
-						test="../../@kind = 'class' or ../../@kind = 'struct'">
-						<xsl:copy-of copy-namespaces="no"
-							select="../../includes" />
-					</xsl:when>
+					<!-- documentation -->
+					<xsl:call-template name="documentation" />
 
-					<!-- typedef inside a namespace -->
-					<xsl:when
-						test="../../@kind = 'namespace'">
-						<xsl:element name="includes">
-							<xsl:attribute name="local" select="'yes'" />
-							<xsl:value-of select="tokenize(location/@file, '/')[last()]" />
-						</xsl:element>
-					</xsl:when>
-
-					<!-- inside a file -->
-					<xsl:otherwise>
-						<xsl:element name="includes">
-							<xsl:attribute name="local" select="'yes'" />
-							<xsl:value-of select="../../compoundname" />
-						</xsl:element>
-					</xsl:otherwise>
-				</xsl:choose>
-
-				<!-- documentation -->
-				<xsl:call-template name="documentation" />
-
-			</xsl:element>
+				</xsl:element>
+			</xsl:if>
 		</xsl:for-each>
 	</xsl:template>
 
@@ -2013,6 +2028,48 @@
 		
 	</xsl:template>
 
+
+
+	<xd:doc>
+		<xd:short>
+			Returns a string representing a C++ namespace.
+		</xd:short>
+		<xd:detail>
+			Doxygen option INLINE_INHERITED_MEMB causes inherited typedefs to appear
+			nearly as normal ones. This function is needed to find out if a typedef is
+			defined in this class or in a base class. Typedefs from base classes shall not
+			be included in meta.xml.
+		</xd:detail>
+		<xd:param name="baseString">
+			String to add '::' and next token. Should be '' (empty string) at first call.
+		</xd:param>
+		<xd:param name="tokens">
+			Tokens to add to string. The last one will be ignored.
+		</xd:param>
+		<xd:param name="position">
+			Position of token to add. Should be 1 at first call.
+		</xd:param>
+	</xd:doc>	
+	<xsl:function name="xbig:buildNamespaceNameTypeIsDefinedIn" as="xs:string">
+		<xsl:param name="baseString" as="xs:string" />
+		<xsl:param name="tokens" />
+		<xsl:param name="position" as="xs:integer" />
+
+		<xsl:choose>
+			<xsl:when test="$position = 1">
+				<xsl:sequence select="xbig:buildNamespaceNameTypeIsDefinedIn(
+							concat($baseString, $tokens[$position]), $tokens, $position + 1)"/>
+			</xsl:when>
+			<xsl:when test="$position &lt; count($tokens)">
+				<xsl:sequence select="xbig:buildNamespaceNameTypeIsDefinedIn(
+							concat($baseString, '::', $tokens[$position]), $tokens, $position + 1)"/>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:sequence select="$baseString"/>
+			</xsl:otherwise>
+		</xsl:choose>
+
+	</xsl:function>
 
 
 </xsl:stylesheet>
