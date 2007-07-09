@@ -64,7 +64,7 @@
 		</xd:param>
 		<xd:param name="isOuterClassTemplate">
 			Boolean value that indicates if this is an inner type of a template.
-			Usally false() execpt for some inner types.
+			Usually false() except for some inner types.
 		</xd:param>
 	</xd:doc>
 	<xsl:template name="javaInterface">

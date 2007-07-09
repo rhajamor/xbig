@@ -234,7 +234,8 @@
 										<xsl:value-of select="'int'"/>
 									</xsl:when>
 									<xsl:otherwise>
-										<xsl:variable name="fullJavaName" select="xbig:getFullJavaName(
+										<xsl:variable name="fullJavaName" select="
+																xbig:getFullJavaClassAndNotInterfaceName(
 																$fullTypeName, $class, $root, $config)"/>
 										<xsl:choose>
 											<xsl:when test="$param/type/@pointerPointer = 'true'">
@@ -687,14 +688,53 @@
 		<xsl:param name="inputTreeRoot"/>
 		<xsl:param name="config"/>
 
-		<xsl:variable name="fullName" select="$type"/>
-
 		<xsl:variable name="nsPrefix" select="$config/config/java/namespaces/packageprefix"/>
-		<xsl:variable name="fullNameWithDots" select="replace($fullName, '::', '.')"/>
-		<xsl:value-of select="concat($nsPrefix, '.', $fullNameWithDots)"/>
+		<xsl:variable name="namespace" select="
+					xbig:getNamespaceOfThatType('', $root, tokenize($type, '::'), 1)"/>
+		<xsl:variable name="classes" select="substring-after($type, $namespace)"/>
+		<xsl:value-of select="concat($nsPrefix, '.', xbig:getUnqualifiedJavaPackageName(
+									$namespace, $config), replace($classes, '::', '.'))"/>
 
 	</xsl:function>
 
+
+
+	<xd:doc type="function">
+		<xd:short>
+			Finds out which part of a full C++ name is the namespace (without classes).
+		</xd:short>
+		<xd:detail>
+			Needed for renaming of C++ namespaces in Java. Parameter tokens contains full type name.
+		</xd:detail>
+		<xd:param name="namespace">Namespace to expand. Empty string ('') during first call.</xd:param>
+		<xd:param name="inputTreeRoot">
+			Root of input tree. Usually selected with '/'.
+		</xd:param>
+		<xd:param name="tokens">Parts of fullname. Splitted by '::'.</xd:param>
+		<xd:param name="currentPosition">
+			Number of token to be added to namespace. 1 during first call.
+		</xd:param>
+	</xd:doc>
+	<xsl:function name="xbig:getNamespaceOfThatType" as="xs:string">
+		<xsl:param name="namespace" as="xs:string"/>
+		<xsl:param name="inputTreeRoot"/>
+		<xsl:param name="tokens"/>
+		<xsl:param name="currentPosition" as="xs:integer"/>
+
+		<xsl:variable name="currentNamespace" select="if ($currentPosition = 1)
+										then $tokens[1]
+										else concat($namespace, '::', $tokens[$currentPosition])"/>
+		<xsl:choose>
+			<xsl:when test="$inputTreeRoot//*[@fullName = $currentNamespace]/name() = 'namespace'">
+				<xsl:sequence select="xbig:getNamespaceOfThatType(
+						$currentNamespace, $inputTreeRoot, $tokens, $currentPosition + 1)"/>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:sequence select="$namespace"/>
+			</xsl:otherwise>
+		</xsl:choose>
+
+	</xsl:function>
 
 
 	<xd:doc type="function">

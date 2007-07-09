@@ -39,10 +39,7 @@ public class BasicTests {
 
         IAIterator it2 = new AIterator(nativeMap);
         Assert.assertEquals(firstKeyReturned, it2.peekNextKey());
-        IAIterator tmp = new AIterator(WithoutNativeObject.I_WILL_DISCONNECT_THIS_OBJECT);
-        it2.operatorAssignment(tmp, it1);
-        tmp.disconnectFromNativeObject();
-        tmp = null;
+        it2.operatorAssignment(it1);
         Assert.assertEquals(secondKeyReturned, it2.peekNextKey());
 
         it2.delete();

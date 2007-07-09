@@ -192,7 +192,8 @@
 
 		<!-- get enum when necessary -->
 		<xsl:if test="xbig:isEnum($fullTypeName, $class, $root)">
-			<xsl:value-of select="xbig:getFullJavaName($fullTypeName, $class, $root, $config)"/>
+			<xsl:value-of select="xbig:getFullJavaClassAndNotInterfaceName(
+									$fullTypeName, $class, $root, $config)"/>
 			<xsl:text>.toEnum(</xsl:text>
 		</xsl:if>
 

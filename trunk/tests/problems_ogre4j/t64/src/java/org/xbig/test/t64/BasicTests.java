@@ -19,8 +19,11 @@ public class BasicTests {
         org.xbig.OverlayElementCommands.IA a4 = new org.xbig.OverlayElementCommands.A();
         org.xbig.OverlayElementCommands.EmitterCommands.IA a5 = new org.xbig.OverlayElementCommands.EmitterCommands.A();
         org.xbig.FOO.IA a6 = new org.xbig.FOO.A();
+        org.xbig.ogre4j.Vocals1 v = org.xbig.ogre4j.Vocals1.u;
 
         Assert.assertEquals(a1.get1(), a2.a(a1));
+        Assert.assertEquals(a1.get1(), a2.b(a1).get1());
+        Assert.assertEquals(v, a2.c(v));
 
         a1.delete();
         a2.delete();
