@@ -76,9 +76,13 @@
 				<xsl:otherwise>
 					<!-- rename operators -->
 					<xsl:variable name="method_name" select="
-							if (starts-with($method/name, 'operator'))
+							if (starts-with($method/name, 'operator') and 
+								not(contains($method/name, '_const')))
 							then $config/config/java/operators/op
 								[. = normalize-space(substring-after($method/name, 'operator'))]/@javaName
+			    			else if (starts-with($method/name, 'operator'))
+			    			then $config/config/java/operators/op[. = substring-before(normalize-space(
+								substring-after($method/name, 'operator')), '_const')]/@javaName
 			    			else $method/name" />
 					<xsl:value-of select="concat($meta_config/method/name/prefix, 
 											$method_name, $meta_config/method/name/suffix)" />
