@@ -26,15 +26,15 @@ the OGRE Unrestricted License provided you have obtained such a license from
 Torus Knot Software Ltd.
 -----------------------------------------------------------------------------
 */
-#ifndef __OSXErrorDialog_H__
-#define __OSXErrorDialog_H__
+#ifndef __OGRE_GLX_ERROR_DIALOG_H__
+#define __OGRE_GLX_ERROR_DIALOG_H__
 
-#include <Ogre/OgrePrerequisites.h>
+#include "OgrePrerequisites.h"
 
 namespace Ogre
 {
 	/** Class for displaying the error dialog if Ogre fails badly. */
-	class ErrorDialog
+	class _OgreExport ErrorDialog
 	{
 	public:
 		ErrorDialog();
@@ -47,7 +47,7 @@ namespace Ogre
 		@param
 			logName Optional name of the log to display in the detail pane.
 		*/
-		void display(const String& errorMessage, String logName = "");
+        void display(const String& errorMessage, String logName = "");
 	};
 }
 #endif

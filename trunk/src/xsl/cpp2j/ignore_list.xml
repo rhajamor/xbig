@@ -37,6 +37,9 @@
 	<item>Ogre::DefaultShadowCameraSetup</item>
 	<item>Ogre::DefaultSphereSceneQuery</item>
 	<item>Ogre::ConfigDialog</item>
+	<item>Ogre::ConfigDialogImp</item>
+	<item>Ogre::ErrorDialog</item>
+	<item>Ogre::ErrorDialogImp</item>
 	<item>Ogre::StringConverter</item>
 	<item>Ogre::UTFString</item>
 

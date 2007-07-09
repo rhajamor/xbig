@@ -2,12 +2,12 @@
 following files contain changes:
 ====================================
 OgreUTFString.h
-OgreIteratorWrappers.h
 
 OgreDynLib.h
 OgreParticleEmitter.h
 OgreParticleSystem.h
 
+OSX/OgreErrorDialogImp.h
 
 doxygen-xml-combine:
     [mkdir] Created dir: XBiG\tests\Ogre3D\build\meta
