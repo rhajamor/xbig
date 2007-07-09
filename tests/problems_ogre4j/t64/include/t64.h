@@ -23,6 +23,14 @@
 
 namespace Ogre {
 
+	enum EXPORT Vocals1 {
+		a = 101,
+		e = 102,
+		i = 103,
+		o = 104,
+		u = 105
+	};
+
 	class EXPORT A {
 	public:
 		int get1(){return 1;}
@@ -32,6 +40,8 @@ namespace Ogre {
 		class EXPORT A {
 		public:
 			int a(::Ogre::A para) {return para.get1();}
+			::Ogre::A& b(::Ogre::A& para) {return para;}
+			Vocals1 c (Vocals1 para) {return para;}
 		};
 	}
 

@@ -59,7 +59,6 @@
     <xsl:param name="method" />
 
     <!-- shortcut of function name, rename operators -->
-<xsl:message>op: <xsl:value-of select="normalize-space(substring-after($method/name, 'operator'))" /></xsl:message>
     <xsl:variable name="method_name" select="
 				if (starts-with($method/name, 'operator') and not(contains($method/name, '_const')))
 				then $config/config/java/operators/op
