@@ -47,6 +47,8 @@ namespace Ogre {
 
 	namespace OverlayElementCommands {
 		class EXPORT A {
+		public:
+			::Ogre::EmitterCommands::A& b(::Ogre::EmitterCommands::A& para) {return para;}
 		};
 	}
 /* not supported (unrenamed namespaces inside a renamed one)

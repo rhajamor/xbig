@@ -24,6 +24,7 @@ public class BasicTests {
         Assert.assertEquals(a1.get1(), a2.a(a1));
         Assert.assertEquals(a1.get1(), a2.b(a1).get1());
         Assert.assertEquals(v, a2.c(v));
+        Assert.assertEquals(a1.get1(), a3.b(a2).a(a1));
 
         a1.delete();
         a2.delete();
