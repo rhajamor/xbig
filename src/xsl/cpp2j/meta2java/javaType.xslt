@@ -692,7 +692,7 @@
 		<xsl:variable name="namespace" select="
 					xbig:getNamespaceOfThatType('', $root, tokenize($type, '::'), 1)"/>
 		<xsl:variable name="classes" select="substring-after($type, $namespace)"/>
-		<xsl:value-of select="concat($nsPrefix, '.', xbig:getUnqualifiedJavaPackageName(
+		<xsl:value-of select="concat($nsPrefix, '.', xbig:getJavaPackageName(
 									$namespace, $config), replace($classes, '::', '.'))"/>
 
 	</xsl:function>
