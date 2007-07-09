@@ -1,0 +1,25 @@
+
+following files contain changes:
+====================================
+OgreUTFString.h
+
+OgreDynLib.h
+OgreParticleEmitter.h
+OgreParticleSystem.h
+
+OSX/OgreErrorDialogImp.h
+
+doxygen-xml-combine:
+    [mkdir] Created dir: XBiG\tests\Ogre3D\build\meta
+     [echo] source: XBiG\tests\Ogre3D/build/doxygen/xml/index.xml
+     [echo] target: XBiG\tests\Ogre3D/build/meta/all.xml
+     [echo] style:  XBiG\tests\Ogre3D/build/doxygen/xml/combine.xslt
+     [java] Warning: at xsl:stylesheet on line 5 of file:/XBiG/tests/Ogre3D/build/doxygen/xml/combine.xslt:
+     [java]   Running an XSLT 1.0 stylesheet with an XSLT 2.0 processor
+     [java] Error on line 159 column 45 of file:/XBiG/tests/Ogre3D/build/doxygen/xml/classOgre_1_1DynLib.xml:
+     [java]   SXXP0003: Error reported by XML parser: Invalid byte 2 of 3-byte UTF-8 sequence.
+     [java] Error on line 11 of file:/XBiG/tests/Ogre3D/build/doxygen/xml/combine.xslt:
+     [java]   FODC0005: org.xml.sax.SAXParseException: Invalid byte 2 of 3-byte UTF-8 sequence.
+
+*******************************************************************************
+note: this file's name begins with AAA that it is not overseen
