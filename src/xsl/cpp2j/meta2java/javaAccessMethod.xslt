@@ -78,6 +78,18 @@
 			<!-- choose correct implementation -->
 			<xsl:choose>
 
+				<!-- methods of ignored classes -->
+				<xsl:when test="$ignore_list/ignore_list/item[. = $class/@fullName]">
+					<xsl:text>&#32;&#32;&#32;&#32;</xsl:text>
+					<xsl:text>throw</xsl:text>
+					<xsl:text>&#32;</xsl:text>
+					<xsl:text>new</xsl:text>
+					<xsl:text>&#32;</xsl:text>
+					<xsl:text>UnsupportedOperationException(&quot;</xsl:text>
+					<xsl:text>This type is on ignore list!</xsl:text>
+					<xsl:text>&quot;);</xsl:text>
+				</xsl:when>
+
 				<!-- constructor -->
 				<xsl:when test="not($method/type)">
 					<xsl:call-template name="javaConstructorImpl">

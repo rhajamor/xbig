@@ -4,7 +4,7 @@
 
 int main(int argc, char* argv[]) 
 {
-   CompositorInstance::TargetOperation::RenderQueueBitSet a;
+   //CompositorInstance::TargetOperation::RenderQueueBitSet a;
 
-   std::cout << "done" << std::endl;
+   //std::cout << "done" << std::endl;
 }
