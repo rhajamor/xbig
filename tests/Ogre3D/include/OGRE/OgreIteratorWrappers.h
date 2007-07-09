@@ -334,7 +334,6 @@ namespace Ogre {
             return mCurrent->first;
         }
         /** Required to overcome intermittent bug */
-        //MapIterator<T> & operator=( MapIterator<T> &rhs )
         ConstMapIterator<T> & operator=( ConstMapIterator<T> &rhs )
         {
             mCurrent = rhs.mCurrent;
