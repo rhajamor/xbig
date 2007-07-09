@@ -20,7 +20,11 @@
 #include <queue>
 #include <stack>
 #include <set>
-#include <hash_map>
+#ifdef __GNUC__
+	#include <ext/hash_map>
+#else
+	#include <hash_map>
+#endif
 //#include <bitset>
 
 

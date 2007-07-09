@@ -12,7 +12,7 @@ do
 	echo ----- $i ----- >> build.log
 	cd $i
 	ant -lib ../../../src/ant/jar clean > /dev/null
-	./run.sh >> ../build.log 2>&1
+	sh run.sh >> ../build.log 2>&1
 	cd  ..
 done
 echo done
