@@ -32,6 +32,25 @@ namespace Ogre {
 		void objectDestroyed(int a[5]) {}
 	};
 	
+
+
+	class EXPORT SceneManager {
+	public:
+		void a() {}
+		int b(int para) {return para;}
+	};
+
+	class EXPORT DefaultSceneManager : public SceneManager {
+	public:
+	};
+
+	class EXPORT A {
+	public:
+		DefaultSceneManager& a(DefaultSceneManager& para) {return para;}
+	};
+
 }
+
+
 
 #endif

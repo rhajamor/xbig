@@ -19,17 +19,18 @@
 
 #include <bitset>
 
-
-enum EXPORT RenderQueueGroupID {
-	RENDER_QUEUE_OVERLAY = 100
-};
-
-const size_t RENDER_QUEUE_COUNT = RENDER_QUEUE_OVERLAY+1;
-
-class EXPORT CompositorInstance {
-public:
-	class EXPORT TargetOperation {
-	public:
-		typedef std::bitset<RENDER_QUEUE_COUNT> RenderQueueBitSet;
+namespace Ogre {
+	enum EXPORT RenderQueueGroupID {
+		RENDER_QUEUE_OVERLAY = 100
 	};
-};
+
+	const size_t RENDER_QUEUE_COUNT = RENDER_QUEUE_OVERLAY+1;
+
+	class EXPORT CompositorInstance {
+	public:
+		class EXPORT TargetOperation {
+		public:
+			typedef std::bitset<RENDER_QUEUE_COUNT> RenderQueueBitSet;
+		};
+	};
+}
