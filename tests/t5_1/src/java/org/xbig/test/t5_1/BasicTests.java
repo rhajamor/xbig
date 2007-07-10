@@ -22,8 +22,13 @@ public class BasicTests {
 		IA a = new A();
 		i = a.a(f);
 		Assert.assertEquals((int)f, i);
+
+        final double attributeValue = 0.3;
+        a.setattribute(attributeValue);
+        Assert.assertEquals(attributeValue, a.getattribute());
+
 		((A)a).delete();
-		
+
 		B b = new B();
 		i = 2;
 		f = b.c(i);
@@ -41,6 +46,10 @@ public class BasicTests {
 		i = 5;
 		b.set(i);
 		Assert.assertEquals(i, a.get());
+
+        b.setattribute(attributeValue);
+        Assert.assertEquals(attributeValue, b.getattribute());
+
 		b.delete();
 	}
 }

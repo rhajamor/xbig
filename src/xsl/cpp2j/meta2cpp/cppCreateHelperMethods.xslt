@@ -91,11 +91,14 @@
 		</xsl:if>
 
 		<!-- create getters and setters for public attributes -->
+		<!-- must be done later because of inheritance -->
+		<!-- 
 		<xsl:for-each select="variable">
 			<xsl:call-template name="createFunctionsForPublicAttribute">
 				<xsl:with-param name="variable" select="."/>
 			</xsl:call-template>
 		</xsl:for-each>
+		 -->
 
 	</xsl:template>
 </xsl:stylesheet>

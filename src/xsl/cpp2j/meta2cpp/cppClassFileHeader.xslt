@@ -140,6 +140,31 @@
 			<xsl:text>;</xsl:text>
 		</xsl:for-each>
 
+		<!-- generate public attributes getters and setters -->
+		<xsl:for-each
+			select="$inheritedMethods/attribute/variable">
+			<xsl:variable name="publicAttributeGettersAndSetters">
+				<xsl:call-template
+					name="createFunctionsForPublicAttribute">
+					<xsl:with-param name="variable" select="." />
+				</xsl:call-template>
+			</xsl:variable>
+
+			<xsl:for-each
+				select="$publicAttributeGettersAndSetters/function">
+				<xsl:call-template name="cppMethodDeclaration">
+					<xsl:with-param name="config" select="$config" />
+					<xsl:with-param name="class_prefix"
+						select="$class_prefix" />
+					<xsl:with-param name="method" select="." />
+					<xsl:with-param name="class" select="$class" />
+				</xsl:call-template>
+
+				<!-- end of method declaration -->
+				<xsl:text>;</xsl:text>
+			</xsl:for-each>
+		</xsl:for-each>
+
 		<!-- close C environment for C++ compiler -->
 		<xsl:text>&#10;&#10;#ifdef __cplusplus</xsl:text>
 		<xsl:text>&#10;} /* extern "C" */</xsl:text>

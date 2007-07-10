@@ -1636,63 +1636,73 @@
 		<!-- see bug 1719159 and 1728987 -->
 		<xsl:for-each select="memberdef[@kind='variable']
 								[not(starts-with(name, '@'))][not(contains(type, '@'))]">
-			<xsl:element name="variable">
-				<!--
-					<xsl:attribute name="static">
-					<xsl:choose>
-					<xsl:when test="starts-with(type,'const')">
-					<xsl:value-of select="'true'"/>
-					</xsl:when>
-					<xsl:otherwise>
-					<xsl:value-of select="'false'"/>
-					</xsl:otherwise>
-					</xsl:choose>
-					</xsl:attribute>
-				-->
-				<xsl:attribute name="visibility" select="@prot" />
-				<xsl:attribute name="static">
-					<xsl:choose>
-						<xsl:when test="@static='yes' or $ifGlobal">
-							<xsl:value-of select="'true'" />
-						</xsl:when>
-						<xsl:when test="@static='no'">
-							<xsl:value-of select="'false'" />
-						</xsl:when>
-					</xsl:choose>
-				</xsl:attribute>
-				<xsl:attribute name="const">
-					<xsl:choose>
-						<xsl:when test="@const='yes'">
-							<xsl:value-of select="'true'" />
-						</xsl:when>
-						<xsl:when test="@const='no' or not(@const)">
-							<xsl:value-of select="'false'" />
-						</xsl:when>
-					</xsl:choose>
-				</xsl:attribute>
 
-				<xsl:if test="type and type!='virtual'">
-					<xsl:call-template name="type" />
-				</xsl:if>
-				<xsl:if test="argsstring!=''">
-					<xsl:element name="argsstring">
-						<xsl:value-of select="argsstring" />
-					</xsl:element>
-				</xsl:if>
-				<xsl:element name="definition">
-					<xsl:choose>
-						<xsl:when test="$ifGlobal">
-							<xsl:value-of select="concat('static ', definition)" />
+			<!-- do not include inherited attributes (because of template handling) -->
+			<xsl:variable name="definitionFullNameTokens"
+							select="tokenize(tokenize(./definition, ' ')[last()], '::')"/>
+			<xsl:variable name="namespaceDefinedIn" select="if (count($definitionFullNameTokens) = 1)
+						then ../../compoundname
+						else xbig:buildNamespaceNameTypeIsDefinedIn('', $definitionFullNameTokens, 1)" />
+			<xsl:if test="$namespaceDefinedIn = ../../compoundname">
+
+				<xsl:element name="variable">
+					<!--
+						<xsl:attribute name="static">
+						<xsl:choose>
+						<xsl:when test="starts-with(type,'const')">
+						<xsl:value-of select="'true'"/>
 						</xsl:when>
 						<xsl:otherwise>
-							<xsl:value-of select="definition" />
+						<xsl:value-of select="'false'"/>
 						</xsl:otherwise>
-					</xsl:choose>	
+						</xsl:choose>
+						</xsl:attribute>
+					-->
+					<xsl:attribute name="visibility" select="@prot" />
+					<xsl:attribute name="static">
+						<xsl:choose>
+							<xsl:when test="@static='yes' or $ifGlobal">
+								<xsl:value-of select="'true'" />
+							</xsl:when>
+							<xsl:when test="@static='no'">
+								<xsl:value-of select="'false'" />
+							</xsl:when>
+						</xsl:choose>
+					</xsl:attribute>
+					<xsl:attribute name="const">
+						<xsl:choose>
+							<xsl:when test="@const='yes'">
+								<xsl:value-of select="'true'" />
+							</xsl:when>
+							<xsl:when test="@const='no' or not(@const)">
+								<xsl:value-of select="'false'" />
+							</xsl:when>
+						</xsl:choose>
+					</xsl:attribute>
+
+					<xsl:if test="type and type!='virtual'">
+						<xsl:call-template name="type" />
+					</xsl:if>
+					<xsl:if test="argsstring!=''">
+						<xsl:element name="argsstring">
+							<xsl:value-of select="argsstring" />
+						</xsl:element>
+					</xsl:if>
+					<xsl:element name="definition">
+						<xsl:choose>
+							<xsl:when test="$ifGlobal">
+								<xsl:value-of select="concat('static ', definition)" />
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:value-of select="definition" />
+							</xsl:otherwise>
+						</xsl:choose>	
+					</xsl:element>
+					<xsl:element name="name">
+						<xsl:value-of select="name" />
+					</xsl:element>
 				</xsl:element>
-				<xsl:element name="name">
-					<xsl:value-of select="name" />
-				</xsl:element>
-			</xsl:element>
+			</xsl:if>
 		</xsl:for-each>
 	</xsl:template>
 

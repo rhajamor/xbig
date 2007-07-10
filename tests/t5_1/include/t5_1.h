@@ -21,6 +21,8 @@ public:
 
 	int get();
 
+	double attribute;
+
 protected:
 	int val;
 };
