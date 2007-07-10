@@ -221,5 +221,27 @@
 
 		</xsl:for-each>
 
+		<!-- generate public attributes getters and setters -->
+		<xsl:for-each
+			select="$inheritedMethods/attribute/variable">
+			<xsl:variable name="publicAttributeGettersAndSetters">
+				<xsl:call-template
+					name="createFunctionsForPublicAttribute">
+					<xsl:with-param name="variable" select="." />
+				</xsl:call-template>
+			</xsl:variable>
+
+			<xsl:for-each
+				select="$publicAttributeGettersAndSetters/function">
+				<xsl:call-template name="cppMethodImpl">
+					<xsl:with-param name="config" select="$config" />
+					<xsl:with-param name="class_prefix"
+						select="$class_prefix" />
+					<xsl:with-param name="class" select="$class" />
+					<xsl:with-param name="method" select="." />
+				</xsl:call-template>
+			</xsl:for-each>
+		</xsl:for-each>
+
 	</xsl:template>
 </xsl:stylesheet>
