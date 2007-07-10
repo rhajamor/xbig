@@ -64,7 +64,7 @@ t44              s
 t45              s
 t46              s
 t47              s
-t48              s
+t48              f (successful because of ignore list)
 t49              s
 t50              s
 t51              s
@@ -73,7 +73,7 @@ t53              s
 t54              f
 t55              f
 t56              f
-t57              f (successful because of ignore list)
+t57              f
 t58              s
 t59              f
 t60              s

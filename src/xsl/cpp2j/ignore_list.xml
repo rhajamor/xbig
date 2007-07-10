@@ -3,9 +3,9 @@
 	<item>Ogre::AlignedAllocator</item>
 
 	<!-- bug 1723312 -->
-	<item>Ogre::CompositorScriptCompiler::TokenActionMap</item>
-	<item>Ogre::MaterialSerializer::AttribParserList</item>
-	<item>Ogre::MaterialScriptCompiler::TokenActionMap</item>
+	<item withoutAnyMethods="true">Ogre::CompositorScriptCompiler::TokenActionMap</item>
+	<item withoutAnyMethods="true">Ogre::MaterialSerializer::AttribParserList</item>
+	<item withoutAnyMethods="true">Ogre::MaterialScriptCompiler::TokenActionMap</item>
 
 	<!-- bug 1724332 -->
 	<item>Ogre::ExceptionFactory</item>
@@ -19,9 +19,9 @@
 
 	<!-- senseless -->
 	<item>_finddata_t</item>
-	<item>GlobalUtility::_findfirst</item>
-	<item>GlobalUtility::_findnext</item>
-	<item>GlobalUtility::_findclose</item>
+	<function>GlobalUtility::_findfirst</function>
+	<function>GlobalUtility::_findnext</function>
+	<function>GlobalUtility::_findclose</function>
 
 
 	<!-- not needed -->
