@@ -53,12 +53,16 @@
 		</xd:param>
 		<xd:param name="class">meta class which contains method.</xd:param>
 		<xd:param name="method">meta function element to be processed.</xd:param>
+		<xd:param name="classPrefixForMethod">
+			Full qualified class name with trailing '::' to put before method name or empty string ('').
+		</xd:param>
 	</xd:doc>
 	<xsl:template name="cppMethodImpl">
 		<xsl:param name="config" />
 		<xsl:param name="class_prefix" />
 		<xsl:param name="class" />
 		<xsl:param name="method" />
+		<xsl:param name="classPrefixForMethod" as="xs:string" />
 
 		<!-- check if method is on ignore list -->
 		<xsl:if test="not($ignore_list/ignore_list/function
@@ -162,7 +166,7 @@
 
 			<!-- real writing of method implementation -->
 			<xsl:value-of
-				select="xbig:code($config, $code_template, $class, $method)" />
+				select="xbig:code($config, $code_template, $class, $method, $classPrefixForMethod)" />
 
 
 			<!-- end implementation -->

@@ -71,11 +71,11 @@ t51              s
 t52              s on win, f on lin
 t53              s
 t54              f
-t55              f
-t56              f
+t55              s
+t56              f on win
 t57              f
 t58              s
-t59              f
+t59              s
 t60              s
 t61              s
 t62              s

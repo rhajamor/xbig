@@ -197,12 +197,59 @@
 
 				<xsl:if test="(not($protectedParameters/* = true()))
 								and ($protectedReturnVal = false())">
+
+					<!-- check if this method is overloaded in base classes, bug 1728995 -->
+					<xsl:variable name="classPrefixForMethod" as="xs:string">
+						<xsl:choose>
+							<xsl:when test="count($inheritedMethodsForJava/function
+												[name = current()/name]) &gt; 1">
+								<xsl:variable name="currentMethod" select="."/>
+								<xsl:variable name="nameSpaces">
+									<xsl:for-each select="$inheritedMethodsForJava/function
+																	[name = current()/name]">
+										<xsl:element name="ns">
+											<xsl:attribute name="isThisMethod" select="
+													if(. eq $currentMethod)
+													then 'true'
+													else 'false'"/>
+											<xsl:variable name="fullMethodName" select="
+																tokenize(./definition, ' ')[last()]"/>
+											<xsl:sequence select="
+													xbig:buildNamespaceNameTypeIsDefinedIn(
+													'', tokenize($fullMethodName, '::'), 1)"/>
+										</xsl:element>
+									</xsl:for-each>
+								</xsl:variable>
+								<xsl:choose>
+									<xsl:when test="$nameSpaces/*[text() != $class/@fullName]">
+										<xsl:sequence select="if ($nameSpaces/*[@isThisMethod = 'true'] 
+																	eq $class/@fullName)
+																then ''
+																else concat($nameSpaces/*
+																	[@isThisMethod = 'true'], '::')"/>
+									</xsl:when>
+
+									<!-- overloaded but not in base classes -->
+									<xsl:otherwise>
+										<xsl:sequence select="''"/>
+									</xsl:otherwise>
+								</xsl:choose>
+							</xsl:when>
+
+							<!-- method not overloaded -->
+							<xsl:otherwise>
+								<xsl:sequence select="''"/>
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:variable>
+
 					<xsl:call-template name="cppMethodImpl">
 						<xsl:with-param name="config" select="$config" />
 						<xsl:with-param name="class_prefix"
 							select="$class_prefix" />
 						<xsl:with-param name="class" select="$class" />
 						<xsl:with-param name="method" select="." />
+						<xsl:with-param name="classPrefixForMethod" select="$classPrefixForMethod" />
 					</xsl:call-template>
 				</xsl:if>
 			</xsl:if>
@@ -217,6 +264,7 @@
 					select="$class_prefix" />
 				<xsl:with-param name="class" select="$class" />
 				<xsl:with-param name="method" select="." />
+				<xsl:with-param name="classPrefixForMethod" select="''" />
 			</xsl:call-template>
 
 		</xsl:for-each>
@@ -239,6 +287,7 @@
 						select="$class_prefix" />
 					<xsl:with-param name="class" select="$class" />
 					<xsl:with-param name="method" select="." />
+					<xsl:with-param name="classPrefixForMethod" select="''" />
 				</xsl:call-template>
 			</xsl:for-each>
 		</xsl:for-each>
