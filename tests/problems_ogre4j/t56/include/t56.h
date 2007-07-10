@@ -23,7 +23,7 @@
 #include <string>
 
 
-#define OGRE_NUM_SHADOW_EXTRUDER_PROGRAMS 8
+//#define OGRE_NUM_SHADOW_EXTRUDER_PROGRAMS 8
 
 
 namespace Ogre {
@@ -43,7 +43,9 @@ namespace Ogre {
 
 	class EXPORT ShadowVolumeExtrudeProgram {
 	public:
-		static const String programNames[OGRE_NUM_SHADOW_EXTRUDER_PROGRAMS];
+		ShadowVolumeExtrudeProgram(){}
+		//static const String programNames[OGRE_NUM_SHADOW_EXTRUDER_PROGRAMS];
+		static const String programName;
 	};
 }
 

@@ -38,6 +38,7 @@
 	xmlns:java="java:org.xbig.xsltext.XsltExt" 
 	extension-element-prefixes="java">
 
+	<xsl:import href="../util/metaTypeInfo.xslt" />
 	<xsl:import href="../exslt/str.split.template.xsl" />
 
 	<xd:doc type="stylesheet">
@@ -2037,49 +2038,6 @@
 		</xsl:element>
 		
 	</xsl:template>
-
-
-
-	<xd:doc>
-		<xd:short>
-			Returns a string representing a C++ namespace.
-		</xd:short>
-		<xd:detail>
-			Doxygen option INLINE_INHERITED_MEMB causes inherited typedefs to appear
-			nearly as normal ones. This function is needed to find out if a typedef is
-			defined in this class or in a base class. Typedefs from base classes shall not
-			be included in meta.xml.
-		</xd:detail>
-		<xd:param name="baseString">
-			String to add '::' and next token. Should be '' (empty string) at first call.
-		</xd:param>
-		<xd:param name="tokens">
-			Tokens to add to string. The last one will be ignored.
-		</xd:param>
-		<xd:param name="position">
-			Position of token to add. Should be 1 at first call.
-		</xd:param>
-	</xd:doc>	
-	<xsl:function name="xbig:buildNamespaceNameTypeIsDefinedIn" as="xs:string">
-		<xsl:param name="baseString" as="xs:string" />
-		<xsl:param name="tokens" />
-		<xsl:param name="position" as="xs:integer" />
-
-		<xsl:choose>
-			<xsl:when test="$position = 1">
-				<xsl:sequence select="xbig:buildNamespaceNameTypeIsDefinedIn(
-							concat($baseString, $tokens[$position]), $tokens, $position + 1)"/>
-			</xsl:when>
-			<xsl:when test="$position &lt; count($tokens)">
-				<xsl:sequence select="xbig:buildNamespaceNameTypeIsDefinedIn(
-							concat($baseString, '::', $tokens[$position]), $tokens, $position + 1)"/>
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:sequence select="$baseString"/>
-			</xsl:otherwise>
-		</xsl:choose>
-
-	</xsl:function>
 
 
 </xsl:stylesheet>

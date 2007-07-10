@@ -17,6 +17,7 @@ public class BasicTests {
 
 	@Test
 	public void test() {
+	    final short correctionValueForUnsigned = -256;
         VertexElement ve = new VertexElement();
 
         short value = (short)5;
@@ -25,7 +26,7 @@ public class BasicTests {
         ShortPointer shortPtr = new ShortPointer((short)0);
         ptrPtr.getObject(shortPtr);
         System.out.println("shortPtr: " + shortPtr.get());
-        Assert.assertEquals(value, shortPtr.get());
+        Assert.assertEquals(value, (short)(shortPtr.get() + correctionValueForUnsigned));
 
         VoidPointer voidPtr = ve.getVoidPointer();
         Assert.assertEquals(voidPtr.getInstancePointer(), shortPtr.getInstancePointer());

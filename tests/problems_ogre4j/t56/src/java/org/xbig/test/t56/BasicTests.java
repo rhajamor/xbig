@@ -16,11 +16,11 @@ public class BasicTests {
 
 	@Test
 	public void test() {
-        TextureUnitState tus = new TextureUnitState();
+        TextureUnitState.TextureEffect te = new TextureUnitState.TextureEffect();
 
-        IFrustum f = tus.getfrustum();
-        ShadowVolumeExtrudeProgram.getprogramNames();
+        IFrustum f = te.getfrustum();
+        ShadowVolumeExtrudeProgram.getprogramName();
 
-        tus.delete();
+        te.delete();
     }
 }

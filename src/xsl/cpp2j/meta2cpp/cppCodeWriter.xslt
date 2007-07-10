@@ -443,7 +443,7 @@
 						<xsl:otherwise>
 							<xsl:variable name="code1"
 								select="xbig:code(
-								$config, $type_info/type[@const='true']/jni2cpp, $class, $method)" />
+								$config, $type_info/type[@const='true']/jni2cpp, $class, $method, '')" />
 							<xsl:variable name="code2"
 								select="replace($code1,'#jni_var#', $param_name)" />
 							<xsl:value-of select="$code2" />
@@ -462,7 +462,7 @@
 				<xsl:otherwise>
 					<!-- perform general code transformations -->
 					<xsl:variable name="code1"
-						select="xbig:code($config, $type_info/type/jni2cpp, $class, $method)" />
+						select="xbig:code($config, $type_info/type/jni2cpp, $class, $method, '')" />
 
 					<!-- add the pointer pointer '*' -->
 					<xsl:variable name="code2"
@@ -590,7 +590,7 @@
 						<xsl:otherwise>
 							<xsl:variable name="code1"
 								select="xbig:code(
-								$config, $type_info/type[@const='true']/cpp2jni, $class, $method)" />
+								$config, $type_info/type[@const='true']/cpp2jni, $class, $method, '')" />
 							<xsl:variable name="code2"
 								select="replace($code1,'#cpp_var#', $param_name)" />
 							<xsl:value-of select="$code2" />
@@ -613,7 +613,7 @@
 				<xsl:otherwise>
 					<!-- perform general code transformations -->
 					<xsl:variable name="code1"
-						select="xbig:code($config, $type_info/type/cpp2jni, $class, $method)" />
+						select="xbig:code($config, $type_info/type/cpp2jni, $class, $method, '')" />
 
 					<!-- replace parameter name in code fragment -->
 					<xsl:variable name="code2"
@@ -678,12 +678,16 @@
 			class which contains this method.
 		</xd:param>
 		<xd:param name="method">method to be generated.</xd:param>
+		<xd:param name="classPrefixForMethod">
+			Full qualified class name with trailing '::' to put before method name or empty string ('').
+		</xd:param>
 	</xd:doc>
 	<xsl:function name="xbig:code" as="xs:string">
 		<xsl:param name="config" />
 		<xsl:param name="line" />
 		<xsl:param name="class" />
 		<xsl:param name="method" />
+		<xsl:param name="classPrefixForMethod" />
 
 		<!-- shortcut for full class name -->
 		<xsl:variable name="full_class_name" select="$class/@fullName" />
@@ -722,11 +726,13 @@
 						</xsl:choose>
 					</xsl:variable>
 					<xsl:value-of
-						select="xbig:cpp-replace($org_line, '#cpp_method#', $methodName)" />
+						select="xbig:cpp-replace($org_line, '#cpp_method#', 
+									concat($classPrefixForMethod, $methodName))" />
 				</xsl:when>
 				<xsl:otherwise>
 					<xsl:value-of
-						select="xbig:cpp-replace($org_line, '#cpp_method#', $method/name)" />
+						select="xbig:cpp-replace($org_line, '#cpp_method#', 
+									concat($classPrefixForMethod, $method/name))" />
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
