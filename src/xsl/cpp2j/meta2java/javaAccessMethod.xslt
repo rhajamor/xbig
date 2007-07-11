@@ -60,7 +60,10 @@
 
 		<!-- check if method is on ignore list -->
 		<xsl:if test="not($ignore_list/ignore_list/function
-						[. = concat($class/@fullName, '::', $method/name)])">
+						[. = concat($class/@fullName, '::', $method/name)])
+					  or
+					  	$ignore_list/ignore_list/function
+						[. = concat($class/@fullName, '::', $method/name)]/@generateDeclaration = 'true'">
 
 			<!-- write parameter type -->
 			<xsl:call-template name="javaAccessMethodDeclaration">
@@ -79,6 +82,19 @@
 			<xsl:choose>
 
 				<!-- methods of ignored classes -->
+				<xsl:when test="$ignore_list/ignore_list/function
+									[. = concat($class/@fullName, '::', $method/name)]">
+					<xsl:text>&#32;&#32;&#32;&#32;</xsl:text>
+					<xsl:text>throw</xsl:text>
+					<xsl:text>&#32;</xsl:text>
+					<xsl:text>new</xsl:text>
+					<xsl:text>&#32;</xsl:text>
+					<xsl:text>UnsupportedOperationException(&quot;</xsl:text>
+					<xsl:text>This method is on ignore list!</xsl:text>
+					<xsl:text>&quot;);</xsl:text>
+				</xsl:when>
+
+				<!-- methods from ignore list -->
 				<xsl:when test="$ignore_list/ignore_list/item[. = $class/@fullName]">
 					<xsl:text>&#32;&#32;&#32;&#32;</xsl:text>
 					<xsl:text>throw</xsl:text>

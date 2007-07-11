@@ -82,3 +82,5 @@ t62              s
 t63              s
 t64              depends on config
 t65              s
+t66              s
+t67              s

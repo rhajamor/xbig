@@ -11,7 +11,7 @@
 	<item withoutAnyMethods="true">Ogre::ExceptionFactory</item>
 
 	<!-- bug 1724335 -->
-	<item>Ogre::Profiler::ProfileHistoryMap</item>
+	<item withoutAnyMethods="true">Ogre::Profiler::ProfileHistoryMap</item>
 
 	<!-- bug 1666890 -->
 	<item>Ogre::CompositorInstance::TargetOperation::RenderQueueBitSet</item>
@@ -62,26 +62,26 @@
 	<function>Ogre::UTFString::setmWStrBuffer</function>
 
 	<!-- protected in sub class -->
-	<function>Ogre::WireBoundingBox::getWorldTransforms</function>
-	<function>Ogre::WireBoundingBox::getWorldOrientation</function>
-	<function>Ogre::WireBoundingBox::getWorldPosition</function>
-	<function>Ogre::Rectangle2D::getWorldTransforms</function>
-	<function>Ogre::Rectangle2D::getWorldOrientation</function>
-	<function>Ogre::Rectangle2D::getWorldPosition</function>
+	<function generateDeclaration="true">Ogre::WireBoundingBox::getWorldTransforms</function>
+	<function generateDeclaration="true">Ogre::WireBoundingBox::getWorldOrientation</function>
+	<function generateDeclaration="true">Ogre::WireBoundingBox::getWorldPosition</function>
+	<function generateDeclaration="true">Ogre::Rectangle2D::getWorldTransforms</function>
+	<function generateDeclaration="true">Ogre::Rectangle2D::getWorldOrientation</function>
+	<function generateDeclaration="true">Ogre::Rectangle2D::getWorldPosition</function>
 
 	<!-- wrong inheritance resolution -->
-	<function>Ogre::RibbonTrail::objectDestroyed</function>
-	<function>Ogre::RibbonTrail::objectAttached</function>
-	<function>Ogre::RibbonTrail::objectDetached</function>
-	<function>Ogre::RibbonTrail::objectMoved</function>
-	<function>Ogre::RibbonTrail::objectRendering</function>
-	<function>Ogre::RibbonTrail::objectQueryLights</function>
-	<function>Ogre::Entity::objectDestroyed</function>
-	<function>Ogre::Entity::objectAttached</function>
-	<function>Ogre::Entity::objectDetached</function>
-	<function>Ogre::Entity::objectMoved</function>
-	<function>Ogre::Entity::objectRendering</function>
-	<function>Ogre::Entity::objectQueryLights</function>
+	<function generateDeclaration="true">Ogre::RibbonTrail::objectDestroyed</function>
+	<function generateDeclaration="true">Ogre::RibbonTrail::objectAttached</function>
+	<function generateDeclaration="true">Ogre::RibbonTrail::objectDetached</function>
+	<function generateDeclaration="true">Ogre::RibbonTrail::objectMoved</function>
+	<function generateDeclaration="true">Ogre::RibbonTrail::objectRendering</function>
+	<function generateDeclaration="true">Ogre::RibbonTrail::objectQueryLights</function>
+	<function generateDeclaration="true">Ogre::Entity::objectDestroyed</function>
+	<function generateDeclaration="true">Ogre::Entity::objectAttached</function>
+	<function generateDeclaration="true">Ogre::Entity::objectDetached</function>
+	<function generateDeclaration="true">Ogre::Entity::objectMoved</function>
+	<function generateDeclaration="true">Ogre::Entity::objectRendering</function>
+	<function generateDeclaration="true">Ogre::Entity::objectQueryLights</function>
 
 	<!-- arrays -->
 	<function>Ogre::PixelUtil::getBitDepths</function>

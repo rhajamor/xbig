@@ -33,6 +33,11 @@ namespace Ogre {
 	};
 	
 
+	class EXPORT PixelUtil {
+	public:
+		void getBitDepths(){}
+	};
+
 
 	class EXPORT SceneManager {
 	public:
@@ -49,6 +54,17 @@ namespace Ogre {
 		DefaultSceneManager& a(DefaultSceneManager& para) {return para;}
 	};
 
+
+
+	class EXPORT SimpleRenderable {
+	public:
+		void getWorldTransforms() {};
+	};
+
+	class EXPORT WireBoundingBox : public SimpleRenderable {
+	public:
+		void getWorldTransforms() {};
+	};
 }
 
 
