@@ -1955,3 +1955,15 @@
 		</templateparameters>
 	</class>
 </namespace>
+
+
+<namespace name="stdext" fullName="stdext">
+
+	<class protection="public" name="hash_compare" fullName="stdext::hash_compare" template="true">
+		<templateparameters>
+			<templateparameter templateType="class" templateDeclaration="T"/>
+			<templateparameter templateType="class" templateDeclaration="U"/>
+		</templateparameters>
+	</class>
+
+</namespace>
