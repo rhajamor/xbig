@@ -149,8 +149,10 @@
 					<xsl:text>long</xsl:text>
 				</xsl:when>
 
-				<xsl:when test="($method/@passedBy='pointer' and not($resolvedType='char')) or ($method/@passedBy eq 'reference'
-				            and not(xbig:isTypeConst($method)))">
+				<xsl:when test="($method/@passedBy='pointer' and not($resolvedType='char')) or
+							($method/@passedBy eq 'reference'
+				            and not(xbig:isTypeConst($method))
+				            and not(xbig:isEnum($fullTypeName, $class, $root)))">
 					<xsl:value-of select="'long'" />
 				</xsl:when>
 

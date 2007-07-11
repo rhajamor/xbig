@@ -82,5 +82,13 @@ int Vector::operator[](unsigned index) {
 		return -1;
 }
 
+int Vector::operator[](unsigned index) const {
+	std::cout << "t23: Vector::operator[](unsigned index)" << std::endl;
+	if(index < 3)
+		return i[index];
+	else
+		return -1;
+}
+
 void Vector::operator-> () const {
 }

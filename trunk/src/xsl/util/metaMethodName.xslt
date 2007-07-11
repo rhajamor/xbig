@@ -81,8 +81,9 @@
 							then $config/config/java/operators/op
 								[. = normalize-space(substring-after($method/name, 'operator'))]/@javaName
 			    			else if (starts-with($method/name, 'operator'))
-			    			then $config/config/java/operators/op[. = substring-before(normalize-space(
-								substring-after($method/name, 'operator')), '_const')]/@javaName
+			    			then concat($config/config/java/operators/op[. = substring-before(
+			    				normalize-space(substring-after($method/name, 'operator')), '_const')]/
+			    				@javaName, '_const')
 			    			else $method/name" />
 					<xsl:value-of select="concat($meta_config/method/name/prefix, 
 											$method_name, $meta_config/method/name/suffix)" />

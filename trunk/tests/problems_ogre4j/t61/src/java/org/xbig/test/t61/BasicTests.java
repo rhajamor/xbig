@@ -7,6 +7,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.xbig.Ogre.IRibbonTrail;
 import org.xbig.Ogre.RibbonTrail;
+import org.xbig.Ogre.PixelUtil;
 /**
  * @author nenning
  *
@@ -23,7 +24,7 @@ public class BasicTests {
         // make sure ignored method does not exist
         boolean foundMethod = false;
         try {
-            RibbonTrail.class.getDeclaredMethod("objectDestroyed", int.class);
+            PixelUtil.class.getDeclaredMethod("getBitDepths");
             foundMethod = true;
         } catch (NoSuchMethodException e) {
             // OK

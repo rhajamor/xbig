@@ -64,13 +64,16 @@
 				then $config/config/java/operators/op
 					[. = normalize-space(substring-after($method/name, 'operator'))]/@javaName
     			else if (starts-with($method/name, 'operator'))
-    			then $config/config/java/operators/op[. = substring-before(normalize-space(
-					substring-after($method/name, 'operator')), '_const')]/@javaName
+    			then concat($config/config/java/operators/op[. = substring-before(normalize-space(
+					substring-after($method/name, 'operator')), '_const')]/@javaName, '_const')
     			else $method/name" />
 
 	<!-- check if method is on ignore list -->
 	<xsl:if test="not($ignore_list/ignore_list/function
-					[. = concat($class/@fullName, '::', $method_name)])">
+						[. = concat($class/@fullName, '::', $method/name)])
+					  or
+					  	$ignore_list/ignore_list/function
+						[. = concat($class/@fullName, '::', $method/name)]/@generateDeclaration = 'true'">
 
 	    <!-- shortcut for return type, take long for constructors -->
 	    <xsl:variable name="return_type" select="$method/type" />

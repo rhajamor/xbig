@@ -36,6 +36,7 @@ public:
 	const Vector operator++(int);
 
 	int operator [](unsigned index);
+	int operator[] (unsigned index) const;
 
 	void operator-> () const;
 
