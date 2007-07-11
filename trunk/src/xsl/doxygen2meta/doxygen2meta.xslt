@@ -837,8 +837,8 @@
 		<xsl:for-each select="memberdef[@kind='typedef']">
 
 			<!-- do not include inherited typedefs -->
-			<xsl:variable name="definitionFullNameTokens"
-							select="tokenize(tokenize(./definition, ' ')[last()], '::')"/>
+			<xsl:variable name="definitionFullNameTokens" select="tokenize(tokenize(replace(replace(
+							./definition, '&lt; ', '&lt;'), ' &gt;', '&gt;'), ' ')[last()], '::')"/>
 			<xsl:variable name="namespaceDefinedIn" select="if (count($definitionFullNameTokens) = 1)
 						then ../../compoundname
 						else xbig:buildNamespaceNameTypeIsDefinedIn('', $definitionFullNameTokens, 1)" />
@@ -1639,8 +1639,8 @@
 								[not(starts-with(name, '@'))][not(contains(type, '@'))]">
 
 			<!-- do not include inherited attributes (because of template handling) -->
-			<xsl:variable name="definitionFullNameTokens"
-							select="tokenize(tokenize(./definition, ' ')[last()], '::')"/>
+			<xsl:variable name="definitionFullNameTokens" select="tokenize(tokenize(replace(replace(
+							./definition, '&lt; ', '&lt;'), ' &gt;', '&gt;'), ' ')[last()], '::')"/>
 			<xsl:variable name="namespaceDefinedIn" select="if (count($definitionFullNameTokens) = 1)
 						then ../../compoundname
 						else xbig:buildNamespaceNameTypeIsDefinedIn('', $definitionFullNameTokens, 1)" />
