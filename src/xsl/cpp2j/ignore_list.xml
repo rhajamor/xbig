@@ -8,7 +8,7 @@
 	<item withoutAnyMethods="true">Ogre::MaterialScriptCompiler::TokenActionMap</item>
 
 	<!-- bug 1724332 -->
-	<item>Ogre::ExceptionFactory</item>
+	<item withoutAnyMethods="true">Ogre::ExceptionFactory</item>
 
 	<!-- bug 1724335 -->
 	<item>Ogre::Profiler::ProfileHistoryMap</item>
@@ -42,6 +42,13 @@
 	<item>Ogre::ErrorDialogImp</item>
 	<item>Ogre::StringConverter</item>
 	<item>Ogre::UTFString</item>
+	<function>GlobalUtility::operatorSubtraction</function>
+	<function>GlobalUtility::operatorEqual</function>
+	<function>GlobalUtility::operatorNotEqual</function>
+	<function>GlobalUtility::operatorLessThan</function>
+	<function>GlobalUtility::operatorLessThanOrEqual</function>
+	<function>GlobalUtility::operatorGreaterThan</function>
+	<function>GlobalUtility::operatorGreaterThanOrEqual</function>
 
 
 	<!-- union -->

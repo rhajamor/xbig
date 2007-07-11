@@ -760,9 +760,10 @@
 		<xsl:param name="class" />
 
 		<!-- remember template it self -->	
-		<xsl:variable name="templateBaseType">
-			<xsl:variable name="resolvedBaseType" select="xbig:resolveTypedef(normalize-space(
+		<xsl:variable name="resolvedBaseType" select="xbig:resolveTypedef(normalize-space(
 												substring-before($type, '&lt;')), $class, $root)"/>
+		<xsl:variable name="templateBaseType">
+
 			<!-- 
 			<xsl:call-template name="javaType">
 				<xsl:with-param name="config" select="$config" />
@@ -784,40 +785,47 @@
 			</xsl:call-template>
 		</xsl:variable>
 
+		<!-- get number of type parameters of base type (needed for optional type parameters) -->
+		<xsl:variable name="numOfBaseTypeTypeParameters" as="xs:integer" select="
+					count($root//*[@fullName = $resolvedBaseType]/templateparameters/templateparameter)"/>
+
 		<!-- get java type for each type parameter -->
 		<xsl:variable name="insideBracketResolved">
 			<xsl:for-each select="$tokens/*">
-				<xsl:variable name="paraElement">
-					<xsl:call-template name="createMetaParameterElement">
-						<xsl:with-param name="type" select="."/>
-					</xsl:call-template>
-				</xsl:variable>
+				<xsl:if test="position() &lt;= $numOfBaseTypeTypeParameters">
 
-				<xsl:choose>
-					<!-- if type parameter is a template -->
-					<xsl:when test="contains(., '&lt;')">
-						<xsl:sequence select="xbig:getFullJavaNameForParametrizedTemplate(
-											$paraElement/*[1]/type, $config, $paraElement, $class)"/>
-					</xsl:when>
-
-					<!-- type parameter is not a template -->
-					<xsl:otherwise>
-						<xsl:variable name="resolvedToken"
-							select="xbig:resolveTypedef($paraElement/*[1]/type, $class, $root)"/>
-						<xsl:call-template name="javaType">
-							<xsl:with-param name="config" select="$config" />
-							<xsl:with-param name="param" select="$paraElement/*[1]" />
-							<xsl:with-param name="class" select="$class" />
-							<xsl:with-param name="typeName" select="$resolvedToken"/>
-							<xsl:with-param name="writingNativeMethod" select="false()" />
-							<xsl:with-param name="isTypeParameter" select="true()" />
+					<xsl:variable name="paraElement">
+						<xsl:call-template name="createMetaParameterElement">
+							<xsl:with-param name="type" select="."/>
 						</xsl:call-template>
-					</xsl:otherwise>
-				</xsl:choose>
+					</xsl:variable>
 
-				<!-- generate ',' between type parameters -->
-				<xsl:if test="position() != last()">
-					<xsl:value-of select="', '"/>
+					<xsl:choose>
+						<!-- if type parameter is a template -->
+						<xsl:when test="contains(., '&lt;')">
+							<xsl:sequence select="xbig:getFullJavaNameForParametrizedTemplate(
+												$paraElement/*[1]/type, $config, $paraElement, $class)"/>
+						</xsl:when>
+
+						<!-- type parameter is not a template -->
+						<xsl:otherwise>
+							<xsl:variable name="resolvedToken"
+								select="xbig:resolveTypedef($paraElement/*[1]/type, $class, $root)"/>
+							<xsl:call-template name="javaType">
+								<xsl:with-param name="config" select="$config" />
+								<xsl:with-param name="param" select="$paraElement/*[1]" />
+								<xsl:with-param name="class" select="$class" />
+								<xsl:with-param name="typeName" select="$resolvedToken"/>
+								<xsl:with-param name="writingNativeMethod" select="false()" />
+								<xsl:with-param name="isTypeParameter" select="true()" />
+							</xsl:call-template>
+						</xsl:otherwise>
+					</xsl:choose>
+
+					<!-- generate ',' between type parameters -->
+					<xsl:if test="position() &lt; $numOfBaseTypeTypeParameters">
+						<xsl:value-of select="', '"/>
+					</xsl:if>
 				</xsl:if>
 			</xsl:for-each>
 		</xsl:variable>
