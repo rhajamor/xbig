@@ -20,6 +20,7 @@ struct EXPORT B {
 	T y;
 	T a();
 	void b(T c);
+	typedef int BLA;
 private:
 	T t;
 };

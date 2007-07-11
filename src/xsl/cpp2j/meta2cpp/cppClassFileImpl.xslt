@@ -202,7 +202,9 @@
 					<xsl:variable name="classPrefixForMethod" as="xs:string">
 						<xsl:choose>
 							<xsl:when test="count($inheritedMethodsForJava/function
-												[name = current()/name]) &gt; 1">
+												[name = current()/name]) &gt; 1
+												and not($class/@name = 
+												$config/config/meta/globalmember/classNameForGlobalMember)">
 								<xsl:variable name="currentMethod" select="."/>
 								<xsl:variable name="nameSpaces">
 									<xsl:for-each select="$inheritedMethodsForJava/function
@@ -212,8 +214,13 @@
 													if(. eq $currentMethod)
 													then 'true'
 													else 'false'"/>
-											<xsl:variable name="fullMethodName" select="
+											<xsl:variable name="fullMethodNameTmp" select="
 																tokenize(./definition, ' ')[last()]"/>
+											<xsl:variable name="fullMethodName" select="
+																if(contains($fullMethodNameTmp, '&gt;'))
+																then normalize-space(substring-before(
+																		$fullMethodNameTmp, '&gt;'))
+																else $fullMethodNameTmp"/>
 											<xsl:sequence select="
 													xbig:buildNamespaceNameTypeIsDefinedIn(
 													'', tokenize($fullMethodName, '::'), 1)"/>

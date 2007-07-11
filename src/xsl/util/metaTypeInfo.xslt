@@ -1050,7 +1050,7 @@
 	</xsl:function>
 
 
-	<xd:doc>
+	<xd:doc type="function">
 		<xd:short>
 			Returns a string representing a C++ namespace.
 		</xd:short>
@@ -1076,14 +1076,18 @@
 		<xsl:param name="tokens" />
 		<xsl:param name="position" as="xs:integer" />
 
+		<xsl:variable name="currentToken" select="if(contains($tokens[$position], '&lt;'))
+								then normalize-space(substring-before($tokens[$position], '&lt;'))
+								else $tokens[$position]"/>
+
 		<xsl:choose>
 			<xsl:when test="$position = 1">
 				<xsl:sequence select="xbig:buildNamespaceNameTypeIsDefinedIn(
-							concat($baseString, $tokens[$position]), $tokens, $position + 1)"/>
+							concat($baseString, $currentToken), $tokens, $position + 1)"/>
 			</xsl:when>
 			<xsl:when test="$position &lt; count($tokens)">
 				<xsl:sequence select="xbig:buildNamespaceNameTypeIsDefinedIn(
-							concat($baseString, '::', $tokens[$position]), $tokens, $position + 1)"/>
+							concat($baseString, '::', $currentToken), $tokens, $position + 1)"/>
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:sequence select="$baseString"/>
