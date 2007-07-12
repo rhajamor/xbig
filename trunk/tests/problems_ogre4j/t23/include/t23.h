@@ -43,3 +43,10 @@ public:
 private:
 	int i[3];
 };
+
+
+class EXPORT Radian {
+public:
+	Radian operator * (float f) const {Radian r; return r;}
+	Radian operator * (const Radian &f) const {Radian r; return r;}
+};

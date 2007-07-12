@@ -214,13 +214,11 @@
 													if(. eq $currentMethod)
 													then 'true'
 													else 'false'"/>
-											<xsl:variable name="fullMethodNameTmp" select="
-																tokenize(./definition, ' ')[last()]"/>
 											<xsl:variable name="fullMethodName" select="
-																if(contains($fullMethodNameTmp, '&gt;'))
-																then normalize-space(substring-before(
-																		$fullMethodNameTmp, '&gt;'))
-																else $fullMethodNameTmp"/>
+														tokenize(replace(replace(replace(
+														normalize-space(./definition), '&lt; ', '&lt;'),
+														' &gt;', '&gt;'), 'operator ', 'operator'), ' ')
+														[last()]"/>
 											<xsl:sequence select="
 													xbig:buildNamespaceNameTypeIsDefinedIn(
 													'', tokenize($fullMethodName, '::'), 1)"/>
