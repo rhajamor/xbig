@@ -84,3 +84,4 @@ t64              depends on config
 t65              s on win, f on lin
 t66              s
 t67              s
+t68              s

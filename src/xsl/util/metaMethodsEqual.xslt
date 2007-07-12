@@ -62,7 +62,8 @@
 				<xsl:choose>
 
 					<!-- test if both methods have the same number of parameters -->
-					<xsl:when test="count($meth1/parameters) = count($meth2/parameters)">
+					<xsl:when test="count($meth1/parameters/parameter) =
+									count($meth2/parameters/parameter)">
 						<xsl:variable name="parameterEquality">
 							<xsl:for-each select="$meth1/parameters/parameter">
 								<xsl:element name="para">
@@ -195,7 +196,8 @@
 				<xsl:choose>
 
 					<!-- test if both methods have the same number of parameters -->
-					<xsl:when test="count($meth1/parameters) = count($meth2/parameters)">
+					<xsl:when test="count($meth1/parameters/parameter) =
+									count($meth2/parameters/parameter)">
 						<xsl:variable name="parameterEquality">
 							<xsl:for-each select="$meth1/parameters/parameter">
 								<xsl:element name="para">

@@ -66,7 +66,9 @@
 
 		<!-- check if method is on ignore list -->
 		<xsl:if test="not($ignore_list/ignore_list/function
-						[. = concat($class/@fullName, '::', $method_name)])">
+						[. = concat($class/@fullName, '::', $method_name)])
+					  and
+						not($ignore_list/ignore_list/item[. = $class/@fullName])">
 
 			<!-- shortcut for return type, take long for constructors, pointers and references -->
 			<!-- 
