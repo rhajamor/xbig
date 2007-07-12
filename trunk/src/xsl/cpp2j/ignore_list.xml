@@ -42,13 +42,13 @@
 	<item>Ogre::ErrorDialogImp</item>
 	<item>Ogre::StringConverter</item>
 	<item>Ogre::UTFString</item>
-	<function>GlobalUtility::operatorSubtraction</function>
-	<function>GlobalUtility::operatorEqual</function>
-	<function>GlobalUtility::operatorNotEqual</function>
-	<function>GlobalUtility::operatorLessThan</function>
-	<function>GlobalUtility::operatorLessThanOrEqual</function>
-	<function>GlobalUtility::operatorGreaterThan</function>
-	<function>GlobalUtility::operatorGreaterThanOrEqual</function>
+	<function>GlobalUtility::operator-</function>
+	<function>GlobalUtility::operator==</function>
+	<function>GlobalUtility::operator!=</function>
+	<function>GlobalUtility::operator&lt;</function>
+	<function>GlobalUtility::operator&lt;=</function>
+	<function>GlobalUtility::operator&gt;</function>
+	<function>GlobalUtility::operator&gt;=</function>
 
 
 	<!-- union -->
