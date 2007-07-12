@@ -45,6 +45,8 @@ public:
         std::string getString(std::string v);
         char* getCharStar(char * v);
         const char * getConstCharStar(const char* v);
+        signed char* getSignedCharStar(signed char * v);
+        unsigned char* getUnsignedCharStar(unsigned char * v);
         size_t getSize_t(size_t v);
         wchar_t getWchar_t(wchar_t v);
 };

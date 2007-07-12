@@ -153,6 +153,14 @@ A::getConstCharStar(const char* v) {
   return v;
 }
 
+signed char* A::getSignedCharStar(signed char * v) {
+  return v;
+}
+
+unsigned char* A::getUnsignedCharStar(unsigned char * v) {
+  return v;
+}
+
 size_t
 A::getSize_t(size_t v) {
   return v;	
