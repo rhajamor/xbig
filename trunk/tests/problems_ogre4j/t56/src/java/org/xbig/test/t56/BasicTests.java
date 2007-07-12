@@ -18,8 +18,13 @@ public class BasicTests {
 	public void test() {
         TextureUnitState.TextureEffect te = new TextureUnitState.TextureEffect();
 
-        IFrustum f = te.getfrustum();
-        ShadowVolumeExtrudeProgram.getprogramName();
+        try {
+        	IFrustum f = te.getfrustum();
+        } catch (Exception e) {
+        	// OK
+        }
+        Assert.assertEquals("Bulldozer Frenzy",
+        		ShadowVolumeExtrudeProgram.getprogramName());
 
         te.delete();
     }

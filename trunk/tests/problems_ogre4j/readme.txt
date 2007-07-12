@@ -71,8 +71,8 @@ t51              s
 t52              s on win, f on lin
 t53              s
 t54              f (successful because of ignore list)
-t55              s
-t56              f on win
+t55              s on win, f on lin
+t56              f on win, s on lin
 t57              f
 t58              s
 t59              s
@@ -81,6 +81,6 @@ t61              s
 t62              s
 t63              s
 t64              depends on config
-t65              s
+t65              s on win, f on lin
 t66              s
 t67              s
