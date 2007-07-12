@@ -1093,108 +1093,121 @@
 				<xsl:if
 				test="ends-with(location/@file,../../includes) and starts-with(@id,../../@id)">
 			-->
-			
-			<xsl:choose>
-				<!-- destructor - do nothing -->
-				<xsl:when test="starts-with(name,'~')" />
-				<xsl:otherwise>
-					<xsl:element name="function">
-						<xsl:attribute name="virt" select="@virt" />
-						<xsl:attribute name="visibility" select="@prot" />
-						<xsl:attribute name="static">
-							<xsl:choose>
-								<xsl:when test="@static='yes' or $ifGlobal">
-									<xsl:value-of select="'true'" />
-								</xsl:when>
-								<xsl:when test="@static='no'">
-									<xsl:value-of select="'false'" />
-								</xsl:when>
-							</xsl:choose>
-						</xsl:attribute>
-						<xsl:attribute name="const">
-							<xsl:choose>
-								<xsl:when test="@const='yes'">
-									<xsl:value-of select="'true'" />
-								</xsl:when>
-								<xsl:when test="@const='no'">
-									<xsl:value-of select="'false'" />
-								</xsl:when>
-							</xsl:choose>
-						</xsl:attribute>
-						<!-- template attributes -->
-						<xsl:if test="templateparamlist">
-							<xsl:variable name="refid"
-								select="../../@id" />
-							<xsl:attribute name="template"
-								select="'true'" />
-							<xsl:attribute name="templateType"
-								select="templateparamlist/param/type" />
-							<xsl:attribute name="templateDeclaration"
-								select="templateparamlist/param/declname" />
-							<xsl:for-each
-								select="inheritancegraph/node">
-								<xsl:if test="link/@refid=$refid">
-									<xsl:variable name="childnode"
-										select="childnode/@refid" />
-									<xsl:for-each select="../node">
-										<xsl:if test="@id=$childnode">
-											<xsl:attribute
-												name="templateName">
-												<xsl:variable
-													name="string" select="substring-before(label,' &gt;')" />
-												<xsl:value-of
-													select="substring-after($string,'&lt; ')" />
-											</xsl:attribute>
-										</xsl:if>
-									</xsl:for-each>
-								</xsl:if>
-							</xsl:for-each>
-						</xsl:if>
-						<!-- type of the function -->
-						<xsl:if test="type and type!='virtual'">
-							<xsl:call-template name="type" />
-						</xsl:if>
-						<xsl:element name="definition">
-							<xsl:choose>
-								<xsl:when test="$ifGlobal">
-									<xsl:value-of select="concat('static ', definition)" />
-								</xsl:when>
-								<xsl:otherwise>
-									<xsl:value-of select="definition" />
-								</xsl:otherwise>
-							</xsl:choose>
-						</xsl:element>
-						<!-- name of the function -->
-						<xsl:element name="name">
-							<!-- <xsl:choose>
-								<xsl:when
-								test="contains(name,'::')">
-								<xsl:value-of
-								select="substring-after(name,'::')" />
-								</xsl:when>
-								<xsl:otherwise> -->
-							<xsl:value-of select="name" />
-							<!-- </xsl:otherwise>
-								</xsl:choose> -->
-						</xsl:element>
-						<!-- parameter of the function -->
-						<xsl:if
-							test="(param/type!='' or param/declname!='') and not(param/type='void')">
-							<xsl:element name="parameters">
-								<xsl:for-each select="param">
-									<xsl:element name="parameter">
-										<xsl:call-template name="type" />
-									</xsl:element>
+
+			<!-- do not include inherited methods -->
+			<xsl:variable name="definitionTokensBySpace" select="tokenize(replace(replace(
+						normalize-space(./definition), '&lt; ', '&lt;'), ' &gt;', '&gt;'), ' ')"/>
+			<xsl:variable name="definitionFullNameTokens" select="if (not(contains(
+						$definitionTokensBySpace[last()], '::')))
+						then tokenize($definitionTokensBySpace[last()-1], '::')
+						else tokenize($definitionTokensBySpace[last()], '::')"/>
+			<xsl:variable name="namespaceDefinedIn" select="if (count($definitionFullNameTokens) = 1)
+						then ../../compoundname
+						else xbig:buildNamespaceNameTypeIsDefinedIn('', $definitionFullNameTokens, 1)" />
+			<xsl:if test="$namespaceDefinedIn = ../../compoundname">
+
+				<xsl:choose>
+					<!-- destructor - do nothing -->
+					<xsl:when test="starts-with(name,'~')" />
+					<xsl:otherwise>
+						<xsl:element name="function">
+							<xsl:attribute name="virt" select="@virt" />
+							<xsl:attribute name="visibility" select="@prot" />
+							<xsl:attribute name="static">
+								<xsl:choose>
+									<xsl:when test="@static='yes' or $ifGlobal">
+										<xsl:value-of select="'true'" />
+									</xsl:when>
+									<xsl:when test="@static='no'">
+										<xsl:value-of select="'false'" />
+									</xsl:when>
+								</xsl:choose>
+							</xsl:attribute>
+							<xsl:attribute name="const">
+								<xsl:choose>
+									<xsl:when test="@const='yes'">
+										<xsl:value-of select="'true'" />
+									</xsl:when>
+									<xsl:when test="@const='no'">
+										<xsl:value-of select="'false'" />
+									</xsl:when>
+								</xsl:choose>
+							</xsl:attribute>
+							<!-- template attributes -->
+							<xsl:if test="templateparamlist">
+								<xsl:variable name="refid"
+									select="../../@id" />
+								<xsl:attribute name="template"
+									select="'true'" />
+								<xsl:attribute name="templateType"
+									select="templateparamlist/param/type" />
+								<xsl:attribute name="templateDeclaration"
+									select="templateparamlist/param/declname" />
+								<xsl:for-each
+									select="inheritancegraph/node">
+									<xsl:if test="link/@refid=$refid">
+										<xsl:variable name="childnode"
+											select="childnode/@refid" />
+										<xsl:for-each select="../node">
+											<xsl:if test="@id=$childnode">
+												<xsl:attribute
+													name="templateName">
+													<xsl:variable
+														name="string" select="substring-before(label,' &gt;')" />
+													<xsl:value-of
+														select="substring-after($string,'&lt; ')" />
+												</xsl:attribute>
+											</xsl:if>
+										</xsl:for-each>
+									</xsl:if>
 								</xsl:for-each>
+							</xsl:if>
+							<!-- type of the function -->
+							<xsl:if test="type and type!='virtual'">
+								<xsl:call-template name="type" />
+							</xsl:if>
+							<xsl:element name="definition">
+								<xsl:choose>
+									<xsl:when test="$ifGlobal">
+										<xsl:value-of select="concat('static ', definition)" />
+									</xsl:when>
+									<xsl:otherwise>
+										<xsl:value-of select="definition" />
+									</xsl:otherwise>
+								</xsl:choose>
 							</xsl:element>
-						</xsl:if>
+							<!-- name of the function -->
+							<xsl:element name="name">
+								<!-- <xsl:choose>
+									<xsl:when
+									test="contains(name,'::')">
+									<xsl:value-of
+									select="substring-after(name,'::')" />
+									</xsl:when>
+									<xsl:otherwise> -->
+								<xsl:value-of select="name" />
+								<!-- </xsl:otherwise>
+									</xsl:choose> -->
+							</xsl:element>
+							<!-- parameter of the function -->
+							<xsl:if
+								test="(param/type!='' or param/declname!='') and not(param/type='void')">
+								<xsl:element name="parameters">
+									<xsl:for-each select="param">
+										<xsl:element name="parameter">
+											<xsl:call-template name="type" />
+										</xsl:element>
+									</xsl:for-each>
+								</xsl:element>
+							</xsl:if>
 
-						<!-- documentation -->
-						<xsl:call-template name="documentation" />
+							<!-- documentation -->
+							<xsl:call-template name="documentation" />
 
-					</xsl:element>
-				</xsl:otherwise>
-			</xsl:choose>
+						</xsl:element>
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:if>
 			<!-- 
 				</xsl:if>
 			-->
