@@ -114,6 +114,7 @@
 	<function>Ogre::ResourceGroupManager::ResourceDeclarationList::remove</function>
 	<function>Ogre::ResourceGroupManager::ResourceDeclarationList::unique</function>
 	<function>Ogre::GpuLogicalIndexUseMap::remove</function>
+	<function>Ogre::GpuLogicalIndexUseMap::get</function>
 
 	<!-- protected typedef as return type -->
 	<function>Ogre::InstancedGeometry::MaterialBucket::getMaterialBucketMap</function>
