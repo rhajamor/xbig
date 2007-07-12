@@ -48,28 +48,28 @@
       <type meta="unsigned char" signature="B" />
 
       <type meta="short" signature="h" />
-			<type meta="short int" signature="h" />
+      <type meta="short int" signature="h" />
       <type meta="signed short" signature="h" />
-			<type meta="signed short int" signature="h" />
+      <type meta="signed short int" signature="h" />
       <type meta="unsigned short" signature="H" />
-			<type meta="unsigned short int" signature="H" />
+      <type meta="unsigned short int" signature="H" />
 
       <type meta="int" signature="i" />
-			<type meta="signed" signature="i" />
+      <type meta="signed" signature="i" />
       <type meta="signed int" signature="i" />
-			<type meta="unsigned" signature="I" />
+      <type meta="unsigned" signature="I" />
       <type meta="unsigned int" signature="I" />
 
       <type meta="long" signature="l" />
-			<type meta="long int" signature="l" />
+      <type meta="long int" signature="l" />
       <type meta="signed long" signature="l" />
-			<type meta="signed long int" signature="l" />
+      <type meta="signed long int" signature="l" />
       <type meta="unsigned long" signature="L" />
-			<type meta="unsigned long int" signature="L" />
+      <type meta="unsigned long int" signature="L" />
 
-			<type meta="long long" signature="o" />
-			<type meta="signed long long" signature="o" />
-			<type meta="unsigned long long" signature="O" />
+      <type meta="long long" signature="o" />
+      <type meta="signed long long" signature="o" />
+      <type meta="unsigned long long" signature="O" />
 			
       <type meta="double" signature="D" />
       <type meta="float" signature="F" />
@@ -77,7 +77,7 @@
       <type meta="std::string" signature="s" />
       <type meta="std::wstring" signature="ws" />
       <type meta="size_t" signature="i" />
-			<type meta="wchar_t" signature="H" />
+      <type meta="wchar_t" signature="H" />
 
       <!-- mapping of non-const passing methods for parameters -->
 
@@ -126,7 +126,7 @@
 		
     <globalmember>
 			<classNameForGlobalMember>GlobalUtility</classNameForGlobalMember>
-		</globalmember>
+    </globalmember>
 
   </meta>
 
@@ -372,25 +372,23 @@
         <type meta="char" jni="jchar" />
 
         <type meta="signed char" pass="pointer" const="true"
-          jni="jstring" cpp="std::string">
+          jni="jlong" cpp="signed char*">
           <jni2cpp>
-            org::xbig::jni::to_stdstring(#jni_env#,
-            #jni_var#)
+            reinterpret_cast&lt;signed char*&gt;(#jni_var#)
           </jni2cpp>
           <cpp2jni>
-            org::xbig::jni::to_jstring(#jni_env#, #cpp_var#)
+            reinterpret_cast&lt;jlong&gt;(#cpp_var#)
           </cpp2jni>
         </type>
         <type meta="signed char" jni="jbyte" />
 
         <type meta="unsigned char" pass="pointer" const="true"
-          jni="jstring" cpp="std::string">
+          jni="jlong" cpp="unsigned char*">
           <jni2cpp>
-            org::xbig::jni::to_stdstring(#jni_env#,
-            #jni_var#)
+            reinterpret_cast&lt;unsigned char*&gt;(#jni_var#)
           </jni2cpp>
           <cpp2jni>
-            org::xbig::jni::to_jstring(#jni_env#, #cpp_var#)
+            reinterpret_cast&lt;jlong&gt;(#cpp_var#)
           </cpp2jni>
         </type>
         <type meta="unsigned char" jni="jshort" />
@@ -986,36 +984,36 @@
       <type meta="unsigned char" java="short" genericParameter="Short" />
 
       <type meta="short" java="short" genericParameter="Short" />
-			<type meta="short int" java="short" genericParameter="Short" />
+      <type meta="short int" java="short" genericParameter="Short" />
       <type meta="signed short" java="short" genericParameter="Short" />
-			<type meta="signed short int" java="short" genericParameter="Short" />
+      <type meta="signed short int" java="short" genericParameter="Short" />
       <type meta="unsigned short" java="int" genericParameter="Integer" />
-			<type meta="unsigned short int" java="int" genericParameter="Integer" />
+      <type meta="unsigned short int" java="int" genericParameter="Integer" />
 
       <type meta="int" java="int" genericParameter="Integer" />
-			<type meta="signed" java="int" genericParameter="Integer" />
+      <type meta="signed" java="int" genericParameter="Integer" />
       <type meta="signed int" java="int" genericParameter="Integer" />
-			<type meta="unsigned" java="long" genericParameter="Long" />
+      <type meta="unsigned" java="long" genericParameter="Long" />
       <type meta="unsigned int" java="long" genericParameter="Long" />
 
       <type meta="long" java="long" genericParameter="Long" />
-			<type meta="long int" java="long" genericParameter="Long" />
+      <type meta="long int" java="long" genericParameter="Long" />
       <type meta="signed long" java="long" genericParameter="Long" />
-			<type meta="signed long int" java="long" genericParameter="Long" />
-			<type meta="unsigned long" java="long" genericParameter="Long" />
-			<type meta="unsigned long int" java="long" genericParameter="Long" />
+      <type meta="signed long int" java="long" genericParameter="Long" />
+      <type meta="unsigned long" java="long" genericParameter="Long" />
+      <type meta="unsigned long int" java="long" genericParameter="Long" />
 			
-			<type meta="long long" java="long" genericParameter="Long" />
-			<type meta="signed long long" java="long" genericParameter="Long" />
-			<type meta="unsigned long long" java="ULongLong" genericParameter="ULongLong" />
+      <type meta="long long" java="long" genericParameter="Long" />
+      <type meta="signed long long" java="long" genericParameter="Long" />
+      <type meta="unsigned long long" java="ULongLong" genericParameter="ULongLong" />
 
       <type meta="double" java="double" genericParameter="Double" />
-			<type meta="float" java="float" genericParameter="Float" />
+      <type meta="float" java="float" genericParameter="Float" />
 
       <type meta="std::string" java="String" genericParameter="String" />
       <type meta="std::wstring" java="String" genericParameter="String" />
       <type meta="size_t" java="int" genericParameter="Integer" />
-			<type meta="wchar_t" java="char" genericParameter="Character" />
+      <type meta="wchar_t" java="char" genericParameter="Character" />
 
     </types>
 

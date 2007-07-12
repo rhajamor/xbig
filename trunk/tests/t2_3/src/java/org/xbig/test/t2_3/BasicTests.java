@@ -6,7 +6,7 @@ package org.xbig.test.t2_3;
 import org.junit.Assert;
 import org.junit.Test;
 import org.xbig.A;
-import org.xbig.base.ULongLong;
+import org.xbig.base.*;
 
 /**
  * @author nenning
@@ -80,6 +80,15 @@ public class BasicTests {
         Assert.assertEquals(a.getString(stringValue), stringValue);
         Assert.assertEquals(a.getCharStar(charStarValue), charStarValue);
         Assert.assertEquals(a.getConstCharStar(constCharStarValue), constCharStarValue);
+
+        short unsignedChar = 300;
+        byte signedChar = -128;
+        ShortPointer shortPtr = new ShortPointer(unsignedChar);
+        BytePointer bytePtr = new BytePointer(signedChar);
+        Assert.assertEquals(unsignedChar, a.getUnsignedCharStar(shortPtr).get());
+        Assert.assertEquals(signedChar, a.getSignedCharStar(bytePtr).get());
+        shortPtr.delete();
+        bytePtr.delete();
 
         int size_tValue = 12345;
         char wchar_tValue = 'a';
