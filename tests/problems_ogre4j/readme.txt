@@ -70,7 +70,7 @@ t50              s
 t51              s
 t52              s on win, f on lin
 t53              s
-t54              f
+t54              f (successful because of ignore list)
 t55              s
 t56              f on win
 t57              f

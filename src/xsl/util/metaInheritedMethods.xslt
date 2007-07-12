@@ -69,7 +69,7 @@
 				<xsl:with-param name="class" select="$class" />
 			</xsl:call-template>
 		</xsl:variable>
-		
+
 		<xsl:for-each select="$methodList/function">
 			<xsl:variable name="currentMethod" select="." />
 			<xsl:variable name="currentMethodPos" select="position()" />
