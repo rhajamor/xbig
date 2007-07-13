@@ -1108,7 +1108,7 @@
 			<info name="mapped_type" typeParaPos="2"/>
 		</additionalInfo>
 
-		<includes local="no">hash_map</includes>
+		<!-- <includes local="no">hash_map</includes> -->
 
 		<function virt="non-virtual" visibility="public" static="false" const="false"
 					passedBy="value">

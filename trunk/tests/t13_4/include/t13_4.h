@@ -44,5 +44,9 @@ typedef std::set<std::string>            StringSet;
 typedef std::multiset<std::string>       StringMultiset;
 typedef std::multimap<std::string, A>    AMultimap;
 typedef std::pair<std::string, A>   	 APair;
-typedef std::hash_map<std::string, A>    AHashMap;
+#ifdef __GNUG__
+	typedef __gnu_cxx::hash_map<std::string, A> AHashMap;
+#else
+	typedef std::hash_map<std::string, A> AHashMap;
+#endif
 //typedef std::bitset<unsigned int>        IntBitset;

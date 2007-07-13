@@ -30,11 +30,11 @@
 #endif
 
 
-//#ifdef __GNUG__
-//	#define HashMap ::std::map
-//#else
+#ifdef __GNUG__
+	#define HashMap ::__gnu_cxx::hash_map
+#else
 	#define HashMap ::std::hash_map
-//#endif
+#endif
 
 
 namespace Ogre {
