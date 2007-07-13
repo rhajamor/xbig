@@ -136,7 +136,7 @@
     </format>
 
 	<always_include>
-		<!-- <header>Ogre.h</header> -->
+		<!-- <header>Ogre4JStableHeaders.h</header> -->
 	</always_include>
 
     <variables>

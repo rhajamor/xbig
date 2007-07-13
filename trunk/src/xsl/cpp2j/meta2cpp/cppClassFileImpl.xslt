@@ -230,8 +230,18 @@
 										<xsl:sequence select="if ($nameSpaces/*[@isThisMethod = 'true'] 
 																	eq $class/@fullName)
 																then ''
-																else concat($nameSpaces/*
-																	[@isThisMethod = 'true'], '::')"/>
+																else if (not(xbig:isTemplate($nameSpaces/*
+																		 [@isThisMethod = 'true'], $root)))
+																	then concat($nameSpaces/*
+																		[@isThisMethod = 'true'], '::')
+																	else if($class/@originalTypedefFullName)
+																		then
+																			concat($class/
+																				@originalTypedefFullName,
+																				'::')
+																		else
+																			concat($class/@fullName, '::')"
+										/>
 									</xsl:when>
 
 									<!-- overloaded but not in base classes -->
