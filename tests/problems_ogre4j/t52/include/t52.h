@@ -35,7 +35,11 @@
 #include "OgreIteratorWrappers.h"
 
 
-#define HashMap ::std::hash_map
+#ifdef __GNUG__
+	#define HashMap ::__gnu_cxx::hash_map
+#else
+	#define HashMap ::std::hash_map
+#endif
 
 
 namespace Ogre {
