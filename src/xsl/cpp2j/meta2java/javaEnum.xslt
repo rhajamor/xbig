@@ -62,13 +62,16 @@
 		<xsl:value-of select="$enum/@protection" />
 		<xsl:text>&#32;enum&#32;</xsl:text>
 		<xsl:value-of select="$enum/@name" />
-		<xsl:text>{&#10;</xsl:text>
+		<xsl:text>&#32;implements&#32;INativeEnum&#32;&lt;&#32;</xsl:text>
+		<xsl:value-of select="$enum/@name" />
+		<xsl:text>&#32;&gt;&#32;{&#10;</xsl:text>
 
 		<!-- do not generate content if type is on ignore list -->
 		<xsl:if
 			test="not($ignore_list/ignore_list/item[. = $enum/@fullName])">
 
 			<xsl:for-each select="$enum/enum">
+				<xsl:text>&#32;&#32;&#32;&#32;</xsl:text>
 				<xsl:value-of select="@name" />
 				<xsl:variable name="name" select="@name" />
 				<xsl:text>(</xsl:text>
@@ -85,19 +88,49 @@
 			</xsl:for-each>
 
 			<xsl:text>;&#10;&#10;</xsl:text>
-			<xsl:text>public int value;&#10;</xsl:text>
+			<xsl:text>&#32;&#32;&#32;&#32;</xsl:text>
+			<xsl:text>private int value;</xsl:text>
+			<xsl:text>&#10;&#10;</xsl:text>
+			<xsl:text>&#32;&#32;&#32;&#32;</xsl:text>
 			<xsl:value-of select="$enum/@name" />
 			<xsl:text>(int i) {&#10;</xsl:text>
+			<xsl:text>&#32;&#32;&#32;&#32;</xsl:text>
+			<xsl:text>&#32;&#32;&#32;&#32;</xsl:text>
 			<xsl:text>this.value = i;&#10;</xsl:text>
-			<xsl:text>}&#10;</xsl:text>
+			<xsl:text>&#32;&#32;&#32;&#32;</xsl:text>
+			<xsl:text>}&#10;&#10;</xsl:text>
+
+			<!-- get value -->
+			<xsl:text>&#32;&#32;&#32;&#32;</xsl:text>
+			<xsl:text>public&#32;int&#32;getValue()&#32;{&#10;</xsl:text>
+			<xsl:text>&#32;&#32;&#32;&#32;</xsl:text>
+			<xsl:text>&#32;&#32;&#32;&#32;</xsl:text>
+			<xsl:text>return&#32;value;&#10;</xsl:text>
+			<xsl:text>&#32;&#32;&#32;&#32;</xsl:text>
+			<xsl:text>}&#10;&#10;</xsl:text>
+
+			<!-- get enum -->
+			<xsl:text>&#32;&#32;&#32;&#32;</xsl:text>
+			<xsl:text>public&#32;</xsl:text>
+			<xsl:value-of select="$enum/@name" />
+			<xsl:text>&#32;getEnum(int&#32;val)&#32;{&#10;</xsl:text>
+			<xsl:text>&#32;&#32;&#32;&#32;</xsl:text>
+			<xsl:text>&#32;&#32;&#32;&#32;</xsl:text>
+			<xsl:text>return&#32;toEnum(val);&#10;</xsl:text>
+			<xsl:text>&#32;&#32;&#32;&#32;</xsl:text>
+			<xsl:text>}&#10;&#10;</xsl:text>
 
 			<!-- enum mapping, switch case -->
-			<xsl:text>public static final&#32;</xsl:text>
+			<xsl:text>&#32;&#32;&#32;&#32;</xsl:text>
+			<xsl:text>public&#32;static final&#32;</xsl:text>
 			<xsl:value-of select="$enum/@name" />
-			<xsl:text>&#32;toEnum(int retval) {&#10;</xsl:text>
-			<xsl:text>if (retval ==</xsl:text>
+			<xsl:text>&#32;toEnum(int&#32;retval)&#32;{&#10;</xsl:text>
+			<xsl:text>&#32;&#32;&#32;&#32;</xsl:text>
+			<xsl:text>if&#32;(retval&#32;==</xsl:text>
 			<xsl:value-of select="$enum/enum[position()=1]/@name" />
 			<xsl:text>.value)&#10;</xsl:text>
+			<xsl:text>&#32;&#32;&#32;&#32;</xsl:text>
+			<xsl:text>&#32;&#32;&#32;&#32;</xsl:text>
 			<xsl:text>return&#32;</xsl:text>
 			<xsl:value-of select="$enum/@name" />
 			<xsl:text>.</xsl:text>
@@ -106,9 +139,12 @@
 
 			<xsl:for-each select="$enum/enum">
 				<xsl:if test="position()!=1">
-					<xsl:text>else if (retval ==</xsl:text>
+					<xsl:text>&#32;&#32;&#32;&#32;</xsl:text>
+					<xsl:text>else&#32;if&#32;(retval&#32;==</xsl:text>
 					<xsl:value-of select="@name" />
 					<xsl:text>.value)&#10;</xsl:text>
+					<xsl:text>&#32;&#32;&#32;&#32;</xsl:text>
+					<xsl:text>&#32;&#32;&#32;&#32;</xsl:text>
 					<xsl:text>return&#32;</xsl:text>
 					<xsl:value-of select="../@name" />
 					<xsl:text>.</xsl:text>
@@ -117,9 +153,9 @@
 				</xsl:if>
 			</xsl:for-each>
 
-			<xsl:text>
-				throw new RuntimeException("wrong number in jni call for an enum");&#10;
-			</xsl:text>
+			<xsl:text>&#32;&#32;&#32;&#32;</xsl:text>
+			<xsl:text>throw new RuntimeException("wrong number in jni call for an enum");&#10;</xsl:text>
+			<xsl:text>&#32;&#32;&#32;&#32;</xsl:text>
 			<xsl:text>}&#10;</xsl:text>
 			<xsl:text>}&#10;</xsl:text>
 

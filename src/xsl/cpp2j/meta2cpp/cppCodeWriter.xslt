@@ -208,7 +208,9 @@
 					</xsl:when>
 					<xsl:when
 						test="xbig:isEnum($fullTypeName, $class, $root)">
-						<xsl:value-of select="$fullTypeName" />
+						<xsl:value-of select="if ($param/@passedBy = 'pointer')
+												then concat($fullTypeName, '*')
+												else $fullTypeName" />
 					</xsl:when>
 					<xsl:otherwise>
 						<xsl:value-of select="$fullTypeName" />
@@ -401,8 +403,9 @@
 				<xsl:when
 					test="xbig:isEnum($fullTypeName, $class, $root)">
 					<xsl:value-of
-						select="
-						concat('(', $fullTypeName, ')', $param_name)" />
+						select="if ($param/@passedBy = 'pointer')
+						then concat('reinterpret_cast&lt; ', $fullTypeName, '* &gt;(', $param_name, ')') 
+						else concat('(', $fullTypeName, ')', $param_name)" />
 				</xsl:when>
 
 				<!-- if this type is a class or struct -->
@@ -535,7 +538,6 @@
 				<!-- if this type is a parametrized template -->
 				<xsl:when test="contains($fullTypeName, '&lt;')">
 					<xsl:variable name="returnCast">
-						<!-- produces warning: address of local variable ‘_cpp_result’ returned -->
 						<xsl:value-of
 							select="'reinterpret_cast&lt;jlong&gt;('" />
 						<xsl:value-of select="$param_name" />
@@ -548,7 +550,6 @@
 				<xsl:when
 					test="xbig:isTemplateTypedef($fullTypeName, $class, $root)">
 					<xsl:variable name="returnCast">
-						<!-- produces warning: address of local variable ‘_cpp_result’ returned -->
 						<xsl:value-of
 							select="'reinterpret_cast&lt;jlong&gt;('" />
 						<xsl:value-of select="$param_name" />
@@ -561,7 +562,18 @@
 				<xsl:when
 					test="xbig:isClassOrStruct($fullTypeName, $class, $root)">
 					<xsl:variable name="returnCast">
-						<!-- produces warning: address of local variable ‘_cpp_result’ returned -->
+						<xsl:value-of
+							select="'reinterpret_cast&lt;jlong&gt;('" />
+						<xsl:value-of select="$param_name" />
+						<xsl:value-of select="')'" />
+					</xsl:variable>
+					<xsl:value-of select="$returnCast" />
+				</xsl:when>
+
+				<!-- if this method returns a pointer to an enum -->
+				<xsl:when
+					test="$param/@passedBy = 'pointer' and xbig:isEnum($fullTypeName, $class, $root)">
+					<xsl:variable name="returnCast">
 						<xsl:value-of
 							select="'reinterpret_cast&lt;jlong&gt;('" />
 						<xsl:value-of select="$param_name" />

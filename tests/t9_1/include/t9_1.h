@@ -35,4 +35,5 @@ public:
 	bool isI(Vocals a);
 	bool isO(Vocals a);
 	bool isU(Vocals a);
+	Vocals* ptr(Vocals* a) {*a = u; return a;}
 };

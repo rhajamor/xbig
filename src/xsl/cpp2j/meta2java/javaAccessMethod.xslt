@@ -77,6 +77,8 @@
 			<!-- start implementation -->
 			<xsl:text>{</xsl:text>
 			<xsl:text>&#10;</xsl:text>
+			<xsl:text>&#32;&#32;&#32;&#32;</xsl:text>
+			<xsl:text>&#32;&#32;&#32;&#32;</xsl:text>
 
 			<!-- choose correct implementation -->
 			<xsl:choose>
@@ -138,6 +140,7 @@
 
 			<!-- implementation finished -->
 			<xsl:text>&#10;</xsl:text>
+			<xsl:text>&#32;&#32;&#32;&#32;</xsl:text>
 			<xsl:text>}</xsl:text>
 
 		</xsl:if> <!-- ignore list check -->

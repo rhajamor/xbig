@@ -147,7 +147,9 @@
 			<!-- if this parameter is a enum -->
 			<xsl:if test="($callingNativeMethod eq true()) and
 				 		  (xbig:isEnum($fullTypeName, $class, $root))">
-				<xsl:value-of select="'.value'" />
+				<xsl:value-of select="if (./@passedBy = 'pointer')
+										then '.getInstancePointer().pointer'
+										else '.getValue()'" />
 			</xsl:if>
 
 			<!-- if this parameter is a class or struct -->

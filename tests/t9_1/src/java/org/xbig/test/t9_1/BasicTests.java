@@ -7,6 +7,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.xbig.A;
 import org.xbig.Vocals;
+import org.xbig.base.*;
 /**
  * @author nenning
  *
@@ -27,4 +28,20 @@ public class BasicTests {
 
 		a.delete();
 	}
+
+	@Test
+    public void useEnumPointer() {
+        A a = new A();
+
+        EnumPointer<Vocals> enumPtr = new EnumPointer<Vocals>(Vocals.i);
+        EnumPointer<Vocals> enumPtr2 = a.ptr(enumPtr);
+        Assert.assertEquals(enumPtr.get(), enumPtr2.get());
+        enumPtr2 = null;
+        Assert.assertEquals(Vocals.u, enumPtr.get());
+        enumPtr.set(Vocals.o);
+        Assert.assertEquals(Vocals.o, enumPtr.get());
+        enumPtr.delete();
+
+        a.delete();
+    }
 }

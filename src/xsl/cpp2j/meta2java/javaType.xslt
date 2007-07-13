@@ -231,7 +231,9 @@
 							<xsl:when test="xbig:isEnum($fullTypeName, $class, $root)">
 								<xsl:choose>
 									<xsl:when test="$writingNativeMethod eq true()">
-										<xsl:value-of select="'int'"/>
+										<xsl:value-of select="if ($param/@passedBy = 'pointer')
+																then 'long'
+																else 'int'"/>
 									</xsl:when>
 									<xsl:otherwise>
 										<xsl:variable name="fullJavaName" select="
@@ -243,7 +245,10 @@
 														$pointerPointerClass, '&lt;', $fullJavaName, '&gt;')"/>
 											</xsl:when>
 											<xsl:otherwise>
-												<xsl:value-of select="$fullJavaName"/>
+												<xsl:value-of select="if ($param/@passedBy = 'pointer')
+																		then concat('EnumPointer &lt; ',
+																			$fullJavaName, ' &gt;')
+																		else $fullJavaName"/>
 											</xsl:otherwise>
 										</xsl:choose>
 									</xsl:otherwise>
