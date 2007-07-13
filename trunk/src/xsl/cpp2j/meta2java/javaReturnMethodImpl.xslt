@@ -192,9 +192,17 @@
 
 		<!-- get enum when necessary -->
 		<xsl:if test="xbig:isEnum($fullTypeName, $class, $root)">
+			<xsl:if test="$method/@passedBy = 'pointer'">
+				<xsl:text>new&#32;EnumPointer&#32;&lt;&#32;</xsl:text>
+			</xsl:if>
 			<xsl:value-of select="xbig:getFullJavaClassAndNotInterfaceName(
 									$fullTypeName, $class, $root, $config)"/>
-			<xsl:text>.toEnum(</xsl:text>
+			<xsl:if test="$method/@passedBy = 'pointer'">
+				<xsl:text>&#32;&gt;&#32;(new&#32;InstancePointer(</xsl:text>
+			</xsl:if>
+			<xsl:if test="not($method/@passedBy = 'pointer')">
+				<xsl:text>.toEnum(</xsl:text>
+			</xsl:if>
 		</xsl:if>
 
 		<!-- create a ULongLong object for "unsigned long long" -->
@@ -272,6 +280,14 @@
 		</xsl:if>
 		<xsl:if test="xbig:isEnum($fullTypeName, $class, $root)">
 			<xsl:text>)</xsl:text>
+			<xsl:if test="$method/@passedBy = 'pointer'">
+				<xsl:text>)</xsl:text>
+				<xsl:text>,&#32;</xsl:text>
+				<xsl:value-of select="xbig:getFullJavaClassAndNotInterfaceName(
+										$fullTypeName, $class, $root, $config)" />
+				<xsl:text>.</xsl:text>
+				<xsl:value-of select="$root//enumeration[@fullName = $fullTypeName]/enum[1]/@name" />
+			</xsl:if>
 		</xsl:if>
 
 		<!-- close parameter list -->

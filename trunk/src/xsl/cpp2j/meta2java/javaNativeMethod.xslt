@@ -91,7 +91,8 @@
 			<xsl:variable name="virtuality" select="$method/@virt" />
 
 			<!-- write visibility modifier -->
-			<xsl:text>&#32;private</xsl:text>
+			<xsl:text>&#32;&#32;&#32;&#32;</xsl:text>
+			<xsl:text>private</xsl:text>
 
 			<!-- write native method modifier -->
 			<xsl:text>&#32;native</xsl:text>

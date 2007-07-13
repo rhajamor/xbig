@@ -99,7 +99,9 @@
 
 					<!-- if this type is an enum -->
 					<xsl:when test="xbig:isEnum($fullTypeName, $class, $root)">
-						<xsl:value-of select="'jint'"/>
+						<xsl:value-of select="if ($param/@passedBy = 'pointer')
+												then 'jlong'
+												else 'jint'"/>
 					</xsl:when>
 
 					<!-- if this type is a class or struct -->

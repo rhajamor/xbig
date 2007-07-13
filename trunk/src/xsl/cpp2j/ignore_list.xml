@@ -36,19 +36,19 @@
 	<item>Ogre::DefaultSceneManagerFactory</item>
 	<item>Ogre::DefaultShadowCameraSetup</item>
 	<item>Ogre::DefaultSphereSceneQuery</item>
-	<item>Ogre::ConfigDialog</item>
+	<!-- <item>Ogre::ConfigDialog</item>
 	<item>Ogre::ConfigDialogImp</item>
 	<item>Ogre::ErrorDialog</item>
-	<item>Ogre::ErrorDialogImp</item>
+	<item>Ogre::ErrorDialogImp</item> -->
 	<item>Ogre::StringConverter</item>
-	<item>Ogre::UTFString</item>
+	<!-- <item>Ogre::UTFString</item>
 	<function>GlobalUtility::operator-</function>
 	<function>GlobalUtility::operator==</function>
 	<function>GlobalUtility::operator!=</function>
 	<function>GlobalUtility::operator&lt;</function>
 	<function>GlobalUtility::operator&lt;=</function>
 	<function>GlobalUtility::operator&gt;</function>
-	<function>GlobalUtility::operator&gt;=</function>
+	<function>GlobalUtility::operator&gt;=</function> -->
 
 
 	<!-- union -->
@@ -126,4 +126,7 @@
 	<!-- protected struct -->
 	<function>Ogre::ProgressiveMesh::PMFaceVertex::getcommonVertex</function>
 	<function>Ogre::ProgressiveMesh::PMFaceVertex::setcommonVertex</function>
+
+	<!-- integer as type parameter -->
+	<item>Ogre::ExceptionCodeType</item>
 </ignore_list>

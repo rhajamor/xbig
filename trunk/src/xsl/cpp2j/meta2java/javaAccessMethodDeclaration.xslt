@@ -89,22 +89,23 @@
 
 
 	    <!-- write method documentation -->
-
+		<xsl:text>&#32;&#32;&#32;&#32;</xsl:text>
 	    <xsl:text>/**&#32;</xsl:text>
 	    <xsl:for-each select="$method/detaileddescription/para">
 	      <xsl:text>&#10;</xsl:text>
+	      <xsl:text>&#32;&#32;&#32;&#32;</xsl:text>
 	      <!-- caused a problem with ogre4j -->
 	      <!-- <xsl:value-of select="normalize-space(text())" />-->
 	      <xsl:value-of select="text()" />
 	    </xsl:for-each>
-	    <xsl:text>&#32;**/</xsl:text>
+	    <xsl:text>**/</xsl:text>
 	    <xsl:text>&#10;</xsl:text>
 
     	<!-- write method modifiers -->
 
 	    <!-- write method visibility -->
 	    <xsl:if test="$visibility">
-	      <xsl:text>&#32;</xsl:text>
+	      <xsl:text>&#32;&#32;&#32;&#32;</xsl:text>
 	      <xsl:value-of select="$visibility" />
 	    </xsl:if>
 
