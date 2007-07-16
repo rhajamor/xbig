@@ -30,10 +30,13 @@ enum EXPORT Vocals2 {
 
 class EXPORT A {
 public:
+	A() {}
+	A(Vocals* a) {*a = o;}
 	bool isA(Vocals b);
 	bool isE(Vocals a);
 	bool isI(Vocals a);
 	bool isO(Vocals a);
 	bool isU(Vocals a);
 	Vocals* ptr(Vocals* a) {*a = u; return a;}
+	void ptrInVoidMethod(Vocals* a) {*a = i;}
 };

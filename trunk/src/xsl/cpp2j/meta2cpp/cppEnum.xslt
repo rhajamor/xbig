@@ -172,24 +172,38 @@
 			<xsl:result-document href="{xbig:toFileURL($impl_filename)}"
 				format="textOutput">
 
+				<!-- write file header with copyright information -->
+				<xsl:call-template name="cppFileHeader">
+					<xsl:with-param name="config" select="$config" />
+				</xsl:call-template>
+				<xsl:text>&#10;&#10;</xsl:text>
+
 				<!-- include all JNI utility functions -->
 				<xsl:text>// use base library for cpp2j</xsl:text>
 				<xsl:text>&#10;#include "jni_base_all.h"&#10;</xsl:text>
 
+				<!-- include headers from config -->
+				<xsl:if test="$config/config/cpp/always_include/header">
+				<xsl:text>&#10;</xsl:text>
+				<xsl:text>// includes from config</xsl:text>
+				<xsl:text>&#10;</xsl:text>
+					<xsl:for-each select="$config/config/cpp/always_include/header">
+						<xsl:text>#include &lt;</xsl:text>
+						<xsl:sequence select="." />
+						<xsl:text>&gt;&#10;</xsl:text>
+					</xsl:for-each>
+				</xsl:if>
+
 				<!-- include current header file if available -->
 				<xsl:text>&#10;</xsl:text>
-				<xsl:text>
-					// import declaration of all functions
-				</xsl:text>
+				<xsl:text>// import declaration of all functions</xsl:text>
 				<xsl:text>&#10;#include "</xsl:text>
 				<xsl:value-of select="$basic_header_filename" />
 				<xsl:text>"&#10;</xsl:text>
 
 				<!-- include header files from original library -->
 				<xsl:text>&#10;</xsl:text>
-				<xsl:text>
-					// import header files of original library
-				</xsl:text>
+				<xsl:text>// import header files of original library</xsl:text>
 				<!-- 
 				<xsl:variable name="nodeContainingIncludeFiles">
 					<xsl:element name="node">
@@ -214,14 +228,14 @@
 
 				<!-- comment for enum getter function -->
 				<xsl:text>/*&#10;</xsl:text>
-				<xsl:text>* Class:</xsl:text>
+				<xsl:text>&#32;* Class:</xsl:text>
 				<xsl:value-of select="$class_prefix" />
 				<xsl:text>&#10;</xsl:text>
-				<xsl:text>* Method:</xsl:text>
+				<xsl:text>&#32;* Method:</xsl:text>
 				<xsl:text>getEnumValues&#10;</xsl:text>
-				<xsl:text>* Signature:</xsl:text>
+				<xsl:text>&#32;* Signature:</xsl:text>
 				<xsl:text>()[I&#10;</xsl:text>
-				<xsl:text>*/&#10;</xsl:text>
+				<xsl:text>&#32;*/&#10;</xsl:text>
 
 				<!-- declaration for enum getter function -->
 				<xsl:text>JNIEXPORT jintArray JNICALL Java_</xsl:text>
@@ -231,11 +245,13 @@
 
 				<!-- implementation for enum getter function -->
 				<xsl:text>{&#10;</xsl:text>
+				<xsl:text>&#32;&#32;&#32;&#32;</xsl:text>
 				<xsl:text>jint enum_values[] = {&#10;</xsl:text>
 
 				<!-- put all enum values into one array -->
 				<xsl:for-each select="$enum/enum">
-					<xsl:text></xsl:text>
+					<xsl:text>&#32;&#32;&#32;&#32;</xsl:text>
+					<xsl:text>&#32;&#32;&#32;&#32;</xsl:text>
 					<xsl:if test="../../name() != 'meta'">
 						<xsl:value-of select="../../@fullName" />
 						<xsl:text>::</xsl:text>
@@ -250,17 +266,17 @@
 
 						<!-- close enum getter function -->
 						<xsl:text>&#10;</xsl:text>
+						<xsl:text>&#32;&#32;&#32;&#32;</xsl:text>
 						<xsl:text>};&#10;</xsl:text>
-						<xsl:text>
-							jintArray array = env->NewIntArray(
-						</xsl:text>
+						<xsl:text>&#32;&#32;&#32;&#32;</xsl:text>
+						<xsl:text>jintArray array = env->NewIntArray(</xsl:text>
 						<xsl:value-of select="$numberOfEnums" />
 						<xsl:text>);&#10;</xsl:text>
-						<xsl:text>
-							env->SetIntArrayRegion(array, 0,
-						</xsl:text>
+						<xsl:text>&#32;&#32;&#32;&#32;</xsl:text>
+						<xsl:text>env->SetIntArrayRegion(array, 0,</xsl:text>
 						<xsl:value-of select="$numberOfEnums" />
 						<xsl:text>, enum_values);&#10;</xsl:text>
+						<xsl:text>&#32;&#32;&#32;&#32;</xsl:text>
 						<xsl:text>return array;&#10;</xsl:text>
 						<xsl:text>}&#10;</xsl:text>
 					</xsl:if>

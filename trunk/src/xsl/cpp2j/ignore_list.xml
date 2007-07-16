@@ -36,19 +36,13 @@
 	<item>Ogre::DefaultSceneManagerFactory</item>
 	<item>Ogre::DefaultShadowCameraSetup</item>
 	<item>Ogre::DefaultSphereSceneQuery</item>
-	<!-- <item>Ogre::ConfigDialog</item>
-	<item>Ogre::ConfigDialogImp</item>
-	<item>Ogre::ErrorDialog</item>
-	<item>Ogre::ErrorDialogImp</item> -->
 	<item>Ogre::StringConverter</item>
-	<!-- <item>Ogre::UTFString</item>
-	<function>GlobalUtility::operator-</function>
-	<function>GlobalUtility::operator==</function>
-	<function>GlobalUtility::operator!=</function>
-	<function>GlobalUtility::operator&lt;</function>
-	<function>GlobalUtility::operator&lt;=</function>
-	<function>GlobalUtility::operator&gt;</function>
-	<function>GlobalUtility::operator&gt;=</function> -->
+
+	<!-- unresolved type 'difference_type' -->
+	<item>Ogre::UTFString::_const_fwd_iterator</item>
+	<item>Ogre::UTFString::_const_rev_iterator</item>
+	<item>Ogre::UTFString::_fwd_iterator</item>
+	<item>Ogre::UTFString::_rev_iterator</item>
 
 
 	<!-- union -->
