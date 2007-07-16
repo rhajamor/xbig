@@ -107,7 +107,8 @@
 		<xsl:value-of select="$interfaceName" />
 
 		<!-- if this class is a template -->
-		<xsl:if test="$class/@template">
+		<xsl:if test="$class/@template  and
+					not($ignore_list/ignore_list/item[. = $class/@fullName])">
 			<xsl:text>&#32;&lt;&#32;</xsl:text>
 			<xsl:for-each
 				select="$class/templateparameters/templateparameter

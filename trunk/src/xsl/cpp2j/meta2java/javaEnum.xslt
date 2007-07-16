@@ -180,9 +180,10 @@
 			<!-- create static initializer -->
 			<xsl:if test="not($isInnerClass)">
 				<xsl:text>static { System.loadLibrary("</xsl:text>
-				<xsl:value-of
-					select="$buildFile/project/property[@name='lib.name']/@value" />
-				<xsl:text>-xbig");}&#10;</xsl:text>
+				<xsl:value-of select="if ($config/config/java/nativelib)
+						then $config/config/java/nativelib
+						else concat($buildFile/project/property[@name='lib.name']/@value, '-xbig')" />
+				<xsl:text>");}&#10;</xsl:text>
 			</xsl:if>
 
 			<!-- class content, an array containing the values and a native method to obtain them -->

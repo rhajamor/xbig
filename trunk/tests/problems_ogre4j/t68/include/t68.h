@@ -41,5 +41,11 @@ namespace Ogre {
 				{ResourcePtr r; return r;}
 	};
 
+	// test ignore_list with primitive types as type parameters
+	template <int num>
+	struct ExceptionCodeType
+	{
+	    enum { number = num };
+	};
 }
 #endif
