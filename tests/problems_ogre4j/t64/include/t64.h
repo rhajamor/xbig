@@ -10,7 +10,8 @@
  * during the generation of ogre4j
  *
  * Problem:
- * renaming of namespaces in java
+ * - renaming of namespaces in java
+ * - name native lib in config
  ******************************************************************/
 
 #ifdef WIN32

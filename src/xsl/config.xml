@@ -1026,6 +1026,7 @@
  -->
     </namespaces>
 
+    <!-- <nativelib>ogre4j</nativelib> -->
 
     <class>
       <pointer>org.xbig.base.InstancePointer</pointer>
