@@ -204,7 +204,11 @@
 					<xsl:when
 						test="xbig:isClassOrStruct($fullTypeName, $class, $root)">
 						<xsl:value-of
-							select="concat($fullTypeName, '*')" />
+							select="if ($param/../../name = 'operator=' or 
+										$param/../../name = 'operator ='
+										and $class/inherits/baseClass/@fullBaseClassName = $fullTypeName)
+									then concat($class/@fullName, '*')
+									else concat($fullTypeName, '*')" />
 					</xsl:when>
 					<xsl:when
 						test="xbig:isEnum($fullTypeName, $class, $root)">
@@ -413,7 +417,12 @@
 					test="xbig:isClassOrStruct($fullTypeName, $class, $root)">
 					<xsl:variable name="part1"
 						select="'reinterpret_cast&lt; '" />
-					<xsl:variable name="part2" select="$fullTypeName" />
+					<xsl:variable name="part2" select="if ($method/name = 'operator=' or 
+															$method/name = 'operator =' and
+															$class/inherits/baseClass/@fullBaseClassName
+															= $fullTypeName)
+														then $class/@fullName
+														else $fullTypeName" />
 					<xsl:variable name="part3"
 						select="$pointerPointerAddOn" />
 					<xsl:variable name="part4" select="if ($param//@constInTemplate = 'true')

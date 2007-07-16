@@ -68,4 +68,15 @@ public class BasicTests {
         cd.delete();
         cdPtr.delete();
     }
+
+    @Test
+    public void testException() {
+        IException e1 = new FileNotFoundException();
+        IException e2 = new IOException();
+
+        e1.operatorAssignment(e2);
+
+        e2.delete();
+        e1.delete();
+    }
 }

@@ -400,7 +400,7 @@
 	<!-- Compile Junit tests for generated Java code -->
 	<!-- ..................................................................... -->
 
-	<target name="compile-junit" depends="javalib">
+	<target name="compile-junit">
 		<javac 
 			srcdir="${dir.cur.src.java}" 
 			destdir="${dir.cur.build.java.class}" 

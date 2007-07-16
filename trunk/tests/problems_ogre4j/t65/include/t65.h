@@ -327,5 +327,86 @@ namespace Ogre {
 	};
 
 	typedef SharedPtr<CodecData> CodecDataPtr;
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+	typedef std::string String;
+
+	class EXPORT Exception : public std::exception
+    {
+    protected:
+        long line;
+        int number;
+        String typeName;
+        String description;
+        String source;
+        String file;
+        mutable String fullDesc;
+    public:
+        enum ExceptionCodes {
+            ERR_CANNOT_WRITE_TO_FILE,
+            ERR_INVALID_STATE,
+            ERR_INVALIDPARAMS,
+            ERR_RENDERINGAPI_ERROR,
+            ERR_DUPLICATE_ITEM,
+            ERR_ITEM_NOT_FOUND,
+            ERR_FILE_NOT_FOUND,
+            ERR_INTERNAL_ERROR,
+            ERR_RT_ASSERTION_FAILED, 
+            ERR_NOT_IMPLEMENTED
+        };
+
+        Exception() {}
+
+        Exception( int number, const String& description, const String& source ) {}
+
+        Exception( int number, const String& description, const String& source, const char* type, const char* file, long line ) {}
+
+        Exception(const Exception& rhs) {}
+
+        ~Exception() throw() {}
+
+        const Exception& operator = (const Exception& rhs) {
+        	std::cout << "got type: " << typeid(rhs).name() << "\n"; return *this;
+        }
+        void operator + (const Exception& rhs) {}
+
+        virtual const String& getFullDescription(void) const {return description;}
+
+        virtual int getNumber(void) const throw() {return number;}
+
+        virtual const String &getSource() const { return source; }
+
+        virtual const String &getFile() const { return file; }
+
+        virtual long getLine() const { return line; }
+
+        virtual const String &getDescription(void) const { return description; }
+
+        const char* what() const throw() { return getFullDescription().c_str(); }
+        
+    };
+
+
+    class EXPORT FileNotFoundException : public Exception                                                         
+    {                                                                                                                  
+    public:                                                                                                            
+        FileNotFoundException(int number, const String& description, const String& source, const char* file, long line)
+            : Exception(number, description, source, "FileNotFoundException", file, line) {}
+
+        FileNotFoundException() {}
+    };                                                                                                                 
+
+    class EXPORT IOException : public Exception
+    {
+    public:
+        IOException(int number, const String& description, const String& source, const char* file, long line)
+            : Exception(number, description, source, "IOException", file, line) {}
+
+        IOException() {}
+    };
 }
+
 #endif

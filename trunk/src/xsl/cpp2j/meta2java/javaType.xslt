@@ -262,9 +262,22 @@
 										<xsl:value-of select="'long'"/>
 									</xsl:when>
 									<xsl:otherwise>
-										<!-- add the template angle bracket -->
+										<!-- This would be necessary for e.g. Ogre::Exception
+											 and it's subclasses. But then we get a problem with
+											 our interfaces (parameters must match exactly for
+											 overriding). This could cause runtime errors.
+										<xsl:variable name="fullJavaName" select="
+														if ($param/../../name = 'operator=' or
+															$param/../../name = 'operator =' and
+															$class/inherits/baseClass/@fullBaseClassName
+															 = $fullTypeName)
+														then xbig:getFullJavaName(
+															 $class/@fullName, $class, $root, $config)
+														else xbig:getFullJavaName(
+															 $fullTypeName, $class, $root, $config)"/>
+										 -->
 										<xsl:variable name="fullJavaName" select="xbig:getFullJavaName(
-														$fullTypeName, $class, $root, $config)"/>
+															 $fullTypeName, $class, $root, $config)"/>
 										<xsl:choose>
 											<xsl:when test="$param/type/@pointerPointer = 'true'">
 												<xsl:value-of select="concat(
