@@ -204,7 +204,8 @@
 							<xsl:when test="count($inheritedMethodsForJava/function
 												[name = current()/name]) &gt; 1
 												and not($class/@name = 
-												$config/config/meta/globalmember/classNameForGlobalMember)">
+												$config/config/meta/globalmember/classNameForGlobalMember)
+												and not(./@virt = 'pure-virtual')">
 								<xsl:variable name="currentMethod" select="."/>
 								<xsl:variable name="nameSpaces">
 									<xsl:for-each select="$inheritedMethodsForJava/function
@@ -251,7 +252,7 @@
 								</xsl:choose>
 							</xsl:when>
 
-							<!-- method not overloaded -->
+							<!-- method not overloaded or pure-virtual -->
 							<xsl:otherwise>
 								<xsl:sequence select="''"/>
 							</xsl:otherwise>

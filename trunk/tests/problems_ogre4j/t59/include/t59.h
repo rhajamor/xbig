@@ -10,7 +10,7 @@
  * during the generation of ogre4j
  *
  * Problem:
- * missing parameter, see bug 1728995
+ * overloading and inheritance, see bug 1728995
  ******************************************************************/
 
 #ifdef WIN32
@@ -21,6 +21,7 @@
 
 
 #include <string>
+#include <iostream>
 
 
 namespace Ogre {
@@ -47,6 +48,27 @@ namespace Ogre {
 	};
 
 	class EXPORT TagPoint : public Bone {};
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	class EXPORT SceneQueryListener {};
+	class EXPORT SceneQueryResult {};
+
+	class EXPORT RegionSceneQuery {
+		SceneQueryResult mSQR;
+	public:
+		virtual SceneQueryResult& execute() {return mSQR;}
+		virtual void execute(SceneQueryListener *listener)=0;
+	};
+
+	class EXPORT AxisAlignedBoxSceneQuery : public RegionSceneQuery {
+	public:
+	};
+
+	class EXPORT ConcreteAxisAlignedBoxSceneQuery : public AxisAlignedBoxSceneQuery {
+	public:
+		void execute(SceneQueryListener* listener) {std::cout << "ConcreteAxisAlignedBoxSceneQuery\n";}
+	};
 }
 
 #endif

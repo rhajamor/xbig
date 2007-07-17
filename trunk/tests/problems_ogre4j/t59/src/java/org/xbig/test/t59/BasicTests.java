@@ -5,12 +5,7 @@ package org.xbig.test.t59;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.xbig.Ogre.Vector3;
-import org.xbig.Ogre.Quaternion;
-import org.xbig.Ogre.TagPoint;
-import org.xbig.Ogre.INode;
-import org.xbig.Ogre.IBone;
-import org.xbig.Ogre.Bone;
+import org.xbig.Ogre.*;
 /**
  * @author nenning
  *
@@ -63,4 +58,15 @@ public class BasicTests {
         vec.delete();
         tp.delete();
     }
+
+	@Test
+	public void testRunOverloadedAndOverriddenMethod() {
+	    ISceneQueryListener sql = new SceneQueryListener();
+	    IAxisAlignedBoxSceneQuery aabsq = new ConcreteAxisAlignedBoxSceneQuery();
+
+	    aabsq.execute(sql);
+
+	    aabsq.delete();
+	    sql.delete();
+	}
 }
