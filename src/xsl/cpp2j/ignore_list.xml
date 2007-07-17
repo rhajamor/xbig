@@ -39,10 +39,10 @@
 	<item>Ogre::StringConverter</item>
 
 	<!-- unresolved type 'difference_type' -->
-	<item>Ogre::UTFString::_const_fwd_iterator</item>
-	<item>Ogre::UTFString::_const_rev_iterator</item>
-	<item>Ogre::UTFString::_fwd_iterator</item>
-	<item>Ogre::UTFString::_rev_iterator</item>
+	<item withoutAnyMethods="true">Ogre::UTFString::_const_fwd_iterator</item>
+	<item withoutAnyMethods="true">Ogre::UTFString::_const_rev_iterator</item>
+	<item withoutAnyMethods="true">Ogre::UTFString::_fwd_iterator</item>
+	<item withoutAnyMethods="true">Ogre::UTFString::_rev_iterator</item>
 
 
 	<!-- union -->
@@ -121,6 +121,66 @@
 	<function>Ogre::ProgressiveMesh::PMFaceVertex::getcommonVertex</function>
 	<function>Ogre::ProgressiveMesh::PMFaceVertex::setcommonVertex</function>
 
-	<!-- integer as type parameter -->
+	<!-- integer as type parameter (template &lt; int T &gt; class ExceptionCodeType) -->
 	<item>Ogre::ExceptionCodeType</item>
+
+	<!-- _OgrePrivate -->
+	<item withoutAnyMethods="true">Ogre::MeshSerializerImpl</item>
+	<item withoutAnyMethods="true">Ogre::MeshSerializerImpl_v1_1</item>
+	<item withoutAnyMethods="true">Ogre::MeshSerializerImpl_v1_2</item>
+	<item withoutAnyMethods="true">Ogre::MeshSerializerImpl_v1_3</item>
+	<item withoutAnyMethods="true">Ogre::FileSystemArchiveFactory</item>
+	<item withoutAnyMethods="true">Ogre::HighLevelGpuProgramFactory</item>
+	<item withoutAnyMethods="true">Ogre::UnifiedHighLevelGpuProgramFactory</item>
+	<item withoutAnyMethods="true">Ogre::ZipArchiveFactory</item>
+	<item withoutAnyMethods="true">Ogre::BillboardParticleRenderer::CmdAccurateFacing</item>
+	<item withoutAnyMethods="true">Ogre::BillboardParticleRenderer::CmdBillboardOrigin</item>
+	<item withoutAnyMethods="true">Ogre::BillboardParticleRenderer::CmdBillboardRotationType</item>
+	<item withoutAnyMethods="true">Ogre::BillboardParticleRenderer::CmdBillboardType</item>
+	<item withoutAnyMethods="true">Ogre::BillboardParticleRenderer::CmdCommonDirection</item>
+	<item withoutAnyMethods="true">Ogre::BillboardParticleRenderer::CmdCommonUpVector</item>
+	<item withoutAnyMethods="true">Ogre::BillboardParticleRenderer::CmdPointRendering</item>
+	<item withoutAnyMethods="true">Ogre::BorderPanelOverlayElement::CmdBorderBottomLeftUV</item>
+	<item withoutAnyMethods="true">Ogre::BorderPanelOverlayElement::CmdBorderBottomRightUV</item>
+	<item withoutAnyMethods="true">Ogre::BorderPanelOverlayElement::CmdBorderBottomUV</item>
+	<item withoutAnyMethods="true">Ogre::BorderPanelOverlayElement::CmdBorderLeftUV</item>
+	<item withoutAnyMethods="true">Ogre::BorderPanelOverlayElement::CmdBorderMaterial</item>
+	<item withoutAnyMethods="true">Ogre::BorderPanelOverlayElement::CmdBorderRightUV</item>
+	<item withoutAnyMethods="true">Ogre::BorderPanelOverlayElement::CmdBorderSize</item>
+	<item withoutAnyMethods="true">Ogre::BorderPanelOverlayElement::CmdBorderTopLeftUV</item>
+	<item withoutAnyMethods="true">Ogre::BorderPanelOverlayElement::CmdBorderTopRightUV</item>
+	<item withoutAnyMethods="true">Ogre::BorderPanelOverlayElement::CmdBorderTopUV</item>
+	<item withoutAnyMethods="true">Ogre::ExternalTextureSource::CmdFPS</item>
+	<item withoutAnyMethods="true">Ogre::ExternalTextureSource::CmdInputFileName</item>
+	<item withoutAnyMethods="true">Ogre::ExternalTextureSource::CmdPlayMode</item>
+	<item withoutAnyMethods="true">Ogre::ExternalTextureSource::CmdTecPassState</item>
+	<item withoutAnyMethods="true">Ogre::PanelOverlayElement::CmdTiling</item>
+	<item withoutAnyMethods="true">Ogre::PanelOverlayElement::CmdTransparent</item>
+	<item withoutAnyMethods="true">Ogre::PanelOverlayElement::CmdUVCoords</item>
+	<item withoutAnyMethods="true">Ogre::ParticleSystem::CmdCull</item>
+	<item withoutAnyMethods="true">Ogre::ParticleSystem::CmdEmittedEmitterQuota</item>
+	<item withoutAnyMethods="true">Ogre::ParticleSystem::CmdHeight</item>
+	<item withoutAnyMethods="true">Ogre::ParticleSystem::CmdIterationInterval</item>
+	<item withoutAnyMethods="true">Ogre::ParticleSystem::CmdLocalSpace</item>
+	<item withoutAnyMethods="true">Ogre::ParticleSystem::CmdMaterial</item>
+	<item withoutAnyMethods="true">Ogre::ParticleSystem::CmdNonvisibleTimeout</item>
+	<item withoutAnyMethods="true">Ogre::ParticleSystem::CmdQuota</item>
+	<item withoutAnyMethods="true">Ogre::ParticleSystem::CmdRenderer</item>
+	<item withoutAnyMethods="true">Ogre::ParticleSystem::CmdSorted</item>
+	<item withoutAnyMethods="true">Ogre::ParticleSystem::CmdWidth</item>
+	<item withoutAnyMethods="true">Ogre::TextAreaOverlayElement::CmdAlignment</item>
+	<item withoutAnyMethods="true">Ogre::TextAreaOverlayElement::CmdCaption</item>
+	<item withoutAnyMethods="true">Ogre::TextAreaOverlayElement::CmdCharHeight</item>
+	<item withoutAnyMethods="true">Ogre::TextAreaOverlayElement::CmdColour</item>
+	<item withoutAnyMethods="true">Ogre::TextAreaOverlayElement::CmdColourBottom</item>
+	<item withoutAnyMethods="true">Ogre::TextAreaOverlayElement::CmdColourTop</item>
+	<item withoutAnyMethods="true">Ogre::TextAreaOverlayElement::CmdFontName</item>
+	<item withoutAnyMethods="true">Ogre::TextAreaOverlayElement::CmdSpaceWidth</item>
+	<item withoutAnyMethods="true">Ogre::UnifiedHighLevelGpuProgram::CmdDelegate</item>
+
+	<!-- not in shared lib -->
+	<item withoutAnyMethods="true">Ogre::ILCodecs</item>
+	<item>Ogre::ILImageCodec</item>
+	<item withoutAnyMethods="true">Ogre::ILUtil</item>
+	<function>Ogre::InstancedGeometry::MaterialBucket::getGeometryBucketList</function>
 </ignore_list>

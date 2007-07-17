@@ -61,8 +61,12 @@
 		<xsl:param name="class_prefix" />
 		<xsl:param name="helper_methods" />
 
+		<!-- 
 		<xsl:variable name="isAbstract"
-			select="xbig:areThereUnimplementedAbstractMethods($class)" />
+			select="xbig:areThereUnimplementedAbstractMethods($class)" />		
+		 -->
+		<xsl:variable name="isAbstract"
+			select="$class/@abstract = 'true'" />
 
 		<!-- write file header with copyright information -->
 		<xsl:call-template name="cppFileHeader">
