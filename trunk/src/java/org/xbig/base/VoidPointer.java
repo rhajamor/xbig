@@ -21,25 +21,47 @@
  */
 package org.xbig.base;
 
+/**
+ * Represents the C/C++ type void*.
+ * @see NumberPointer
+ */
 public class VoidPointer extends NativeObject {
 	
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.xbig.base.NativeObject#NativeObject(InstancePointer)
+     */
 	public VoidPointer(InstancePointer pInstance) {
 		super(pInstance);
 	}
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.xbig.base.NativeObject#NativeObject(InstancePointer, boolean)
+     */
 	public VoidPointer(InstancePointer pointer, boolean b) {
 		super(pointer,b);
 	}
 
 	private native void _dispose(long pInstance);
 
+	/**
+	 * @{inheritdoc}
+	 * @see org.xbig.base.NativeObject#delete()
+	 */
 	@Override
 	public void delete() {
 		if(this.remote)
 			throw new RuntimeException("Instance created by the library! It's not allowed to dispose it.");
-		//_dispose(object.pointer);
+		_dispose(object.pointer);
 		throw new RuntimeException("deleting ‘void*’ is undefined");
 	}
+	/**
+	 * @{inheritdoc}
+	 * @see org.xbig.base.NativeObject#equals(java.lang.Object)
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof VoidPointer) {

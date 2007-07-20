@@ -21,12 +21,35 @@
  */
 package org.xbig.base;
 
+/**
+ * Represents a pointer or reference to a native string.
+ * @see NumberPointer
+ */
 public class StringPointer extends NativeObject {
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.xbig.base.NativeObject#NativeObject(InstancePointer)
+     */
 	public StringPointer(InstancePointer pInstance) {
 		super(pInstance);
 	}
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.xbig.base.NativeObject#NativeObject(InstancePointer, boolean)
+     */
+    public StringPointer(InstancePointer pointer, boolean b) {
+        super(pointer,b);
+    }
+
+    /**
+     * Create native variable and initialise it.
+     * 
+     * @param value Value to initialise native value.
+     */
 	public StringPointer(String value) {
 		super(new InstancePointer(_create(value)),false);
 	}
@@ -41,6 +64,10 @@ public class StringPointer extends NativeObject {
 
 	private native void _set(long pInstance, String value);
 
+	/**
+	 * @{inheritdoc}
+	 * @see org.xbig.base.NativeObject#delete()
+	 */
 	@Override
 	public void delete() {
 		if(this.remote)
@@ -63,21 +90,40 @@ public class StringPointer extends NativeObject {
 		return super.equals(obj);
 	}
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.xbig.base.NumberPointer#get()
+     */
 	public String get()
 	{
 		return _get(object.pointer);
 	}
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.xbig.base.NumberPointer#next()
+     */
 	public StringPointer next() {
 		long ptr = _next(object.pointer);
 		if(ptr==0)return null;		
 		return new StringPointer(new InstancePointer(ptr));
 	}
 	
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.xbig.base.NumberPointer#set()
+     */
 	public void set(String value) {
 		_set(object.pointer, value);
 	}
 
+	/**
+	 * @{inheritdoc}
+	 * @see org.xbig.base.NativeObject#toString()
+	 */
 	@Override
 	public String toString() {
 		return _get(object.pointer);

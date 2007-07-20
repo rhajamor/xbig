@@ -21,12 +21,35 @@
  */
 package org.xbig.base;
 
+/**
+ * Represents a pointer or reference to a native integer value.
+ * @see NumberPointer
+ */
 public class IntegerPointer extends NumberPointer<Integer> {
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.xbig.base.NativeObject#NativeObject(InstancePointer)
+     */
 	public IntegerPointer(InstancePointer pInstance) {
 		super(pInstance);
 	}
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.xbig.base.NativeObject#NativeObject(InstancePointer, boolean)
+     */
+    public IntegerPointer(InstancePointer pointer, boolean b) {
+        super(pointer,b);
+    }
+
+    /**
+     * Create native variable and initialise it.
+     * 
+     * @param value Value to initialise native value.
+     */
 	public IntegerPointer(int value) {
 		super(new InstancePointer(_create(value)),false);
 	}
@@ -41,6 +64,10 @@ public class IntegerPointer extends NumberPointer<Integer> {
 
 	private native void _set(long pInstance, int value);
 
+	/**
+	 * @{inheritdoc}
+	 * @see org.xbig.base.NativeObject#delete()
+	 */
 	@Override
 	public void delete() {
 		if(this.remote)
@@ -48,11 +75,19 @@ public class IntegerPointer extends NumberPointer<Integer> {
 		_dispose(object.pointer);
 	}
 	
+	/**
+	 * @{inheritdoc}
+	 * @see org.xbig.base.NumberPointer#doubleValue()
+	 */
 	@Override
 	public double doubleValue() {
 		return _get(object.pointer);
 	}
 
+	/**
+	 * @{inheritdoc}
+	 * @see org.xbig.base.NativeObject#equals(java.lang.Object)
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof IntegerPointer) {
@@ -61,29 +96,53 @@ public class IntegerPointer extends NumberPointer<Integer> {
 		return super.equals(obj);
 	}
 	
+	/**
+	 * @{inheritdoc}
+	 * @see org.xbig.base.NumberPointer#floatValue()
+	 */
 	@Override
 	public float floatValue() {
 		return _get(object.pointer);
 	}
+	/**
+	 * @{inheritdoc}
+	 * @see org.xbig.base.NumberPointer#get()
+	 */
 	public Integer get()
 	{
 		return _get(object.pointer);
 	}
+	/**
+	 * @{inheritdoc}
+	 * @see org.xbig.base.NativeObject#hashCode()
+	 */
 	@Override
 	public int hashCode() {
 		return _get(object.pointer);
 	}
 
+	/**
+	 * @{inheritdoc}
+	 * @see org.xbig.base.NumberPointer#intValue()
+	 */
 	@Override
 	public int intValue() {		
 		return _get(object.pointer);
 	}
 
+	/**
+	 * @{inheritdoc}
+	 * @see org.xbig.base.NumberPointer#longValue()
+	 */
 	@Override
 	public long longValue() {		
 		return _get(object.pointer);
 	}
 
+	/**
+	 * @{inheritdoc}
+	 * @see org.xbig.base.NumberPointer#next()
+	 */
 	@Override
 	public IntegerPointer next() {
 		long ptr = _next(object.pointer);
@@ -91,10 +150,18 @@ public class IntegerPointer extends NumberPointer<Integer> {
 		return new IntegerPointer(new InstancePointer(ptr));
 	}
 	
+	/**
+	 * @{inheritdoc}
+	 * @see org.xbig.base.NumberPointer#set(java.lang.Object)
+	 */
 	public void set(Integer value) {
 		_set(object.pointer, value);
 	}
 
+	/**
+	 * @{inheritdoc}
+	 * @see org.xbig.base.NativeObject#toString()
+	 */
 	@Override
 	public String toString() {
 		return Integer.toString(_get(object.pointer));

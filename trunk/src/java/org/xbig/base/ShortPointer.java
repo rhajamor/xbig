@@ -21,12 +21,35 @@
  */
 package org.xbig.base;
 
+/**
+ * Represents a pointer or reference to a native short value.
+ * @see NumberPointer
+ */
 public class ShortPointer extends NumberPointer<Short> {
 	
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.xbig.base.NativeObject#NativeObject(InstancePointer)
+     */
 	public ShortPointer(InstancePointer pInstance) {
 		super(pInstance);
 	}
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.xbig.base.NativeObject#NativeObject(InstancePointer, boolean)
+     */
+    public ShortPointer(InstancePointer pointer, boolean b) {
+        super(pointer,b);
+    }
+
+    /**
+     * Create native variable and initialise it.
+     * 
+     * @param value Value to initialise native value.
+     */
 	public ShortPointer(short value) {
 		super(new InstancePointer(_create(value)),false);
 	}
@@ -41,16 +64,28 @@ public class ShortPointer extends NumberPointer<Short> {
 
 	private native void _set(long pInstance, short value);
 
+	/**
+	 * @{inheritdoc}
+	 * @see org.xbig.base.NativeObject#delete()
+	 */
 	@Override
 	public void delete() {
 		if(this.remote)
 			throw new RuntimeException("Instance created by the library! It's not allowed to dispose it.");
 		_dispose(object.pointer);		
 	}
+	/**
+	 * @{inheritdoc}
+	 * @see org.xbig.base.NumberPointer#doubleValue()
+	 */
 	@Override
 	public double doubleValue() {
 		return _get(object.pointer);
 	}
+	/**
+	 * @{inheritdoc}
+	 * @see org.xbig.base.NativeObject#equals(java.lang.Object)
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof ShortPointer) {
@@ -58,29 +93,53 @@ public class ShortPointer extends NumberPointer<Short> {
 		}
 		return super.equals(obj);
 	}
+	/**
+	 * @{inheritdoc}
+	 * @see org.xbig.base.NumberPointer#floatValue()
+	 */
 	@Override
 	public float floatValue() {
 		return (float) _get(object.pointer);
 	}
+	/**
+	 * @{inheritdoc}
+	 * @see org.xbig.base.NumberPointer#get()
+	 */
 	public Short get()
 	{
 		return _get(object.pointer);
 	}
+	/**
+	 * @{inheritdoc}
+	 * @see org.xbig.base.NativeObject#hashCode()
+	 */
 	@Override
 	public int hashCode() {
 		return intValue();
 	}
 
+	/**
+	 * @{inheritdoc}
+	 * @see org.xbig.base.NumberPointer#intValue()
+	 */
 	@Override
 	public int intValue() {
 		return (int) _get(object.pointer);
 	}
 
+	/**
+	 * @{inheritdoc}
+	 * @see org.xbig.base.NumberPointer#longValue()
+	 */
 	@Override
 	public long longValue() {
 		return (long) _get(object.pointer);
 	}
 
+	/**
+	 * @{inheritdoc}
+	 * @see org.xbig.base.NumberPointer#next()
+	 */
 	@Override
 	public ShortPointer next() {
 		long ptr = _next(object.pointer);
@@ -88,11 +147,19 @@ public class ShortPointer extends NumberPointer<Short> {
 		return new ShortPointer(new InstancePointer(ptr));
 	}
 	
+	/**
+	 * @{inheritdoc}
+	 * @see org.xbig.base.NumberPointer#set(java.lang.Object)
+	 */
 	public void set(Short value)
 	{
 		_set(object.pointer, value);
 	}
 
+	/**
+	 * @{inheritdoc}
+	 * @see org.xbig.base.NativeObject#toString()
+	 */
 	@Override
 	public String toString() {
 		return Short.toString(get());

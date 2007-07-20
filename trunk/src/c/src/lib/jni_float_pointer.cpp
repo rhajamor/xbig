@@ -10,7 +10,7 @@ JNIEXPORT jlong JNICALL Java_org_xbig_base_FloatPointer__1create
 {
 	float * ptr = new float;
 	*ptr = value;
-	return reinterpret_cast<long>(ptr);
+	return reinterpret_cast<jlong>(ptr);
 }
 
 /*
@@ -59,5 +59,5 @@ JNIEXPORT jlong JNICALL Java_org_xbig_base_FloatPointer__1next
 {
 	float * ptr = reinterpret_cast<float*>(pInstance);
 	ptr++;
-	return reinterpret_cast<long>(ptr);
+	return reinterpret_cast<jlong>(ptr);
 }

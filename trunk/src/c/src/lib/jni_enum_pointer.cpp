@@ -33,7 +33,7 @@ JNIEXPORT jlong JNICALL Java_org_xbig_base_EnumPointer__1_1createEnumPointer
   (JNIEnv *, jclass, jint _jni_value)
 {
 	int* _cpp_this = new int(_jni_value);
-	return reinterpret_cast<long>(_cpp_this);
+	return reinterpret_cast<jlong>(_cpp_this);
 }
 
 /*

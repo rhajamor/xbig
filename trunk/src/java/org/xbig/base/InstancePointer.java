@@ -18,28 +18,23 @@
  * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
  * Place - Suite 330, Boston, MA 02111-1307, USA, or go to
  * http://www.gnu.org/copyleft/lesser.txt.
- * 
- * 
- * InstancePointer.java
- * 
- * Version Information
- * -------------------
- * $Revision: 1.1 $
- * $Date: 2006/09/20 11:36:09 $
- * $Author: bielig $
  */
 package org.xbig.base;
 
 /**
  * Wrapper for native pointer values.
  * 
- * @author Kai Klesatschke <yavin@ogre4j.org>
- * @author Hubert Rung <hubert.rung@netallied.de>
  */
 public class InstancePointer {
-	
+
+    /**
+     * Adress of a native object or primitive value.
+     */
 	public long pointer;
 
+	/**
+	 * Create a new InstancePointer with the adress of a native object or primitive value.
+	 */
 	public InstancePointer(long value) {
 		this.pointer = value;
 	}

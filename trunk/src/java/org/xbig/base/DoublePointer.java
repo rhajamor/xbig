@@ -21,12 +21,35 @@
  */
 package org.xbig.base;
 
+/**
+ * Represents a pointer or reference to a native double value.
+ * @see NumberPointer
+ */
 public class DoublePointer extends NumberPointer<Double> {
 	
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.xbig.base.NativeObject#NativeObject(InstancePointer)
+     */
 	public DoublePointer(InstancePointer pInstance) {
 		super(pInstance);
 	}
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.xbig.base.NativeObject#NativeObject(InstancePointer, boolean)
+     */
+    public DoublePointer(InstancePointer pointer, boolean b) {
+        super(pointer,b);
+    }
+
+    /**
+     * Create native variable and initialise it.
+     * 
+     * @param value Value to initialise native value.
+     */
 	public DoublePointer(double value) {
 		super(new InstancePointer(_create(value)),false);
 	}
@@ -41,16 +64,28 @@ public class DoublePointer extends NumberPointer<Double> {
 
 	private native void _set(long pInstance, double value);
 
+	/**
+	 * @{inheritdoc}
+	 * @see org.xbig.base.NativeObject#delete()
+	 */
 	@Override
 	public void delete() {
 		if(this.remote)
 			throw new RuntimeException("Instance created by the library! It's not allowed to dispose it.");
 		_dispose(object.pointer);		
 	}
+	/**
+	 * @{inheritdoc}
+	 * @see org.xbig.base.NumberPointer#doubleValue()
+	 */
 	@Override
 	public double doubleValue() {
 		return _get(object.pointer);
 	}
+	/**
+	 * @{inheritdoc}
+	 * @see org.xbig.base.NativeObject#equals(java.lang.Object)
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof DoublePointer) {
@@ -58,40 +93,72 @@ public class DoublePointer extends NumberPointer<Double> {
 		}
 		return super.equals(obj);
 	}
+	/**
+	 * @{inheritdoc}
+	 * @see org.xbig.base.NumberPointer#floatValue()
+	 */
 	@Override
 	public float floatValue() {
 		return (float) _get(object.pointer);
 	}
+	/**
+	 * @{inheritdoc}
+	 * @see org.xbig.base.NumberPointer#get()
+	 */
 	public Double get()
 	{
 		return _get(object.pointer);
 	}
+	/**
+	 * @{inheritdoc}
+	 * @see org.xbig.base.NativeObject#hashCode()
+	 */
 	@Override
 	public int hashCode() {
 		long bits = Double.doubleToLongBits(_get(object.pointer));
 		return (int)(bits ^ (bits >>> 32));
 	}
 
+	/**
+	 * @{inheritdoc}
+	 * @see org.xbig.base.NumberPointer#intValue()
+	 */
 	@Override
 	public int intValue() {
 		return (int) _get(object.pointer);
 	}
 
+	/**
+	 * @{inheritdoc}
+	 * @see org.xbig.base.NumberPointer#longValue()
+	 */
 	@Override
 	public long longValue() {
 		return (long) _get(object.pointer);
 	}
 
+	/**
+	 * @{inheritdoc}
+	 * @see org.xbig.base.NumberPointer#next()
+	 */
 	@Override
 	public DoublePointer next() {
 		long ptr = _next(object.pointer);
 		if(ptr==0)return null;		
 		return new DoublePointer(new InstancePointer(ptr));
 	}
+	/**
+	 * @{inheritdoc}
+	 * @see org.xbig.base.NumberPointer#set(java.lang.Object)
+	 */
 	public void set(Double value) {
 		_set(object.pointer, value);
 	}
 
+	/**
+	 * @{inheritdoc}
+	 * @see org.xbig.base.NativeObject#toString()
+	 */
 	@Override
 	public String toString() {
 		return Double.toString(get());

@@ -18,27 +18,20 @@
  * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
  * Place - Suite 330, Boston, MA 02111-1307, USA, or go to
  * http://www.gnu.org/copyleft/lesser.txt.
- * 
- *
- *
- * ULongLong.java
- * 
- * To represent the C++ data type "unsigned long long"
- * 
- * 
- * Date: 2007/05/07
- * Author: jie shen
  */
-
 package org.xbig.base;
 
 import java.lang.RuntimeException;
 import java.lang.NumberFormatException;
 import java.math.BigInteger;
 
+/**
+ * 
+ * To represent the C++ data type "unsigned long long"
+ */
 public class ULongLong {	
 	
-	/*
+	/**
 	 * C++ type "unsigned long long" covers (-9,223,372,036,854,775,808 to 9,223,372,036,854,775,807);
 	 * Java type "long" covers (0 to 18,446,744,073,709,551,615);
 	 * 
@@ -134,6 +127,10 @@ public class ULongLong {
 		}
 	}
 	
+	/**
+	 * @{inheritdoc}
+	 * @see java.lang.Object#toString()
+	 */
 	public String toString() {
 		return this.originalValue.toString();
 	}

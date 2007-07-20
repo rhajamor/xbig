@@ -21,12 +21,35 @@
  */
 package org.xbig.base;
 
+/**
+ * Represents a pointer or reference to a native float value.
+ * @see NumberPointer
+ */
 public class FloatPointer extends NumberPointer<Float> {
 	
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.xbig.base.NativeObject#NativeObject(InstancePointer)
+     */
 	public FloatPointer(InstancePointer pInstance) {
 		super(pInstance);
 	}
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.xbig.base.NativeObject#NativeObject(InstancePointer, boolean)
+     */
+    public FloatPointer(InstancePointer pointer, boolean b) {
+        super(pointer,b);
+    }
+
+    /**
+     * Create native variable and initialise it.
+     * 
+     * @param value Value to initialise native value.
+     */
 	public FloatPointer(float value) {
 		super(new InstancePointer(_create(value)),false);
 	}
@@ -41,16 +64,28 @@ public class FloatPointer extends NumberPointer<Float> {
 
 	private native void _set(long pInstance, float value);
 
+	/**
+	 * @{inheritdoc}
+	 * @see org.xbig.base.NativeObject#delete()
+	 */
 	@Override
 	public void delete() {
 		if(this.remote)
 			throw new RuntimeException("Instance created by the library! It's not allowed to dispose it.");
 		_dispose(object.pointer);		
 	}
+	/**
+	 * @{inheritdoc}
+	 * @see org.xbig.base.NumberPointer#doubleValue()
+	 */
 	@Override
 	public double doubleValue() {
 		return _get(object.pointer);
 	}
+	/**
+	 * @{inheritdoc}
+	 * @see org.xbig.base.NativeObject#equals(java.lang.Object)
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof FloatPointer) {
@@ -58,29 +93,53 @@ public class FloatPointer extends NumberPointer<Float> {
 		}
 		return super.equals(obj);
 	}
+	/**
+	 * @{inheritdoc}
+	 * @see org.xbig.base.NumberPointer#floatValue()
+	 */
 	@Override
 	public float floatValue() {
 		return _get(object.pointer);
 	}
+	/**
+	 * @{inheritdoc}
+	 * @see org.xbig.base.NumberPointer#get()
+	 */
 	public Float get()
 	{
 		return _get(object.pointer);
 	}
+	/**
+	 * @{inheritdoc}
+	 * @see org.xbig.base.NativeObject#hashCode()
+	 */
 	@Override
 	public int hashCode() {
 		return Float.floatToIntBits(_get(object.pointer));
 	}
 
+	/**
+	 * @{inheritdoc}
+	 * @see org.xbig.base.NumberPointer#intValue()
+	 */
 	@Override
 	public int intValue() {
 		return (int) _get(object.pointer);
 	}
 
+	/**
+	 * @{inheritdoc}
+	 * @see org.xbig.base.NumberPointer#longValue()
+	 */
 	@Override
 	public long longValue() {
 		return (long) _get(object.pointer);
 	}
 
+	/**
+	 * @{inheritdoc}
+	 * @see org.xbig.base.NumberPointer#next()
+	 */
 	@Override
 	public FloatPointer next() {
 		long ptr = _next(object.pointer);
@@ -88,10 +147,18 @@ public class FloatPointer extends NumberPointer<Float> {
 		return new FloatPointer(new InstancePointer(ptr));
 	}
 
+	/**
+	 * @{inheritdoc}
+	 * @see org.xbig.base.NumberPointer#set(java.lang.Object)
+	 */
 	public void set(Float value) {
 		_set(object.pointer, value);
 	}
 
+	/**
+	 * @{inheritdoc}
+	 * @see org.xbig.base.NativeObject#toString()
+	 */
 	@Override
 	public String toString() {
 		return Float.toString(get());

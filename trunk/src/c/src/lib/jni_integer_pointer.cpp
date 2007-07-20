@@ -10,7 +10,7 @@ JNIEXPORT jlong JNICALL Java_org_xbig_base_IntegerPointer__1create
 {
 	int * ptr = new int;
 	*ptr = value;
-	return reinterpret_cast<long>(ptr);
+	return reinterpret_cast<jlong>(ptr);
 }
 
 /*
@@ -47,25 +47,13 @@ JNIEXPORT jlong JNICALL Java_org_xbig_base_IntegerPointer__1next
 {
 	int * ptr = reinterpret_cast<int*>(pInstance);
 	ptr++;
-	return reinterpret_cast<long>(ptr);
+	return reinterpret_cast<jlong>(ptr);
 }
 
 /*
  * Class:     base_intPointer
  * Method:    _set
  * Signature: (JI)V
- */
-JNIEXPORT void JNICALL Java_org_xbig_base_IntegerPointer__1set
-  (JNIEnv *env, jobject that, jint pInstance, jint value)
-{
-	int * ptr = reinterpret_cast<int*>(pInstance);
-	*ptr = value;
-}
-
-/*
- * Class:     base_intPointer
- * Method:    _set
- * Signature: (JD)V
  */
 JNIEXPORT void JNICALL Java_org_xbig_base_IntegerPointer__1set
   (JNIEnv *env, jobject that, jlong pInstance, jint value)

@@ -10,7 +10,7 @@ JNIEXPORT jlong JNICALL Java_org_xbig_base_ShortPointer__1create
 {
 	short * ptr = new short;
 	*ptr = value;
-	return reinterpret_cast<long>(ptr);
+	return reinterpret_cast<jlong>(ptr);
 }
 
 /*
@@ -47,7 +47,7 @@ JNIEXPORT jlong JNICALL Java_org_xbig_base_ShortPointer__1next
 {
 	short * ptr = reinterpret_cast<short*>(pInstance);
 	ptr++;
-	return reinterpret_cast<long>(ptr);
+	return reinterpret_cast<jlong>(ptr);
 }
 
 /*

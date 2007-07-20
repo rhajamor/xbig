@@ -18,18 +18,17 @@
  * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
  * Place - Suite 330, Boston, MA 02111-1307, USA, or go to
  * http://www.gnu.org/copyleft/lesser.txt.
- * 
- *
- * NativeObject.java
- * 
- * Version Information
- * -------------------
- * $Revision: 1.1 $
- * $Date: 2006/09/20 11:36:09 $
- * $Author: bielig $
  */
 package org.xbig.base;
 
+/**
+ * Baseclass of all generated classes.
+ * This class holdes an InstancePointer which 
+ * contains the adress of a C++ Object this Java object
+ * corresponds to. All method calls of generated classes
+ * are delegated to that corresponding C++ object.
+ * 
+ */
 public abstract class NativeObject implements INativeObject {
 
 	/**
