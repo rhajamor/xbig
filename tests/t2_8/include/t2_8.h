@@ -44,6 +44,8 @@ public:
 	void f(B);
 	B g(B);
 
+	static B h;
+
 private:
 	B* b_ptr;
 	B& b_ref;

@@ -20,6 +20,7 @@ public class BasicTests {
 	public void useObjectPointersAndReferences() {
 		A a = new A();
 		B b = new B();
+		b.seti(100);
 		IB b2;
 
 		a.a(b);
@@ -52,6 +53,12 @@ public class BasicTests {
 
 		a.delete();
 		b.delete();
+
+		final int value3 = 17;
+		IB staticB = A.geth();
+		staticB.seti(value3);
+		Assert.assertEquals(value3, A.geth().geti());
+
 	}
 
 	@Test

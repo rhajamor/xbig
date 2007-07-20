@@ -154,7 +154,9 @@
 		<xsl:variable name="objectReturnedByValue" select="if($method/@passedBy = 'value' and
       						count($config/config/java/types/type[@meta = $resolvedType]) = 0
       						and $config/config/java/passObjectsReturnedByValueAsParameters = 'yes'
-      						and not(xbig:isEnum($resolvedType, $class, $root)))
+      						and not(xbig:isEnum($resolvedType, $class, $root))
+      						and not($method/@public_attribute_getter = 'true'
+      						 and $method/@static = 'true'))
       						then true() else false()" as="xs:boolean"/>
 
 	    <!-- write return type if available-->

@@ -990,7 +990,9 @@
 
 							<!-- we have to move local objects to the heap -->
 							<xsl:when
-								test="$method/@passedBy = 'value'">
+								test="$method/@passedBy = 'value' and
+										not($method/@public_attribute_getter = 'true'
+										 and $method/@static = 'true')">
 								<xsl:value-of select="'new '" />
 								<xsl:choose>
 									<xsl:when
@@ -1005,6 +1007,11 @@
 									</xsl:otherwise>
 								</xsl:choose>
 								<xsl:value-of select="'('" />
+							</xsl:when>
+
+							<xsl:when
+								test="$method/@passedBy = 'value'">
+								<xsl:text>&amp;</xsl:text>
 							</xsl:when>
 
 							<!-- passed by reference -->
@@ -1034,7 +1041,9 @@
 					test="(xbig:isClassOrStruct($fullTypeName, $class, $root) or
 								xbig:isTemplateTypedef($fullTypeName, $class, $root) or
 								contains($method/type, '&lt;')
-								) and $method/@passedBy = 'value'">
+								) and $method/@passedBy = 'value' and not(
+								 $method/@public_attribute_getter = 'true'
+								 and $method/@static = 'true')">
 					<xsl:value-of
 						select="replace($line13, '#optional_closing_bracket#', ')')" />
 				</xsl:when>

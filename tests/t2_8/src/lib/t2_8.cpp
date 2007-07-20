@@ -4,16 +4,17 @@
 #include <iostream>
 
 B::B() {
-	std::cout << "t2_8: B::B()" << std::endl;
+	std::cout << "t2_8: B::B(), adress: " << long(this) << std::endl;
 }
 
 B::B(const B& rhs) {
-	std::cout << "t2_8: B::B(const B&)" << std::endl;
+	std::cout << "t2_8: B::B(const B&), adress: " << long(this) << std::endl;
 	i = rhs.i;
 }
 
 B::~B() {
-	std::cout << "t2_8: B::~B()" << std::endl;
+	std::cout << "t2_8: B::~B(), adress: " << long(this) 
+			  << ", value: " << i << std::endl;
 }
 
 int B::get1() {
@@ -68,3 +69,5 @@ B A::g(B para) {
 	b_val = para;
 	return b_val;
 }
+
+B A::h;
