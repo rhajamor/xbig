@@ -10,7 +10,7 @@ JNIEXPORT jlong JNICALL Java_org_xbig_base_DoublePointer__1create
 {
 	double * ptr = new double;
 	*ptr = value;
-	return reinterpret_cast<long>(ptr);
+	return reinterpret_cast<jlong>(ptr);
 }
 
 /*
@@ -47,7 +47,7 @@ JNIEXPORT jlong JNICALL Java_org_xbig_base_DoublePointer__1next
 {
 	double * ptr = reinterpret_cast<double*>(pInstance);
 	ptr++;
-	return reinterpret_cast<long>(ptr);
+	return reinterpret_cast<jlong>(ptr);
 }
 
 /*

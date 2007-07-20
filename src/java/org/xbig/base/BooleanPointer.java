@@ -21,12 +21,35 @@
  */
 package org.xbig.base;
 
+/**
+ * Represents a pointer or reference to a native boolean value.
+ * @see NumberPointer
+ */
 public class BooleanPointer extends NumberPointer<Boolean> {
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.xbig.base.NativeObject#NativeObject(InstancePointer)
+     */
 	public BooleanPointer(InstancePointer pInstance) {
 		super(pInstance);
 	}
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.xbig.base.NativeObject#NativeObject(InstancePointer, boolean)
+     */
+    public BooleanPointer(InstancePointer pointer, boolean b) {
+        super(pointer,b);
+    }
+
+    /**
+     * Create native variable and initialise it.
+     * 
+     * @param value Value to initialise native value.
+     */
 	public BooleanPointer(int value) {
 		super(new InstancePointer(_create(value)),false);
 	}
@@ -41,6 +64,10 @@ public class BooleanPointer extends NumberPointer<Boolean> {
 
 	private native void _set(long pInstance, boolean value);
 
+	/**
+	 * @{inheritdoc}
+	 * @see org.xbig.base.NativeObject#delete()
+	 */
 	@Override
 	public void delete() {
 		if(this.remote)
@@ -48,6 +75,10 @@ public class BooleanPointer extends NumberPointer<Boolean> {
 		_dispose(object.pointer);
 	}
 	
+	/**
+	 * @{inheritdoc}
+	 * @see org.xbig.base.NumberPointer#doubleValue()
+	 */
 	@Override
 	public double doubleValue() {
 		if(_get(object.pointer))
@@ -55,6 +86,10 @@ public class BooleanPointer extends NumberPointer<Boolean> {
 		return 0.0;
 	}
 
+	/**
+	 * @{inheritdoc}
+	 * @see org.xbig.base.NativeObject#equals(java.lang.Object)
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof BooleanPointer) {
@@ -63,16 +98,28 @@ public class BooleanPointer extends NumberPointer<Boolean> {
 		return super.equals(obj);
 	}
 	
+	/**
+	 * @{inheritdoc}
+	 * @see org.xbig.base.NumberPointer#floatValue()
+	 */
 	@Override
 	public float floatValue() {
 		if(_get(object.pointer))
 			return 1.0F;
 		return 0.0F;
 	}
+	/**
+	 * @{inheritdoc}
+	 * @see org.xbig.base.NumberPointer#get()
+	 */
 	public Boolean get()
 	{
 		return _get(object.pointer);
 	}
+	/**
+	 * @{inheritdoc}
+	 * @see org.xbig.base.NativeObject#hashCode()
+	 */
 	@Override
 	public int hashCode() {
 		if(_get(object.pointer))
@@ -80,6 +127,10 @@ public class BooleanPointer extends NumberPointer<Boolean> {
 		return 0;
 	}
 
+	/**
+	 * @{inheritdoc}
+	 * @see org.xbig.base.NumberPointer#intValue()
+	 */
 	@Override
 	public int intValue() {		
 		if(_get(object.pointer))
@@ -87,6 +138,10 @@ public class BooleanPointer extends NumberPointer<Boolean> {
 		return 0;
 	}
 
+	/**
+	 * @{inheritdoc}
+	 * @see org.xbig.base.NumberPointer#longValue()
+	 */
 	@Override
 	public long longValue() {		
 		if(_get(object.pointer))
@@ -94,6 +149,10 @@ public class BooleanPointer extends NumberPointer<Boolean> {
 		return 0L;
 	}
 
+	/**
+	 * @{inheritdoc}
+	 * @see org.xbig.base.NumberPointer#next()
+	 */
 	@Override
 	public BooleanPointer next() {
 		long ptr = _next(object.pointer);
@@ -101,10 +160,18 @@ public class BooleanPointer extends NumberPointer<Boolean> {
 		return new BooleanPointer(new InstancePointer(ptr));
 	}
 	
+	/**
+	 * @{inheritdoc}
+	 * @see org.xbig.base.NumberPointer#set(java.lang.Object)
+	 */
 	public void set(Boolean value) {
 		_set(object.pointer, value);
 	}
 
+	/**
+	 * @{inheritdoc}
+	 * @see org.xbig.base.NativeObject#toString()
+	 */
 	@Override
 	public String toString() {
 		return Boolean.toString(_get(object.pointer));

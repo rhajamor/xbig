@@ -26,14 +26,23 @@ package org.xbig.base;
  * int. This allows the user to work with primitive values returned in a pointer
  * or by reference.
  * 
- * @author Kai Klesatschke
  */
 public abstract class NumberPointer<T> extends NativeObject {
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.xbig.base.NativeObject#NativeObject(InstancePointer)
+     */
 	public NumberPointer(InstancePointer pInstance) {
 		super(pInstance);
 	}
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.xbig.base.NativeObject#NativeObject(InstancePointer, boolean)
+     */
 	public NumberPointer(InstancePointer pointer, boolean b) {
 		super(pointer,b);
 	}
@@ -112,5 +121,5 @@ public abstract class NumberPointer<T> extends NativeObject {
 	/**
 	 * @return The pointer to the next number in memory. 
 	 */
-	public abstract NumberPointer next();
+	public abstract NumberPointer< T > next();
 }

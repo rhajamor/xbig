@@ -10,7 +10,7 @@ JNIEXPORT jlong JNICALL Java_org_xbig_base_CharPointer__1create
 {
 	char * ptr = new char;
 	*ptr = value;
-	return reinterpret_cast<long>(ptr);
+	return reinterpret_cast<jlong>(ptr);
 }
 
 /*
@@ -47,19 +47,7 @@ JNIEXPORT jlong JNICALL Java_org_xbig_base_CharPointer__1next
 {
 	char * ptr = reinterpret_cast<char*>(pInstance);
 	ptr++;
-	return reinterpret_cast<long>(ptr);
-}
-
-/*
- * Class:     base_CharPointer
- * Method:    _set
- * Signature: (JC)V
- */
-JNIEXPORT void JNICALL Java_org_xbig_base_CharPointer__1set
-  (JNIEnv *env, jobject that, jlong pInstance, jbyte value)
-{
-	char * ptr = reinterpret_cast<char*>(pInstance);
-	*ptr = value;
+	return reinterpret_cast<jlong>(ptr);
 }
 
 /*

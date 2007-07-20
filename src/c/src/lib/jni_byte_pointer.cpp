@@ -10,7 +10,7 @@ JNIEXPORT jlong JNICALL Java_org_xbig_base_BytePointer__1create
 {
 	signed char * ptr = new signed char;
 	*ptr = value;
-	return reinterpret_cast<long>(ptr);
+	return reinterpret_cast<jlong>(ptr);
 }
 
 /*
@@ -47,7 +47,7 @@ JNIEXPORT jlong JNICALL Java_org_xbig_base_BytePointer__1next
 {
 	signed char * ptr = reinterpret_cast<signed char*>(pInstance);
 	ptr++;
-	return reinterpret_cast<long>(ptr);
+	return reinterpret_cast<jlong>(ptr);
 }
 
 /*

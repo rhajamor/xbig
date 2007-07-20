@@ -9,8 +9,8 @@ JNIEXPORT jlong JNICALL Java_org_xbig_base_BooleanPointer__1create
   (JNIEnv *env, jclass that, jboolean value)
 {
 	bool * ptr = new bool;
-	*ptr = value;
-	return reinterpret_cast<long>(ptr);
+	*ptr = value ? 1 : 0;
+	return reinterpret_cast<jlong>(ptr);
 }
 
 /*
@@ -47,7 +47,7 @@ JNIEXPORT jlong JNICALL Java_org_xbig_base_BooleanPointer__1next
 {
 	bool * ptr = reinterpret_cast<bool*>(pInstance);
 	ptr++;
-	return reinterpret_cast<long>(ptr);
+	return reinterpret_cast<jlong>(ptr);
 }
 
 /*
@@ -59,7 +59,7 @@ JNIEXPORT void JNICALL Java_org_xbig_base_BooleanPointer__1set
   (JNIEnv *env, jobject that, jboolean pInstance, jboolean value)
 {
 	bool * ptr = reinterpret_cast<bool*>(pInstance);
-	*ptr = value;
+	*ptr = value ? 1 : 0;
 }
 
 /*
@@ -71,5 +71,5 @@ JNIEXPORT void JNICALL Java_org_xbig_base_BooleanPointer__1set
   (JNIEnv *env, jobject that, jlong pInstance, jboolean value)
 {
 	bool * ptr = reinterpret_cast<bool*>(pInstance);
-	*ptr = value;
+	*ptr = value ? 1 : 0;
 }

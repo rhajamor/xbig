@@ -10,7 +10,7 @@ JNIEXPORT jlong JNICALL Java_org_xbig_base_LongPointer__1create
 {
 	long * ptr = new long;
 	*ptr = value;
-	return reinterpret_cast<long>(ptr);
+	return reinterpret_cast<jlong>(ptr);
 }
 
 /*
@@ -47,7 +47,7 @@ JNIEXPORT jlong JNICALL Java_org_xbig_base_LongPointer__1next
 {
 	long * ptr = reinterpret_cast<long*>(pInstance);
 	ptr++;
-	return reinterpret_cast<long>(ptr);
+	return reinterpret_cast<jlong>(ptr);
 }
 
 /*

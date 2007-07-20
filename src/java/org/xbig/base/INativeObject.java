@@ -18,18 +18,13 @@
  * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
  * Place - Suite 330, Boston, MA 02111-1307, USA, or go to
  * http://www.gnu.org/copyleft/lesser.txt.
- * 
- *
- * NativeObject.java
- * 
- * Version Information
- * -------------------
- * $Revision: 1.1 $
- * $Date: 2006/09/20 11:36:09 $
- * $Author: nenning $
  */
 package org.xbig.base;
 
+/**
+ *
+ * @see NativeObject
+ */
 public interface INativeObject {
 
 	/**
@@ -40,9 +35,12 @@ public interface INativeObject {
 	InstancePointer getInstancePointer();
 
 	/**
+	 * Deletes the corresponding C++ object.
+	 * <p>
 	 * Subclasses must implement this but if the native instance was created by
 	 * the underlying library the native call to dispose must <b>not</b>
 	 * happen!
+	 * </p>
 	 * 
 	 * @see #remote
 	 */
