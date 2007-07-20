@@ -80,7 +80,9 @@
 		<xsl:variable name="objectReturnedByValue" select="if($method/@passedBy = 'value' and
       						count($config/config/java/types/type[@meta = $resolvedType]) = 0
       						and $config/config/java/passObjectsReturnedByValueAsParameters = 'yes'
-      						and not(xbig:isEnum($resolvedType, $class, $root)))
+      						and not(xbig:isEnum($resolvedType, $class, $root))
+      						and not($method/@public_attribute_getter = 'true'
+      						 and $method/@static = 'true'))
       						then true() else false()"/>
 
 		<!-- if an object is returned by value or a parametrized template is returned -->
@@ -256,7 +258,9 @@
 		<xsl:if test="contains($resolvedType, '&lt;')"><!-- for returned parametrized templates -->
 			<xsl:text>))</xsl:text>
 			<!-- we have copied the returned object to the heap -->
-			<xsl:if test="$method/@passedBy = 'value'">
+			<xsl:if test="$method/@passedBy = 'value' and
+						not($method/@public_attribute_getter = 'true'
+      					 and $method/@static = 'true')">
 				<xsl:text>, false</xsl:text>
 			</xsl:if>
 			<!-- not copied to heap, but parametrized templates as return values are always passed -->
@@ -267,14 +271,18 @@
 		<xsl:if test="xbig:isTemplateTypedef($fullTypeName, $class, $root)">
 			<xsl:text>))</xsl:text>
 			<!-- we have copied the returned object to the heap -->
-			<xsl:if test="$method/@passedBy = 'value'">
+			<xsl:if test="$method/@passedBy = 'value' and
+						not($method/@public_attribute_getter = 'true'
+      					 and $method/@static = 'true')">
 				<xsl:text>, false</xsl:text>
 			</xsl:if>
 		</xsl:if>
 		<xsl:if test="xbig:isClassOrStruct($fullTypeName, $class, $root)">
 			<xsl:text>))</xsl:text>
 			<!-- we have copied the returned object to the heap -->
-			<xsl:if test="$method/@passedBy = 'value'">
+			<xsl:if test="$method/@passedBy = 'value' and
+						not($method/@public_attribute_getter = 'true'
+      					 and $method/@static = 'true')">
 				<xsl:text>, false</xsl:text>
 			</xsl:if>
 		</xsl:if>

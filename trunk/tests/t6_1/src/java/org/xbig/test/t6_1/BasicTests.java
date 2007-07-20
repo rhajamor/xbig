@@ -7,7 +7,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.xbig.base.InstancePointer;
 import org.xbig.base.NativeObject;
-import org.xbig.base.ParametrizedTemplateReturnPlaceHolder;
 import org.xbig.C;
 import org.xbig.IA;
 import org.xbig.IC;
