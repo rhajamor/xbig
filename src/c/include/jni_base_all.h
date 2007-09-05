@@ -24,7 +24,6 @@
 #ifndef _Included_jni_base_all_
 #define _Included_jni_base_all_
 
-#include "Ogre4JStableHeaders.h"
 #include "jni_char_pointer.h"
 #include "jni_double_pointer.h"
 #include "jni_float_pointer.h"

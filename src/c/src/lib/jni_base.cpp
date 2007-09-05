@@ -29,8 +29,8 @@ std::string org::xbig::jni::to_stdstring(JNIEnv* env, jstring jString) {
 }
 
 std::wstring org::xbig::jni::to_stdwstring(JNIEnv* env, jstring jString) {
-	const char* c_str = env->GetStringUTFChars(jString, JNI_FALSE); // false: create a copy
-	return std::wstring((wchar_t*)c_str);
+	const wchar_t* c_str = env->GetStringChars(jString, JNI_FALSE); // false: create a copy
+	return std::wstring(c_str);
 }
 
 char* org::xbig::jni::to_cstring(JNIEnv* env, jstring jString) {
@@ -49,5 +49,5 @@ jstring org::xbig::jni::to_jstring(JNIEnv* env, const char* str) {
 }
 
 jstring org::xbig::jni::to_jstring(JNIEnv* env, const std::wstring& str) {
-	return env->NewStringUTF((const char*)str.c_str());
+	return env->NewString(str.c_str(), str.length());
 }
