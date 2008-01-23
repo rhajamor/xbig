@@ -24,16 +24,16 @@
 	Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 	http://www.gnu.org/copyleft/lesser.txt.
 	
-	Author: Frank Bielig
+	Author: Kai Klesatschke
 	
 -->
 
 
-<project name="t1" default="all" basedir=".">
+<project name="t01" default="all" basedir=".">
 
 	<property name="dir.cur" location="." />
-	<property name="dir.top" location="../.." />
-	<property name="lib.name" value="t1" />
+	<property name="dir.top" location="../../.." />
+	<property name="lib.name" value="t01" />
 	
 	<import file="${dir.top}/src/ant/cpp2j.xml" />
 	
@@ -42,16 +42,11 @@
 
 	<!-- Compilation of test library -->
 	<target name="compile-lib-base" depends="init">
-		<cpp-shared-lib name="${lib.name}" />
-		<cpp-shared-test name="simple" libs="${lib.name}" />
+		<cpp-shared-lib name="t01" />
+		<cpp-shared-test name="simple" libs="t01" />
 	</target>
 
-	<target name="compile-base-lib">
-		<ant dir="../../src/java" inheritAll="false"/>
-		<ant dir="../../src/c" inheritAll="false"/>
-	</target>
-
-	<target name="all" depends="compile-base-lib, compile-lib-base, javalib-test"/>
+	<target name="all" depends="compile-lib-base, javalib-test"></target>
 
 	<target name="clean" depends="cpp-clean">
 		<delete dir="${dir.cpp.build}" />
