@@ -56,3 +56,15 @@ JNIEXPORT jbyte JNICALL Java_org_xbig_base_NativeBuffer__1getIndex
 	unsigned char* buffer = reinterpret_cast<unsigned char*>(pInstance);
 	return buffer[index];
 }
+
+/*
+ * Class:     base_NativeBuffer
+ * Method:    _set
+ * Signature: (J)C
+ */
+JNIEXPORT void JNICALL Java_org_xbig_base_NativeBuffer__1setIndex
+  (JNIEnv *, jobject, jlong pInstance, jint index, jbyte value)
+{
+	unsigned char* buffer = reinterpret_cast<unsigned char*>(pInstance);
+	buffer[index] = value;
+}

@@ -94,11 +94,37 @@ public class NativeBuffer extends NativeObject {
     private native byte _getIndex(long pInstance, int index);
 
     /**
+     * Set value at a given index.
+     * 
+     * @param index Index to set.
+     * @param value Value to set.
+     */
+    public void setIndex(int index, byte value) {
+        if (this.deleted) {
+            throw new IllegalStateException();
+        }
+        if (index < 0 || index > this.size) {
+            throw new IllegalArgumentException();
+        }
+        _setIndex(object.pointer, index, value);
+    }
+    private native void _setIndex(long pInstance, int index, byte value);
+
+    /**
      * Get size of this buffer.
      * 
      * @return Size of this buffer.
      */
     public int getSize() {
         return this.size;
+    }
+
+    /**
+     * Get a VoidPointer for this buffer.
+     * 
+     * @return VoidPointer pointing at this buffer.
+     */
+    public VoidPointer getVoidPointer() {
+        return new VoidPointer(new InstancePointer(object.pointer), true);
     }
 }
