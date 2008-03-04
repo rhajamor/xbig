@@ -23,9 +23,24 @@
 
 #include <iostream>
 
+#ifdef WIN32
+#include <windows.h>
+#endif
+
 std::string org::xbig::jni::to_stdstring(JNIEnv* env, jstring jString) {
+#ifdef WIN32
+	const std::wstring wideString(env->GetStringChars(jString, JNI_FALSE)); // false: create a copy
+        char * dest = new char[ wideString.length() + 1 ];
+        WideCharToMultiByte( CP_ACP, 0, wideString.c_str(), (int) wideString.length(),
+                             dest, (int) wideString.length(), NULL, NULL );
+        dest[ wideString.length() ] = 0; // null termination
+        std::string returnValue( dest );
+        delete[] dest;
+        return returnValue;
+#else
 	const char* c_str = env->GetStringUTFChars(jString, JNI_FALSE); // false: create a copy
 	return std::string(c_str);
+#endif
 }
 
 std::wstring org::xbig::jni::to_stdwstring(JNIEnv* env, jstring jString) {
@@ -34,17 +49,20 @@ std::wstring org::xbig::jni::to_stdwstring(JNIEnv* env, jstring jString) {
 }
 
 char* org::xbig::jni::to_cstring(JNIEnv* env, jstring jString) {
+	// TODO platform specific conversion
 	char* c_str = (char*)env->GetStringUTFChars(jString, JNI_FALSE); // false: create a copy
 	return c_str;
 }
 
 
 jstring org::xbig::jni::to_jstring(JNIEnv* env, const std::string& str) {
+	// TODO platform specific conversion
 	return env->NewStringUTF(str.c_str());
 }
 
 
 jstring org::xbig::jni::to_jstring(JNIEnv* env, const char* str) {
+	// TODO platform specific conversion
 	return env->NewStringUTF(str);
 }
 
