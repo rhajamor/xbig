@@ -38,8 +38,8 @@
 	<property name="cpp.compiler" value="gcc" />
 	<property name="cpp.platform" value="linux" />
 	<property name="cpp.api" value="default" />
-	<property name="cpp.debug" value="true" />
-	<property name="cpp.tasks" value="cpptasks-1.0.0.b4.jar" />
+	<property name="cpp.debug" value="false" />
+	<property name="cpp.tasks" value="cpptasks.jar" />
 
 	<property name="dir.cpp.base" value="${dir.cur}" />
 	<property name="dir.cpp.inc" value="${dir.cpp.base}/include" />
