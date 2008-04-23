@@ -57,7 +57,7 @@
 
 				<libset libs="dl" unless="cpp.is-win32" />
 				<libset libs="stdc++" if="cpp.use-gcc" />
-				<libset libs="gcc_s" if="cpp.use-gcc" />
+				<!--<libset libs="gcc_s" if="cpp.use-gcc" />-->
 				<libraries />
 				<morelibraries />
 

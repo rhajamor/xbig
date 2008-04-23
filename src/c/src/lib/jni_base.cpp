@@ -29,7 +29,7 @@
 
 std::string org::xbig::jni::to_stdstring(JNIEnv* env, jstring jString) {
 #ifdef WIN32
-	const std::wstring wideString(env->GetStringChars(jString, JNI_FALSE)); // false: create a copy
+	const std::wstring wideString((const wchar_t*)env->GetStringChars(jString, JNI_FALSE)); // false: create a copy
         char * dest = new char[ wideString.length() + 1 ];
         WideCharToMultiByte( CP_ACP, 0, wideString.c_str(), (int) wideString.length(),
                              dest, (int) wideString.length(), NULL, NULL );
@@ -44,8 +44,8 @@ std::string org::xbig::jni::to_stdstring(JNIEnv* env, jstring jString) {
 }
 
 std::wstring org::xbig::jni::to_stdwstring(JNIEnv* env, jstring jString) {
-	const wchar_t* c_str = env->GetStringChars(jString, JNI_FALSE); // false: create a copy
-	return std::wstring(c_str);
+	const wchar_t* c_str = (const wchar_t* ) env->GetStringChars(jString, JNI_FALSE); // false: create a copy
+ 	return std::wstring(c_str);
 }
 
 char* org::xbig::jni::to_cstring(JNIEnv* env, jstring jString) {
@@ -67,5 +67,5 @@ jstring org::xbig::jni::to_jstring(JNIEnv* env, const char* str) {
 }
 
 jstring org::xbig::jni::to_jstring(JNIEnv* env, const std::wstring& str) {
-	return env->NewString(str.c_str(), str.length());
+	return env->NewString((const jchar*)str.c_str(), str.length());
 }

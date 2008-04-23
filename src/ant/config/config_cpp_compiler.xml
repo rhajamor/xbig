@@ -33,6 +33,8 @@
 
 <project name="config.cpp.compiler" basedir="../../..">
 
+	<targetplatform osfamily="mac"/>
+
 	<compiler id="base-msvc" name="msvc">
 		<!--  target Pentium Pro   -->
 		<compilerarg value="/G6" />
