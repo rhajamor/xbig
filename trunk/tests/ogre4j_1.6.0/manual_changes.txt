@@ -1,0 +1,13 @@
+Following files contain unicode characters 
+in comments which cause problems with the 
+java xml parser. They have been removed:
+- OgreCompiler2Pass.h
+- OgreDynLib.h
+- OgreParticleEmitter.h
+- OgreParticleSystem.h
+
+
+
+In OgreUTFString.h the base class of _base_iterator
+has been removed as it caused problems and is not
+necessary for our java binding.
