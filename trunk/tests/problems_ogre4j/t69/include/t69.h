@@ -19,6 +19,7 @@
 	#define EXPORT
 #endif
 
+#include <stdlib.h>
 #include <memory>
 #include <limits>
 #include <string>
