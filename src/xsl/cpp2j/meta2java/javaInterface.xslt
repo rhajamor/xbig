@@ -110,9 +110,16 @@
 		<xsl:if test="$class/@template  and
 					not($ignore_list/ignore_list/item[. = $class/@fullName])">
 			<xsl:text>&#32;&lt;&#32;</xsl:text>
+
+			<!-- OGRE 1.6 custom mem alloc problem
+			     we could generate something like class Foo < T extends Bar > here.
+			     Bar would be @templateType.
 			<xsl:for-each
 				select="$class/templateparameters/templateparameter
 								[@templateType = 'class' or @templateType = 'typename']">
+			-->
+			<xsl:for-each
+				select="$class/templateparameters/templateparameter">
 				<xsl:value-of select="@templateDeclaration" />
 
 				<!-- outcommented for primitive types as template parameters -->
@@ -137,6 +144,7 @@
 				<!-- find and print java name of baseclass -->
 				<!-- TODO check what happens if there is a typedef for a template
 						  which inherits something -->
+
 				<xsl:choose>
 					<!-- this class is a typedef for a template -->
 					<xsl:when test="./@originalTypedefBasetype">
@@ -152,6 +160,7 @@
 										</xsl:element>
 									</xsl:element>
 								</xsl:variable>
+
 								<xsl:call-template name="javaType">
 									<xsl:with-param name="config" select="$config"/>
 									<xsl:with-param name="param" select="$generatedParam"/>
@@ -195,7 +204,7 @@
 					<!-- inheritance without templates -->
 					<xsl:otherwise>
 						<xsl:value-of select="xbig:getFullJavaName(
-											./@fullBaseClassName, $class, $root, $config)" />
+											xbig:resolveTypedef(./@fullBaseClassName, $class, $root), $class, $root, $config)" />
 					</xsl:otherwise>
 				</xsl:choose>
 

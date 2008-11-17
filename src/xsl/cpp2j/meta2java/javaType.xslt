@@ -291,6 +291,34 @@
 								</xsl:choose>
 							</xsl:when>
 
+							<!-- if this type is an enum constant -->
+							<xsl:when test="xbig:isEnumConstant($fullTypeName, $class, $root)">
+								<xsl:choose>
+									<xsl:when test="$writingNativeMethod eq true()">
+										<xsl:value-of select="if ($param/@passedBy = 'pointer')
+																then 'long'
+																else 'int'"/>
+									</xsl:when>
+									<xsl:otherwise>
+										<xsl:variable name="fullJavaName" select="
+																xbig:getFullJavaClassAndNotInterfaceName(
+																xbig:getEnumTypeForEnumConstant($fullTypeName, $class, $root), $class, $root, $config)"/>
+										<xsl:choose>
+											<xsl:when test="$param/type/@pointerPointer = 'true'">
+												<xsl:value-of select="concat(
+														$pointerPointerClass, '&lt;', $fullJavaName, '&gt;')"/>
+											</xsl:when>
+											<xsl:otherwise>
+												<xsl:value-of select="if ($param/@passedBy = 'pointer')
+																		then concat('EnumPointer &lt; ',
+																			$fullJavaName, ' &gt;')
+																		else $fullJavaName"/>
+											</xsl:otherwise>
+										</xsl:choose>
+									</xsl:otherwise>
+								</xsl:choose>
+							</xsl:when>
+
 							<!-- if type is not found and a native method is generated -> use long -->
 							<xsl:when test="$writingNativeMethod eq true()">
 								<xsl:value-of select="'long'"/>
@@ -305,7 +333,9 @@
 												$pointerPointerClass, '&lt;', $fullJavaName, '&gt;')"/>
 									</xsl:when>
 									<xsl:otherwise>
-										<xsl:value-of select="$fullJavaName"/>
+										<!-- Final else branch. Use general Object to avoid compiler errors. -->
+										<!-- <xsl:value-of select="$fullJavaName"/> -->
+										<xsl:value-of select="'Object'"/>
 									</xsl:otherwise>
 								</xsl:choose>
 							</xsl:otherwise>

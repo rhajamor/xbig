@@ -241,6 +241,68 @@
 
 
 	<xd:doc type="function">
+		<xd:short>Checks if a string is an enum constant.</xd:short>
+		<xd:param name="type">
+			String to be checked.
+		</xd:param>
+		<xd:param name="currentNode">
+			Meta class, struct or namespace which contains type.
+		</xd:param>
+		<xd:param name="inputTreeRoot">
+			Root of input tree. Usually selected with '/'.
+		</xd:param>
+	</xd:doc>
+	<xsl:function name="xbig:isEnumConstant" as="xs:boolean">
+		<xsl:param name="type" />
+		<xsl:param name="currentNode" />
+		<xsl:param name="inputTreeRoot" />
+
+		<xsl:variable name="fullName" select="$type" />
+
+		<xsl:choose>
+			<xsl:when
+				test="boolean($inputTreeRoot//enum[@name = $fullName])">
+				<xsl:value-of select="true()" />
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="false()" />
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:function>
+
+
+	<xd:doc type="function">
+		<xd:short>Returns enum type for an enum constant.</xd:short>
+		<xd:param name="enumConstant">
+			Enum constant to find type for.
+		</xd:param>
+		<xd:param name="currentNode">
+			Meta class, struct or namespace which contains type.
+		</xd:param>
+		<xd:param name="inputTreeRoot">
+			Root of input tree. Usually selected with '/'.
+		</xd:param>
+	</xd:doc>
+	<xsl:function name="xbig:getEnumTypeForEnumConstant" as="xs:string">
+		<xsl:param name="enumConstant" />
+		<xsl:param name="currentNode" />
+		<xsl:param name="inputTreeRoot" />
+
+		<xsl:variable name="fullName" select="$enumConstant" />
+
+		<xsl:choose>
+			<xsl:when
+				test="boolean($inputTreeRoot//enum[@name = $fullName])">
+				<xsl:value-of select="$inputTreeRoot//enum[@name = $fullName]/../@fullName" />
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="$fullName" />
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:function>
+
+
+	<xd:doc type="function">
 		<xd:short>Checks if a type is a typedef.</xd:short>
 		<xd:param name="type">
 			Fully qualified type name to be checked.

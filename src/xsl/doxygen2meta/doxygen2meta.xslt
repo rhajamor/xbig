@@ -1790,9 +1790,7 @@
 
 		<!-- generate default c-tor if necessary -->
 		<xsl:if
-			test="not(sectiondef[@kind='public-func']/memberdef/name=$className) and
-					  not(sectiondef[@kind='private-func']/memberdef/name=$className) and
-					  not(sectiondef[@kind='protected-func']/memberdef/name=$className)">
+			test="xbig:haveToGenerateDefaultCtor(., $className, /)">
 			<xsl:element name="function">
 				<xsl:attribute name="virt">
 					<xsl:text>non-virtual</xsl:text>
@@ -1820,6 +1818,58 @@
 			</xsl:element>
 		</xsl:if>
 	</xsl:template>
+
+
+	<xd:doc type="function">
+		<xd:short>
+			Takes a compounddef node representing a class and checks if it is necessary to
+			generate a default c-tor for that class. Checks base classes, too.
+		</xd:short>
+		<xd:param name="node">compounddef node representing class to check.</xd:param>
+		<xd:param name="className">name of class to check.</xd:param>
+		<xd:param name="root">root node of input tree.</xd:param>
+	</xd:doc>
+	<xsl:function name="xbig:haveToGenerateDefaultCtor" as="xs:boolean">
+		<xsl:param name="node" />
+		<xsl:param name="className" />
+		<xsl:param name="root" />
+
+		<xsl:choose>
+			<xsl:when test="not($node/sectiondef[@kind='public-func']/memberdef/name=$className) and
+					  not($node/sectiondef[@kind='private-func']/memberdef/name=$className) and
+					  not($node/sectiondef[@kind='protected-func']/memberdef/name=$className)">
+				<xsl:choose>
+					<!-- check base classes -->
+					<xsl:when test="$node/inheritancegraph">
+						<xsl:variable name="baseClassesResults">
+							<xsl:for-each select="$node/inheritancegraph/node">
+								<xsl:element name="result">
+									<xsl:value-of select="xbig:haveToGenerateDefaultCtor($root//compounddef[@id eq ./link/@refid], tokenize(./label, '::')[last()], $root)" />
+								</xsl:element>
+							</xsl:for-each>
+						</xsl:variable>
+						<xsl:choose>
+							<xsl:when test="count($baseClassesResults/result/false()) > 0">
+								<xsl:value-of select="false()" />
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:value-of select="true()" />
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:when>
+
+					<xsl:otherwise>
+						<xsl:value-of select="true()" />
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:when>
+
+			<xsl:otherwise>
+				<xsl:value-of select="false()" />
+			</xsl:otherwise>
+		</xsl:choose>
+
+	</xsl:function>
 
 
 
