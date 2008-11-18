@@ -861,8 +861,17 @@
 						</xsl:choose>
 					</xsl:attribute>
 					<xsl:attribute name="protection" select="@prot" />
-					<xsl:attribute name="basetype"
-						select="normalize-space(./type)" />
+					<xsl:attribute name="basetype">
+						<xsl:choose>
+							<xsl:when test="count(./type/ref) = 1 and contains(./definition, 'typedef') and contains(./definition, 'struct')">
+								<!-- e.g. typedef struct, but no template typedefs -->
+								<xsl:value-of select="normalize-space(//compounddef[@id = current()/type/ref/@refid]/compoundname)" />
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:value-of select="normalize-space(./type)" />
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:attribute>
 
 					<!-- copy all includes into meta output -->
 					<xsl:choose>
