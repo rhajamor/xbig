@@ -190,10 +190,12 @@
 		<xsl:value-of select="$config/config/java/namespaces/packageprefix"/>
 		<xsl:text>.std.*;&#10;</xsl:text>
 		 -->
+		 <!-- not necessary, just causing warnings
 		<xsl:text>import </xsl:text>
 		<xsl:value-of select="$config/config/java/namespaces/packageprefix"/>
 		<xsl:text>.*;&#10;</xsl:text>
 		<xsl:text>&#10;</xsl:text>
+		 -->
 	</xsl:template>
 
 </xsl:stylesheet>
