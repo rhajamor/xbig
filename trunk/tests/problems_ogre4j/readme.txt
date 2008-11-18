@@ -1,11 +1,11 @@
 ****************************************************************************
-* 
+*
 * Overview on this XBiG Test-Suite
-* 
+*
 * See .h file in include dir of each test for a description.
 * Following table shows which tests are known to fail.
 * It shows for which project a problem occured, too.
-* 
+*
 ****************************************************************************
 
 
@@ -85,3 +85,5 @@ t65              s on win, f on lin
 t66              s
 t67              s
 t68              s
+t69              s
+t70              s

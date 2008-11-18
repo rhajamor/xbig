@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.xbig.test.t70;
 
@@ -41,15 +41,16 @@ public class BasicTests {
 
 	    Assert.assertTrue(iterator.hasMoreElements());
 	    iterator.getNext(assignment);
-	    Assert.assertEquals(0, assignment.getvertexIndex());
+	    Assert.assertEquals(0L, assignment.getvertexIndex());
 	    Assert.assertEquals(0, assignment.getboneIndex());
 	    Assert.assertEquals(0.0f, assignment.getweight());
 	    assignment.delete();
 
-	    iterator.moveNext();
+	    // getNext() moves iterator
+	    //iterator.moveNext();
 	    Assert.assertTrue(iterator.hasMoreElements());
 	    iterator.getNext(assignment);
-	    Assert.assertEquals(1, assignment.getvertexIndex());
+	    Assert.assertEquals(1L, assignment.getvertexIndex());
 	    Assert.assertEquals(1, assignment.getboneIndex());
 	    Assert.assertEquals(0.1f, assignment.getweight());
 	    assignment.delete();
