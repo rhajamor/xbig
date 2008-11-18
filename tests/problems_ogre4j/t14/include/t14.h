@@ -19,6 +19,7 @@
 
 
 #include <vector>
+#include <typeinfo>
 
 class EXPORT RenderSystem {};
 

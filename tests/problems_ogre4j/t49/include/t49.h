@@ -22,6 +22,7 @@
 
 #include <string>
 #include <vector>
+#include <string.h>
 
 
 namespace Ogre {
@@ -144,7 +145,7 @@ namespace Ogre {
 			for (p = 0; p < mNumPasses; ++p)
 				memset(mCounters[p], 0, sizeof(int) * 256);
 			ContainerIter i = mTmpContainer.begin();
-			TCompValueType prevValue = func.operator()(*i); 
+			TCompValueType prevValue = func.operator()(*i);
 			bool needsSorting = false;
 			for (int u = 0; i != mTmpContainer.end(); ++i, ++u)
 			{
@@ -173,7 +174,7 @@ namespace Ogre {
 			}
 			finalPass(p, prevValue);
 			int c = 0;
-			for (i = container.begin(); 
+			for (i = container.begin();
 				i != container.end(); ++i, ++c)
 			{
 				*i = *((*mDest)[c].iter);
