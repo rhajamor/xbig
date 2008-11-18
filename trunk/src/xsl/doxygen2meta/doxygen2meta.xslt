@@ -1840,16 +1840,23 @@
 					  not($node/sectiondef[@kind='protected-func']/memberdef/name=$className)">
 				<xsl:choose>
 					<!-- check base classes -->
-					<xsl:when test="$node/inheritancegraph">
+					<!-- see tests t5_4 and t69 -->
+					<xsl:when test="count($node/inheritancegraph/node[not(childnode) or link[@refid = $node/@id]]) > 0">
 						<xsl:variable name="baseClassesResults">
-							<xsl:for-each select="$node/inheritancegraph/node">
+							<xsl:for-each select="$node/inheritancegraph/node[not(childnode) and link[@refid != $node/@id]]">
+								<xsl:variable name="currentInheritanceNode" select="current()" />
 								<xsl:element name="result">
-									<xsl:value-of select="xbig:haveToGenerateDefaultCtor($root//compounddef[@id eq ./link/@refid], tokenize(./label, '::')[last()], $root)" />
+									<xsl:attribute name="result">
+										<xsl:variable name="currentInheritanceNodeID" select="$currentInheritanceNode/link/@refid" />
+										<xsl:variable name="nodeForCall" select="$root//compounddef[@id = $currentInheritanceNodeID]" />
+										<xsl:variable name="classNameForCall" select="tokenize($currentInheritanceNode/label, '::')[last()]" />
+										<xsl:value-of select="xbig:haveToGenerateDefaultCtor($nodeForCall, $classNameForCall, $root)" />
+									</xsl:attribute>
 								</xsl:element>
 							</xsl:for-each>
 						</xsl:variable>
 						<xsl:choose>
-							<xsl:when test="count($baseClassesResults/result/false()) > 0">
+							<xsl:when test="count($baseClassesResults/result[@result = false()]) > 0">
 								<xsl:value-of select="false()" />
 							</xsl:when>
 							<xsl:otherwise>
