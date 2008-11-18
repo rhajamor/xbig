@@ -22,6 +22,7 @@
 
 #include <algorithm>
 #include <typeinfo>
+#include <iostream>
 
 
 namespace Ogre {
@@ -119,14 +120,14 @@ namespace Ogre {
         placeholder * mContent;
         template<typename ValueType>
         friend ValueType * any_cast(Any *);
-    public: 
+    public:
 	    template<typename ValueType>
     	ValueType operator()() const
     	{
-			if (!mContent) 
+			if (!mContent)
 			{
 //				OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS,
-//					"Bad cast from uninitialised Any", 
+//					"Bad cast from uninitialised Any",
 //					"Any::operator()");
 			}
 			else if(getType() == typeid(ValueType))
@@ -139,7 +140,7 @@ namespace Ogre {
 //				str << "Bad cast from type '" << getType().name() << "' "
 //					<< "to '" << typeid(ValueType).name() << "'";
 //				OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS,
-//					 str.str(), 
+//					 str.str(),
 //					"Any::operator()");
 			}
 		}

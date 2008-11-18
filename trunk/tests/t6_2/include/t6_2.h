@@ -13,6 +13,7 @@
 #endif
 
 #include <iostream>
+#include <typeinfo>
 
 template <class T>
 struct EXPORT B {

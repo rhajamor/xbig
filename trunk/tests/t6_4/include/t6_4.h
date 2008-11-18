@@ -13,6 +13,7 @@
 #endif
 
 #include <iostream>
+#include <typeinfo>
 
 namespace n {
 	template <class T, typename U>

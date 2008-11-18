@@ -20,6 +20,7 @@
 
 #include <map>
 #include <string>
+#include <typeinfo>
 
 
 namespace Ogre {
@@ -33,7 +34,7 @@ namespace Ogre {
 	public:
 		typedef typename T::mapped_type MappedType;
 		typedef typename T::key_type KeyType;
-	
+
 		MapIterator(typename T::iterator start, typename T::iterator end)
 		: mCurrent(start), mEnd(end)
 		{
