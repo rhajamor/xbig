@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.xbig.test.t2_3;
 
@@ -12,21 +12,21 @@ import org.xbig.base.*;
 
 /**
  * @author nenning
- * 
+ *
  */
 public class BasicTests {
-	
+
 	@Test
 	public void callMethodWithDifferentNamesDifferentParameters() {
 		A a = new A();
-        
+
 		short charValue = 127;
         byte  signedCharValue = -128;
         short unsignedCharValue = 234;
         Assert.assertEquals(a.getChar(charValue),charValue);
         Assert.assertEquals(a.getUnsignedChar(unsignedCharValue), unsignedCharValue);
         Assert.assertEquals(a.getSignedChar(signedCharValue), signedCharValue);
-        
+
         short shortValue = 22513;
         short shortIntValue = -22513;
         short signedShortValue = 32767;
@@ -39,7 +39,7 @@ public class BasicTests {
         Assert.assertEquals(a.getSignedShortInt(signedShortIntValue), signedShortIntValue);
         Assert.assertEquals(a.getUnsignedShort(unsignedShortValue), unsignedShortValue);
         Assert.assertEquals(a.getUnsignedShortInt(unsignedShortIntValue), unsignedShortIntValue);
-        
+
         int intValue = 2147483647;
         int signedValue = -2147483648;
         int signedIntValue = 2000000000;
@@ -47,10 +47,10 @@ public class BasicTests {
         long unsignedIntValue = 4294967295L;
         Assert.assertEquals(a.getInt(intValue), intValue);
         Assert.assertEquals(a.getSigned(signedValue), signedValue);
-        Assert.assertEquals(a.getSignedInt(signedIntValue), signedIntValue);      
+        Assert.assertEquals(a.getSignedInt(signedIntValue), signedIntValue);
         Assert.assertEquals(a.getUnsigned(unsignedValue), unsignedValue);
         Assert.assertEquals(a.getUnsignedInt(unsignedIntValue), unsignedIntValue);
-        
+
         long longValue = 1000000000L;
         long longIntValue = 2147483647L;
         long signedLongValue = -1000000000L;
@@ -75,7 +75,7 @@ public class BasicTests {
         double doubleValue = 12314.563456;
         Assert.assertEquals(a.getFloat(floatValue), floatValue);
         Assert.assertEquals(a.getDouble(doubleValue), doubleValue);
-        
+
         String stringValue = "12345";
         String charStarValue = "23456";
         String constCharStarValue = "34567";
@@ -95,7 +95,7 @@ public class BasicTests {
         int size_tValue = 12345;
         char wchar_tValue = 'a';
         Assert.assertEquals(a.getWchar_t(wchar_tValue), wchar_tValue);
-        
+
 		a.delete();
 	}
 
@@ -103,7 +103,9 @@ public class BasicTests {
 	public void testTime() {
 		ITime time = new Time();
 
-		long currentTime = System.currentTimeMillis();
+		// on my linux test machine, time_t was 4 bytes unsigned
+		//long currentTime = System.currentTimeMillis();
+		long currentTime = 2147483647L;
 		time.setTime(currentTime);
 
 		Assert.assertEquals(currentTime, time.getTime());
@@ -129,11 +131,11 @@ public class BasicTests {
 
 	/*
 	 Move B to t2_9
-	 
+
     @Test
     public void callMethodWithSameNameDifferentParameters() {
         A a = new A();
-        
+
         byte  byteValue = 13;
         short smallShortValue = 234;
         short shortValue = 22513;
@@ -141,9 +143,9 @@ public class BasicTests {
         long longValue = 32424567;
         float floatValue = 123.234f;
         double doubleValue = 12314.563456;
-        
-        
+
+
         a.delete();
     }*/
-    
+
 }
