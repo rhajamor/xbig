@@ -1,19 +1,19 @@
 /* This source file is part of XBiG
  *     (XSLT Bindings Generator)
  * For the latest info, see http://sourceforge.net/projects/xbig/
- * 
+ *
  * Copyright (c) 2005 netAllied GmbH, Tettnang
  * Also see acknowledgements in Readme.html
- * 
+ *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free Software
  * Foundation; either version 2 of the License, or (at your option) any later
  * version.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License along with
  * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
  * Place - Suite 330, Boston, MA 02111-1307, USA, or go to
@@ -44,8 +44,13 @@ std::string org::xbig::jni::to_stdstring(JNIEnv* env, jstring jString) {
 }
 
 std::wstring org::xbig::jni::to_stdwstring(JNIEnv* env, jstring jString) {
+#ifdef WIN32
 	const wchar_t* c_str = (const wchar_t* ) env->GetStringChars(jString, JNI_FALSE); // false: create a copy
  	return std::wstring(c_str);
+#else
+	const char* c_str = env->GetStringUTFChars(jString, JNI_FALSE); // false: create a copy
+	return std::wstring((wchar_t*)c_str);
+#endif
 }
 
 char* org::xbig::jni::to_cstring(JNIEnv* env, jstring jString) {
@@ -67,5 +72,9 @@ jstring org::xbig::jni::to_jstring(JNIEnv* env, const char* str) {
 }
 
 jstring org::xbig::jni::to_jstring(JNIEnv* env, const std::wstring& str) {
+#ifdef WIN32
 	return env->NewString((const jchar*)str.c_str(), str.length());
+#else
+	return env->NewStringUTF((const char*)str.c_str());
+#endif
 }
