@@ -57,6 +57,6 @@ typedef std::pair<std::string, A>   	 APair;
 #ifdef __GNUG__
 	typedef __gnu_cxx::hash_map<std::string, A> AHashMap;
 #else
-	typedef std::hash_map<std::string, A> AHashMap;
+	typedef stdext::hash_map<std::string, A> AHashMap;
 #endif
 //typedef std::bitset<unsigned int>        IntBitset;

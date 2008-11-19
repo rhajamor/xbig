@@ -1954,6 +1954,108 @@
 			<templateparameter templateType="class" templateDeclaration="T"/>
 		</templateparameters>
 	</class>
+
+	<class protection="public" name="ostringstream" fullName="std::ostringstream">
+		<!-- 
+		<function virt="non-virtual" visibility="private" static="false" const="false"
+					passedBy="value">
+			<name>ostringstream</name>
+			<definition>std::ostringstream::ostringstream</definition>
+			<parameters>
+				<parameter passedBy="reference">
+					<type const="true">std::string</type>
+					<name>str</name>
+				</parameter>
+				<parameter passedBy="value">
+					<type const="false">std::ios_base::openmode</type>
+					<name>which</name>
+				</parameter>
+			</parameters>
+		</function>
+		 -->
+		<!-- 
+		<function virt="non-virtual" visibility="public" static="false" const="true"
+					passedBy="value">
+			<name>str</name>
+			<type>std::string</type>
+			<definition>std::ostringstream::str</definition>
+		</function>
+		 -->
+	</class>
+
+	<class protection="public" name="istringstream" fullName="std::istringstream">
+		<!-- 
+		<function virt="non-virtual" visibility="private" static="false" const="false"
+					passedBy="value">
+			<name>istringstream</name>
+			<definition>std::istringstream::istringstream</definition>
+			<parameters>
+				<parameter passedBy="reference">
+					<type const="true">std::string</type>
+					<name>str</name>
+				</parameter>
+				<parameter passedBy="value">
+					<type const="false">std::ios_base::openmode</type>
+					<name>which</name>
+				</parameter>
+			</parameters>
+		</function>
+		 -->
+		<!-- 
+		<function virt="non-virtual" visibility="public" static="false" const="true"
+					passedBy="value">
+			<name>str</name>
+			<type>std::string</type>
+			<definition>std::istringstream::str</definition>
+		</function>
+		 -->
+	</class>
+
+<!-- 
+	<class protection="public" name="stringstream" fullName="std::stringstream">
+		<function virt="non-virtual" visibility="public" static="false" const="false"
+					passedBy="value">
+			<name>stringstream</name>
+			<definition>std::stringstream::stringstream</definition>
+		</function>
+		<function virt="non-virtual" visibility="public" static="false" const="true"
+					passedBy="value">
+			<name>str</name>
+			<type>std::string</type>
+			<definition>std::stringstream::str</definition>
+		</function>
+	</class>
+ -->
+
+	<class protection="public" name="streambuf" fullName="std::streambuf">
+	</class>
+
+	<class protection="public" name="stringbuf" fullName="std::stringbuf">
+	</class>
+
+	<class protection="public" name="filebuf" fullName="std::filebuf">
+	</class>
+
+<!-- 
+	<class protection="public" name="fstream" fullName="std::fstream">
+	</class>
+ -->
+<!-- 
+	<class protection="public" name="iostream" fullName="std::iostream">
+	</class>
+ -->
+	<class protection="public" name="ios_base" fullName="std::ios_base">
+		<enumeration protection="public" name="openmode" fullName="std::ios_base::openmode">
+			<enum name="app"/>
+			<enum name="ate"/>
+			<enum name="binary"/>
+			<enum name="in"/>
+			<enum name="out"/>
+			<enum name="trunc"/>
+			<includes>ios</includes>
+        </enumeration>
+	</class>
+
 </namespace>
 
 
@@ -1964,6 +2066,18 @@
 			<templateparameter templateType="class" templateDeclaration="T"/>
 			<templateparameter templateType="class" templateDeclaration="U"/>
 		</templateparameters>
+	</class>
+
+	<class protection="public" name="hash_map" fullName="stdext::hash_map" template="true">
+		<templateparameters>
+			<templateparameter templateType="class" templateDeclaration="K"/>
+			<templateparameter templateType="class" templateDeclaration="V"/>
+		</templateparameters>
+
+		<additionalInfo>
+			<info name="key_type" typeParaPos="1"/>
+			<info name="mapped_type" typeParaPos="2"/>
+		</additionalInfo>
 	</class>
 
 </namespace>
