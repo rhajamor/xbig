@@ -6,6 +6,8 @@ package org.xbig.test.t2_3;
 import org.junit.Assert;
 import org.junit.Test;
 import org.xbig.A;
+import org.xbig.ITime;
+import org.xbig.Time;
 import org.xbig.base.*;
 
 /**
@@ -96,7 +98,35 @@ public class BasicTests {
         
 		a.delete();
 	}
-    
+
+	@Test
+	public void testTime() {
+		ITime time = new Time();
+
+		long currentTime = System.currentTimeMillis();
+		time.setTime(currentTime);
+
+		Assert.assertEquals(currentTime, time.getTime());
+		Assert.assertEquals(currentTime, time.getTimePtr().get());
+		Assert.assertEquals(currentTime, time.getTimeRef().get());
+
+		LongPointer currentTimePtr = new LongPointer(currentTime);
+		time.setTimePtr(currentTimePtr);
+
+		Assert.assertEquals(currentTime, time.getTime());
+		Assert.assertEquals(currentTime, time.getTimePtr().get());
+		Assert.assertEquals(currentTime, time.getTimeRef().get());
+
+		time.setTimeRef(currentTimePtr);
+
+		Assert.assertEquals(currentTime, time.getTime());
+		Assert.assertEquals(currentTime, time.getTimePtr().get());
+		Assert.assertEquals(currentTime, time.getTimeRef().get());
+
+		currentTimePtr.delete();
+		time.delete();
+	}
+
 	/*
 	 Move B to t2_9
 	 

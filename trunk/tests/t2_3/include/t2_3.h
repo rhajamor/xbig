@@ -5,13 +5,15 @@
  * It handles a class with a method
  *
  ******************************************************************/
-#include <string>
-
 #ifdef WIN32
 	#define EXPORT __declspec(dllexport)
 #else
 	#define EXPORT
 #endif
+
+#include <string>
+#include <time.h>
+
 
 class EXPORT A {
 public:
@@ -34,7 +36,7 @@ public:
         long getLong(long v);
         long int getLongInt(long int v);
         signed long getSignedLong(signed long v);
-        signed long int getSignedLongInt(signed long int v);        
+        signed long int getSignedLongInt(signed long int v);
         unsigned long getUnsignedLong(unsigned long v);
         unsigned long int getUnsignedLongInt(unsigned long int v);
         long long getLongLong(long long v);
@@ -51,22 +53,37 @@ public:
         wchar_t getWchar_t(wchar_t v);
 };
 
+class EXPORT Time {
+public:
+	void setTime(time_t t) {this->t = t;}
+	time_t getTime() {return t;}
+
+	void setTimePtr(time_t* t) {this->t = *t;}
+	time_t* getTimePtr() {return &t;}
+
+	void setTimeRef(time_t& t) {this->t = t;}
+	time_t& getTimeRef() {return t;}
+
+private:
+	time_t t;
+};
+
 /*
 Move B to t2_9
 
 class EXPORT B {
 public:
 	B();
-	
+
         long getSigned(char v);
         long getSigned(signed char v);
         long getSigned(short v);
         long getSigned(int v);
         long getSigned(long v);
-        
+
         unsigned long getUnsigned(unsigned char v);
         unsigned long getUnsigned(unsigned short v);
         unsigned long getUnsigned(unsigned int v);
-        unsigned long getUnsigned(unsigned long v);                
+        unsigned long getUnsigned(unsigned long v);
 };*/
 
