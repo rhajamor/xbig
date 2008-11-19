@@ -333,9 +333,11 @@
 												$pointerPointerClass, '&lt;', $fullJavaName, '&gt;')"/>
 									</xsl:when>
 									<xsl:otherwise>
-										<!-- Final else branch. Use general Object to avoid compiler errors. -->
-										<!-- <xsl:value-of select="$fullJavaName"/> -->
-										<xsl:value-of select="'Object'"/>
+										<!-- Final else branch. -->
+										<!-- Use general Object to avoid compiler errors. -->
+										<!-- <xsl:value-of select="'Object'"/> -->
+										<!-- Using Object makes it hard to find out what went wrong in generated code. -->
+										<xsl:value-of select="$fullJavaName"/>
 									</xsl:otherwise>
 								</xsl:choose>
 							</xsl:otherwise>
