@@ -78,6 +78,7 @@
       <type meta="std::wstring" signature="ws" />
       <type meta="size_t" signature="i" />
       <type meta="wchar_t" signature="H" />
+      <type meta="time_t" signature="l" />
 
       <!-- mapping of non-const passing methods for parameters -->
 
@@ -300,7 +301,8 @@
         <type meta="byte" signature="B" />
         <type meta="array" signature="[" />
         <type meta="size_t" signature="I" />
-				<type meta="wchar_t" signature="S" />
+        <type meta="wchar_t" signature="S" />
+        <type meta="time_t" signature="J" />
       </signatures>
 
       <types>
@@ -961,6 +963,27 @@
 					</cpp2jni>
 				</type>
 				<type meta="wchar_t" jni="jchar" />
+
+        <type meta="time_t" pass="pointer" jni="jlong"
+          cpp="time_t*">
+          <jni2cpp>
+            reinterpret_cast&lt;time_t*&gt;(#jni_var#)
+          </jni2cpp>
+          <cpp2jni>
+            reinterpret_cast&lt;jlong&gt;(#cpp_var#)
+          </cpp2jni>
+        </type>
+        <type meta="time_t" pass="reference" jni="jlong"
+          cpp="time_t*" returntype="time_t&amp;">
+          <jni2cpp>
+            reinterpret_cast&lt;time_t*&gt;(#jni_var#)
+          </jni2cpp>
+          <cpp2jni>
+            reinterpret_cast&lt;jlong&gt;(&amp;#cpp_var#)
+          </cpp2jni>
+        </type>
+        <type meta="time_t" jni="jlong" />
+
       </types>
     </jni>
 
@@ -1014,6 +1037,7 @@
       <type meta="std::wstring" java="String" genericParameter="String" />
       <type meta="size_t" java="int" genericParameter="Integer" />
       <type meta="wchar_t" java="char" genericParameter="Character" />
+      <type meta="time_t" java="long" genericParameter="Long" />
 
     </types>
 
