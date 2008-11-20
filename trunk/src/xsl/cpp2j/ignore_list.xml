@@ -183,4 +183,19 @@
 	<item>Ogre::ILImageCodec</item>
 	<item withoutAnyMethods="true">Ogre::ILUtil</item>
 	<function>Ogre::InstancedGeometry::MaterialBucket::getGeometryBucketList</function>
+
+	<!-- OGRE 1.6 -->
+	<!-- doxygen doesn't find ScriptNodeList -->
+	<item withoutAnyMethods="true">Ogre::ParticleScriptCompilerListener</item>
+	<item withoutAnyMethods="true">Ogre::ParticleScriptCompiler</item>
+	<item withoutAnyMethods="true">Ogre::CompositorScriptCompilerListener</item>
+	<item withoutAnyMethods="true">Ogre::CompositorScriptCompiler2</item>
+
+	<!-- custom memory allocation -->
+	<item withoutAnyMethods="true">Ogre::NedAllocImpl</item>
+	<item withoutAnyMethods="true">Ogre::NedAllocPolicy</item>
+
+	<!-- stl wrapper -->
+	<function>Ogre::TangentSpaceCalc::IndexRemapList::remove</function>
+    <function>Ogre::TangentSpaceCalc::IndexRemapList::unique</function>
 </ignore_list>
