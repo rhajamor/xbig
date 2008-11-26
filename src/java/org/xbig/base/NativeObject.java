@@ -192,4 +192,10 @@ public abstract class NativeObject implements INativeObject {
         this.remote = false;
         this.deleted = true;
     }
+
+	public void finalize() {
+		if(!this.remote && !this.deleted) {
+			delete();
+		}
+	}
 }

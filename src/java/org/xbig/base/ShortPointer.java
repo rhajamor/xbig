@@ -164,4 +164,10 @@ public class ShortPointer extends NumberPointer<Short> {
 	public String toString() {
 		return Short.toString(get());
 	}
+
+	public void finalize() {
+		if(!this.remote && !this.deleted) {
+			delete();
+		}
+	}
 }

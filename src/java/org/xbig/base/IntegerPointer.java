@@ -166,4 +166,10 @@ public class IntegerPointer extends NumberPointer<Integer> {
 	public String toString() {
 		return Integer.toString(_get(object.pointer));
 	}
+
+	public void finalize() {
+		if(!this.remote && !this.deleted) {
+			delete();
+		}
+	}
 }

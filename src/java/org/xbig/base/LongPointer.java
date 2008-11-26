@@ -164,4 +164,10 @@ public class LongPointer extends NumberPointer<Long> {
 	public String toString() {
 		return Long.toString(get());
 	}
+
+	public void finalize() {
+		if(!this.remote && !this.deleted) {
+			delete();
+		}
+	}
 }

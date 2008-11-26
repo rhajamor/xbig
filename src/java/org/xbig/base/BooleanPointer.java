@@ -176,4 +176,10 @@ public class BooleanPointer extends NumberPointer<Boolean> {
 	public String toString() {
 		return Boolean.toString(_get(object.pointer));
 	}
+
+	public void finalize() {
+		if(!this.remote && !this.deleted) {
+			delete();
+		}
+	}
 }

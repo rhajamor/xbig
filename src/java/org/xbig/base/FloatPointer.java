@@ -163,4 +163,10 @@ public class FloatPointer extends NumberPointer<Float> {
 	public String toString() {
 		return Float.toString(get());
 	}
+
+	public void finalize() {
+		if(!this.remote && !this.deleted) {
+			delete();
+		}
+	}
 }
