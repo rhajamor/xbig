@@ -69,4 +69,10 @@ public class VoidPointer extends NativeObject {
 		}
 		return super.equals(obj);
 	}
+
+	public void finalize() {
+		if(!this.remote && !this.deleted) {
+			delete();
+		}
+	}
 }

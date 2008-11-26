@@ -163,4 +163,10 @@ public class DoublePointer extends NumberPointer<Double> {
 	public String toString() {
 		return Double.toString(get());
 	}
+
+	public void finalize() {
+		if(!this.remote && !this.deleted) {
+			delete();
+		}
+	}
 }

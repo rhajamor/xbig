@@ -163,4 +163,10 @@ public class CharPointer extends NumberPointer<Character> {
 	public String toString() {
 		return Character.toString(get());
 	}
+
+	public void finalize() {
+		if(!this.remote && !this.deleted) {
+			delete();
+		}
+	}
 }

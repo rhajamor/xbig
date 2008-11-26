@@ -128,4 +128,10 @@ public class StringPointer extends NativeObject {
 	public String toString() {
 		return _get(object.pointer);
 	}
+
+	public void finalize() {
+		if(!this.remote && !this.deleted) {
+			delete();
+		}
+	}
 }

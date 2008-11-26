@@ -164,4 +164,10 @@ public class BytePointer extends NumberPointer<Byte> {
 	public String toString() {
 		return Byte.toString(get());
 	}
+
+	public void finalize() {
+		if(!this.remote && !this.deleted) {
+			delete();
+		}
+	}
 }
