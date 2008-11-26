@@ -29,33 +29,41 @@
 
 std::string org::xbig::jni::to_stdstring(JNIEnv* env, jstring jString) {
 #ifdef WIN32
-	const std::wstring wideString((const wchar_t*)env->GetStringChars(jString, JNI_FALSE)); // false: create a copy
-        char * dest = new char[ wideString.length() + 1 ];
-        WideCharToMultiByte( CP_ACP, 0, wideString.c_str(), (int) wideString.length(),
-                             dest, (int) wideString.length(), NULL, NULL );
-        dest[ wideString.length() ] = 0; // null termination
-        std::string returnValue( dest );
-        delete[] dest;
-        return returnValue;
+	const char* c_str = env->GetStringChars(jString, 0);
+    const std::wstring wideString((const wchar_t*)c_str);
+    char * dest = new char[ wideString.length() + 1 ];
+    WideCharToMultiByte( CP_ACP, 0, wideString.c_str(), (int) wideString.length(),
+                         dest, (int) wideString.length(), NULL, NULL );
+    dest[ wideString.length() ] = 0; // null termination
+    std::string returnValue( dest );
+    delete[] dest;
+    env->ReleaseStringChars(jString, c_str);
+    return returnValue;
 #else
-	const char* c_str = env->GetStringUTFChars(jString, JNI_FALSE); // false: create a copy
-	return std::string(c_str);
+    const char* c_str = env->GetStringUTFChars(jString, 0);
+    std::string std_str(c_str);
+    env->ReleaseStringUTFChars(jString, c_str);
+    return std_str;
 #endif
 }
 
 std::wstring org::xbig::jni::to_stdwstring(JNIEnv* env, jstring jString) {
 #ifdef WIN32
-	const wchar_t* c_str = (const wchar_t* ) env->GetStringChars(jString, JNI_FALSE); // false: create a copy
- 	return std::wstring(c_str);
+	const char* c_str = env->GetStringChars(jString, 0);
+    std::wstring std_wstr((const wchar_t* ) c_str);
+    env->ReleaseStringChars(jString, c_str);
+    return std_wstr;
 #else
-	const char* c_str = env->GetStringUTFChars(jString, JNI_FALSE); // false: create a copy
-	return std::wstring((wchar_t*)c_str);
+	const char* c_str = env->GetStringUTFChars(jString, 0);
+	std::wstring std_wstr((const wchar_t* ) c_str);
+    env->ReleaseStringUTFChars(jString, c_str);
+    return std_wstr;
 #endif
 }
 
 char* org::xbig::jni::to_cstring(JNIEnv* env, jstring jString) {
 	// TODO platform specific conversion
-	char* c_str = (char*)env->GetStringUTFChars(jString, JNI_FALSE); // false: create a copy
+	char* c_str = (char*)env->GetStringUTFChars(jString, 0);
 	return c_str;
 }
 
