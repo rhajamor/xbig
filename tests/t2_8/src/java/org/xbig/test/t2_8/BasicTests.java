@@ -131,7 +131,6 @@ public class BasicTests {
 	public void unicode() {
 		// german characters in html: &auml; &ouml; &uuml;
 		String javaString = "ä ö ü";
-		StringPointer sPtr = new StringPointer(javaString);
 
 		S s = new S();
 		IWideString ws = new WideString();
@@ -144,6 +143,5 @@ public class BasicTests {
 		s.delete();
 		ws.delete();
 		cp.delete();
-		sPtr.delete();
 	}
 }

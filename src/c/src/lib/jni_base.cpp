@@ -48,17 +48,22 @@ std::string org::xbig::jni::to_stdstring(JNIEnv* env, jstring jString) {
 }
 
 std::wstring org::xbig::jni::to_stdwstring(JNIEnv* env, jstring jString) {
-#ifdef WIN32
-	const char* c_str = env->GetStringChars(jString, 0);
-    std::wstring std_wstr((const wchar_t* ) c_str);
-    env->ReleaseStringChars(jString, c_str);
+    const jchar* j_str = env->GetStringChars(jString, 0);
+    std::wstring std_wstr;
+    if (sizeof(jchar) == sizeof(wchar_t))
+    {
+    	std_wstr = (const wchar_t*)j_str;
+    }
+    else
+    {
+    	for (int i=0; j_str[i]!='\0'; ++i)
+    	{
+    		std_wstr.append(1, j_str[i]);
+    	}
+    }
+    env->ReleaseStringChars(jString, j_str);
     return std_wstr;
-#else
-	const char* c_str = env->GetStringUTFChars(jString, 0);
-	std::wstring std_wstr((const wchar_t* ) c_str);
-    env->ReleaseStringUTFChars(jString, c_str);
-    return std_wstr;
-#endif
+
 }
 
 char* org::xbig::jni::to_cstring(JNIEnv* env, jstring jString) {
@@ -80,9 +85,19 @@ jstring org::xbig::jni::to_jstring(JNIEnv* env, const char* str) {
 }
 
 jstring org::xbig::jni::to_jstring(JNIEnv* env, const std::wstring& str) {
-#ifdef WIN32
-	return env->NewString((const jchar*)str.c_str(), str.length());
-#else
-	return env->NewStringUTF((const char*)str.c_str());
-#endif
+	if (sizeof(jchar) == sizeof(wchar_t))
+	{
+		return env->NewString((const jchar*)str.c_str(), str.length());
+	}
+	else
+	{
+		jchar* j_str = new jchar[ str.length() ];
+		for (int i=0; i<str.length(); ++i)
+		{
+			j_str[i] = str.at(i);
+		}
+		jstring jStr = env->NewString(j_str, str.length());
+		delete[] j_str;
+		return jStr;
+	}
 }
