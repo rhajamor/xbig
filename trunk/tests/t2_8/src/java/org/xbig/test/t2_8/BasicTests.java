@@ -10,6 +10,11 @@ import org.xbig.A;
 import org.xbig.B;
 import org.xbig.IB;
 import org.xbig.S;
+import org.xbig.IWideString;
+import org.xbig.WideString;
+import org.xbig.ICharPtr;
+import org.xbig.CharPtr;
+
 /**
  * @author nenning
  *
@@ -84,5 +89,61 @@ public class BasicTests {
 
 		sPtr.delete();
 		s.delete();
+	}
+
+	@Test
+	public void useWideStrings() {
+		IWideString s = new WideString();
+		String javaString = "Bulldozer Frenzy";
+		StringPointer sPtr = new StringPointer(javaString);
+
+		s.a(javaString);
+		Assert.assertEquals(javaString, s.b());
+		Assert.assertEquals(javaString, s.c(javaString));
+
+		s.d(sPtr);
+		Assert.assertEquals(sPtr.get(), s.e().get());
+		Assert.assertEquals(sPtr.get(), s.f(sPtr).get());
+
+		s.g(sPtr);
+		Assert.assertEquals(sPtr.get(), s.h().get());
+		Assert.assertEquals(sPtr.get(), s.i(sPtr).get());
+
+		sPtr.delete();
+		s.delete();
+	}
+
+	@Test
+	public void useCharPtr() {
+		ICharPtr s = new CharPtr();
+		String javaString = "Bulldozer Frenzy";
+		StringPointer sPtr = new StringPointer(javaString);
+
+		s.a(javaString);
+		Assert.assertEquals(javaString, s.b());
+		Assert.assertEquals(javaString, s.c(javaString));
+
+		sPtr.delete();
+		s.delete();
+	}
+
+	@Test
+	public void unicode() {
+		// german characters in html: &auml; &ouml; &uuml;
+		String javaString = "ä ö ü";
+		StringPointer sPtr = new StringPointer(javaString);
+
+		S s = new S();
+		IWideString ws = new WideString();
+		ICharPtr cp = new CharPtr();
+
+		Assert.assertEquals(javaString, s.c(javaString));
+		Assert.assertEquals(javaString, ws.c(javaString));
+		Assert.assertEquals(javaString, cp.c(javaString));
+
+		s.delete();
+		ws.delete();
+		cp.delete();
+		sPtr.delete();
 	}
 }
