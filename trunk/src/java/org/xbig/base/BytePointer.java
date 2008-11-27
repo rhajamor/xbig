@@ -71,9 +71,15 @@ public class BytePointer extends NumberPointer<Byte> {
 	 */
 	@Override
 	public void delete() {
-		if(this.remote)
+		if(this.remote) {
 			throw new RuntimeException("Instance created by the library! It's not allowed to dispose it.");
-		_dispose(object.pointer);		
+		}
+
+		if(!this.deleted) {
+			_dispose(object.pointer);
+		    this.deleted = true;
+		   	this.object.pointer = 0;
+		}
 	}
 	/**
 	 * @{inheritdoc}
