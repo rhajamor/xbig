@@ -336,7 +336,7 @@ public class BasicTests {
 	    VoidPointer voidPointer = buffer.getVoidPointer();
 	    a.fillLongBuffer(voidPointer);
 	    for (long i=0; i<bufferSize; i++) {
-	        Assert.assertEquals(i, buffer.getIndex(i));
+	        Assert.assertEquals(i, buffer.getIndex((int)i));
 	    }
 
 	    try {
@@ -408,7 +408,7 @@ public class BasicTests {
 	    VoidPointer voidPointer = buffer.getVoidPointer();
 	    a.fillFloatBuffer(voidPointer);
 	    for (float i=0; i<bufferSize; i++) {
-	        Assert.assertEquals(i, buffer.getIndex(i));
+	        Assert.assertEquals(i, buffer.getIndex((int)i));
 	    }
 
 	    try {
@@ -442,10 +442,10 @@ public class BasicTests {
         NativeFloatBuffer buffer = new NativeFloatBuffer(bufferSize);
 
         for (float i=0; i<bufferSize; i++) {
-            buffer.setIndex(i, i);
+            buffer.setIndex((int)i, i);
         }
         for (float i=0; i<bufferSize; i++) {
-            Assert.assertEquals(i, buffer.getIndex(i));
+            Assert.assertEquals(i, buffer.getIndex((int)i));
         }
 
         try {
@@ -481,7 +481,7 @@ public class BasicTests {
 	    VoidPointer voidPointer = buffer.getVoidPointer();
 	    a.fillDoubleBuffer(voidPointer);
 	    for (double i=0; i<bufferSize; i++) {
-	        Assert.assertEquals(i, buffer.getIndex(i));
+	        Assert.assertEquals(i, buffer.getIndex((int)i));
 	    }
 
 	    try {
@@ -515,10 +515,10 @@ public class BasicTests {
         NativeDoubleBuffer buffer = new NativeDoubleBuffer(bufferSize);
 
         for (double i=0; i<bufferSize; i++) {
-            buffer.setIndex(i, i);
+            buffer.setIndex((int)i, i);
         }
         for (double i=0; i<bufferSize; i++) {
-            Assert.assertEquals(i, buffer.getIndex(i));
+            Assert.assertEquals(i, buffer.getIndex((int)i));
         }
 
         try {
