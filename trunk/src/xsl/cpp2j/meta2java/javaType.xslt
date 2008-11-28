@@ -392,7 +392,7 @@
 		</xsl:variable>
 
 		<xsl:choose>
-			<xsl:when test="$type_info/type/@java ne 'int'">
+			<xsl:when test="$type_info/type/@java != 'int' and $type_info/type/@meta != 'std::wstring'">
 				<xsl:value-of>
 					<xsl:call-template name="firstLetterToUpperCase">
 						<xsl:with-param name="name">
@@ -411,8 +411,13 @@
 			</xsl:when>
 
 			<!-- IntegerPointer is a special name -->
-			<xsl:when test="$type_info/type/@java eq 'int'">
+			<xsl:when test="$type_info/type/@java = 'int'">
 				<xsl:value-of select="'IntegerPointer'" />
+			</xsl:when>
+
+			<!-- WideStringPointer is a special name, too -->
+			<xsl:when test="$type_info/type/@meta = 'std::wstring'">
+				<xsl:value-of select="'WideStringPointer'" />
 			</xsl:when>
 		</xsl:choose>
 

@@ -6,6 +6,7 @@ package org.xbig.test.t2_8;
 import org.junit.Assert;
 import org.junit.Test;
 import org.xbig.base.StringPointer;
+import org.xbig.base.WideStringPointer;
 import org.xbig.A;
 import org.xbig.B;
 import org.xbig.IB;
@@ -95,21 +96,24 @@ public class BasicTests {
 	public void useWideStrings() {
 		IWideString s = new WideString();
 		String javaString = "Bulldozer Frenzy";
-		StringPointer sPtr = new StringPointer(javaString);
+		WideStringPointer wsPtr = new WideStringPointer(javaString);
+
+		// short test for WideStringPointer
+		Assert.assertTrue(wsPtr.equals(javaString));
 
 		s.a(javaString);
 		Assert.assertEquals(javaString, s.b());
 		Assert.assertEquals(javaString, s.c(javaString));
 
-		s.d(sPtr);
-		Assert.assertEquals(sPtr.get(), s.e().get());
-		Assert.assertEquals(sPtr.get(), s.f(sPtr).get());
+		s.d(wsPtr);
+		Assert.assertEquals(wsPtr.get(), s.e().get());
+		Assert.assertEquals(wsPtr.get(), s.f(wsPtr).get());
 
-		s.g(sPtr);
-		Assert.assertEquals(sPtr.get(), s.h().get());
-		Assert.assertEquals(sPtr.get(), s.i(sPtr).get());
+		s.g(wsPtr);
+		Assert.assertEquals(wsPtr.get(), s.h().get());
+		Assert.assertEquals(wsPtr.get(), s.i(wsPtr).get());
 
-		sPtr.delete();
+		wsPtr.delete();
 		s.delete();
 	}
 

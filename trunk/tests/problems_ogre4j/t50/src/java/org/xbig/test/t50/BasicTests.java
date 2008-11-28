@@ -6,7 +6,7 @@ package org.xbig.test.t50;
 import org.junit.Assert;
 import org.junit.Test;
 import org.xbig.base.ShortPointer;
-import org.xbig.base.StringPointer;
+import org.xbig.base.WideStringPointer;
 import org.xbig.Ogre.A;
 import org.xbig.std.ofstream;
 import org.xbig.std.ifstream;
@@ -64,15 +64,16 @@ public class BasicTests {
     public void wstring() {
         A a = new A();
         String string = "Bulldozer Frenzy";
-        StringPointer strPtr = new StringPointer(string);
+        WideStringPointer wstrPtr = new WideStringPointer(string);
 
         Assert.assertEquals(string, a.wstringValue(string));
-        Assert.assertEquals(string, a.wstringPointer(strPtr).get());
-        Assert.assertEquals(string, a.wstringReference(strPtr).get());
+        Assert.assertEquals(string, a.wstringPointer(wstrPtr).get());
+        Assert.assertEquals(string, a.wstringReference(wstrPtr).get());
         Assert.assertEquals(string, a.wstringConstValue(string));
-        Assert.assertEquals(string, a.wstringConstPointer(strPtr).get());
+        Assert.assertEquals(string, a.wstringConstPointer(wstrPtr).get());
         Assert.assertEquals(string, a.wstringConstReference(string));
 
+        wstrPtr.delete();
         a.delete();
     }
 }
