@@ -23,45 +23,45 @@
 
 #include <jni_base.h>
 
-/* Header for class base_NativeBuffer */
+/* Header for class base_NativeDoubleBuffer */
 
-#ifndef _Included_base_NativeBuffer
-#define _Included_base_NativeBuffer
+#ifndef _Included_base_NativeDoubleBuffer
+#define _Included_base_NativeDoubleBuffer
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 /*
- * Class:     base_NativeBuffer
+ * Class:     base_NativeDoubleBuffer
  * Method:    _create
  * Signature: ()J
  */
-JNIEXPORT jlong JNICALL Java_org_xbig_base_NativeBuffer__1create
+JNIEXPORT jlong JNICALL Java_org_xbig_base_NativeDoubleBuffer__1create
   (JNIEnv *env, jclass that, jint size);
 
 /*
- * Class:     base_NativeBuffer
+ * Class:     base_NativeDoubleBuffer
  * Method:    _dispose
  * Signature: (J)V
  */
-JNIEXPORT void JNICALL Java_org_xbig_base_NativeBuffer__1dispose
+JNIEXPORT void JNICALL Java_org_xbig_base_NativeDoubleBuffer__1dispose
   (JNIEnv *, jobject, jlong);
 
 /*
- * Class:     base_NativeBuffer
+ * Class:     base_NativeDoubleBuffer
  * Method:    _get
  * Signature: (J)C
  */
-JNIEXPORT jbyte JNICALL Java_org_xbig_base_NativeBuffer__1getIndex
+JNIEXPORT jdouble JNICALL Java_org_xbig_base_NativeDoubleBuffer__1getIndex
   (JNIEnv *, jobject, jlong, jint);
 
 /*
- * Class:     base_NativeBuffer
+ * Class:     base_NativeDoubleBuffer
  * Method:    _set
  * Signature: (J)C
  */
-JNIEXPORT void JNICALL Java_org_xbig_base_NativeBuffer__1setIndex
-  (JNIEnv *, jobject, jlong, jint, jbyte);
+JNIEXPORT void JNICALL Java_org_xbig_base_NativeDoubleBuffer__1setIndex
+  (JNIEnv *, jobject, jlong, jint, jdouble);
 
 #ifdef __cplusplus
 }

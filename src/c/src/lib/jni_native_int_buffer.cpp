@@ -19,52 +19,52 @@
  * Place - Suite 330, Boston, MA 02111-1307, USA, or go to
  * http://www.gnu.org/copyleft/lesser.txt.
  */
-#include <jni_native_buffer.h>
+#include <jni_native_int_buffer.h>
 
 /*
- * Class:     base_NativeBuffer
+ * Class:     base_NativeIntBuffer
  * Method:    _create
  * Signature: ()J
  */
-JNIEXPORT jlong JNICALL Java_org_xbig_base_NativeBuffer__1create
+JNIEXPORT jlong JNICALL Java_org_xbig_base_NativeIntBuffer__1create
   (JNIEnv *env, jclass that, jint size)
 {
-	unsigned char* buffer = new unsigned char[ size ];
+	int* buffer = new int[ size ];
 	return reinterpret_cast<jlong>(buffer);
 }
 
 /*
- * Class:     base_NativeBuffer
+ * Class:     base_NativeIntBuffer
  * Method:    _dispose
  * Signature: (J)V
  */
-JNIEXPORT void JNICALL Java_org_xbig_base_NativeBuffer__1dispose
+JNIEXPORT void JNICALL Java_org_xbig_base_NativeIntBuffer__1dispose
   (JNIEnv *, jobject, jlong pInstance)
 {
-	unsigned char* buffer = reinterpret_cast<unsigned char*>(pInstance);
+	int* buffer = reinterpret_cast<int*>(pInstance);
 	delete[] buffer;
 }
 
 /*
- * Class:     base_NativeBuffer
+ * Class:     base_NativeIntBuffer
  * Method:    _get
  * Signature: (J)C
  */
-JNIEXPORT jbyte JNICALL Java_org_xbig_base_NativeBuffer__1getIndex
+JNIEXPORT jint JNICALL Java_org_xbig_base_NativeIntBuffer__1getIndex
   (JNIEnv *, jobject, jlong pInstance, jint index)
 {
-	unsigned char* buffer = reinterpret_cast<unsigned char*>(pInstance);
+	int* buffer = reinterpret_cast<int*>(pInstance);
 	return buffer[index];
 }
 
 /*
- * Class:     base_NativeBuffer
+ * Class:     base_NativeIntBuffer
  * Method:    _set
  * Signature: (J)C
  */
-JNIEXPORT void JNICALL Java_org_xbig_base_NativeBuffer__1setIndex
-  (JNIEnv *, jobject, jlong pInstance, jint index, jbyte value)
+JNIEXPORT void JNICALL Java_org_xbig_base_NativeIntBuffer__1setIndex
+  (JNIEnv *, jobject, jlong pInstance, jint index, jint value)
 {
-	unsigned char* buffer = reinterpret_cast<unsigned char*>(pInstance);
+	int* buffer = reinterpret_cast<int*>(pInstance);
 	buffer[index] = value;
 }

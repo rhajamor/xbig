@@ -26,7 +26,7 @@ package org.xbig.base;
  * Allows allocation of a memory region.
  * 
  */
-public class NativeBuffer extends NativeObject {
+public class NativeShortBuffer extends NativeObject {
 
     /**
      * Size of this buffer.
@@ -38,7 +38,7 @@ public class NativeBuffer extends NativeObject {
      * 
      * @see org.xbig.base.NativeObject#NativeObject(InstancePointer)
      */
-    public NativeBuffer(InstancePointer pInstance) {
+    public NativeShortBuffer(InstancePointer pInstance) {
         super(pInstance);
     }
 
@@ -47,7 +47,7 @@ public class NativeBuffer extends NativeObject {
      * 
      * @see org.xbig.base.NativeObject#NativeObject(InstancePointer, boolean)
      */
-    public NativeBuffer(InstancePointer pointer, boolean b) {
+    public NativeShortBuffer(InstancePointer pointer, boolean b) {
         super(pointer,b);
     }
 
@@ -56,7 +56,7 @@ public class NativeBuffer extends NativeObject {
      * 
      * @param size Size of memory to allocate.
      */
-    public NativeBuffer(int size) {
+    public NativeShortBuffer(int size) {
         super(new InstancePointer(_create(size)),false);
         this.size = size;
     }
@@ -71,7 +71,7 @@ public class NativeBuffer extends NativeObject {
      */
     @Override
     public void delete() {
-		if(this.remote) {
+    	if(this.remote) {
 			throw new RuntimeException("Instance created by the library! It's not allowed to dispose it.");
 		}
 
@@ -87,7 +87,7 @@ public class NativeBuffer extends NativeObject {
      * 
      * @param index Index to get value from.
      */
-    public byte getIndex(int index) {
+    public short getIndex(int index) {
         if (this.deleted) {
             throw new IllegalStateException();
         }
@@ -96,7 +96,7 @@ public class NativeBuffer extends NativeObject {
         }
         return _getIndex(object.pointer, index);
     }
-    private native byte _getIndex(long pInstance, int index);
+    private native short _getIndex(long pInstance, int index);
 
     /**
      * Set value at a given index.
@@ -104,7 +104,7 @@ public class NativeBuffer extends NativeObject {
      * @param index Index to set.
      * @param value Value to set.
      */
-    public void setIndex(int index, byte value) {
+    public void setIndex(int index, short value) {
         if (this.deleted) {
             throw new IllegalStateException();
         }
@@ -113,11 +113,11 @@ public class NativeBuffer extends NativeObject {
         }
         _setIndex(object.pointer, index, value);
     }
-    private native void _setIndex(long pInstance, int index, byte value);
+    private native void _setIndex(long pInstance, int index, short value);
 
     /**
      * Get size of this buffer.
-     * 
+     * _org_xbig_std_ios.c
      * @return Size of this buffer.
      */
     public int getSize() {
@@ -132,4 +132,10 @@ public class NativeBuffer extends NativeObject {
     public VoidPointer getVoidPointer() {
         return new VoidPointer(new InstancePointer(object.pointer), true);
     }
+    
+    public void finalize() {
+		if(!this.remote && !this.deleted) {
+			delete();
+		}
+	}
 }
