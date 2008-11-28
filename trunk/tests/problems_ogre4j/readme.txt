@@ -82,7 +82,7 @@ t62              s
 t63              s
 t64              depends on config
 t65              s on win, f on lin
-t66              s
+t66              s on win and lin, f on osx
 t67              s
 t68              s
 t69              s
