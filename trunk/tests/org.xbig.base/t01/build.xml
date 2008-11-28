@@ -46,7 +46,12 @@
 		<cpp-shared-test name="simple" libs="t01" />
 	</target>
 
-	<target name="all" depends="compile-lib-base, javalib-test"></target>
+	<target name="compile-base-lib">
+		<ant dir="${dir.top}/src/java" inheritAll="false"/>
+		<ant dir="${dir.top}/src/c" inheritAll="false"/>
+	</target>
+
+	<target name="all" depends="compile-base-lib, compile-lib-base, javalib-test"></target>
 
 	<target name="clean" depends="cpp-clean">
 		<delete dir="${dir.cpp.build}" />
