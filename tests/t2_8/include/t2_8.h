@@ -96,3 +96,10 @@ public:
 private:
 	const char* ms;
 };
+
+class EXPORT Const {
+public:
+	const std::string a(const std::string s) {std::cout << "str in c++: " << s << std::endl; return s;}
+	const std::string* b(const std::string* s) {std::cout << "str in c++: " << s << std::endl; return s;}
+	const std::string& c(const std::string& s) {std::cout << "str in c++: " << s << std::endl; return s;}
+};

@@ -30,7 +30,7 @@ JNIEXPORT jlong JNICALL Java_org_xbig_base_WideStringPointer__1create
   (JNIEnv *env, jclass that, jstring value)
 {
 	std::wstring * ptr = new std::wstring;
-	*ptr = org::xbig::jni::to_stdwstring(env, value);
+	org::xbig::jni::to_stdwstring(env, value, *ptr);
 	return reinterpret_cast<jlong>(ptr);
 }
 
@@ -81,5 +81,5 @@ JNIEXPORT void JNICALL Java_org_xbig_base_WideStringPointer__1set
   (JNIEnv * env, jobject that, jlong pInstance, jstring value)
 {
 	std::wstring * ptr = reinterpret_cast<std::wstring*>(pInstance);
-	*ptr = org::xbig::jni::to_stdwstring(env, value);
+	org::xbig::jni::to_stdwstring(env, value, *ptr);
 }

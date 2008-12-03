@@ -38,6 +38,7 @@
 
 	<xsl:import href="cppMethodDeclaration.xslt" />
 	<xsl:import href="cppMethodParameterConversion.xslt" />
+	<xsl:import href="../../util/firstLetterToUpperCase.xslt" />
 
 	<xd:doc type="stylesheet">
 		<xd:short>Implementation of JNI functions.</xd:short>
@@ -95,63 +96,63 @@
 					<!-- handle constructor -->
 					<xsl:when test="not($method/type)">
 						<xsl:copy-of
-							select="$config/config/cpp/method/constructor" />
+							select="xbig:removeCDATA($config/config/cpp/method/constructor)" />
 					</xsl:when>
 
 					<!-- handle destructor -->
-					<xsl:when test="$method/@destructor eq 'true'">
+					<xsl:when test="$method/@destructor = 'true'">
 						<xsl:copy-of
-							select="$config/config/cpp/method/destructor" />
+							select="xbig:removeCDATA($config/config/cpp/method/destructor)" />
 					</xsl:when>
 
 					<!-- handle public attribute getter -->
-					<xsl:when test="$method/@public_attribute_getter eq 'true'">
+					<xsl:when test="$method/@public_attribute_getter = 'true'">
 						<xsl:choose>
 							<xsl:when test="@static!='true'">
-								<xsl:copy-of select="$config/config/cpp/method/publicattribute/get/nonstatic" />
+								<xsl:copy-of select="xbig:removeCDATA($config/config/cpp/method/publicattribute/get/nonstatic)" />
 							</xsl:when>
 							<xsl:when test="@static='true'">
-								<xsl:copy-of select="$config/config/cpp/method/publicattribute/get/static" />
+								<xsl:copy-of select="xbig:removeCDATA($config/config/cpp/method/publicattribute/get/static)" />
 							</xsl:when>
 						</xsl:choose>
 					</xsl:when>
 
 					<!-- handle public attribute setter -->
-					<xsl:when test="$method/@public_attribute_setter eq 'true'">
+					<xsl:when test="$method/@public_attribute_setter = 'true'">
 						<xsl:choose>
 							<xsl:when test="@static!='true'">
-								<xsl:copy-of select="$config/config/cpp/method/publicattribute/set/nonstatic" />
+								<xsl:copy-of select="xbig:removeCDATA($config/config/cpp/method/publicattribute/set/nonstatic)" />
 							</xsl:when>
 							<xsl:when test="@static='true'">
-								<xsl:copy-of select="$config/config/cpp/method/publicattribute/set/static" />
+								<xsl:copy-of select="xbig:removeCDATA($config/config/cpp/method/publicattribute/set/static)" />
 							</xsl:when>
 						</xsl:choose>
 					</xsl:when>
 
 					<!-- handle static method without return parameter -->
 					<xsl:when
-						test="($method/type eq 'void') and ($static eq 'true') and not($method/@passedBy = 'pointer')">
+						test="($method/type = 'void') and ($static = 'true') and not($method/@passedBy = 'pointer')">
 						<xsl:copy-of
-							select="$config/config/cpp/method/static/void" />
+							select="xbig:removeCDATA($config/config/cpp/method/static/void)" />
 					</xsl:when>
 
 					<!-- handle static method with return parameter -->
 					<xsl:when
-						test="$static eq 'true'">
+						test="$static = 'true'">
 						<xsl:copy-of
-							select="$config/config/cpp/method/static/return" />
+							select="xbig:removeCDATA($config/config/cpp/method/static/return)" />
 					</xsl:when>
 
 					<!-- handle normal method without return parameter-->
-					<xsl:when test="($method/type eq 'void') and not($method/@passedBy = 'pointer')">
+					<xsl:when test="($method/type = 'void') and not($method/@passedBy = 'pointer')">
 						<xsl:copy-of
-							select="$config/config/cpp/method/normal/void" />
+							select="xbig:removeCDATA($config/config/cpp/method/normal/void)" />
 					</xsl:when>
 
 					<!-- handle normal method with return parameter-->
-					<xsl:when test="($method/type ne 'void') or ($method/type eq 'void' and $method/@passedBy = 'pointer')">
+					<xsl:when test="($method/type != 'void') or ($method/type = 'void' and $method/@passedBy = 'pointer')">
 						<xsl:copy-of
-							select="$config/config/cpp/method/normal/return" />
+							select="xbig:removeCDATA($config/config/cpp/method/normal/return)" />
 					</xsl:when>
 				
 					<!-- print message for other stuff -->

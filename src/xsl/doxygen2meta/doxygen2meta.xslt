@@ -2061,14 +2061,14 @@
 		<xsl:param name="namespace" select="''"/>
 		<xsl:element name="class">
 			<xsl:attribute name="protection" select="'public'" />
-			<xsl:attribute name="name" select="$config/config/meta/globalmember/classNameForGlobalMember" />
+			<xsl:attribute name="name" select="normalize-space($config/config/meta/globalmember/classNameForGlobalMember)" />
 			<xsl:attribute name="fullName">
 				<xsl:choose>
 					<xsl:when test="$namespace=''">
-						<xsl:value-of select="$config/config/meta/globalmember/classNameForGlobalMember" />
+						<xsl:value-of select="normalize-space($config/config/meta/globalmember/classNameForGlobalMember)" />
 					</xsl:when>
 					<xsl:otherwise>
-						<xsl:value-of select="concat($namespace, '::', $config/config/meta/globalmember/classNameForGlobalMember)" />
+						<xsl:value-of select="concat($namespace, '::', normalize-space($config/config/meta/globalmember/classNameForGlobalMember))" />
 					</xsl:otherwise>
 				</xsl:choose>
 			</xsl:attribute>
