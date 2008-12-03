@@ -5,7 +5,7 @@ package org.xbig.test.t50;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.xbig.base.ShortPointer;
+import org.xbig.base.BytePointer;
 import org.xbig.base.WideStringPointer;
 import org.xbig.Ogre.A;
 import org.xbig.std.ofstream;
@@ -39,23 +39,23 @@ public class BasicTests {
         ifstream iFile = new ifstream();
 
         String filename = "test.txt";
-        short s = 'A';
-        ShortPointer sPtr = new ShortPointer((short)0);
+        short s = 'A'; // = 65 in ascii
+        BytePointer bytePtr = new BytePointer((byte)0);
 
         oFile.open(filename);
         oFile.put(s);
         oFile.close();
 
         iFile.open(filename);
-        iFile.get(sPtr);
+        iFile.get(bytePtr);
         iFile.close();
 
-        System.out.println("got from file: " + sPtr.get());
+        System.out.println("got from file: " + bytePtr.get() + ", as char: " + (char)(bytePtr.get().byteValue()));
         File javaFile = new File(filename);
         javaFile.delete();
-        Assert.assertEquals(s, sPtr.get());
+        Assert.assertEquals(s, (short)bytePtr.get());
 
-        sPtr.delete();
+        bytePtr.delete();
         iFile.delete();
         oFile.delete();
     }
