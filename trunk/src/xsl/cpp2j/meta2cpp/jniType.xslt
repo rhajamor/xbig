@@ -129,9 +129,20 @@
 						<xsl:value-of select="'jlong'"/>
 					</xsl:when>
 
-					<!-- print first type found in result list -->
+					<!-- print type from config. Take care of const. -->
 					<xsl:otherwise>
-						<xsl:value-of select="$type_info/type/@jni" />
+						<xsl:variable name="constTypeFromConfig" select="$type_info/type[@const = 'true']/@jni" />
+						<xsl:variable name="nonConstTypeFromConfig" select="$type_info/type[@const = 'false' or not(@const)]/@jni" />
+						<xsl:value-of 
+							select="if($param/type/@const = 'true') then
+										if($constTypeFromConfig) then
+											$constTypeFromConfig
+										else
+											$type_info/type/@jni
+									else if($nonConstTypeFromConfig) then
+										$nonConstTypeFromConfig
+									else
+										$type_info/type/@jni" />
 					</xsl:otherwise>
 				</xsl:choose>
 			</xsl:otherwise>

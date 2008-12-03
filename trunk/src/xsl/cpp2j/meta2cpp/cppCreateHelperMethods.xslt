@@ -51,7 +51,7 @@
 		<xsl:param name="class" />
 		
 		<!-- if we call a global method, the destructor is unnecessary -->
-		<xsl:if test="not($class/@name = $config/config/meta/globalmember/classNameForGlobalMember)">
+		<xsl:if test="not($class/@name = normalize-space($config/config/meta/globalmember/classNameForGlobalMember))">
 			<!-- compose destructor name -->
 			<xsl:variable name="destructor_name"
 				select="$config/config/meta/destructor/name/text()" />

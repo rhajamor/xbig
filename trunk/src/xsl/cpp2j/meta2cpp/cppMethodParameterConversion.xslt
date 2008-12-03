@@ -39,6 +39,7 @@
 	<xsl:import href="cppMethodDeclaration.xslt" />
 	<xsl:import href="cppCodeWriter.xslt" />
 	<xsl:import href="../../util/metaTypeInfo.xslt" />
+	<xsl:import href="../../util/firstLetterToUpperCase.xslt" />
 
 	<xd:doc type="stylesheet">
 		<xd:short>Conversion of JNI parameters to C++ types.</xd:short>
@@ -66,31 +67,45 @@
 
 			<xsl:variable name="fullTypeName" select="$resolvedParameter"/>
 
-			<!-- if there is no param name in original lib -->
-			<xsl:variable name="paramName">
-				<xsl:choose>
-					<xsl:when test="not(./name) or ./name = ''">
-						<xsl:value-of select="concat($config/config/meta/parameter/defaultName,
-												$parameterPosition)"/>
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:value-of select="./name"/>
-					</xsl:otherwise>
-				</xsl:choose>
-			</xsl:variable>
+			<!-- parameter name -->
+			<xsl:variable name="param_name" select="xbig:createParameterName(., position(), $config)" />
 
 			<!-- parameter name for call native function -->
 			<xsl:variable name="lib_var"
-				select="xbig:cpp-param($config, $paramName)" />
+				select="xbig:cpp-param($config, $param_name)" />
 
-			<!-- write new line seperator for parameter declaration -->
+			<!-- write new line separator for parameter declaration -->
 			<xsl:text>#nl#</xsl:text>
+
+			<!-- type info -->
+			<xsl:variable name="type_info">
+				<xsl:call-template name="metaExactTypeInfo">
+					<xsl:with-param name="root"
+						select="$config/config/cpp/jni/types" />
+					<xsl:with-param name="param" select="." />
+					<xsl:with-param name="typeName" select="$fullTypeName" />
+				</xsl:call-template>
+			</xsl:variable>
+
+			<!-- check for <pre_jni2cpp> -->
+			<xsl:choose>
+				<xsl:when test="./type/@const = 'true'">
+					<xsl:if test="$type_info/type[@const = 'true']/pre_jni2cpp">
+						<xsl:value-of select="replace(replace(xbig:removeCDATA($type_info/type[@const = 'true']/pre_jni2cpp), '#jni_var#', $param_name), '#cpp_var#', $lib_var)" />
+					</xsl:if>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:if test="$type_info/type[@const = 'false' or not(@const)]/pre_jni2cpp">
+						<xsl:value-of select="replace(replace(xbig:removeCDATA($type_info/type[@const = 'false' or not(@const)]/pre_jni2cpp), '#jni_var#', $param_name), '#cpp_var#', $lib_var)" />
+					</xsl:if>
+				</xsl:otherwise>
+			</xsl:choose>
 
 			<!-- write type for transformation -->
 			<!-- take cpp attribute if available, otherwise write meta -->
-			<xsl:value-of select="xbig:cpp-type($config, ., $class, $fullTypeName)" />
+			<xsl:value-of select="xbig:cpp-type($config, ., $class, $fullTypeName, true())" />
 
-			<!-- write seperator for variable -->
+			<!-- write separator for variable -->
 			<xsl:text>&#32;</xsl:text>
 
 			<!-- write variable for transformed variable -->
@@ -100,8 +115,8 @@
 			<xsl:text>&#32;=&#32;</xsl:text>
 
 			<!-- write conversion to C++ type -->
-			<xsl:value-of select="xbig:jni-to-cpp(
-							$config, $class, $method, ., $fullTypeName, position())" />
+			<xsl:value-of select="replace(xbig:jni-to-cpp(
+							$config, $class, $method, ., $fullTypeName, $param_name, $type_info), '#cpp_var#', $lib_var)" />
 
 			<!-- finish conversion statement -->
 			<xsl:text>;</xsl:text>

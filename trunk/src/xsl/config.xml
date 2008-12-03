@@ -1,31 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-  
-  This source file is part of XBiG
-  (XSLT Bindings Generator)
-  For the latest info, see http://sourceforge.net/projects/xbig
-  
-  Copyright (c) 2006 The XBiG Development Team
-  Also see acknowledgements in Readme.html
-  
-  This program is free software; you can redistribute it and/or modify it under
-  the terms of the GNU Lesser General Public License as published by the Free Software
-  Foundation; either version 2 of the License, or (at your option) any later
-  version.
-  
-  This program is distributed in the hope that it will be useful, but WITHOUT
-  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-  FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
-  
-  You should have received a copy of the GNU Lesser General Public License along with
-  this program; if not, write to the Free Software Foundation, Inc., 59 Temple
-  Place - Suite 330, Boston, MA 02111-1307, USA, or go to
-  http://www.gnu.org/copyleft/lesser.txt.
-  
-  Author: Frank Bielig
-          Christoph Nenning
-  
--->
+	<!--
+
+		This source file is part of XBiG (XSLT Bindings Generator) For the
+		latest info, see http://sourceforge.net/projects/xbig Copyright (c)
+		2006 The XBiG Development Team Also see acknowledgements in
+		Readme.html This program is free software; you can redistribute it
+		and/or modify it under the terms of the GNU Lesser General Public
+		License as published by the Free Software Foundation; either version 2
+		of the License, or (at your option) any later version. This program is
+		distributed in the hope that it will be useful, but WITHOUT ANY
+		WARRANTY; without even the implied warranty of MERCHANTABILITY or
+		FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+		License for more details. You should have received a copy of the GNU
+		Lesser General Public License along with this program; if not, write
+		to the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+		Boston, MA 02111-1307, USA, or go to
+		http://www.gnu.org/copyleft/lesser.txt.
+	-->
 
 <!DOCTYPE DaemonConfig [
   <!ENTITY cppFileHeader SYSTEM "cpp2j/etc/cpp_header.inc">
@@ -35,105 +26,106 @@
 
 <config>
 
-  <meta>
-    <signatures>
+	<meta>
+		<signatures>
 
-      <!-- mapping of basic types -->
+			<!-- mapping of basic types -->
 
-      <type meta="void" signature="v" />
-      <type meta="bool" signature="b" />
+			<type meta="void" signature="v" />
+			<type meta="bool" signature="b" />
 
-      <type meta="char" signature="c" />
-      <type meta="signed char" signature="b" />
-      <type meta="unsigned char" signature="B" />
+			<type meta="char" signature="c" />
+			<type meta="signed char" signature="b" />
+			<type meta="unsigned char" signature="B" />
 
-      <type meta="short" signature="h" />
-      <type meta="short int" signature="h" />
-      <type meta="signed short" signature="h" />
-      <type meta="signed short int" signature="h" />
-      <type meta="unsigned short" signature="H" />
-      <type meta="unsigned short int" signature="H" />
+			<type meta="short" signature="h" />
+			<type meta="short int" signature="h" />
+			<type meta="signed short" signature="h" />
+			<type meta="signed short int" signature="h" />
+			<type meta="unsigned short" signature="H" />
+			<type meta="unsigned short int" signature="H" />
 
-      <type meta="int" signature="i" />
-      <type meta="signed" signature="i" />
-      <type meta="signed int" signature="i" />
-      <type meta="unsigned" signature="I" />
-      <type meta="unsigned int" signature="I" />
+			<type meta="int" signature="i" />
+			<type meta="signed" signature="i" />
+			<type meta="signed int" signature="i" />
+			<type meta="unsigned" signature="I" />
+			<type meta="unsigned int" signature="I" />
 
-      <type meta="long" signature="l" />
-      <type meta="long int" signature="l" />
-      <type meta="signed long" signature="l" />
-      <type meta="signed long int" signature="l" />
-      <type meta="unsigned long" signature="L" />
-      <type meta="unsigned long int" signature="L" />
+			<type meta="long" signature="l" />
+			<type meta="long int" signature="l" />
+			<type meta="signed long" signature="l" />
+			<type meta="signed long int" signature="l" />
+			<type meta="unsigned long" signature="L" />
+			<type meta="unsigned long int" signature="L" />
 
-      <type meta="long long" signature="o" />
-      <type meta="signed long long" signature="o" />
-      <type meta="unsigned long long" signature="O" />
-			
-      <type meta="double" signature="D" />
-      <type meta="float" signature="F" />
+			<type meta="long long" signature="o" />
+			<type meta="signed long long" signature="o" />
+			<type meta="unsigned long long" signature="O" />
 
-      <type meta="std::string" signature="s" />
-      <type meta="std::wstring" signature="ws" />
-      <type meta="size_t" signature="i" />
-      <type meta="wchar_t" signature="H" />
-      <type meta="time_t" signature="l" />
+			<type meta="double" signature="D" />
+			<type meta="float" signature="F" />
 
-      <!-- mapping of non-const passing methods for parameters -->
+			<type meta="std::string" signature="s" />
+			<type meta="std::wstring" signature="ws" />
+			<type meta="size_t" signature="i" />
+			<type meta="wchar_t" signature="H" />
+			<type meta="time_t" signature="l" />
 
-      <pass meta="reference" signature="r" />
-      <pass meta="pointer" signature="p" />
-      <pass meta="value" signature="v" />
-      <pass meta="array" signature="a" />
+			<!-- mapping of non-const passing methods for parameters -->
 
-      <!-- mapping of constant passing methods for parameters -->
+			<pass meta="reference" signature="r" />
+			<pass meta="pointer" signature="p" />
+			<pass meta="value" signature="v" />
+			<pass meta="array" signature="a" />
 
-      <const-pass meta="reference" signature="R" />
-      <const-pass meta="pointer" signature="P" />
-      <const-pass meta="value" signature="V" />
-      <const-pass meta="array" signature="A" />
+			<!-- mapping of constant passing methods for parameters -->
 
-    </signatures>
+			<const-pass meta="reference" signature="R" />
+			<const-pass meta="pointer" signature="P" />
+			<const-pass meta="value" signature="V" />
+			<const-pass meta="array" signature="A" />
 
-    <method>
-      <name>
-        <prefix>_</prefix>
-        <suffix></suffix>
-      </name>
-    </method>
+		</signatures>
 
-    <constructor>
-      <name>
-        <prefix>__create</prefix>
-        <suffix></suffix>
-      </name>
-    </constructor>
+		<method>
+			<name>
+				<prefix>_</prefix>
+				<suffix></suffix>
+			</name>
+		</method>
 
-    <destructor>
-      <name>__delete</name>
-    </destructor>
+		<constructor>
+			<name>
+				<prefix>__create</prefix>
+				<suffix></suffix>
+			</name>
+		</constructor>
 
-    <publicattribute>
-      <get>get</get>
-      <set>set</set>
-    </publicattribute>
+		<destructor>
+			<name>__delete</name>
+		</destructor>
 
-    <parameter>
-      <defaultName>a</defaultName>
-      <rename meta="_min">min</rename>
-      <rename meta="_max">max</rename>
-    </parameter>
-		
-    <globalmember>
-			<classNameForGlobalMember>GlobalUtility</classNameForGlobalMember>
-    </globalmember>
+		<publicattribute>
+			<get>get</get>
+			<set>set</set>
+		</publicattribute>
 
-  </meta>
+		<parameter>
+			<defaultName>a</defaultName>
+			<rename meta="_min">min</rename>
+			<rename meta="_max">max</rename>
+		</parameter>
 
-  <cpp>
-    <format>
-      <indent>&#10;&#32;&#32;</indent>
+		<globalmember>
+			<classNameForGlobalMember>GlobalUtility
+			</classNameForGlobalMember>
+		</globalmember>
+
+	</meta>
+
+	<cpp>
+		<format>
+			<indent>&#10;&#32;&#32;</indent>
     </format>
 
 	<always_include>
@@ -158,99 +150,164 @@
 
     <method>
       <constructor>
-        #nl#// constructor of class #cpp_class# #nl# #nl#//
-        parameter conversions #cpp_conversions# #nl# #nl#//
-        create new instance of class #cpp_class#
-        #nl##cpp_class#* #cpp_this# = new
-        #cpp_class#(#cpp_params#); #nl# #nl#// return casted
-        pointer #nl#jlong #jni_pointer# =
-        reinterpret_cast&lt;jlong&gt;(#cpp_this#); #nl#return
-        #jni_pointer#;
+        ![CDATA[
+        #nl#
+        // constructor of class #cpp_class#
+        #nl# #nl#
+        // parameter conversions
+        #cpp_conversions# 
+        #nl# #nl#
+        // create new instance of class #cpp_class#
+        #nl#
+        #cpp_class#* #cpp_this# = new #cpp_class#(#cpp_params#);
+        #nl# #nl#
+        // return casted pointer
+        #nl#
+        jlong #jni_pointer# = reinterpret_cast&lt;jlong&gt;(#cpp_this#);
+        #nl#
+        return #jni_pointer#;
+        ]]
       </constructor>
 
       <destructor>
-        #nl#// destructor of class #cpp_class# #nl#// cast
-        pointer to C++ object #nl##cpp_class#* #cpp_this# =
-        reinterpret_cast&lt;#cpp_class#*&gt;(#jni_pointer#);
-        #nl#// delete object if it exists #nl#if(#cpp_this# !=
-        NULL) delete #cpp_this#;
+        ![CDATA[
+        #nl#
+        // destructor of class #cpp_class#
+        #nl#
+        // cast pointer to C++ object
+        #nl#
+        #cpp_class#* #cpp_this# = reinterpret_cast&lt;#cpp_class#*&gt;(#jni_pointer#);
+        #nl#
+        // delete object if it exists
+        #nl#
+        if(#cpp_this# != NULL)
+        	delete #cpp_this#;
+        ]]
       </destructor>
 
       <static>
         <void>
-          #nl#// static method of class #cpp_class# without
-          return value #nl#// parameter conversions
-          #cpp_conversions# #nl# #nl#// call library method
-          #nl##cpp_class#::#cpp_method#(#cpp_params#);
+          ![CDATA[
+          #nl#
+          // static method of class #cpp_class# without return value
+          #nl#
+          // parameter conversions
+          #cpp_conversions#
+          #nl# #nl#
+          // call library method
+          #nl#
+          #cpp_class#::#cpp_method#(#cpp_params#);
+          ]]
         </void>
         <return>
-          #nl#// static method of class #cpp_class# with
-          return value #nl#// parameter conversions
-          #cpp_conversions# #nl# #nl#// call library method
-          #nl##cpp_return_type# #cpp_return_var# =
-          #optional_return_conversion#
-          #cpp_class#::#cpp_method#(#cpp_params#)#optional_closing_bracket#;
-          #nl#return #cpp_return#;
+          ![CDATA[
+          #nl#
+          // static method of class #cpp_class# with return value
+          #nl#
+          // parameter conversions
+          #cpp_conversions#
+          #nl# #nl#
+          // call library method
+          #nl#
+          #cpp_return_type# #cpp_return_var# = #optional_return_conversion# #cpp_class#::#cpp_method#(#cpp_params#)#optional_closing_bracket#;
+          #nl#
+          return #cpp_return#;
+          ]]
         </return>
       </static>
 
       <normal>
         <void>
-          #nl#// parameter conversions #cpp_conversions# #nl#
-          #nl#// cast pointer to C++ object #nl##cpp_class#*
-          #cpp_this# =
-          reinterpret_cast&lt;#cpp_class#*&gt;(#jni_pointer#);
-          #nl# #nl#// call library method
-          #nl##cpp_this#->#cpp_method#(#cpp_params#);
+          ![CDATA[
+          #nl#
+          // parameter conversions #cpp_conversions#
+          #nl# #nl#
+          // cast pointer to C++ object
+          #nl#
+          #cpp_class#* #cpp_this# = reinterpret_cast&lt;#cpp_class#*&gt;(#jni_pointer#);
+          #nl# #nl#
+          // call library method
+          #nl#
+          #cpp_this#->#cpp_method#(#cpp_params#);
+          ]]
         </void>
         <return>
-          #nl#// parameter conversions #cpp_conversions# #nl#
-          #nl#// cast pointer to C++ object #nl##cpp_class#*
-          #cpp_this# =
-          reinterpret_cast&lt;#cpp_class#*&gt;(#jni_pointer#);
-          #nl# #nl#// call library method
-          #nl##cpp_return_type# #cpp_return_var# =
-          #optional_return_conversion#
-          #cpp_this#->#cpp_method#(#cpp_params#)
-          #optional_closing_bracket#; #nl#return #cpp_return#;
+          ![CDATA[
+          #nl#
+          // parameter conversions #cpp_conversions#
+          #nl# #nl#
+          // cast pointer to C++ object
+          #nl#
+          #cpp_class#* #cpp_this# = reinterpret_cast&lt;#cpp_class#*&gt;(#jni_pointer#);
+          #nl# #nl#
+          // call library method
+          #nl#
+          #cpp_return_type# #cpp_return_var# = #optional_return_conversion# #cpp_this#->#cpp_method#(#cpp_params#) #optional_closing_bracket#;
+          #nl#
+          return #cpp_return#;
+          ]]
         </return>
       </normal>
 
       <publicattribute>
         <get>
           <static>
-            #nl#// parameter conversions #cpp_conversions#
-            #nl# #nl#// call library method
-            #nl##cpp_return_type# #cpp_return_var# =
-            #optional_return_conversion#
-            #cpp_class#::#cpp_attribute##optional_closing_bracket#;
-            #nl#return #cpp_return#;
+            ![CDATA[
+            #nl#
+            // parameter conversions
+            #cpp_conversions#
+            #nl# #nl#
+            // call library method
+            #nl#
+            #cpp_return_type# #cpp_return_var# = #optional_return_conversion# #cpp_class#::#cpp_attribute# #optional_closing_bracket#;
+            #nl#
+            return #cpp_return#;
+            ]]
           </static>
           <nonstatic>
-            #nl#// parameter conversions #cpp_conversions#
-            #nl# #nl#// cast pointer to C++ object
-            #nl##cpp_class#* #cpp_this# =
-            reinterpret_cast&lt;#cpp_class#*&gt;(#jni_pointer#);
-            #nl# #nl#// call library method
-            #nl##cpp_return_type# #cpp_return_var# =
-            #optional_return_conversion#
-            #cpp_this#->#cpp_attribute##optional_closing_bracket#;
-            #nl#return #cpp_return#;
+            ![CDATA[
+            #nl#
+            // parameter conversions
+            #cpp_conversions#
+            #nl# #nl#
+            // cast pointer to C++ object
+            #nl#
+            #cpp_class#* #cpp_this# = reinterpret_cast&lt;#cpp_class#*&gt;(#jni_pointer#);
+            #nl# #nl#
+            // call library method
+            #nl#
+            #cpp_return_type# #cpp_return_var# = #optional_return_conversion# #cpp_this#->#cpp_attribute##optional_closing_bracket#;
+            #nl#
+            return #cpp_return#;
+            ]]
           </nonstatic>
         </get>
         <set>
           <static>
-            #nl#// parameter conversions #cpp_conversions#
-            #nl# #nl#// call library method
-            #nl##cpp_class#::#cpp_attribute# = #cpp_params#;
+            ![CDATA[
+            #nl#
+            // parameter conversions
+            #cpp_conversions#
+            #nl# #nl#
+            // call library method
+            #nl#
+            #cpp_class#::#cpp_attribute# = #cpp_params#;
+            ]]
           </static>
           <nonstatic>
-            #nl#// parameter conversions #cpp_conversions#
-            #nl# #nl#// cast pointer to C++ object
-            #nl##cpp_class#* #cpp_this# =
-            reinterpret_cast&lt;#cpp_class#*&gt;(#jni_pointer#);
-            #nl# #nl#// call library method
-            #nl##cpp_this#->#cpp_attribute# = #cpp_params#;
+            ![CDATA[
+            #nl#
+            // parameter conversions
+            #cpp_conversions#
+            #nl# #nl#
+            // cast pointer to C++ object
+            #nl#
+            #cpp_class#* #cpp_this# =reinterpret_cast&lt;#cpp_class#*&gt;(#jni_pointer#);
+            #nl# #nl#
+            // call library method
+            #nl#
+            #cpp_this#->#cpp_attribute# = #cpp_params#;
+            ]]
           </nonstatic>
         </set>
       </publicattribute>
@@ -353,10 +410,22 @@
           </cpp2jni>
         </type>
 
+        <type meta="char" pass="pointer"
+          jni="jlong" cpp="char*">
+          <jni2cpp>
+            reinterpret_cast&lt;char*&gt;(#jni_var#)
+          </jni2cpp>
+          <cpp2jni>
+            reinterpret_cast&lt;jlong&gt;(#cpp_var#)
+          </cpp2jni>
+        </type>
         <type meta="char" pass="pointer" const="true"
           jni="jstring" cpp="char*">
+          <pre_jni2cpp>
+			std::string #cpp_var#_TMP; org::xbig::jni::to_stdstring(#jni_env#, #jni_var#, #cpp_var#_TMP);
+          </pre_jni2cpp>
           <jni2cpp>
-            org::xbig::jni::to_cstring(#jni_env#, #jni_var#)
+            #cpp_var#_TMP.c_str()
           </jni2cpp>
           <cpp2jni>
             org::xbig::jni::to_jstring(#jni_env#, #cpp_var#)
@@ -867,9 +936,9 @@
         <type meta="std::string" pass="reference" jni="jstring"
           cpp="std::string&amp;" returntype="std::string&amp;"
           const="true">
+          <!-- copy const references of strings to allow usage of plain Strings in java (not StringPointer). -->
           <jni2cpp>
-            org::xbig::jni::to_stdstring(#jni_env#,
-            #jni_var#)
+            ![CDATA[""; org::xbig::jni::to_stdstring(#jni_env#, #jni_var#, #cpp_var#); // calls c-tor only. Not operator= .]]
           </jni2cpp>
           <cpp2jni>
             org::xbig::jni::to_jstring(#jni_env#, #cpp_var#)
@@ -877,8 +946,7 @@
         </type>
         <type meta="std::string" jni="jstring">
           <jni2cpp>
-            org::xbig::jni::to_stdstring(#jni_env#,
-            #jni_var#)
+            ![CDATA[""; org::xbig::jni::to_stdstring(#jni_env#, #jni_var#, #cpp_var#); // calls c-tor only. Not operator= .]]
           </jni2cpp>
           <cpp2jni>
             org::xbig::jni::to_jstring(#jni_env#, #cpp_var#)
@@ -907,8 +975,7 @@
           cpp="std::wstring&amp;" returntype="std::wstring&amp;"
           const="true">
           <jni2cpp>
-            org::xbig::jni::to_stdwstring(#jni_env#,
-            #jni_var#)
+            ![CDATA[(const wchar_t*)""; org::xbig::jni::to_stdwstring(#jni_env#, #jni_var#, #cpp_var#); // calls c-tor only. Not operator= .]]
           </jni2cpp>
           <cpp2jni>
             org::xbig::jni::to_jstring(#jni_env#, #cpp_var#)
@@ -916,8 +983,7 @@
         </type>
         <type meta="std::wstring" jni="jstring">
           <jni2cpp>
-            org::xbig::jni::to_stdwstring(#jni_env#,
-            #jni_var#)
+            ![CDATA[(const wchar_t*)""; org::xbig::jni::to_stdwstring(#jni_env#, #jni_var#, #cpp_var#); // calls c-tor only. Not operator= .]]
           </jni2cpp>
           <cpp2jni>
             org::xbig::jni::to_jstring(#jni_env#, #cpp_var#)

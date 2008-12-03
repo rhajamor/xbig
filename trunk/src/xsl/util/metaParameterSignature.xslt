@@ -33,7 +33,8 @@
 	xmlns:xs="http://www.w3.org/2001/XMLSchema"
 	xmlns:fn="http://www.w3.org/2005/xpath-functions"
 	xmlns:xdt="http://www.w3.org/2005/xpath-datatypes"
-	xmlns:xd="http://www.pnp-software.com/XSLTdoc">
+	xmlns:xd="http://www.pnp-software.com/XSLTdoc"
+	xmlns:xbig="http://xbig.sourceforge.net/XBiG">
 
 
 	<xd:doc type="stylesheet">
@@ -148,5 +149,37 @@
 		<xsl:value-of select="$array_signature" />
 
 	</xsl:template>
+
+
+	<xd:doc type="function">
+		<xd:short>Checks if given parameter has a name and returns it. 
+					If it has no name, default name from config plus given position is returned.
+		</xd:short>
+		<xd:param name="param">
+			Parameter node from meta.
+		</xd:param>
+		<xd:param name="pos">
+			Parameter position (e.g. 1st parameter of function).
+		</xd:param>
+		<xd:param name="config">
+			config.xml.
+		</xd:param>
+	</xd:doc>
+	<xsl:function name="xbig:createParameterName">
+		<xsl:param name="param" />
+		<xsl:param name="pos" />
+		<xsl:param name="config" />
+
+		<xsl:choose>
+				<xsl:when test="not($param/name) or $param/name = ''">
+					<xsl:value-of
+						select="concat(
+									$config/config/meta/parameter/defaultName, $pos)" />
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="$param/name" />
+				</xsl:otherwise>
+			</xsl:choose>
+	</xsl:function>
 
 </xsl:stylesheet>

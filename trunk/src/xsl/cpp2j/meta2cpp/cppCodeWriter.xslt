@@ -90,12 +90,16 @@
 		<xd:param name="fullTypeName">
 			Fully qualified type name.
 		</xd:param>
+		<xd:param name="isParameter">
+			Indicates if this function call is for a c++ parameter or for a return type.
+		</xd:param>
 	</xd:doc>
 	<xsl:function name="xbig:cpp-type" as="xs:string">
 		<xsl:param name="config" />
 		<xsl:param name="param" />
 		<xsl:param name="class" />
 		<xsl:param name="fullTypeName" />
+		<xsl:param name="isParameter" as="xs:boolean" />
 
 		<!-- shortcut to type conversion configurations -->
 		<xsl:variable name="type_info">
@@ -116,8 +120,15 @@
 			</xsl:message>
 		</xsl:if>
 
+		<!-- make cpp type const if it is const in meta.
+		     But when type is a parameter and a string, it cannot be const
+		     because to_stdstring changes passed out parameter.
+		     String pointers are not converted with to_stdstring
+		     and thus they may be const.
+		     Return types must be const to avoid compiler errors. -->
+		<xsl:variable name="isString" as="xs:boolean" select="$fullTypeName = 'std::string' or $fullTypeName = 'std::wstring'" />
 		<xsl:variable name="const"
-			select="if($param/type/@const eq 'true') then 'const ' else ''" />
+			select="if($param/type/@const eq 'true' and ($isParameter = false() or ($isString = true() and $param/@passedBy != 'pointer') = false())) then 'const ' else ''" />
 
 		<!-- add '*' for pointer pointer -->
 		<xsl:variable name="pointerPointer">
@@ -150,10 +161,22 @@
 					<!-- if const -->
 					<!-- TODO check for const pointers (int* const) -->
 					<!-- signed / unsigned char as pointer pointer, see bug 1728985 -->
+					<xsl:variable name="constCppTypeFromConfig" select="$type_info/type[@const = 'true']/@cpp" />
+					<xsl:variable name="nonConstCppTypeFromConfig" select="$type_info/type[@const = 'false' or not(@const)]/@cpp" />
+					<xsl:variable name="cppTypeFromConfig" 
+						select="if($param/type/@const = 'true') then 
+									if($constCppTypeFromConfig) then
+										$constCppTypeFromConfig
+									else
+										$type_info/type/@cpp
+								else if($nonConstCppTypeFromConfig) then
+									$nonConstCppTypeFromConfig
+								else
+									$type_info/type/@cpp" />
 					<xsl:variable name="cppType" select="if(contains($fullTypeName, 'char')
 															and $pointerPointer != '')
 															then concat($fullTypeName, '*')
-															else $type_info/type/@cpp"/>
+															else $cppTypeFromConfig"/>
 
 					<!-- Return types are declared partly const always, see bug 1728998.
 						 See Ogre::SceneNode::ConstObjectIterator::peekNextValuePtr.
@@ -282,9 +305,11 @@
 		<xd:param name="fullTypeName">
 			Fully qualified type name.
 		</xd:param>
-		<xd:param name="paramPosition">
-			Number of parameter in parameter list. Needed for unnamed
-			parameters.
+		<xd:param name="param_name">
+			Parameter name to be used. Should be created with xbig:createParameterName().
+		</xd:param>
+		<xd:param name="type_info">
+			Info from meta about current type. Should be obtained with template 'metaExactTypeInfo'.
 		</xd:param>
 	</xd:doc>
 	<xsl:function name="xbig:jni-to-cpp" as="xs:string">
@@ -293,38 +318,12 @@
 		<xsl:param name="method" />
 		<xsl:param name="param" />
 		<xsl:param name="fullTypeName" />
-		<xsl:param name="paramPosition" />
-
-		<!-- shortcut to type conversion configurations -->
-		<xsl:variable name="type_info">
-			<xsl:call-template name="metaExactTypeInfo">
-				<xsl:with-param name="root"
-					select="$config/config/cpp/jni/types" />
-				<xsl:with-param name="param" select="$param" />
-				<xsl:with-param name="typeName" select="$fullTypeName" />
-			</xsl:call-template>
-		</xsl:variable>
+		<xsl:param name="param_name" />
+		<xsl:param name="type_info" />
 
 		<!-- const or not, for a later concat -->
 		<xsl:variable name="const"
 			select="if($param/type/@const eq 'true') then ' const ' else ''" />
-
-		<!-- shortcut for parameter name -->
-		<!-- if there is no param name in original lib -->
-		<xsl:variable name="parameterPosition" select="$paramPosition" />
-		<xsl:variable name="param_name">
-			<xsl:choose>
-				<xsl:when test="not($param/name) or $param/name = ''">
-					<xsl:value-of
-						select="concat(
-									$config/config/meta/parameter/defaultName,
-									$parameterPosition)" />
-				</xsl:when>
-				<xsl:otherwise>
-					<xsl:value-of select="$param/name" />
-				</xsl:otherwise>
-			</xsl:choose>
-		</xsl:variable>
 
 		<!-- find out if we have a pointer pointer pointer -->
 		<xsl:variable name="pointerPointerAddOn">
@@ -455,7 +454,7 @@
 						<xsl:otherwise>
 							<xsl:variable name="code1"
 								select="xbig:code(
-								$config, $type_info/type[@const='true']/jni2cpp, $class, $method, '')" />
+								$config, xbig:removeCDATA($type_info/type[@const='true']/jni2cpp), $class, $method, '')" />
 							<xsl:variable name="code2"
 								select="replace($code1,'#jni_var#', $param_name)" />
 							<xsl:value-of select="$code2" />
@@ -473,8 +472,20 @@
 				<!-- the 'normal' way -->
 				<xsl:otherwise>
 					<!-- perform general code transformations -->
+					<xsl:variable name="constConversionFromConfig" select="$type_info/type[@const = 'true']/jni2cpp"/>
+					<xsl:variable name="nonConstConversionFromConfig" select="$type_info/type[@const = 'false' or not(./@const)]/jni2cpp"/>
+					<xsl:variable name="conversionFromConfig" 
+						select="if($param/type/@const = 'true') then 
+									if($constConversionFromConfig) then
+										$constConversionFromConfig
+									else
+										$type_info/type/jni2cpp
+								else if($nonConstConversionFromConfig) then
+									$nonConstConversionFromConfig
+								else
+									$type_info/type/jni2cpp" />
 					<xsl:variable name="code1"
-						select="xbig:code($config, $type_info/type/jni2cpp, $class, $method, '')" />
+						select="xbig:code($config, xbig:removeCDATA($conversionFromConfig), $class, $method, '')" />
 
 					<!-- add the pointer pointer '*' -->
 					<xsl:variable name="code2"
@@ -633,8 +644,20 @@
 				<!-- the 'normal way' -->
 				<xsl:otherwise>
 					<!-- perform general code transformations -->
+					<xsl:variable name="constConversionFromConfig" select="$type_info/type[@const = 'true']/cpp2jni" />
+					<xsl:variable name="nonConstConversionFromConfig" select="$type_info/type[@const = 'false' or not(@const)]/cpp2jni" />
+					<xsl:variable name="conversionFromConfig" 
+						select="if($param/type/@const = 'true') then
+									if($constConversionFromConfig) then
+										$constConversionFromConfig
+									else
+										$type_info/type/cpp2jni
+								else if($nonConstConversionFromConfig) then
+									$nonConstConversionFromConfig
+								else
+									$type_info/type/cpp2jni" />
 					<xsl:variable name="code1"
-						select="xbig:code($config, $type_info/type/cpp2jni, $class, $method, '')" />
+						select="xbig:code($config, $conversionFromConfig, $class, $method, '')" />
 
 					<!-- replace parameter name in code fragment -->
 					<xsl:variable name="code2"
@@ -720,6 +743,34 @@
 		<!-- original code line -->
 		<xsl:variable name="org_line" select="normalize-space($line)" />
 
+		<!-- replace parameter conversions -->
+		<!-- this was line7, has been moved here to allow more ##-variables in conversion -->
+		<xsl:variable name="line-1">
+			<xsl:choose>
+
+				<xsl:when test="matches($org_line, '#cpp_conversions#')">
+					<!-- write code for parameter conversion -->
+					<xsl:variable name="param_conversions">
+						<xsl:call-template
+							name="cppMethodParameterConversion">
+							<xsl:with-param name="config"
+								select="$config" />
+							<xsl:with-param name="class"
+								select="$class" />
+							<xsl:with-param name="method"
+								select="$method" />
+						</xsl:call-template>
+					</xsl:variable>
+					<xsl:value-of
+						select="xbig:cpp-replace($org_line, '#cpp_conversions#', $param_conversions)" />
+				</xsl:when>
+
+				<xsl:otherwise>
+					<xsl:value-of select="$org_line" />
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+
 		<!-- replace method name -->
 		<xsl:variable name="line0">
 			<!-- if const overloading is used, we have to find out the original name -->
@@ -747,12 +798,12 @@
 						</xsl:choose>
 					</xsl:variable>
 					<xsl:value-of
-						select="xbig:cpp-replace($org_line, '#cpp_method#', 
+						select="xbig:cpp-replace($line-1, '#cpp_method#', 
 									concat($classPrefixForMethod, $methodName))" />
 				</xsl:when>
 				<xsl:otherwise>
 					<xsl:value-of
-						select="xbig:cpp-replace($org_line, '#cpp_method#', 
+						select="xbig:cpp-replace($line-1, '#cpp_method#', 
 									concat($classPrefixForMethod, $method/name))" />
 				</xsl:otherwise>
 			</xsl:choose>
@@ -762,7 +813,7 @@
 		<xsl:variable name="line1">
 			<xsl:choose>
 				<!-- if we call a global method -->
-				<xsl:when test="$class/@name = $config/config/meta/globalmember/classNameForGlobalMember">
+				<xsl:when test="$class/@name = normalize-space($config/config/meta/globalmember/classNameForGlobalMember)">
 					<xsl:variable name="namespace">
 						<xsl:choose>
 							<xsl:when test="$class/@name != $class/@fullName">
@@ -825,31 +876,8 @@
 		</xsl:variable>
 
 		<!-- replace parameter conversions -->
-		<xsl:variable name="line7">
-			<xsl:choose>
-
-				<xsl:when test="matches($line6, '#cpp_conversions#')">
-					<!-- write code for parameter conversion -->
-					<xsl:variable name="param_conversions">
-						<xsl:call-template
-							name="cppMethodParameterConversion">
-							<xsl:with-param name="config"
-								select="$config" />
-							<xsl:with-param name="class"
-								select="$class" />
-							<xsl:with-param name="method"
-								select="$method" />
-						</xsl:call-template>
-					</xsl:variable>
-					<xsl:value-of
-						select="xbig:cpp-replace($line6, '#cpp_conversions#', $param_conversions)" />
-				</xsl:when>
-
-				<xsl:otherwise>
-					<xsl:value-of select="$line6" />
-				</xsl:otherwise>
-			</xsl:choose>
-		</xsl:variable>
+		<!-- has been moved to top -->
+		<xsl:variable name="line7" select="$line6" />
 
 		<!-- resolve typedefs -->
 		<xsl:variable name="resolvedType">
@@ -948,7 +976,7 @@
 		<!-- replace return type -->
 		<xsl:variable name="line10"
 			select="xbig:cpp-replace($line9, '#cpp_return_type#',
-				xbig:cpp-type($config, $method, $class, $fullTypeName))" />
+				xbig:cpp-type($config, $method, $class, $fullTypeName, false()))" />
 
 		<!-- replace class name -->
 		<xsl:variable name="line11"

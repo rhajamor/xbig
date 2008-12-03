@@ -65,4 +65,26 @@
 		<xsl:value-of select="concat($upperFirstLetter,$rest)"/>
 
 	</xsl:template>
+
+
+	<xd:doc type="function">
+		<xd:short>Checks if given string contains CDATA and removes it.</xd:short>
+		<xd:param name="input">
+			String to be manipulated.
+		</xd:param>
+	</xd:doc>
+	<xsl:function name="xbig:removeCDATA" as="xs:string">
+		<xsl:param name="input" as="xs:string" />
+
+		<xsl:choose>
+			<xsl:when test="contains($input, 'CDATA')">
+				<xsl:value-of select="substring-before(substring-after($input, '![CDATA['), ']]')" />
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="$input" />
+			</xsl:otherwise>
+		</xsl:choose>
+
+	</xsl:function>
+
 </xsl:stylesheet>

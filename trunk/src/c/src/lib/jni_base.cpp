@@ -22,12 +22,14 @@
 #include <jni_base.h>
 
 #include <iostream>
+#include <string.h>
+
 
 #ifdef WIN32
 #include <windows.h>
 #endif
 
-std::string org::xbig::jni::to_stdstring(JNIEnv* env, jstring jString) {
+std::string& org::xbig::jni::to_stdstring(JNIEnv* env, jstring jString, std::string& outString) {
 #ifdef WIN32
 	const char* c_str = env->GetStringChars(jString, 0);
     const std::wstring wideString((const wchar_t*)c_str);
@@ -35,41 +37,41 @@ std::string org::xbig::jni::to_stdstring(JNIEnv* env, jstring jString) {
     WideCharToMultiByte( CP_ACP, 0, wideString.c_str(), (int) wideString.length(),
                          dest, (int) wideString.length(), NULL, NULL );
     dest[ wideString.length() ] = 0; // null termination
-    std::string returnValue( dest );
+    outString = dest;
     delete[] dest;
     env->ReleaseStringChars(jString, c_str);
-    return returnValue;
+    return outString;
 #else
     const char* c_str = env->GetStringUTFChars(jString, 0);
-    std::string std_str(c_str);
+    outString = (c_str);
     env->ReleaseStringUTFChars(jString, c_str);
-    return std_str;
+    return outString;
 #endif
 }
 
-std::wstring org::xbig::jni::to_stdwstring(JNIEnv* env, jstring jString) {
+std::wstring& org::xbig::jni::to_stdwstring(JNIEnv* env, jstring jString, std::wstring& outString) {
     const jchar* j_str = env->GetStringChars(jString, 0);
-    std::wstring std_wstr;
     if (sizeof(jchar) == sizeof(wchar_t))
     {
-    	std_wstr = (const wchar_t*)j_str;
+    	outString = (const wchar_t*)j_str;
     }
     else
     {
     	for (int i=0; j_str[i]!='\0'; ++i)
     	{
-    		std_wstr.append(1, j_str[i]);
+    		outString.append(1, j_str[i]);
     	}
     }
     env->ReleaseStringChars(jString, j_str);
-    return std_wstr;
-
+    return outString;
 }
 
-char* org::xbig::jni::to_cstring(JNIEnv* env, jstring jString) {
+char* org::xbig::jni::to_cstring(JNIEnv* env, jstring jString, char* outString) {
 	// TODO platform specific conversion
 	char* c_str = (char*)env->GetStringUTFChars(jString, 0);
-	return c_str;
+	strcpy (outString, c_str);
+	env->ReleaseStringUTFChars(jString, c_str);
+	return outString;
 }
 
 
@@ -100,4 +102,8 @@ jstring org::xbig::jni::to_jstring(JNIEnv* env, const std::wstring& str) {
 		delete[] j_str;
 		return jStr;
 	}
+}
+
+jsize org::xbig::jni::getStringLength(JNIEnv* env, const jstring& jString) {
+	return env->GetStringUTFLength(jString);
 }

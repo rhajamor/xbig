@@ -204,7 +204,7 @@
 							<xsl:when test="count($inheritedMethodsForJava/function
 												[name = current()/name]) &gt; 1
 												and not($class/@name = 
-												$config/config/meta/globalmember/classNameForGlobalMember)
+												normalize-space($config/config/meta/globalmember/classNameForGlobalMember))
 												and not(./@virt = 'pure-virtual')">
 								<xsl:variable name="currentMethod" select="."/>
 								<xsl:variable name="nameSpaces">
