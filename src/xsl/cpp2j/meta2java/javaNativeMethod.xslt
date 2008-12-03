@@ -152,7 +152,7 @@
 					<xsl:text>long</xsl:text>
 				</xsl:when>
 
-				<xsl:when test="($method/@passedBy='pointer' and not($resolvedType='char')) or
+				<xsl:when test="($method/@passedBy='pointer' and not($resolvedType='char' and xbig:isTypeConst($method))) or
 							($method/@passedBy eq 'reference'
 				            and not(xbig:isTypeConst($method))
 				            and not(xbig:isEnum($fullTypeName, $class, $root)))">
@@ -210,7 +210,7 @@
 				<!-- if more parameters available -->
 				<xsl:if test="count($method/parameters/parameter) > 0">
 					<!-- write seperator for following parameters -->
-					<xsl:text>,</xsl:text>
+					<xsl:text>,&#32;</xsl:text>
 				</xsl:if>
 			</xsl:if>
 

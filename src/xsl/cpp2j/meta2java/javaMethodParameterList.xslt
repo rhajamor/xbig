@@ -76,7 +76,7 @@
 				<!-- write parameter type -->
 				<xsl:choose>
 					<xsl:when test="($writingNativeMethod eq true()) 
-									and ((./@passedBy='pointer' and not(./type='char')) or 
+									and ((./@passedBy='pointer' and not(./type='char' and xbig:isTypeConst(.))) or 
 									(./@passedBy eq 'reference' and not(xbig:isTypeConst(.))))">
 						<xsl:value-of select="'long'" />
 					</xsl:when>
@@ -139,7 +139,7 @@
 			<!-- if we call a native method and have to pass an InstancePointer -->
 			<xsl:if test="($callingNativeMethod eq true())
 						 and $type_info/type/@java
-						 and ((./@passedBy='pointer' and not(./type='char')) or 
+						 and ((./@passedBy='pointer' and not(./type='char' and xbig:isTypeConst(.))) or 
 						 (./@passedBy eq 'reference' and not(xbig:isTypeConst(.))))">
 				<xsl:value-of select="'.object.pointer'" />
 			</xsl:if>

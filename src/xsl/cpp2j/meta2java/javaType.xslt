@@ -124,7 +124,7 @@
 				<!-- choose type -->
 				<xsl:choose>
 					<!-- write pointer class if the value is passed by pointer or reference and not const -->
-					<xsl:when test="(($param/@passedBy='pointer' and not($resolvedType='char')) or
+					<xsl:when test="(($param/@passedBy='pointer' and not($resolvedType='char' and xbig:isTypeConst($param))) or
 									($param/@passedBy='reference' and not(xbig:isTypeConst($param))))
 									and ($writingNativeMethod ne true())
 									and $type_info/type/@java">	
@@ -347,7 +347,9 @@
 					<!-- types in config (usually primitive types) -->
 					<xsl:otherwise>
 						<xsl:choose>
-							<!-- mapp char* to String -->
+							<!-- map const char* to String -->
+							<!-- char* is handled somewhere above and should be 
+							     a BytePointer or ShortPointer -->
 							<xsl:when test="$param/@passedBy='pointer' and $resolvedType='char'">
 								<xsl:value-of select="'String'"/>
 							</xsl:when>
@@ -392,7 +394,9 @@
 		</xsl:variable>
 
 		<xsl:choose>
-			<xsl:when test="$type_info/type/@java != 'int' and $type_info/type/@meta != 'std::wstring'">
+			<xsl:when test="$type_info/type/@java != 'int' and
+			                $type_info/type/@meta != 'std::wstring' and
+			                $type_info/type/@meta != 'char'">
 				<xsl:value-of>
 					<xsl:call-template name="firstLetterToUpperCase">
 						<xsl:with-param name="name">
@@ -418,6 +422,11 @@
 			<!-- WideStringPointer is a special name, too -->
 			<xsl:when test="$type_info/type/@meta = 'std::wstring'">
 				<xsl:value-of select="'WideStringPointer'" />
+			</xsl:when>
+
+			<!-- char * (not const) -->
+			<xsl:when test="$type_info/type/@meta = 'char'">
+				<xsl:value-of select="'BytePointer'" />
 			</xsl:when>
 		</xsl:choose>
 
