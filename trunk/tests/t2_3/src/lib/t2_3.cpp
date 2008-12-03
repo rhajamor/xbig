@@ -145,7 +145,14 @@ A::getString(std::string v) {
 
 char*
 A::getCharStar(char * v) {
-  std::cout << "A::getCharStar(char * v), ptr: " << v << ", value: " << *v << std::endl;
+  std::cout << "A::getCharStar(char * v), ptr: "
+            //<< std::hex << (int)v
+            << (void*)v
+            << std::dec << ", value: " << *v
+            << ", as (char*) " << v
+            << ", as (const char*): " << (const char*)v
+            //<< ", next elements: 1=" << v[1] << " 2=" << v[2] << " 3=" << v[3] << " 4=" << v[4]
+            << std::endl;
   return v;
 }
 

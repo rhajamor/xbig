@@ -507,7 +507,7 @@
 		</xsl:if>
 
 		<!-- close class declaration  -->
-		<xsl:text>};&#10;</xsl:text>
+		<xsl:text>}&#10;</xsl:text>
 
 	</xsl:template>
 

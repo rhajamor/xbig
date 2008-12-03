@@ -103,3 +103,35 @@ public:
 	const std::string* b(const std::string* s) {std::cout << "str in c++: " << s << std::endl; return s;}
 	const std::string& c(const std::string& s) {std::cout << "str in c++: " << s << std::endl; return s;}
 };
+
+class EXPORT CharPtr2 {
+public:
+	const char* constCharPtr(const char* s) {std::cout << "str in c++: " << s << std::endl; return s;}
+	char* charPtr(char* s) {std::cout << "str in c++: " << s << std::endl; return s;}
+
+	char charValue(char s) {std::cout << "str in c++: " << s << std::endl; return s;}
+	const char constCharValue(const char s) {std::cout << "str in c++: " << s << std::endl; return s;}
+
+	char& charRef(char& s) {std::cout << "str in c++: " << s << std::endl; return s;}
+	const char& constCharRef(const char& s) {std::cout << "str in c++: " << s << std::endl; return s;}
+
+
+	const unsigned char* constCharPtrUnsigned(const unsigned char* s) {std::cout << "str in c++: " << s << std::endl; return s;}
+	unsigned char* charPtrUnsigned(unsigned char* s) {std::cout << "str in c++: " << s << std::endl; return s;}
+
+	unsigned char charValueUnsigned(unsigned char s) {std::cout << "str in c++: " << s << std::endl; return s;}
+	const unsigned char constCharValueUnsigned(const unsigned char s) {std::cout << "str in c++: " << s << std::endl; return s;}
+
+	unsigned char& charRefUnsigned(unsigned char& s) {std::cout << "str in c++: " << s << std::endl; return s;}
+	const unsigned char& constCharRefUnsigned(const unsigned char& s) {std::cout << "str in c++: " << s << std::endl; return s;}
+
+
+	const signed char* constCharPtrSigned(const signed char* s) {std::cout << "str in c++: " << s << std::endl; return s;}
+	signed char* charPtrSigned(signed char* s) {std::cout << "str in c++: " << s << std::endl; return s;}
+
+	signed char charValueSigned(signed char s) {std::cout << "str in c++: " << s << std::endl; return s;}
+	const signed char constCharValueSigned(const signed char s) {std::cout << "str in c++: " << s << std::endl; return s;}
+
+	signed char& charRefSigned(signed char& s) {std::cout << "str in c++: " << s << std::endl; return s;}
+	const signed char& constCharRefSigned(const signed char& s) {std::cout << "str in c++: " << s << std::endl; return s;}
+};

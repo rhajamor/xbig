@@ -77,10 +77,21 @@ public class BasicTests {
         Assert.assertEquals(a.getDouble(doubleValue), doubleValue);
 
         String stringValue = "12345";
-        String charStarValue = "23456";
-        String constCharStarValue = "34567";
         Assert.assertEquals(a.getString(stringValue), stringValue);
-        Assert.assertEquals(a.getCharStar(charStarValue), charStarValue);
+
+        // char* is not mapped to String anymore
+        //String charStarValue = "23456";
+        NativeByteBuffer pseudoCString = new NativeByteBuffer(3);
+        pseudoCString.setIndex(0, (byte)65); // 65 is 'A' in ASCII
+        pseudoCString.setIndex(1, (byte)66);
+        pseudoCString.setIndex(2, (byte)0);
+        BytePointer charStar = new BytePointer(pseudoCString.getInstancePointer()); // pseudo cast
+        //Assert.assertEquals(a.getCharStar(charStarValue), charStarValue);
+        Assert.assertEquals(a.getCharStar(charStar).get(), charStar.get());
+        pseudoCString.delete();
+
+        // const char* is mapped to String
+        String constCharStarValue = "34567";
         Assert.assertEquals(a.getConstCharStar(constCharStarValue), constCharStarValue);
 
         short unsignedChar = 300;
