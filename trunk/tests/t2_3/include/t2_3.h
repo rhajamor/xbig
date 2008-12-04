@@ -12,6 +12,7 @@
 #endif
 
 #include <string>
+#include <iostream>
 #include <time.h>
 
 
@@ -55,10 +56,11 @@ public:
 
 class EXPORT Time {
 public:
-	void setTime(time_t t) {this->t = t;}
-	time_t getTime() {return t;}
+	Time():t(0){}
+	void setTime(time_t t) {std::cout << "time in c++: " << t << std::endl; this->t = t;}
+	time_t getTime() {std::cout << "returning: " << t << std::endl; return t;}
 
-	void setTimePtr(time_t* t) {this->t = *t;}
+	void setTimePtr(time_t* t) {std::cout << "time in c++ (via ptr):" << *t << ", adr: " << (int)t << ", as long: " << (long)*t << ", prev adr as long: " << (long)(*(t-4)) << ", next adr as long: " << (long)(*(t+4)) << std::endl; this->t = *t;}
 	time_t* getTimePtr() {return &t;}
 
 	void setTimeRef(time_t& t) {this->t = t;}

@@ -123,7 +123,13 @@ public class BasicTests {
 		Assert.assertEquals(currentTime, time.getTimePtr().get());
 		Assert.assertEquals(currentTime, time.getTimeRef().get());
 
-		LongPointer currentTimePtr = new LongPointer(currentTime);
+		// on my windows test machine, time_t was 8 bytes but
+		// long was just 4 bytes.
+		//LongPointer currentTimePtr = new LongPointer(currentTime);
+		NativeLongBuffer buf = new NativeLongBuffer(2);
+		buf.setIndex(0, currentTime); // is this endian related?
+		buf.setIndex(1, 0L);
+		LongPointer currentTimePtr = new LongPointer(buf.getInstancePointer());
 		time.setTimePtr(currentTimePtr);
 
 		Assert.assertEquals(currentTime, time.getTime());
@@ -136,7 +142,8 @@ public class BasicTests {
 		Assert.assertEquals(currentTime, time.getTimePtr().get());
 		Assert.assertEquals(currentTime, time.getTimeRef().get());
 
-		currentTimePtr.delete();
+		//currentTimePtr.delete();
+		buf.delete();
 		time.delete();
 	}
 
