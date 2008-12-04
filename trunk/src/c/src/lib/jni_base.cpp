@@ -31,15 +31,16 @@
 
 std::string& org::xbig::jni::to_stdstring(JNIEnv* env, jstring jString, std::string& outString) {
 #ifdef WIN32
-	const char* c_str = env->GetStringChars(jString, 0);
-    const std::wstring wideString((const wchar_t*)c_str);
+	// note: jchar and wchar_t are both 2 bytes with msvc
+	const wchar_t* c_str = (const wchar_t*)env->GetStringChars(jString, 0);
+    const std::wstring wideString(c_str);
     char * dest = new char[ wideString.length() + 1 ];
     WideCharToMultiByte( CP_ACP, 0, wideString.c_str(), (int) wideString.length(),
                          dest, (int) wideString.length(), NULL, NULL );
     dest[ wideString.length() ] = 0; // null termination
     outString = dest;
     delete[] dest;
-    env->ReleaseStringChars(jString, c_str);
+    env->ReleaseStringChars(jString, (const jchar*)c_str);
     return outString;
 #else
     const char* c_str = env->GetStringUTFChars(jString, 0);
