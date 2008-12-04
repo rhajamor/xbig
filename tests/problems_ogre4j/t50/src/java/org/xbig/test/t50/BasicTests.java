@@ -60,20 +60,4 @@ public class BasicTests {
         oFile.delete();
     }
 
-    @Test
-    public void wstring() {
-        A a = new A();
-        String string = "Bulldozer Frenzy";
-        WideStringPointer wstrPtr = new WideStringPointer(string);
-
-        Assert.assertEquals(string, a.wstringValue(string));
-        Assert.assertEquals(string, a.wstringPointer(wstrPtr).get());
-        Assert.assertEquals(string, a.wstringReference(wstrPtr).get());
-        Assert.assertEquals(string, a.wstringConstValue(string));
-        Assert.assertEquals(string, a.wstringConstPointer(wstrPtr).get());
-        Assert.assertEquals(string, a.wstringConstReference(string));
-
-        wstrPtr.delete();
-        a.delete();
-    }
 }

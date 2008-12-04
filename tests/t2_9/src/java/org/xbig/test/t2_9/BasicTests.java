@@ -69,7 +69,11 @@ public class BasicTests {
 		Assert.assertEquals(wsPtr.get(), s.h().get());
 		Assert.assertEquals(wsPtr.get(), s.i(wsPtr).get());
 
-		wsPtr.delete();
+        Assert.assertEquals(javaString, s.wstringConstValue(javaString));
+        Assert.assertEquals(javaString, s.wstringConstPointer(wsPtr).get());
+        Assert.assertEquals(javaString, s.wstringConstReference(javaString));
+
+        wsPtr.delete();
 		s.delete();
 	}
 
