@@ -6,7 +6,6 @@ package org.xbig.test.t2_8;
 import org.junit.Assert;
 import org.junit.Test;
 import org.xbig.base.StringPointer;
-import org.xbig.base.WideStringPointer;
 import org.xbig.base.NativeByteBuffer;
 import org.xbig.base.BytePointer;
 import org.xbig.base.ShortPointer;
@@ -14,8 +13,6 @@ import org.xbig.A;
 import org.xbig.B;
 import org.xbig.IB;
 import org.xbig.S;
-import org.xbig.IWideString;
-import org.xbig.WideString;
 import org.xbig.ICharPtr;
 import org.xbig.CharPtr;
 import org.xbig.ICharPtr2;
@@ -98,31 +95,6 @@ public class BasicTests {
 	}
 
 	@Test
-	public void useWideStrings() {
-		IWideString s = new WideString();
-		String javaString = "Wide String";
-		WideStringPointer wsPtr = new WideStringPointer(javaString);
-
-		// short test for WideStringPointer
-		Assert.assertTrue(wsPtr.equals(javaString));
-
-		s.a(javaString);
-		Assert.assertEquals(javaString, s.b());
-		Assert.assertEquals(javaString, s.c(javaString));
-
-		s.d(wsPtr);
-		Assert.assertEquals(wsPtr.get(), s.e().get());
-		Assert.assertEquals(wsPtr.get(), s.f(wsPtr).get());
-
-		s.g(wsPtr);
-		Assert.assertEquals(wsPtr.get(), s.h().get());
-		Assert.assertEquals(wsPtr.get(), s.i(wsPtr).get());
-
-		wsPtr.delete();
-		s.delete();
-	}
-
-	@Test
 	public void useCharPtr() {
 		ICharPtr s = new CharPtr();
 		String javaString = "Bulldozer Frenzy";
@@ -142,15 +114,12 @@ public class BasicTests {
 		String javaString = "ä ö ü";
 
 		S s = new S();
-		IWideString ws = new WideString();
 		ICharPtr cp = new CharPtr();
 
 		Assert.assertEquals(javaString, s.c(javaString));
-		Assert.assertEquals(javaString, ws.c(javaString));
 		Assert.assertEquals(javaString, cp.c(javaString));
 
 		s.delete();
-		ws.delete();
 		cp.delete();
 	}
 
