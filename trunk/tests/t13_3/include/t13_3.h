@@ -6,6 +6,9 @@
  *
  * It handles the last two problems with a std::map
  *
+ * Note:
+ * It is known to not compile with ant on windows.
+ *
  ******************************************************************/
 
 #ifdef WIN32

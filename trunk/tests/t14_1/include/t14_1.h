@@ -4,6 +4,9 @@
  *
  * It handles arrays as parameters.
  *
+ * Note:
+ * It currently fails because arrays are not implemented.
+ *
  ******************************************************************/
 
 #ifdef WIN32

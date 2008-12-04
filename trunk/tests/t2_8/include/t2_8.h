@@ -9,6 +9,8 @@
  * wstrings are moved to t2_9 because mixing of cout and wcout
  * is not supported on every platform.
  *
+ * Note:
+ * This test is known to cause a linker error under windows.
  ******************************************************************/
 
 #ifdef WIN32

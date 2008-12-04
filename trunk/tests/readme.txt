@@ -70,7 +70,7 @@ t10: global functions
 	t10_2: global functions with different types
 
 t11: global variables
-	t11_1: global function
+	t11_1: global variables and variables in namespaces
 
 t12: pointer pointer
 	t12_1: objects

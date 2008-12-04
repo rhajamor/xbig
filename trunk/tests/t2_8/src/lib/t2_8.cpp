@@ -13,7 +13,7 @@ B::B(const B& rhs) {
 }
 
 B::~B() {
-	std::cout << "t2_8: B::~B(), adress: " << long(this) 
+	std::cout << "t2_8: B::~B(), adress: " << long(this)
 			  << ", value: " << i << std::endl;
 }
 

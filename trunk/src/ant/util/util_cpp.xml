@@ -22,8 +22,7 @@
 	this program; if not, write to the Free Software Foundation, Inc., 59 Temple
 	Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 	http://www.gnu.org/copyleft/lesser.txt.
-	
-	Author: Frank Bielig
+
 -->
 
 <!-- 
@@ -95,6 +94,14 @@
 					<extralibraries />
 				</morelibraries>
 			</cpp-compile>
+
+			<!-- embed manifest for visual studio 2005 -->
+			<exec executable="mt.exe" dir="@{outdir}/@{type}" osfamily="Windows"
+				    failonerror="false" failifexecutionfails="false">
+				<arg value="-manifest" />
+				<arg value="@{name}.dll.manifest" />
+				<arg value="-outputresource:@{name}.dll;2" />
+			</exec>
 		</sequential>
 	</macrodef>
 

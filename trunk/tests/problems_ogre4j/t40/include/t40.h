@@ -33,7 +33,11 @@
 #ifdef __GNUG__
 	#define HashMap ::__gnu_cxx::hash_map
 #else
-	#define HashMap ::std::hash_map
+	#if _MSC_VER < 1400 // vs 2005
+		#define HashMap ::std::hash_map
+	#else
+		#define HashMap ::stdext::hash_map
+	#endif
 #endif
 
 

@@ -23,8 +23,6 @@
 	Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 	http://www.gnu.org/copyleft/lesser.txt.
 	
-	Author: Frank Bielig
-			Kai Klesatschke <kai.klesatschke@netallied.de>
 -->
 
 <project name="cpp2j" default="echo-props" basedir="../..">
