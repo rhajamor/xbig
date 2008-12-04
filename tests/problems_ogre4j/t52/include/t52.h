@@ -10,7 +10,7 @@
  * during the generation of ogre4j
  *
  * Problem:
- * pointer and const as type parameter for templates 
+ * pointer and const as type parameter for templates
  * using inner stuff of their type parameters and
  * const pointer pointers, see bug 1728998
  ******************************************************************/
@@ -38,7 +38,11 @@
 #ifdef __GNUG__
 	#define HashMap ::__gnu_cxx::hash_map
 #else
-	#define HashMap ::std::hash_map
+	#if _MSC_VER < 1400 // vs 2005
+		#define HashMap ::std::hash_map
+	#else
+		#define HashMap ::stdext::hash_map
+	#endif
 #endif
 
 
@@ -119,7 +123,7 @@ namespace Ogre {
 		PF_FLOAT16_RGB,
 		PF_FLOAT16_RGBA,
 		PF_FLOAT32_R,
-		PF_FLOAT32_RGB, 	
+		PF_FLOAT32_RGB,
 		PF_FLOAT32_RGBA,
 		PF_FLOAT16_GR,
 		PF_FLOAT32_GR
