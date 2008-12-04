@@ -7,6 +7,9 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.xbig.base.StringPointer;
 import org.xbig.base.WideStringPointer;
+import org.xbig.base.NativeByteBuffer;
+import org.xbig.base.BytePointer;
+import org.xbig.base.ShortPointer;
 import org.xbig.A;
 import org.xbig.B;
 import org.xbig.IB;
@@ -15,6 +18,8 @@ import org.xbig.IWideString;
 import org.xbig.WideString;
 import org.xbig.ICharPtr;
 import org.xbig.CharPtr;
+import org.xbig.ICharPtr2;
+import org.xbig.CharPtr2;
 
 /**
  * @author nenning
@@ -95,7 +100,7 @@ public class BasicTests {
 	@Test
 	public void useWideStrings() {
 		IWideString s = new WideString();
-		String javaString = "Bulldozer Frenzy";
+		String javaString = "Wide String";
 		WideStringPointer wsPtr = new WideStringPointer(javaString);
 
 		// short test for WideStringPointer
@@ -147,5 +152,43 @@ public class BasicTests {
 		s.delete();
 		ws.delete();
 		cp.delete();
+	}
+
+	@Test
+	public void charInManyDifferentFlavours() {
+		ICharPtr2 charPtr2 = new CharPtr2();
+
+		String string = "foo";
+		NativeByteBuffer pseudoCString = new NativeByteBuffer(3);
+        pseudoCString.setIndex(0, (byte)65); // 65 is 'A' in ASCII
+        pseudoCString.setIndex(1, (byte)66);
+        pseudoCString.setIndex(2, (byte)0);
+        BytePointer bytePtr = new BytePointer(pseudoCString.getInstancePointer()); // pseudo cast
+		short shortValue = (short) 1000;
+		ShortPointer shortPtr = new ShortPointer(shortValue);
+		byte byteValue = (byte)127;
+
+		Assert.assertEquals(string,     charPtr2.constCharPtr(string));
+		Assert.assertEquals(bytePtr,    charPtr2.charPtr(bytePtr));
+		Assert.assertEquals((byte)shortValue, (byte)charPtr2.charValue(shortValue));
+		Assert.assertEquals((byte)shortValue, (byte)charPtr2.constCharValue(shortValue));
+		Assert.assertEquals(bytePtr,    charPtr2.charRef(bytePtr));
+		Assert.assertEquals((byte)shortValue, (byte)charPtr2.constCharRef(shortValue));
+		Assert.assertEquals(shortPtr,   charPtr2.constCharPtrUnsigned(shortPtr));
+		Assert.assertEquals(shortPtr,   charPtr2.charPtrUnsigned(shortPtr));
+		Assert.assertEquals((byte)shortValue, (byte)charPtr2.charValueUnsigned(shortValue));
+		Assert.assertEquals((byte)shortValue, (byte)charPtr2.constCharValueUnsigned(shortValue));
+		Assert.assertEquals(shortPtr,   charPtr2.charRefUnsigned(shortPtr));
+		Assert.assertEquals((byte)shortValue, (byte)charPtr2.constCharRefUnsigned(shortValue));
+		Assert.assertEquals(bytePtr,    charPtr2.constCharPtrSigned(bytePtr));
+		Assert.assertEquals(bytePtr,    charPtr2.charPtrSigned(bytePtr));
+		Assert.assertEquals(byteValue,  charPtr2.charValueSigned(byteValue));
+		Assert.assertEquals(byteValue,  charPtr2.constCharValueSigned(byteValue));
+		Assert.assertEquals(bytePtr,    charPtr2.charRefSigned(bytePtr));
+		Assert.assertEquals(byteValue,  charPtr2.constCharRefSigned(byteValue));
+
+		pseudoCString.delete();
+		shortPtr.delete();
+		charPtr2.delete();
 	}
 }

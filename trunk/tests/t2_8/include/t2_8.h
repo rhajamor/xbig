@@ -106,32 +106,32 @@ public:
 
 class EXPORT CharPtr2 {
 public:
-	const char* constCharPtr(const char* s) {std::cout << "str in c++: " << s << std::endl; return s;}
-	char* charPtr(char* s) {std::cout << "str in c++: " << s << std::endl; return s;}
+	const char* constCharPtr(const char* s) {std::cout << "[constCharPtr] str in c++: " << s << ", as int: " << (int)*s << std::endl; return s;}
+	char* charPtr(char* s) {std::cout << "[charPtr] str in c++: " << s << ", as int: " << (int)*s << std::endl; return s;}
 
-	char charValue(char s) {std::cout << "str in c++: " << s << std::endl; return s;}
-	const char constCharValue(const char s) {std::cout << "str in c++: " << s << std::endl; return s;}
+	char charValue(char s) {std::cout << "[charValue] str in c++: " << s << ", as int: " << (int)s << std::endl; return s;}
+	const char constCharValue(const char s) {std::cout << "[constCharValue] str in c++: " << s << ", as int: " << (int)s << std::endl; return s;}
 
-	char& charRef(char& s) {std::cout << "str in c++: " << s << std::endl; return s;}
-	const char& constCharRef(const char& s) {std::cout << "str in c++: " << s << std::endl; return s;}
-
-
-	const unsigned char* constCharPtrUnsigned(const unsigned char* s) {std::cout << "str in c++: " << s << std::endl; return s;}
-	unsigned char* charPtrUnsigned(unsigned char* s) {std::cout << "str in c++: " << s << std::endl; return s;}
-
-	unsigned char charValueUnsigned(unsigned char s) {std::cout << "str in c++: " << s << std::endl; return s;}
-	const unsigned char constCharValueUnsigned(const unsigned char s) {std::cout << "str in c++: " << s << std::endl; return s;}
-
-	unsigned char& charRefUnsigned(unsigned char& s) {std::cout << "str in c++: " << s << std::endl; return s;}
-	const unsigned char& constCharRefUnsigned(const unsigned char& s) {std::cout << "str in c++: " << s << std::endl; return s;}
+	char& charRef(char& s) {std::cout << "[charRef] str in c++: " << s << ", as int: " << (int)s << std::endl; return s;}
+	const char& constCharRef(const char& s) {std::cout << "[constCharRef] str in c++: " << s << ", as int: " << (int)s << std::endl; return s;}
 
 
-	const signed char* constCharPtrSigned(const signed char* s) {std::cout << "str in c++: " << s << std::endl; return s;}
-	signed char* charPtrSigned(signed char* s) {std::cout << "str in c++: " << s << std::endl; return s;}
+	const unsigned char* constCharPtrUnsigned(const unsigned char* s) {std::cout << "[constCharPtrUnsigned] str in c++: " << s << ", as int: " << (int)*s << std::endl; return s;}
+	unsigned char* charPtrUnsigned(unsigned char* s) {std::cout << "[charPtrUnsigned] str in c++: " << s << ", as int: " << (int)*s << std::endl; return s;}
 
-	signed char charValueSigned(signed char s) {std::cout << "str in c++: " << s << std::endl; return s;}
-	const signed char constCharValueSigned(const signed char s) {std::cout << "str in c++: " << s << std::endl; return s;}
+	unsigned char charValueUnsigned(unsigned char s) {std::cout << "[charValueUnsigned] str in c++: " << s << ", as int: " << (int)s << std::endl; return s;}
+	const unsigned char constCharValueUnsigned(const unsigned char s) {std::cout << "[constCharValueUnsigned] str in c++: " << s << ", as int: " << (int)s << std::endl; return s;}
 
-	signed char& charRefSigned(signed char& s) {std::cout << "str in c++: " << s << std::endl; return s;}
-	const signed char& constCharRefSigned(const signed char& s) {std::cout << "str in c++: " << s << std::endl; return s;}
+	unsigned char& charRefUnsigned(unsigned char& s) {std::cout << "[charRefUnsigned] str in c++: " << s << ", as int: " << (int)s << std::endl; return s;}
+	const unsigned char& constCharRefUnsigned(const unsigned char& s) {std::cout << "[constCharRefUnsigned] str in c++: " << s << ", as int: " << (int)s << std::endl; return s;}
+
+
+	const signed char* constCharPtrSigned(const signed char* s) {std::cout << "[constCharPtrSigned] str in c++: " << s << ", as int: " << (int)*s << std::endl; return s;}
+	signed char* charPtrSigned(signed char* s) {std::cout << "[charPtrSigned] str in c++: " << s << ", as int: " << (int)*s << std::endl; return s;}
+
+	signed char charValueSigned(signed char s) {std::cout << "[charValueSigned] str in c++: " << s << ", as int: " << (int)s << std::endl; return s;}
+	const signed char constCharValueSigned(const signed char s) {std::cout << "[constCharValueSigned] str in c++: " << s << ", as int: " << (int)s << std::endl; return s;}
+
+	signed char& charRefSigned(signed char& s) {std::cout << "[charRefSigned] str in c++: " << s << ", as int: " << (int)s << std::endl; return s;}
+	const signed char& constCharRefSigned(const signed char& s) {std::cout << "[constCharRefSigned] str in c++: " << s << ", as int: " << (int)s << std::endl; return s;}
 };
