@@ -913,9 +913,12 @@
 							<xsl:variable name="fullParameterTypeName"
 								select="$resolvedParameter" />
 
-							<!-- write parameter name -->
+							<!-- References are casted to pointers and thus must be dereferenced. -->
 							<xsl:if
-								test="(@passedBy eq 'reference' and not(xbig:isTypeConst(.)))
+								test="(@passedBy eq 'reference' and not(xbig:isTypeConst(.))
+									   and $fullParameterTypeName != 'unsigned char'
+								       and $fullParameterTypeName != 'signed char'
+								      )
 							              or 
 							              (
 							              	@passedBy ne 'pointer'
@@ -930,6 +933,7 @@
 										   )">
 								<xsl:value-of select="'*'" />
 							</xsl:if>
+
 							<!-- if there is no param name in original lib -->
 							<xsl:variable name="parameterPosition"
 								select="position()" />
@@ -947,6 +951,8 @@
 									</xsl:otherwise>
 								</xsl:choose>
 							</xsl:variable>
+
+							<!-- write parameter name -->
 							<xsl:value-of
 								select="xbig:cpp-param($config, $paramName)" />
 
