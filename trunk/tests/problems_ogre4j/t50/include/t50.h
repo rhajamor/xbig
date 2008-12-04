@@ -32,13 +32,6 @@ namespace Ogre {
 		void a(std::ifstream&){}
 		void b(std::ios::fmtflags){}
 
-		std::wstring wstringValue(std::wstring str) {return str;}
-		std::wstring* wstringPointer(std::wstring* str) {return str;}
-		std::wstring& wstringReference(std::wstring& str) {return str;}
-
-		const std::wstring wstringConstValue(const std::wstring str) {return str;}
-		const std::wstring* wstringConstPointer(const std::wstring* str) {return str;}
-		const std::wstring& wstringConstReference(const std::wstring& str) {return str;}
 	};
 }
 

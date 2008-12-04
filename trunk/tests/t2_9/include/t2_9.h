@@ -52,6 +52,11 @@ public:
 	void g(std::wstring* s) {ms = *s;}
 	std::wstring* h() {return &ms;}
 	std::wstring* i(std::wstring* s) {std::wcout << "str in c++: " << *s << std::endl; return s;}
+
+	const std::wstring wstringConstValue(const std::wstring str) {return str;}
+	const std::wstring* wstringConstPointer(const std::wstring* str) {return str;}
+	const std::wstring& wstringConstReference(const std::wstring& str) {return str;}
+
 private:
 	std::wstring ms;
 };
