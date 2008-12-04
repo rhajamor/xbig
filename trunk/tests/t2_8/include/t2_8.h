@@ -5,7 +5,9 @@
  * It handles a class with pointers and references to objects
  * as parameters and return values
  * and
- * strings
+ * strings.
+ * wstrings are moved to t2_9 because mixing of cout and wcout
+ * is not supported on every platform.
  *
  ******************************************************************/
 
@@ -15,8 +17,10 @@
 	#define EXPORT
 #endif
 
+
 #include <string>
 #include <iostream>
+
 
 class EXPORT B {
 public:
@@ -68,23 +72,6 @@ public:
 	std::string* i(std::string* s) {std::cout << "str in c++: " << *s << std::endl; return s;}
 private:
 	std::string ms;
-};
-
-class EXPORT WideString {
-public:
-	void a(std::wstring s) {ms = s;}
-	std::wstring b() {return ms;}
-	std::wstring c(std::wstring s) {std::wcout << "str in c++: " << s << std::endl; return s;}
-
-	void d(std::wstring& s) {ms = s;}
-	std::wstring& e() {return ms;}
-	std::wstring& f(std::wstring& s) {std::wcout << "str in c++: " << s << std::endl; return s;}
-
-	void g(std::wstring* s) {ms = *s;}
-	std::wstring* h() {return &ms;}
-	std::wstring* i(std::wstring* s) {std::wcout << "str in c++: " << *s << std::endl; return s;}
-private:
-	std::wstring ms;
 };
 
 class EXPORT CharPtr {
