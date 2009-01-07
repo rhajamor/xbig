@@ -27,26 +27,46 @@
 
 #ifdef WIN32
 #include <windows.h>
+
+namespace org { namespace xbig { namespace jni {
+
+void windowsStringConverter(JNIEnv* env, jstring jString, std::string& outString, int codePage)
+{
+	// note: jchar and wchar_t are both 2 bytes with msvc
+	const wchar_t* c_str = (const wchar_t*)env->GetStringChars(jString, 0);
+
+    int requiredSize = WideCharToMultiByte( codePage, 0, c_str, -1,
+        0, 0, NULL, NULL );
+
+    char * dest = new char[ requiredSize ];
+    WideCharToMultiByte( codePage, 0, c_str, -1,
+                         dest, requiredSize, NULL, NULL );
+    outString = dest;
+    delete[] dest;
+    env->ReleaseStringChars(jString, (const jchar*)c_str);
+}
+
+}}}
 #endif
 
 std::string& org::xbig::jni::to_stdstring(JNIEnv* env, jstring jString, std::string& outString) {
 #ifdef WIN32
-	// note: jchar and wchar_t are both 2 bytes with msvc
-	const wchar_t* c_str = (const wchar_t*)env->GetStringChars(jString, 0);
-    const std::wstring wideString(c_str);
-    char * dest = new char[ wideString.length() + 1 ];
-    WideCharToMultiByte( CP_ACP, 0, wideString.c_str(), (int) wideString.length(),
-                         dest, (int) wideString.length(), NULL, NULL );
-    dest[ wideString.length() ] = 0; // null termination
-    outString = dest;
-    delete[] dest;
-    env->ReleaseStringChars(jString, (const jchar*)c_str);
+	windowsStringConverter(env, jString, outString, CP_ACP);
     return outString;
 #else
     const char* c_str = env->GetStringUTFChars(jString, 0);
     outString = (c_str);
     env->ReleaseStringUTFChars(jString, c_str);
     return outString;
+#endif
+}
+
+std::string& org::xbig::jni::to_stdstringUTF8(JNIEnv* env, jstring jString, std::string& outString) {
+#ifdef WIN32
+	windowsStringConverter(env, jString, outString, CP_UTF8);
+    return outString;
+#else
+    return to_stdstring(env, jString, outString);
 #endif
 }
 
@@ -95,7 +115,7 @@ jstring org::xbig::jni::to_jstring(JNIEnv* env, const std::wstring& str) {
 	else
 	{
 		jchar* j_str = new jchar[ str.length() ];
-		for (int i=0; i<str.length(); ++i)
+		for (size_t i=0; i<str.length(); ++i)
 		{
 			j_str[i] = str.at(i);
 		}
