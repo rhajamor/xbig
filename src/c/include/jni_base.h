@@ -39,6 +39,8 @@ namespace org { namespace xbig { namespace jni {
 
 EXPORT std::string& to_stdstring(JNIEnv* env, jstring jString, std::string& outString);
 
+EXPORT std::string& to_stdstringUTF8(JNIEnv* env, jstring jString, std::string& outString);
+
 EXPORT std::wstring& to_stdwstring(JNIEnv* env, jstring jString, std::wstring& outString);
 
 EXPORT char* to_cstring(JNIEnv* env, jstring jString, char* outString);
