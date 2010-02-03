@@ -1102,8 +1102,11 @@
       <type meta="unsigned long int" java="long" genericParameter="Long" />
 			
       <type meta="long long" java="long" genericParameter="Long" />
+      <type meta="long long int" java="long" genericParameter="Long" />
       <type meta="signed long long" java="long" genericParameter="Long" />
+      <type meta="signed long long int" java="long" genericParameter="Long" />
       <type meta="unsigned long long" java="ULongLong" genericParameter="ULongLong" />
+      <type meta="unsigned long long int" java="ULongLong" genericParameter="ULongLong" />
 
       <type meta="double" java="double" genericParameter="Double" />
       <type meta="float" java="float" genericParameter="Float" />
