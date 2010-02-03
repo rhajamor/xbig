@@ -87,3 +87,6 @@ t13: external types
 
 t14: arrays
 	t14_1: arrays as parameters
+	
+t15: ogre17
+	t15_1: Problem with "template struct" construct
