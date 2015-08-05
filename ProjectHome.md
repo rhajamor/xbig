@@ -1,0 +1,1 @@
+The XSLT Bindings Generator - XBiG - is a project that uses XSL transformations to generate foreign function interfaces (bindings) for libraries.
